@@ -19,7 +19,8 @@ namespace HediffResourceFramework
 				}
 				return false;
 			}
-			else if (option.verbIndex != -1)
+
+			if (option.verbIndex != -1)
 			{
 				if (verb.EquipmentSource.def.Verbs.IndexOf(verb.verbProps) == option.verbIndex)
 				{
@@ -44,7 +45,6 @@ namespace HediffResourceFramework
 							if (option.disableOnEmptyOrMissingHediff)
 							{
 								bool manaIsEmptyOrNull = manaHediff != null ? manaHediff.Severity <= 0 : true;
-								Log.Message("disableOnEmptyOrMissingHediff: " + verb.CasterPawn + " - " + option.hediff + " - manaHediff: " + manaHediff + " - " + manaIsEmptyOrNull + " - " + manaHediff?.Severity);
 								if (manaIsEmptyOrNull)
 								{
 									return false;
@@ -52,7 +52,6 @@ namespace HediffResourceFramework
 							}
 							if (option.minimumSeverityCastRequirement != -1f)
 							{
-								Log.Message("minimumSeverityCastRequirement: " + verb.CasterPawn + " - " + option.hediff + " - manaHediff: " + manaHediff + " - " + " - " + manaHediff?.Severity);
 								if (manaHediff.Severity < option.minimumSeverityCastRequirement)
 								{
 									return false;
@@ -64,5 +63,10 @@ namespace HediffResourceFramework
 			}
 			return true;
 		}
-    }
+
+		public static void DisableGizmoOnEmptyOrMissingHediff(HediffOption option, Gizmo gizmo)
+		{
+			gizmo.Disable(option.disableReason);
+		}
+	}
 }

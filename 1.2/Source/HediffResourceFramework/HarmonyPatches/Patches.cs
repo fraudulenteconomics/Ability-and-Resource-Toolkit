@@ -18,51 +18,43 @@ namespace HediffResourceFramework
 		{
 			Harmony harmony = new Harmony("Fraudecon.HediffResourceFramework");
 			harmony.PatchAll();
-			MethodInfo method_Postfix = AccessTools.Method(typeof(HarmonyInit), "Postfix");
-			foreach (Type type in GenTypes.AllSubclassesNonAbstract(typeof(Verb)))
-			{
-				MethodInfo methodToPatch = AccessTools.Method(type, "TryCastShot");
-				try
-				{
-					harmony.Patch(methodToPatch, null, new HarmonyMethod(method_Postfix), null);
-				}
-				catch (Exception ex)
-				{
-				};
-			}
+			//MethodInfo method_Postfix = AccessTools.Method(typeof(HarmonyInit), "Postfix");
+			//foreach (Type type in GenTypes.AllSubclassesNonAbstract(typeof(Verb)))
+			//{
+			//	MethodInfo methodToPatch = AccessTools.Method(type, "TryCastShot");
+			//	try
+			//	{
+			//		harmony.Patch(methodToPatch, null, new HarmonyMethod(method_Postfix), null);
+			//	}
+			//	catch (Exception ex)
+			//	{
+			//	};
+			//}
 		}
+	}
 
-		private static void Postfix(Verb __instance, bool __result)
+	[HarmonyPatch(typeof(Verb), "TryCastNextBurstShot")]
+	public static class Patch_TryCastNextBurstShot
+	{
+		private static void Postfix(Verb __instance)
 		{
-			if (__result && __instance.CasterIsPawn && __instance.EquipmentSource != null)
-            {
+			if (__instance.Available() && __instance.CasterIsPawn && __instance.EquipmentSource != null)
+			{
+				Log.Message("Postfix: " + __instance);
 				var options = __instance.EquipmentSource.def.GetModExtension<HediffAdjustOptions>();
 				if (options != null)
-                {
+				{
 					foreach (var option in options.hediffOptions)
-                    {
-						if (!option.verbLabel.NullOrEmpty() && __instance.ReportLabel == option.verbLabel)
-                        {
-							HealthUtility.AdjustSeverity(__instance.CasterPawn, option.hediff, option.severityOffset);
-                        }
-						else if (option.verbIndex != -1 && __instance.EquipmentSource.def.Verbs.IndexOf(__instance.verbProps) == option.verbIndex)
-                        {
-							HealthUtility.AdjustSeverity(__instance.CasterPawn, option.hediff, option.severityOffset);
-						}
-						else
-                        {
+					{
+						if (HediffResourceUtils.VerbMatches(__instance, option))
+						{
+							Log.Message("Adjusting hediff: " + option.hediff + " - " + option.severityOffset + " - " + option.verbIndex);
 							HealthUtility.AdjustSeverity(__instance.CasterPawn, option.hediff, option.severityOffset);
 						}
 					}
-                }
+				}
 			}
 		}
-
-		public static void DisableGizmoOnEmptyOrMissingHediff(Verb verb, HediffOption option, Gizmo gizmo)
-        {
-			gizmo.Disable(option.disableReason);
-		}
-
 	}
 
 	[HarmonyPatch(typeof(CompReloadable), "CreateVerbTargetCommand")]
@@ -85,14 +77,14 @@ namespace HediffResourceFramework
 								bool manaIsEmptyOrNull = manaHediff != null ? manaHediff.Severity <= 0 : false;
 								if (manaIsEmptyOrNull)
 								{
-									HarmonyInit.DisableGizmoOnEmptyOrMissingHediff(verb, option, __result);
+									HediffResourceUtils.DisableGizmoOnEmptyOrMissingHediff(option, __result);
 								}
 							}
 							if (option.minimumSeverityCastRequirement != -1f)
 							{
 								if (manaHediff != null && manaHediff.Severity < option.minimumSeverityCastRequirement)
 								{
-									HarmonyInit.DisableGizmoOnEmptyOrMissingHediff(verb, option, __result);
+									HediffResourceUtils.DisableGizmoOnEmptyOrMissingHediff(option, __result);
 								}
 							}
 						}
@@ -100,7 +92,6 @@ namespace HediffResourceFramework
 				}
 			}
 		}
-
 	}
 
 	[HarmonyPatch(typeof(PawnVerbGizmoUtility), "GetGizmosForVerb")]
@@ -126,7 +117,7 @@ namespace HediffResourceFramework
 								{
 									foreach (var g in list)
 									{
-										HarmonyInit.DisableGizmoOnEmptyOrMissingHediff(verb, option, g);
+										HediffResourceUtils.DisableGizmoOnEmptyOrMissingHediff(option, g);
 									}
 								}
 							}
@@ -136,7 +127,7 @@ namespace HediffResourceFramework
 								{
 									foreach (var g in list)
 									{
-										HarmonyInit.DisableGizmoOnEmptyOrMissingHediff(verb, option, g);
+										HediffResourceUtils.DisableGizmoOnEmptyOrMissingHediff(option, g);
 									}
 								}
 							}

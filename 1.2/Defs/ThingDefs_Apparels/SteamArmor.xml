@@ -266,7 +266,7 @@
 				<hediffOptions>
 					<li>
 						<hediff>HRF_Mana_Hediff</hediff>
-						<severityOffset>1000</severityOffset>
+						<severityOffset>100</severityOffset>
 					</li>
 				</hediffOptions>
 			</li>
