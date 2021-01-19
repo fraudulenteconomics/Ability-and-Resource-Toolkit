@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "SavpB3u8AgsQwo3FY1Zdy5h4SuIrWenKARziGFxtpfc5pN99cht+ecXp5E7+LIPnV0EXk5EliJvkaE0zmlqqiQ==",
+  "success": true,
+  "projectFilePath": "C:\\GAMES\\Rimworld\\Mods\\HediffResourceFramework\\1.2\\Source\\HediffResourceFramework\\HediffResourceFramework.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Vova\\.nuget\\packages\\krafs.rimworld.ref\\1.2.2753\\krafs.rimworld.ref.1.2.2753.nupkg.sha512",
+    "C:\\Users\\Vova\\.nuget\\packages\\lib.harmony\\2.0.4\\lib.harmony.2.0.4.nupkg.sha512"
+  ],
+  "logs": []
+}
