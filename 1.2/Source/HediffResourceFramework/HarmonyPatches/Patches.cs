@@ -60,21 +60,7 @@ namespace HediffResourceFramework
 
 		public static void DisableGizmoOnEmptyOrMissingHediff(Verb verb, HediffOption option, Gizmo gizmo)
         {
-			if (option.disableOnEmptyOrMissingHediff)
-			{
-				if (!option.verbLabel.NullOrEmpty() && verb.ReportLabel == option.verbLabel)
-				{
-					gizmo.Disable(option.disableReason);
-				}
-				else if (option.verbIndex != -1 && verb.EquipmentSource.def.Verbs.IndexOf(verb.verbProps) == option.verbIndex)
-				{
-					gizmo.Disable(option.disableReason);
-				}
-				else
-				{
-					gizmo.Disable(option.disableReason);
-				}
-			}
+			gizmo.Disable(option.disableReason);
 		}
 
 	}
@@ -91,20 +77,23 @@ namespace HediffResourceFramework
 				{
 					foreach (var option in options.hediffOptions)
                     {
-						var manaHediff = verb.CasterPawn.health.hediffSet.GetFirstHediffOfDef(option.hediff);
-						if (option.disableOnEmptyOrMissingHediff)
+						if (HediffResourceUtils.VerbMatches(verb, option))
                         {
-							bool manaIsEmptyOrNull = manaHediff != null ? manaHediff.Severity <= 0 : false;
-							if (manaIsEmptyOrNull)
+							var manaHediff = verb.CasterPawn.health.hediffSet.GetFirstHediffOfDef(option.hediff);
+							if (option.disableOnEmptyOrMissingHediff)
 							{
-								HarmonyInit.DisableGizmoOnEmptyOrMissingHediff(verb, option, __result);
+								bool manaIsEmptyOrNull = manaHediff != null ? manaHediff.Severity <= 0 : false;
+								if (manaIsEmptyOrNull)
+								{
+									HarmonyInit.DisableGizmoOnEmptyOrMissingHediff(verb, option, __result);
+								}
 							}
-						}
-						if (option.minimumSeverityCastRequirement != -1f)
-						{
-							if (manaHediff != null && manaHediff.Severity < option.minimumSeverityCastRequirement)
+							if (option.minimumSeverityCastRequirement != -1f)
 							{
-								HarmonyInit.DisableGizmoOnEmptyOrMissingHediff(verb, option, __result);
+								if (manaHediff != null && manaHediff.Severity < option.minimumSeverityCastRequirement)
+								{
+									HarmonyInit.DisableGizmoOnEmptyOrMissingHediff(verb, option, __result);
+								}
 							}
 						}
 					}
@@ -127,25 +116,28 @@ namespace HediffResourceFramework
 					var list = __result.ToList();
 					foreach (var option in options.hediffOptions)
 					{
-						var manaHediff = verb.CasterPawn.health.hediffSet.GetFirstHediffOfDef(option.hediff);
-						if (option.disableOnEmptyOrMissingHediff)
+						if (HediffResourceUtils.VerbMatches(verb, option))
 						{
-							bool manaIsEmptyOrNull = manaHediff != null ? manaHediff.Severity <= 0 : true;
-							if (manaIsEmptyOrNull)
+							var manaHediff = verb.CasterPawn.health.hediffSet.GetFirstHediffOfDef(option.hediff);
+							if (option.disableOnEmptyOrMissingHediff)
 							{
-								foreach (var g in list)
+								bool manaIsEmptyOrNull = manaHediff != null ? manaHediff.Severity <= 0 : true;
+								if (manaIsEmptyOrNull)
 								{
-									HarmonyInit.DisableGizmoOnEmptyOrMissingHediff(verb, option, g);
+									foreach (var g in list)
+									{
+										HarmonyInit.DisableGizmoOnEmptyOrMissingHediff(verb, option, g);
+									}
 								}
 							}
-						}
-						if (option.minimumSeverityCastRequirement != -1f)
-						{
-							if (manaHediff != null && manaHediff.Severity < option.minimumSeverityCastRequirement)
+							if (option.minimumSeverityCastRequirement != -1f)
 							{
-								foreach (var g in list)
+								if (manaHediff != null && manaHediff.Severity < option.minimumSeverityCastRequirement)
 								{
-									HarmonyInit.DisableGizmoOnEmptyOrMissingHediff(verb, option, g);
+									foreach (var g in list)
+									{
+										HarmonyInit.DisableGizmoOnEmptyOrMissingHediff(verb, option, g);
+									}
 								}
 							}
 						}
