@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="Comps\CompApparelAdjustHediffs.cs" />
     <Compile Include="HarmonyPatches\Patches.cs" />
+    <Compile Include="HediffResourceUtils.cs" />
     <Compile Include="ModExtensions\HediffAdjustOptions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

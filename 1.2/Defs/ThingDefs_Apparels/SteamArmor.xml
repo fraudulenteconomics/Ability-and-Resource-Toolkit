@@ -1,0 +1,386 @@
+<Defs>
+
+	<ThingDef ParentName="ApparelArmorReconBase">
+		<defName>HRF_SteamArmor</defName>
+		<label>steam armor</label>
+		<description>A suit of armor with an onboard steam generator that steadily creates steam pressure. This steam can be used to power additional steam devices including accessories, apparel, and weapons. It also comes with an internal steam repeater.</description>
+		<apparel>
+			<tags>
+				<li>SpacerMilitary</li>
+			</tags>
+		</apparel>
+		<verbs>
+			<li>
+				<verbClass>Verb_Shoot</verbClass>
+				<label>steamshot</label>
+				<defaultProjectile>Bullet_AutocannonTurret</defaultProjectile>
+				<warmupTime>0</warmupTime>
+				<minRange>8.9</minRange>
+				<range>32.9</range>
+				<ticksBetweenBurstShots>17</ticksBetweenBurstShots>
+				<burstShotCount>3</burstShotCount>
+				<soundCast>Shot_Autocannon</soundCast>
+				<soundCastTail>GunTail_Heavy</soundCastTail>
+				<muzzleFlashScale>12</muzzleFlashScale>
+			</li>
+		</verbs>
+		<tickerType>Normal</tickerType>
+		<comps>
+			<li Class="VFECore.CompProperties_ApparelHediffs">
+				<hediffDefnames>
+					<li>HRF_Steam_Hediff</li>
+				</hediffDefnames>
+			</li>
+			<li Class="MVCF.Comps.CompProperties_VerbGiver">
+				<verbProps>
+					<li>
+						<label>steamshot</label>
+						<canBeToggled>true</canBeToggled>
+					</li>
+				</verbProps>
+			</li>
+			<li Class="HediffResourceFramework.CompProperties_ApparelAdjustHediffs">
+				<hediffOptions>
+					<li>
+						<hediff>HRF_Steam_Hediff</hediff>
+						<severityOffset>100</severityOffset>
+					</li>
+				</hediffOptions>
+			</li>
+		</comps>
+		<modExtensions>
+			<li Class="HediffResourceFramework.HediffAdjustOptions">
+				<hediffOptions>
+					<li>
+						<hediff>HRF_Steam_Hediff</hediff>
+						<severityOffset>-0.5</severityOffset>
+						<disableOnEmptyOrMissingHediff>true</disableOnEmptyOrMissingHediff>
+						<disableReason>Steam is empty</disableReason>
+					</li>
+				</hediffOptions>
+			</li>
+		</modExtensions>
+	</ThingDef>
+
+	<ThingDef ParentName="ApparelArmorHelmetReconBase">
+		<defName>HRF_SteamHelmet</defName>
+		<label>steam helmet</label>
+		<description>A helmet with a steam port, allowing it to be connected to a steam generator and power steam devices. This helmet contains a side mounted steam rail blaster.</description>
+		<apparel>
+			<tags>
+				<li>SpacerMilitary</li>
+			</tags>
+		</apparel>
+		<verbs>
+			<li>
+				<verbClass>Verb_Shoot</verbClass>
+				<label>steamrail</label>
+				<defaultProjectile>Bullet_TurretSniper</defaultProjectile>
+				<warmupTime>0</warmupTime>
+				<minRange>2.9</minRange>
+				<range>45.9</range>
+				<burstShotCount>1</burstShotCount>
+				<soundCast>Shot_TurretSniper</soundCast>
+				<soundCastTail>GunTail_Heavy</soundCastTail>
+				<muzzleFlashScale>18</muzzleFlashScale>
+			</li>
+		</verbs>
+		<comps>
+			<li Class="MVCF.Comps.CompProperties_VerbGiver">
+				<verbProps>
+					<li>
+						<label>steamrail</label>
+						<canBeToggled>true</canBeToggled>
+					</li>
+				</verbProps>
+			</li>
+			<li Class="HediffResourceFramework.CompProperties_ApparelAdjustHediffs">
+				<hediffOptions>
+					<li>
+						<hediff>HRF_Steam_Hediff</hediff>
+						<severityOffset>-100</severityOffset>
+					</li>
+				</hediffOptions>
+			</li>
+		</comps>
+		<modExtensions>
+			<li Class="HediffResourceFramework.HediffAdjustOptions">
+				<hediffOptions>
+					<li>
+						<hediff>HRF_Steam_Hediff</hediff>
+						<severityOffset>-2.5</severityOffset>
+						<disableOnEmptyOrMissingHediff>true</disableOnEmptyOrMissingHediff>
+						<disableReason>Steam is empty</disableReason>
+					</li>
+				</hediffOptions>
+			</li>
+		</modExtensions>
+	</ThingDef>
+
+	<ThingDef ParentName="BaseHumanMakeableGun">
+		<defName>HRF_SteamRepeater</defName>
+		<label>steam repeater</label>
+		<description>A multi-barrel steam powered blaster. It will repeatedly fire rounds until it runs out of steam power, at which point it has a lengthy rearming period before it may be fired again.</description>
+		<graphicData>
+			<texPath>Things/Item/Equipment/WeaponRanged/Minigun</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+		</graphicData>
+		<soundInteract>Interact_Rifle</soundInteract>
+		<thingSetMakerTags>
+			<li>RewardStandardQualitySuper</li>
+		</thingSetMakerTags>
+		<statBases>
+			<WorkToMake>60000</WorkToMake>
+			<Mass>10</Mass>
+			<AccuracyTouch>0.15</AccuracyTouch>
+			<AccuracyShort>0.25</AccuracyShort>
+			<AccuracyMedium>0.25</AccuracyMedium>
+			<AccuracyLong>0.18</AccuracyLong>
+			<RangedWeapon_Cooldown>5</RangedWeapon_Cooldown>
+		</statBases>
+		<costList>
+			<Steel>160</Steel>
+			<ComponentIndustrial>20</ComponentIndustrial>
+		</costList>
+		<recipeMaker>
+			<researchPrerequisite>MultibarrelWeapons</researchPrerequisite>
+			<skillRequirements>
+				<Crafting>7</Crafting>
+			</skillRequirements>
+		</recipeMaker>
+		<techLevel>Industrial</techLevel>
+		<weaponTags>
+			<li>GunHeavy</li>
+		</weaponTags>
+		<equippedStatOffsets>
+			<MoveSpeed>-0.25</MoveSpeed>
+		</equippedStatOffsets>
+		<verbs>
+			<li>
+				<verbClass>Verb_Shoot</verbClass>
+				<label>steamrepeater</label>
+				<hasStandardCommand>true</hasStandardCommand>
+				<defaultProjectile>Bullet_Minigun</defaultProjectile>
+				<warmupTime>0</warmupTime>
+				<range>30.9</range>
+				<burstShotCount>25</burstShotCount>
+				<ticksBetweenBurstShots>5</ticksBetweenBurstShots>
+				<soundCast>Shot_Minigun</soundCast>
+				<soundCastTail>GunTail_Medium</soundCastTail>
+				<muzzleFlashScale>9</muzzleFlashScale>
+			</li>
+		</verbs>
+		<comps>
+			<li Class="MVCF.Comps.CompProperties_VerbGiver">
+				<verbProps>
+					<li>
+						<label>steamrepeater</label>
+						<canBeToggled>true</canBeToggled>
+					</li>
+				</verbProps>
+			</li>
+		</comps>
+		<tools>
+			<li>
+				<label>barrels</label>
+				<capacities>
+					<li>Blunt</li>
+				</capacities>
+				<power>11.7</power>
+				<cooldownTime>2.6</cooldownTime>
+			</li>
+		</tools>
+		<modExtensions>
+			<li Class="HediffResourceFramework.HediffAdjustOptions">
+				<hediffOptions>
+					<li>
+						<hediff>HRF_Steam_Hediff</hediff>
+						<severityOffset>-0.2</severityOffset>
+						<disableOnEmptyOrMissingHediff>true</disableOnEmptyOrMissingHediff>
+						<disableReason>Steam is empty</disableReason>
+					</li>
+				</hediffOptions>
+			</li>
+		</modExtensions>
+	</ThingDef>
+
+	<ThingDef ParentName="ApparelBase">
+		<defName>HRF_Smokepop_HediffUser</defName>
+		<label>testing smokepop</label>
+		<description>Testing for hediff on verb use smokepop belt.</description>
+		<techLevel>Industrial</techLevel>
+		<thingClass>SmokepopBelt</thingClass>
+		<verbs>
+			<li>
+				<verbClass>Verb_Shoot</verbClass>
+				<label>testshot</label>
+				<hasStandardCommand>true</hasStandardCommand>
+				<defaultProjectile>Bullet_ChargeRifle</defaultProjectile>
+				<warmupTime>1.0</warmupTime>
+				<range>25.9</range>
+				<ticksBetweenBurstShots>12</ticksBetweenBurstShots>
+				<burstShotCount>3</burstShotCount>
+				<soundCast>Shot_ChargeRifle</soundCast>
+				<soundCastTail>GunTail_Medium</soundCastTail>
+				<muzzleFlashScale>9</muzzleFlashScale>
+				<accuracyTouch>0.4</accuracyTouch>
+				<accuracyShort>0.9</accuracyShort>
+				<accuracyMedium>1</accuracyMedium>
+				<accuracyLong>1</accuracyLong>
+				<defaultCooldownTime>2.5</defaultCooldownTime>
+			</li>
+			<li>
+				<verbClass>Verb_Shoot</verbClass>
+				<label>testshot 2</label>
+				<hasStandardCommand>true</hasStandardCommand>
+				<defaultProjectile>Bullet_ChargeRifle</defaultProjectile>
+				<warmupTime>1.0</warmupTime>
+				<range>25.9</range>
+				<ticksBetweenBurstShots>12</ticksBetweenBurstShots>
+				<burstShotCount>3</burstShotCount>
+				<soundCast>Shot_ChargeRifle</soundCast>
+				<soundCastTail>GunTail_Medium</soundCastTail>
+				<muzzleFlashScale>9</muzzleFlashScale>
+				<accuracyTouch>0.4</accuracyTouch>
+				<accuracyShort>0.9</accuracyShort>
+				<accuracyMedium>1</accuracyMedium>
+				<accuracyLong>1</accuracyLong>
+				<defaultCooldownTime>2.5</defaultCooldownTime>
+			</li>
+		</verbs>
+		<comps>
+			<li Class="MVCF.Comps.CompProperties_VerbGiver">
+				<verbProps>
+					<li>
+						<label>testshot 1</label>
+						<canBeToggled>true</canBeToggled>
+					</li>
+					<li>
+						<label>testshot 2</label>
+						<canBeToggled>true</canBeToggled>
+					</li>
+				</verbProps>
+			</li>
+			<li Class="HediffResourceFramework.CompProperties_ApparelAdjustHediffs">
+				<hediffOptions>
+					<li>
+						<hediff>HRF_Mana_Hediff</hediff>
+						<severityOffset>1000</severityOffset>
+					</li>
+				</hediffOptions>
+			</li>
+		</comps>
+		<recipeMaker>
+			<unfinishedThingDef>UnfinishedPack</unfinishedThingDef>
+			<researchPrerequisite>SmokepopBelt</researchPrerequisite>
+			<recipeUsers>
+				<li>TableMachining</li>
+			</recipeUsers>
+			<useIngredientsForColor>false</useIngredientsForColor>
+			<workSpeedStat>GeneralLaborSpeed</workSpeedStat>
+			<workSkill>Crafting</workSkill>
+			<effectWorking>Smith</effectWorking>
+			<soundWorking>Recipe_Smith</soundWorking>
+			<skillRequirements>
+				<Crafting>3</Crafting>
+			</skillRequirements>
+		</recipeMaker>
+		<costList>
+			<ComponentIndustrial>1</ComponentIndustrial>
+			<Steel>20</Steel>
+			<Chemfuel>40</Chemfuel>
+		</costList>
+		<graphicData>
+			<texPath>Things/Pawn/Humanlike/Apparel/SmokepopBelt/SmokepopBelt</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+		</graphicData>
+		<tickerType>Normal</tickerType>
+		<statBases>
+			<WorkToMake>1200</WorkToMake>
+			<Mass>3</Mass>
+			<Flammability>0.4</Flammability>
+			<SmokepopBeltRadius>4.9</SmokepopBeltRadius>
+			<EquipDelay>2</EquipDelay>
+		</statBases>
+		<thingCategories>
+			<li>ApparelUtility</li>
+		</thingCategories>
+		<generateAllowChance>0.15</generateAllowChance>
+		<apparel>
+			<careIfWornByCorpse>false</careIfWornByCorpse>
+			<careIfDamaged>false</careIfDamaged>
+			<wearPerDay>0</wearPerDay>
+			<bodyPartGroups>
+				<li>Waist</li>
+			</bodyPartGroups>
+			<layers>
+				<li>Belt</li>
+			</layers>
+			<tags>
+				<li>BeltDefensePop</li>
+			</tags>
+		</apparel>
+		<colorGenerator Class="ColorGenerator_Options">
+			<options>
+				<li>
+					<weight>10</weight>
+					<only>(0.33,0.33,0.33,1)</only>
+				</li>
+				<li>
+					<weight>10</weight>
+					<only>(0.6,0.4,0.4,1)</only>
+				</li>
+				<li>
+					<weight>10</weight>
+					<only>(0.6,0.6,0.4,1)</only>
+				</li>
+				<li>
+					<weight>6</weight>
+					<min>(0.3,0.3,0.3,1)</min>
+					<max>(0.5,0.5,0.5,1)</max>
+				</li>
+			</options>
+		</colorGenerator>
+		<modExtensions>
+			<li Class="HediffResourceFramework.HediffAdjustOptions">
+				<hediffOptions>
+					<li>
+						<hediff>HRF_Mana_Hediff</hediff>
+						<verbIndex>0</verbIndex>
+						<severityOffset>-1.33</severityOffset>
+						<disableOnEmptyOrMissingHediff>true</disableOnEmptyOrMissingHediff>
+						<disableReason>Mana is empty</disableReason>
+						<minimumSeverityCastRequirement>50</minimumSeverityCastRequirement>
+					</li>
+				</hediffOptions>
+			</li>
+		</modExtensions>
+	</ThingDef>
+
+	<HediffDef>
+		<defName>HRF_Mana_Hediff</defName>
+		<label>Mana</label>
+		<description>Mana accumulating within the pawn.</description>
+		<hediffClass>HediffWithComps</hediffClass>
+		<maxSeverity>100</maxSeverity>
+		<initialSeverity>100</initialSeverity>
+		<isBad>false</isBad>
+		<tendable>false</tendable>
+		<makesSickThought>false</makesSickThought>
+		<defaultLabelColor>(0.1,0.3,0.9)</defaultLabelColor>
+	</HediffDef>	
+
+	<HediffDef>
+		<defName>HRF_Steam_Hediff</defName>
+		<label>Steam</label>
+		<description>Steam pressure generated from an onboard steam engine.</description>
+		<hediffClass>HediffWithComps</hediffClass>
+		<maxSeverity>10</maxSeverity>
+		<initialSeverity>1</initialSeverity>
+		<isBad>false</isBad>
+		<tendable>false</tendable>
+		<makesSickThought>false</makesSickThought>
+		<defaultLabelColor>(0.9,0.9,0.2)</defaultLabelColor>
+	</HediffDef>
+
+</Defs>
