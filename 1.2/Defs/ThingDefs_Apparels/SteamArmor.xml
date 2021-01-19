@@ -213,7 +213,7 @@
 		<verbs>
 			<li>
 				<verbClass>Verb_Shoot</verbClass>
-				<label>testshot</label>
+				<label>Small Fireball</label>
 				<hasStandardCommand>true</hasStandardCommand>
 				<defaultProjectile>Bullet_ChargeRifle</defaultProjectile>
 				<warmupTime>1.0</warmupTime>
@@ -231,13 +231,14 @@
 			</li>
 			<li>
 				<verbClass>Verb_Shoot</verbClass>
-				<label>testshot 2</label>
+				<label>Big Fireball</label>
 				<hasStandardCommand>true</hasStandardCommand>
-				<defaultProjectile>Bullet_ChargeRifle</defaultProjectile>
+				<defaultProjectile>Bullet_EMPLauncher</defaultProjectile>
 				<warmupTime>1.0</warmupTime>
-				<range>25.9</range>
+				<range>29.9</range>
+				<forcedMissRadius>2.9</forcedMissRadius>
 				<ticksBetweenBurstShots>12</ticksBetweenBurstShots>
-				<burstShotCount>3</burstShotCount>
+				<burstShotCount>1</burstShotCount>
 				<soundCast>Shot_ChargeRifle</soundCast>
 				<soundCastTail>GunTail_Medium</soundCastTail>
 				<muzzleFlashScale>9</muzzleFlashScale>
@@ -252,11 +253,11 @@
 			<li Class="MVCF.Comps.CompProperties_VerbGiver">
 				<verbProps>
 					<li>
-						<label>testshot 1</label>
+						<label>Small Fireball</label>
 						<canBeToggled>true</canBeToggled>
 					</li>
 					<li>
-						<label>testshot 2</label>
+						<label>Big Fireball</label>
 						<canBeToggled>true</canBeToggled>
 					</li>
 				</verbProps>
@@ -350,7 +351,15 @@
 						<severityOffset>-1.33</severityOffset>
 						<disableOnEmptyOrMissingHediff>true</disableOnEmptyOrMissingHediff>
 						<disableReason>Mana is empty</disableReason>
-						<minimumSeverityCastRequirement>50</minimumSeverityCastRequirement>
+						<minimumSeverityCastRequirement>5</minimumSeverityCastRequirement>
+					</li>
+					<li>
+						<hediff>HRF_Mana_Hediff</hediff>
+						<verbIndex>1</verbIndex>
+						<severityOffset>-15</severityOffset>
+						<disableOnEmptyOrMissingHediff>true</disableOnEmptyOrMissingHediff>
+						<disableReason>Mana is empty</disableReason>
+						<minimumSeverityCastRequirement>15</minimumSeverityCastRequirement>
 					</li>
 				</hediffOptions>
 			</li>
