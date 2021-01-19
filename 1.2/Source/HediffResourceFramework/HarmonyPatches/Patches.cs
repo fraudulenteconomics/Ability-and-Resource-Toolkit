@@ -102,8 +102,7 @@ namespace HediffResourceFramework
 						}
 						if (option.minimumSeverityCastRequirement != -1f)
 						{
-							Log.Message("minimumSeverityCastRequirement: " + verb.CasterPawn + " - " + option.hediff + " - manaHediff: " + manaHediff + " - " + " - " + manaHediff?.Severity);
-							if (manaHediff.Severity < option.minimumSeverityCastRequirement)
+							if (manaHediff != null && manaHediff.Severity < option.minimumSeverityCastRequirement)
 							{
 								HarmonyInit.DisableGizmoOnEmptyOrMissingHediff(verb, option, __result);
 							}
@@ -142,8 +141,7 @@ namespace HediffResourceFramework
 						}
 						if (option.minimumSeverityCastRequirement != -1f)
 						{
-							Log.Message("minimumSeverityCastRequirement: " + verb.CasterPawn + " - " + option.hediff + " - manaHediff: " + manaHediff + " - " + " - " + manaHediff?.Severity);
-							if (manaHediff.Severity < option.minimumSeverityCastRequirement)
+							if (manaHediff != null && manaHediff.Severity < option.minimumSeverityCastRequirement)
 							{
 								foreach (var g in list)
 								{
