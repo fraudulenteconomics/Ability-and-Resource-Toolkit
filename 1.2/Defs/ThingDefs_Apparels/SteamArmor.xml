@@ -189,6 +189,24 @@
 					</li>
 				</verbProps>
 			</li>
+			<li Class="HediffResourceFramework.CompProperties_WeaponAdjustHediffs">
+				<hediffOptions>
+					<li>
+						<hediff>HRF_Steam_Hediff</hediff>
+						<resourceOffset>100</resourceOffset>
+						<qualityScalesResourceOffset>true</qualityScalesResourceOffset>
+						<addHediffIfMissing>false</addHediffIfMissing>
+						<!-- default is false -->
+						<maxResourceCapacityOffset>5</maxResourceCapacityOffset>
+						<qualityScalesCapacityOffset>true</qualityScalesCapacityOffset>
+						<disallowEquippingIfEmptyNullHediff>true</disallowEquippingIfEmptyNullHediff>
+						<dropWeaponIfEmptyNullHediff>true</dropWeaponIfEmptyNullHediff>
+						<blackListHediffsPreventEquipping>
+							<li>HRF_Mana_Hediff</li>
+						</blackListHediffsPreventEquipping>
+					</li>
+				</hediffOptions>
+			</li>
 		</comps>
 		<tools>
 			<li>
