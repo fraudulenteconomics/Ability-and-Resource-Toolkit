@@ -14,12 +14,19 @@ namespace HediffResourceFramework
 
         }
 
-        public HediffDef hediff;
-        public float severityOffset;
+        public HediffResourceDef hediff;
+        public float resourceOffset;
+        public bool qualityScalesResourceOffset;
+        public float maxResourceCapacityOffset;
+        public bool qualityScalesCapacityOffset;
         public int verbIndex = -1;
         public string verbLabel;
         public bool disableOnEmptyOrMissingHediff;
-        public float minimumSeverityCastRequirement = -1f;
+        public float minimumResourceCastRequirement = -1f;
+        public bool disallowEquippingIfEmptyNullHediff;
+        public List<HediffDef> blackListHediffsPreventEquipping;
+        public bool dropApparelIfEmptyNullHediff;
+        public bool addHediffIfMissing = false;
         public string disableReason;
     }
     public class HediffAdjustOptions : DefModExtension

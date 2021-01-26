@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Verse;
+using Verse.AI;
 
 namespace HediffResourceFramework
 {
@@ -18,21 +19,9 @@ namespace HediffResourceFramework
 		{
 			Harmony harmony = new Harmony("Fraudecon.HediffResourceFramework");
 			harmony.PatchAll();
-			//MethodInfo method_Postfix = AccessTools.Method(typeof(HarmonyInit), "Postfix");
-			//foreach (Type type in GenTypes.AllSubclassesNonAbstract(typeof(Verb)))
-			//{
-			//	MethodInfo methodToPatch = AccessTools.Method(type, "TryCastShot");
-			//	try
-			//	{
-			//		harmony.Patch(methodToPatch, null, new HarmonyMethod(method_Postfix), null);
-			//	}
-			//	catch (Exception ex)
-			//	{
-			//	};
-			//}
 		}
 	}
-
+	
 	[HarmonyPatch(typeof(Verb), "TryCastNextBurstShot")]
 	public static class Patch_TryCastNextBurstShot
 	{
@@ -48,15 +37,15 @@ namespace HediffResourceFramework
 					{
 						if (HediffResourceUtils.VerbMatches(__instance, option))
 						{
-							Log.Message("Adjusting hediff: " + option.hediff + " - " + option.severityOffset + " - " + option.verbIndex);
-							HealthUtility.AdjustSeverity(__instance.CasterPawn, option.hediff, option.severityOffset);
+							Log.Message("Adjusting hediff: " + option.hediff + " - " + option.resourceOffset + " - " + option.verbIndex);
+							HediffResourceUtils.AdjustResourceAmount(__instance.CasterPawn, option.hediff, option.resourceOffset, option);
 						}
 					}
 				}
 			}
 		}
 	}
-
+	
 	[HarmonyPatch(typeof(CompReloadable), "CreateVerbTargetCommand")]
 	public static class Patch_CreateVerbTargetCommand
     {
@@ -71,18 +60,18 @@ namespace HediffResourceFramework
                     {
 						if (HediffResourceUtils.VerbMatches(verb, option))
                         {
-							var manaHediff = verb.CasterPawn.health.hediffSet.GetFirstHediffOfDef(option.hediff);
+							var manaHediff = verb.CasterPawn.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
 							if (option.disableOnEmptyOrMissingHediff)
 							{
-								bool manaIsEmptyOrNull = manaHediff != null ? manaHediff.Severity <= 0 : false;
+								bool manaIsEmptyOrNull = manaHediff != null ? manaHediff.ResourceAmount <= 0 : false;
 								if (manaIsEmptyOrNull)
 								{
 									HediffResourceUtils.DisableGizmoOnEmptyOrMissingHediff(option, __result);
 								}
 							}
-							if (option.minimumSeverityCastRequirement != -1f)
+							if (option.minimumResourceCastRequirement != -1f)
 							{
-								if (manaHediff != null && manaHediff.Severity < option.minimumSeverityCastRequirement)
+								if (manaHediff != null && manaHediff.ResourceAmount < option.minimumResourceCastRequirement)
 								{
 									HediffResourceUtils.DisableGizmoOnEmptyOrMissingHediff(option, __result);
 								}
@@ -93,7 +82,7 @@ namespace HediffResourceFramework
 			}
 		}
 	}
-
+	
 	[HarmonyPatch(typeof(PawnVerbGizmoUtility), "GetGizmosForVerb")]
 	public static class Patch_GetGizmosForVerb
 	{
@@ -109,10 +98,10 @@ namespace HediffResourceFramework
 					{
 						if (HediffResourceUtils.VerbMatches(verb, option))
 						{
-							var manaHediff = verb.CasterPawn.health.hediffSet.GetFirstHediffOfDef(option.hediff);
+							var manaHediff = verb.CasterPawn.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
 							if (option.disableOnEmptyOrMissingHediff)
 							{
-								bool manaIsEmptyOrNull = manaHediff != null ? manaHediff.Severity <= 0 : true;
+								bool manaIsEmptyOrNull = manaHediff != null ? manaHediff.ResourceAmount <= 0 : true;
 								if (manaIsEmptyOrNull)
 								{
 									foreach (var g in list)
@@ -121,9 +110,9 @@ namespace HediffResourceFramework
 									}
 								}
 							}
-							if (option.minimumSeverityCastRequirement != -1f)
+							if (option.minimumResourceCastRequirement != -1f)
 							{
-								if (manaHediff != null && manaHediff.Severity < option.minimumSeverityCastRequirement)
+								if (manaHediff != null && manaHediff.ResourceAmount < option.minimumResourceCastRequirement)
 								{
 									foreach (var g in list)
 									{
@@ -138,7 +127,7 @@ namespace HediffResourceFramework
 			}
 		}
 	}
-
+	
 	[HarmonyPatch(typeof(Verb), "IsStillUsableBy")]
 	public static class Patch_IsStillUsableBy
 	{
@@ -146,11 +135,15 @@ namespace HediffResourceFramework
 		{
 			if (__result)
 			{
-				__result = HediffResourceUtils.IsUsableBy(__instance);
+				__result = HediffResourceUtils.IsUsableBy(__instance, out bool verbIsFromHediffResource);
+				if (verbIsFromHediffResource)
+                {
+					pawn.jobs.StopAll();
+                }
 			}
 		}
 	}
-
+	
 	[HarmonyPatch(typeof(Verb), "Available")]
 	public static class Patch_Available
 	{
@@ -158,8 +151,48 @@ namespace HediffResourceFramework
 		{
 			if (__result)
 			{
-				__result = HediffResourceUtils.IsUsableBy(__instance);
+				__result = HediffResourceUtils.IsUsableBy(__instance, out bool verbIsFromHediffResource);
+				if (verbIsFromHediffResource)
+				{
+					__instance.CasterPawn?.jobs.StopAll();
+				}
 			}
+		}
+	}
+	
+	[HarmonyPatch(typeof(JobDriver_Wear), "TryMakePreToilReservations")]
+	public static class Patch_TryMakePreToilReservations
+	{
+		private static bool Prefix(JobDriver_Wear __instance)
+		{
+			var apparel = (Apparel)__instance.job.GetTarget(TargetIndex.A).Thing;
+			var hediffComp = apparel.GetComp<CompApparelAdjustHediffs>();
+			if (hediffComp?.Props.hediffOptions != null)
+			{
+				foreach (var option in hediffComp.Props.hediffOptions)
+				{
+					if (option.disallowEquippingIfEmptyNullHediff)
+					{
+						var hediff = __instance.pawn.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
+						if (hediff is null || hediff.ResourceAmount <= 0)
+                        {
+							return false;
+                        }
+					}
+					if (option.blackListHediffsPreventEquipping != null)
+                    {
+						foreach (var hediffDef in option.blackListHediffsPreventEquipping)
+                        {
+							var hediff = __instance.pawn.health.hediffSet.GetFirstHediffOfDef(option.hediff);
+							if (hediff != null)
+                            {
+								return false;
+                            }
+						}
+					}
+				}
+			}
+			return true;
 		}
 	}
 }

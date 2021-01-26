@@ -48,6 +48,8 @@
     <Compile Include="Comps\CompApparelAdjustHediffs.cs" />
     <Compile Include="HarmonyPatches\Patches.cs" />
     <Compile Include="HediffResourceUtils.cs" />
+    <Compile Include="Hediffs\HediffResource.cs" />
+    <Compile Include="Hediffs\HediffResourceDef.cs" />
     <Compile Include="ModExtensions\HediffAdjustOptions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

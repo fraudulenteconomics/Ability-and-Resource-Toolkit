@@ -43,7 +43,17 @@
 				<hediffOptions>
 					<li>
 						<hediff>HRF_Steam_Hediff</hediff>
-						<severityOffset>100</severityOffset>
+						<resourceOffset>100</resourceOffset>
+						<qualityScalesResourceOffset>true</qualityScalesResourceOffset>
+						<addHediffIfMissing>false</addHediffIfMissing>
+						<!-- default is false -->
+						<maxResourceCapacityOffset>5</maxResourceCapacityOffset>
+						<qualityScalesCapacityOffset>true</qualityScalesCapacityOffset>
+						<disallowEquippingIfEmptyNullHediff>true</disallowEquippingIfEmptyNullHediff>
+						<dropApparelIfEmptyNullHediff>true</dropApparelIfEmptyNullHediff>
+						<blackListHediffsPreventEquipping>
+							<li>HRF_Mana_Hediff</li>
+						</blackListHediffsPreventEquipping>
 					</li>
 				</hediffOptions>
 			</li>
@@ -53,7 +63,7 @@
 				<hediffOptions>
 					<li>
 						<hediff>HRF_Steam_Hediff</hediff>
-						<severityOffset>-0.5</severityOffset>
+						<resourceOffset>-0.5</resourceOffset>
 						<disableOnEmptyOrMissingHediff>true</disableOnEmptyOrMissingHediff>
 						<disableReason>Steam is empty</disableReason>
 					</li>
@@ -98,7 +108,7 @@
 				<hediffOptions>
 					<li>
 						<hediff>HRF_Steam_Hediff</hediff>
-						<severityOffset>-100</severityOffset>
+						<resourceOffset>-100</resourceOffset>
 					</li>
 				</hediffOptions>
 			</li>
@@ -108,7 +118,7 @@
 				<hediffOptions>
 					<li>
 						<hediff>HRF_Steam_Hediff</hediff>
-						<severityOffset>-2.5</severityOffset>
+						<resourceOffset>-2.5</resourceOffset>
 						<disableOnEmptyOrMissingHediff>true</disableOnEmptyOrMissingHediff>
 						<disableReason>Steam is empty</disableReason>
 					</li>
@@ -195,7 +205,7 @@
 				<hediffOptions>
 					<li>
 						<hediff>HRF_Steam_Hediff</hediff>
-						<severityOffset>-0.2</severityOffset>
+						<resourceOffset>-0.2</resourceOffset>
 						<disableOnEmptyOrMissingHediff>true</disableOnEmptyOrMissingHediff>
 						<disableReason>Steam is empty</disableReason>
 					</li>
@@ -266,7 +276,7 @@
 				<hediffOptions>
 					<li>
 						<hediff>HRF_Mana_Hediff</hediff>
-						<severityOffset>100</severityOffset>
+						<resourceOffset>100</resourceOffset>
 					</li>
 				</hediffOptions>
 			</li>
@@ -348,48 +358,86 @@
 					<li>
 						<hediff>HRF_Mana_Hediff</hediff>
 						<verbIndex>0</verbIndex>
-						<severityOffset>-1.33</severityOffset>
+						<resourceOffset>-1.33</resourceOffset>
 						<disableOnEmptyOrMissingHediff>true</disableOnEmptyOrMissingHediff>
 						<disableReason>Mana is empty</disableReason>
-						<minimumSeverityCastRequirement>5</minimumSeverityCastRequirement>
+						<minimumResourceCastRequirement>5</minimumResourceCastRequirement>
 					</li>
 					<li>
 						<hediff>HRF_Mana_Hediff</hediff>
 						<verbIndex>1</verbIndex>
-						<severityOffset>-15</severityOffset>
+						<resourceOffset>-15</resourceOffset>
 						<disableOnEmptyOrMissingHediff>true</disableOnEmptyOrMissingHediff>
 						<disableReason>Mana is empty</disableReason>
-						<minimumSeverityCastRequirement>15</minimumSeverityCastRequirement>
+						<minimumResourceCastRequirement>15</minimumResourceCastRequirement>
 					</li>
 				</hediffOptions>
 			</li>
 		</modExtensions>
 	</ThingDef>
 
-	<HediffDef>
+	<HediffResourceFramework.HediffResourceDef>
 		<defName>HRF_Mana_Hediff</defName>
 		<label>Mana</label>
 		<description>Mana accumulating within the pawn.</description>
-		<hediffClass>HediffWithComps</hediffClass>
-		<maxSeverity>100</maxSeverity>
-		<initialSeverity>100</initialSeverity>
+		<hediffClass>HediffResourceFramework.HediffResource</hediffClass>
+
+		<maxResourceCapacity>100</maxResourceCapacity>
+		<initialResourceAmount>100</initialResourceAmount>
 		<isBad>false</isBad>
 		<tendable>false</tendable>
 		<makesSickThought>false</makesSickThought>
 		<defaultLabelColor>(0.1,0.3,0.9)</defaultLabelColor>
-	</HediffDef>	
+	</HediffResourceFramework.HediffResourceDef>	
 
-	<HediffDef>
+	<HediffResourceFramework.HediffResourceDef>
 		<defName>HRF_Steam_Hediff</defName>
 		<label>Steam</label>
 		<description>Steam pressure generated from an onboard steam engine.</description>
-		<hediffClass>HediffWithComps</hediffClass>
-		<maxSeverity>10</maxSeverity>
-		<initialSeverity>1</initialSeverity>
+		<hediffClass>HediffResourceFramework.HediffResource</hediffClass>
+
+		<maxResourceCapacity>10</maxResourceCapacity>
+		<initialResourceAmount>1</initialResourceAmount>
+		<resourceGainPerDamages>
+			<SurgicalCut>5</SurgicalCut>
+			<ExecutionCut>5</ExecutionCut>
+
+			<Cut>5</Cut>
+			<Crush>5</Crush>
+			<Blunt>5</Blunt>
+			<Poke>5</Poke>
+			<Stab>5</Stab>
+			<Scratch>5</Scratch>
+			<ScratchToxic>5</ScratchToxic>
+			<Bite>5</Bite>
+			<ToxicBite>5</ToxicBite>
+
+			<Deterioration>5</Deterioration>
+			<Mining>5</Mining>
+			<Rotting>5</Rotting>
+			<Extinguish>5</Extinguish>
+			<Bomb>5</Bomb>
+			<BombSuper>5</BombSuper>
+			<Smoke>5</Smoke>
+
+			<RangedStab>5</RangedStab>
+			<Bullet>5</Bullet>
+			<Arrow>5</Arrow>
+			<ArrowHighVelocity>5</ArrowHighVelocity>
+
+			<Stun>5</Stun>
+			<EMP>5</EMP>
+
+			<Flame>5</Flame>
+			<Burn>5</Burn>
+			<Frostbite>5</Frostbite>
+			<TornadoScratch>5</TornadoScratch>
+			
+		</resourceGainPerDamages>
 		<isBad>false</isBad>
 		<tendable>false</tendable>
 		<makesSickThought>false</makesSickThought>
 		<defaultLabelColor>(0.9,0.9,0.2)</defaultLabelColor>
-	</HediffDef>
+	</HediffResourceFramework.HediffResourceDef>
 
 </Defs>

@@ -11,6 +11,7 @@ namespace HediffResourceFramework
     public class CompProperties_ApparelAdjustHediffs : CompProperties
     {
         public List<HediffOption> hediffOptions;
+
         public CompProperties_ApparelAdjustHediffs()
         {
             this.compClass = typeof(CompApparelAdjustHediffs);
@@ -35,9 +36,13 @@ namespace HediffResourceFramework
                 {
                     foreach (var option in Props.hediffOptions)
                     {
-                        float num = option.severityOffset;
+                        float num = option.resourceOffset;
                         num *= 0.00333333341f;
-                        HealthUtility.AdjustSeverity(apparel.Wearer, option.hediff, num);
+                        if (option.qualityScalesResourceOffset && apparel.TryGetQuality(out QualityCategory qc))
+                        {
+                            num *= HediffResourceUtils.GetQualityMultiplier(qc);
+                        }
+                        HediffResourceUtils.AdjustResourceAmount(apparel.Wearer, option.hediff, num, option);
                     }
                 }
             }
