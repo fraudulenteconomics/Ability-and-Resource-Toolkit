@@ -47,6 +47,68 @@ namespace HediffResourceFramework
             }
         }
 
+        public override string TipStringExtra
+        {
+            get
+            {
+                return base.TipStringExtra + "\n" + "HRF.Fulfils".Translate(TotalResourceGainAmount());
+            }
+        }
+
+        public float TotalResourceGainAmount()
+        {
+            float num = 0;
+            var apparels = pawn.apparel?.WornApparel?.ToList();
+            if (apparels != null)
+            {
+                foreach (var apparel in apparels)
+                {
+                    var hediffComp = apparel.GetComp<CompApparelAdjustHediffs>();
+                    if (hediffComp?.Props.hediffOptions != null)
+                    {
+                        foreach (var option in hediffComp.Props.hediffOptions)
+                        {
+                            if (option.hediff == def)
+                            {
+                                var num2 = option.resourceOffset;
+                                num2 *= 0.00333333341f;
+                                if (option.qualityScalesResourceOffset && apparel.TryGetQuality(out QualityCategory qc))
+                                {
+                                    num2 *= HediffResourceUtils.GetQualityMultiplier(qc);
+                                }
+                                num += num2;
+                            }
+                        }
+                    }
+                }
+            }
+
+            var equipments = pawn.equipment.AllEquipmentListForReading;
+            if (equipments != null)
+            {
+                foreach (var equipment in equipments)
+                {
+                    var hediffComp = equipment.GetComp<CompWeaponAdjustHediffs>();
+                    if (hediffComp?.Props.hediffOptions != null)
+                    {
+                        foreach (var option in hediffComp.Props.hediffOptions)
+                        {
+                            if (option.hediff == def)
+                            {
+                                var num2 = option.resourceOffset;
+                                num2 *= 0.00333333341f;
+                                if (option.qualityScalesResourceOffset && equipment.TryGetQuality(out QualityCategory qc))
+                                {
+                                    num2 *= HediffResourceUtils.GetQualityMultiplier(qc);
+                                }
+                                num += num2;
+                            }
+                        }
+                    }
+                }
+            }
+            return num;
+        }
         public override void Notify_PawnPostApplyDamage(DamageInfo dinfo, float totalDamageDealt)
         {
             base.Notify_PawnPostApplyDamage(dinfo, totalDamageDealt);

@@ -151,37 +151,15 @@ namespace HediffResourceFramework
 		}
 	}
 
-	[HarmonyPatch(typeof(ApparelUtility), "HasPartsToWear")]
+	[HarmonyPatch(typeof(JobGiver_OptimizeApparel), "ApparelScoreGain_NewTmp")]
 	public static class Patch_HasPartsToWear
 	{
-		private static bool Prefix(Pawn p, ThingDef apparel)
+		private static bool Prefix(ref float __result, Pawn pawn, Apparel ap, List<float> wornScoresCache)
 		{
-			var props = apparel.GetCompProperties<CompProperties_ApparelAdjustHediffs>();
-			if (props?.hediffOptions != null)
-			{
-				foreach (var option in props.hediffOptions)
-				{
-					if (option.disallowEquippingIfEmptyNullHediff)
-					{
-						var hediff = p.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
-						if (hediff is null || hediff.ResourceAmount <= 0)
-						{
-							return false;
-						}
-					}
-
-					if (option.blackListHediffsPreventEquipping != null)
-					{
-						foreach (var hediffDef in option.blackListHediffsPreventEquipping)
-						{
-							var hediff = p.health.hediffSet.GetFirstHediffOfDef(hediffDef);
-							if (hediff != null)
-							{
-								return false;
-							}
-						}
-					}
-				}
+			if (!AddHumanlikeOrders_Fix.CanWear(pawn, ap, out string tmp))
+            {
+				__result = -1000f;
+				return false;
 			}
 			return true;
 		}
@@ -228,7 +206,7 @@ namespace HediffResourceFramework
 			}
 		}
 
-		private static bool CanWear(Pawn pawn, Apparel apparel, out string reason)
+		public static bool CanWear(Pawn pawn, Apparel apparel, out string reason)
 		{
 			var hediffComp = apparel.GetComp<CompApparelAdjustHediffs>();
 			if (hediffComp?.Props.hediffOptions != null)
