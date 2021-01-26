@@ -50,6 +50,7 @@
 						<maxResourceCapacityOffset>5</maxResourceCapacityOffset>
 						<qualityScalesCapacityOffset>true</qualityScalesCapacityOffset>
 						<disallowEquippingIfEmptyNullHediff>false</disallowEquippingIfEmptyNullHediff>
+						
 						<dropApparelIfEmptyNullHediff>false</dropApparelIfEmptyNullHediff>
 						<blackListHediffsPreventEquipping>
 							<li>HRF_Mana_Hediff</li>
@@ -109,23 +110,16 @@
 				<hediffOptions>
 					<li>
 						<hediff>HRF_Steam_Hediff</hediff>
-						<resourceOffset>-100</resourceOffset>
-					</li>
-				</hediffOptions>
-			</li>
-			<li Class="HediffResourceFramework.CompProperties_ApparelAdjustHediffs">
-				<hediffOptions>
-					<li>
-						<hediff>HRF_Steam_Hediff</hediff>
 						<addHediffIfMissing>false</addHediffIfMissing>
-						<!-- default is false -->
 						<maxResourceCapacityOffset>-2</maxResourceCapacityOffset>
 						<qualityScalesCapacityOffset>false</qualityScalesCapacityOffset>
 						<disallowEquippingIfEmptyNullHediff>true</disallowEquippingIfEmptyNullHediff>
+						<cannotEquipReason>No enough steam</cannotEquipReason>
 						<dropApparelIfEmptyNullHediff>true</dropApparelIfEmptyNullHediff>
 						<blackListHediffsPreventEquipping>
 							<li>HRF_Mana_Hediff</li>
 						</blackListHediffsPreventEquipping>
+						<cannotEquipReasonIncompatible>Incompatible with </cannotEquipReasonIncompatible>
 					</li>
 				</hediffOptions>
 			</li>
@@ -213,15 +207,17 @@
 						<hediff>HRF_Steam_Hediff</hediff>
 						<resourceOffset>100</resourceOffset>
 						<qualityScalesResourceOffset>true</qualityScalesResourceOffset>
-						<addHediffIfMissing>false</addHediffIfMissing>
-						<!-- default is false -->
+						<addHediffIfMissing>false</addHediffIfMissing> <!-- default is false -->
 						<maxResourceCapacityOffset>5</maxResourceCapacityOffset>
 						<qualityScalesCapacityOffset>true</qualityScalesCapacityOffset>
 						<disallowEquippingIfEmptyNullHediff>true</disallowEquippingIfEmptyNullHediff>
+						<cannotEquipReason>No enough steam</cannotEquipReason>
 						<dropWeaponIfEmptyNullHediff>true</dropWeaponIfEmptyNullHediff>
 						<blackListHediffsPreventEquipping>
 							<li>HRF_Mana_Hediff</li>
 						</blackListHediffsPreventEquipping>
+						<cannotEquipReasonIncompatible>Incompatible with </cannotEquipReasonIncompatible>
+
 					</li>
 				</hediffOptions>
 			</li>

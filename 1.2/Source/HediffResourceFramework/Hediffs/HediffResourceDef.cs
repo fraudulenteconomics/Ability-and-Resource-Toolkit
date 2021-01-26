@@ -28,5 +28,6 @@ namespace HediffResourceFramework
         public float maxResourceCapacity;
         public float initialResourceAmount;
 		public ResourceGainPerDamage resourceGainPerDamages;
+		public float resourceGainPerAllDamages;
 	}
 }

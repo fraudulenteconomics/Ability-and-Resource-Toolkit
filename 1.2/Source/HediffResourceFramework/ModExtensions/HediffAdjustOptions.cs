@@ -24,8 +24,12 @@ namespace HediffResourceFramework
         public bool disableOnEmptyOrMissingHediff;
         public float minimumResourceCastRequirement = -1f;
         public bool disallowEquippingIfEmptyNullHediff;
+        public string cannotEquipReason;
         public List<HediffDef> blackListHediffsPreventEquipping;
+        public string cannotEquipReasonIncompatible;
+
         public bool dropApparelIfEmptyNullHediff;
+        public bool dropWeaponIfEmptyNullHediff;
         public bool addHediffIfMissing = false;
         public string disableReason;
     }

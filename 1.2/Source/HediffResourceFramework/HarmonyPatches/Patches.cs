@@ -7,6 +7,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 using Verse;
 using Verse.AI;
 
@@ -21,7 +22,7 @@ namespace HediffResourceFramework
 			harmony.PatchAll();
 		}
 	}
-	
+
 	[HarmonyPatch(typeof(Verb), "TryCastNextBurstShot")]
 	public static class Patch_TryCastNextBurstShot
 	{
@@ -29,7 +30,6 @@ namespace HediffResourceFramework
 		{
 			if (__instance.Available() && __instance.CasterIsPawn && __instance.EquipmentSource != null)
 			{
-				Log.Message("Postfix: " + __instance);
 				var options = __instance.EquipmentSource.def.GetModExtension<HediffAdjustOptions>();
 				if (options != null)
 				{
@@ -37,7 +37,6 @@ namespace HediffResourceFramework
 					{
 						if (HediffResourceUtils.VerbMatches(__instance, option))
 						{
-							Log.Message("Adjusting hediff: " + option.hediff + " - " + option.resourceOffset + " - " + option.verbIndex);
 							HediffResourceUtils.AdjustResourceAmount(__instance.CasterPawn, option.hediff, option.resourceOffset, option);
 						}
 					}
@@ -45,10 +44,10 @@ namespace HediffResourceFramework
 			}
 		}
 	}
-	
+
 	[HarmonyPatch(typeof(CompReloadable), "CreateVerbTargetCommand")]
 	public static class Patch_CreateVerbTargetCommand
-    {
+	{
 		private static void Postfix(ref Command_Reloadable __result, Thing gear, Verb verb)
 		{
 			if (__result != null && verb.CasterIsPawn && verb.EquipmentSource != null)
@@ -57,9 +56,9 @@ namespace HediffResourceFramework
 				if (options != null)
 				{
 					foreach (var option in options.hediffOptions)
-                    {
+					{
 						if (HediffResourceUtils.VerbMatches(verb, option))
-                        {
+						{
 							var manaHediff = verb.CasterPawn.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
 							if (option.disableOnEmptyOrMissingHediff)
 							{
@@ -82,7 +81,7 @@ namespace HediffResourceFramework
 			}
 		}
 	}
-	
+
 	[HarmonyPatch(typeof(PawnVerbGizmoUtility), "GetGizmosForVerb")]
 	public static class Patch_GetGizmosForVerb
 	{
@@ -92,7 +91,7 @@ namespace HediffResourceFramework
 			{
 				var options = verb.EquipmentSource.def.GetModExtension<HediffAdjustOptions>();
 				if (options != null)
-                {
+				{
 					var list = __result.ToList();
 					foreach (var option in options.hediffOptions)
 					{
@@ -127,7 +126,7 @@ namespace HediffResourceFramework
 			}
 		}
 	}
-	
+
 	[HarmonyPatch(typeof(Verb), "IsStillUsableBy")]
 	public static class Patch_IsStillUsableBy
 	{
@@ -136,14 +135,10 @@ namespace HediffResourceFramework
 			if (__result)
 			{
 				__result = HediffResourceUtils.IsUsableBy(__instance, out bool verbIsFromHediffResource);
-				if (verbIsFromHediffResource)
-                {
-					pawn.jobs.StopAll();
-                }
 			}
 		}
 	}
-	
+
 	[HarmonyPatch(typeof(Verb), "Available")]
 	public static class Patch_Available
 	{
@@ -152,20 +147,54 @@ namespace HediffResourceFramework
 			if (__result)
 			{
 				__result = HediffResourceUtils.IsUsableBy(__instance, out bool verbIsFromHediffResource);
-				if (verbIsFromHediffResource)
-				{
-					__instance.CasterPawn?.jobs.StopAll();
-				}
 			}
 		}
 	}
-	
-	[HarmonyPatch(typeof(JobDriver_Wear), "TryMakePreToilReservations")]
-	public static class Patch_TryMakePreToilReservations
+
+
+	[HarmonyPatch(typeof(FloatMenuMakerMap), "AddHumanlikeOrders")]
+	public static class AddHumanlikeOrders_Fix
 	{
-		private static bool Prefix(JobDriver_Wear __instance)
+		public static void Postfix(Vector3 clickPos, Pawn pawn, ref List<FloatMenuOption> opts)
 		{
-			var apparel = (Apparel)__instance.job.GetTarget(TargetIndex.A).Thing;
+			IntVec3 c = IntVec3.FromVector3(clickPos);
+			foreach (var apparel in GridsUtility.GetThingList(c, pawn.Map).Where(x => x is Apparel).Cast<Apparel>())
+			{
+				TaggedString toCheck = "ForceWear".Translate(apparel.LabelCap, apparel);
+				FloatMenuOption floatMenuOption = opts.FirstOrDefault((FloatMenuOption x) => x.Label.Contains
+				(toCheck));
+				if (floatMenuOption != null && !CanWear(pawn, apparel, out string reason))
+				{
+					opts.Remove(floatMenuOption);
+					var newOption = new FloatMenuOption("CannotWear".Translate(apparel.LabelShort) + "(" + reason + ")", null, MenuOptionPriority.Default, null, null, 0f, null, null);
+					opts.Add(newOption);
+				}
+			}
+
+			if (pawn.equipment != null)
+			{
+				List<Thing> thingList = c.GetThingList(pawn.Map);
+				for (int i = 0; i < thingList.Count; i++)
+				{
+					if (thingList[i].TryGetComp<CompEquippable>() != null)
+					{
+						var equipment = (ThingWithComps)thingList[i];
+						TaggedString toCheck = "Equip".Translate(equipment.LabelShort);
+						FloatMenuOption floatMenuOption = opts.FirstOrDefault((FloatMenuOption x) => x.Label.Contains
+						(toCheck));
+						if (floatMenuOption != null && !CanEquip(pawn, equipment, out string reason))
+						{
+							opts.Remove(floatMenuOption);
+							var newOption = new FloatMenuOption("CannotEquip".Translate(equipment.LabelShort) + " (" + reason + ")", null, MenuOptionPriority.Default, null, null, 0f, null, null);
+							opts.Add(newOption);
+						}
+					}
+				}
+			}
+		}
+
+		private static bool CanWear(Pawn pawn, Apparel apparel, out string reason)
+		{
 			var hediffComp = apparel.GetComp<CompApparelAdjustHediffs>();
 			if (hediffComp?.Props.hediffOptions != null)
 			{
@@ -173,25 +202,64 @@ namespace HediffResourceFramework
 				{
 					if (option.disallowEquippingIfEmptyNullHediff)
 					{
-						var hediff = __instance.pawn.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
+						var hediff = pawn.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
 						if (hediff is null || hediff.ResourceAmount <= 0)
-                        {
+						{
+							reason = option.cannotEquipReason;
 							return false;
-                        }
+						}
 					}
+
 					if (option.blackListHediffsPreventEquipping != null)
-                    {
+					{
 						foreach (var hediffDef in option.blackListHediffsPreventEquipping)
-                        {
-							var hediff = __instance.pawn.health.hediffSet.GetFirstHediffOfDef(option.hediff);
+						{
+							var hediff = pawn.health.hediffSet.GetFirstHediffOfDef(hediffDef);
 							if (hediff != null)
-                            {
+							{
+								reason = option.cannotEquipReasonIncompatible + hediffDef.label;
 								return false;
-                            }
+							}
 						}
 					}
 				}
 			}
+			reason = "";
+			return true;
+		}
+
+		private static bool CanEquip(Pawn pawn, ThingWithComps weapon, out string reason)
+		{
+			var hediffComp = weapon.GetComp<CompWeaponAdjustHediffs>();
+			if (hediffComp?.Props.hediffOptions != null)
+			{
+				foreach (var option in hediffComp.Props.hediffOptions)
+				{
+					if (option.disallowEquippingIfEmptyNullHediff)
+					{
+						var hediff = pawn.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
+						if (hediff is null || hediff.ResourceAmount <= 0)
+						{
+							reason = option.cannotEquipReason;
+							return false;
+						}
+					}
+
+					if (option.blackListHediffsPreventEquipping != null)
+					{
+						foreach (var hediffDef in option.blackListHediffsPreventEquipping)
+						{
+							var hediff = pawn.health.hediffSet.GetFirstHediffOfDef(hediffDef);
+							if (hediff != null)
+							{
+								reason = option.cannotEquipReasonIncompatible;
+								return false;
+							}
+						}
+					}
+				}
+			}
+			reason = "";
 			return true;
 		}
 	}

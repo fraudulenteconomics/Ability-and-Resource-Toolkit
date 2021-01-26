@@ -54,6 +54,10 @@ namespace HediffResourceFramework
             {
                 this.ResourceAmount += resourceGain;
             }
+            else if (this.def.resourceGainPerAllDamages != 0f)
+            {
+                this.ResourceAmount += this.def.resourceGainPerAllDamages;
+            }
         }
         public override void PostAdd(DamageInfo? dinfo)
         {
@@ -77,6 +81,25 @@ namespace HediffResourceFramework
                             if (option.dropApparelIfEmptyNullHediff && option.hediff == def)
                             {
                                 pawn.apparel.TryDrop(apparel);
+                            }
+                        }
+                    }
+                }
+            }
+
+            var equipments = pawn.equipment.AllEquipmentListForReading;
+            if (equipments != null)
+            {
+                foreach (var equipment in equipments)
+                {
+                    var hediffComp = equipment.GetComp<CompWeaponAdjustHediffs>();
+                    if (hediffComp?.Props.hediffOptions != null)
+                    {
+                        foreach (var option in hediffComp.Props.hediffOptions)
+                        {
+                            if (option.dropWeaponIfEmptyNullHediff && option.hediff == def)
+                            {
+                                pawn.equipment.TryDropEquipment(equipment, out ThingWithComps result, pawn.Position);
                             }
                         }
                     }
