@@ -151,6 +151,41 @@ namespace HediffResourceFramework
 		}
 	}
 
+	[HarmonyPatch(typeof(ApparelUtility), "HasPartsToWear")]
+	public static class Patch_HasPartsToWear
+	{
+		private static bool Prefix(Pawn p, ThingDef apparel)
+		{
+			var props = apparel.GetCompProperties<CompProperties_ApparelAdjustHediffs>();
+			if (props?.hediffOptions != null)
+			{
+				foreach (var option in props.hediffOptions)
+				{
+					if (option.disallowEquippingIfEmptyNullHediff)
+					{
+						var hediff = p.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
+						if (hediff is null || hediff.ResourceAmount <= 0)
+						{
+							return false;
+						}
+					}
+
+					if (option.blackListHediffsPreventEquipping != null)
+					{
+						foreach (var hediffDef in option.blackListHediffsPreventEquipping)
+						{
+							var hediff = p.health.hediffSet.GetFirstHediffOfDef(hediffDef);
+							if (hediff != null)
+							{
+								return false;
+							}
+						}
+					}
+				}
+			}
+			return true;
+		}
+	}
 
 	[HarmonyPatch(typeof(FloatMenuMakerMap), "AddHumanlikeOrders")]
 	public static class AddHumanlikeOrders_Fix
