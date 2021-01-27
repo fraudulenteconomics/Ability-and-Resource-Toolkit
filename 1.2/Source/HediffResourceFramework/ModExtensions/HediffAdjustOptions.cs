@@ -26,6 +26,7 @@ namespace HediffResourceFramework
         public bool disallowEquippingIfEmptyNullHediff;
         public string cannotEquipReason;
         public List<HediffDef> blackListHediffsPreventEquipping;
+        public List<HediffDef> dropWeaponOrApparelIfBlacklistHediff;
         public string cannotEquipReasonIncompatible;
 
         public bool dropApparelIfEmptyNullHediff;

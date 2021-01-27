@@ -151,6 +151,52 @@ namespace HediffResourceFramework
 		}
 	}
 
+	[HarmonyPatch(typeof(Hediff), "PostAdd")]
+	public static class Patch_PostAdd
+	{
+		private static void Postfix(Hediff __instance)
+		{
+			var pawn = __instance.pawn;
+			var apparels = pawn.apparel?.WornApparel?.ToList();
+			if (apparels != null)
+			{
+				foreach (var apparel in apparels)
+				{
+					var hediffComp = apparel.GetComp<CompApparelAdjustHediffs>();
+					if (hediffComp?.Props.hediffOptions != null)
+					{
+						foreach (var option in hediffComp.Props.hediffOptions)
+						{
+							if (option.dropWeaponOrApparelIfBlacklistHediff?.Contains(__instance.def) ?? false)
+							{
+								pawn.apparel.TryDrop(apparel);
+							}
+						}
+					}
+				}
+			}
+
+			var equipments = pawn.equipment.AllEquipmentListForReading;
+			if (equipments != null)
+			{
+				foreach (var equipment in equipments)
+				{
+					var hediffComp = equipment.GetComp<CompWeaponAdjustHediffs>();
+					if (hediffComp?.Props.hediffOptions != null)
+					{
+						foreach (var option in hediffComp.Props.hediffOptions)
+						{
+							if (option.dropWeaponOrApparelIfBlacklistHediff?.Contains(__instance.def) ?? false)
+							{
+								pawn.equipment.TryDropEquipment(equipment, out ThingWithComps result, pawn.Position);
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
 	[HarmonyPatch(typeof(Pawn), "PreApplyDamage")]
 	public static class Patch_PreApplyDamage
 	{
@@ -181,10 +227,17 @@ namespace HediffResourceFramework
 
 		private static void ProcessDamage(ref DamageInfo dinfo, HediffResource hediff, ShieldProperties shieldProps)
 		{
-			Log.Message(hediff.def.defName + " - hediff.ResourceAmount: " + hediff.ResourceAmount + " - Damage amount: " + dinfo.Amount);
+			Log.Message("Pre: " + hediff.def.defName + " - hediff.ResourceAmount: " + hediff.ResourceAmount + " - Damage amount: " + dinfo.Amount);
 			if (shieldProps.resourceConsumptionPerDamage.HasValue && hediff.ResourceAmount >= shieldProps.resourceConsumptionPerDamage.Value)
 			{
-				dinfo.SetAmount(dinfo.Amount - shieldProps.maxDamageToAbsorb.Value);
+				if (shieldProps.maxDamageToAbsorb.HasValue)
+                {
+					dinfo.SetAmount(dinfo.Amount - shieldProps.maxDamageToAbsorb.Value);
+                }
+				else
+                {
+					dinfo.SetAmount(0);
+				}
 				hediff.ResourceAmount -= shieldProps.resourceConsumptionPerDamage.Value;
 			}
 			else if (shieldProps.ratioPerAbsorb.HasValue)
@@ -211,7 +264,7 @@ namespace HediffResourceFramework
 					hediff.ResourceAmount = 0;
 				}
 			}
-			Log.Message(hediff.def.defName + " - hediff.ResourceAmount: " + hediff.ResourceAmount + " - Damage amount: " + dinfo.Amount);
+			Log.Message("Post: " + hediff.def.defName + " - hediff.ResourceAmount: " + hediff.ResourceAmount + " - Damage amount: " + dinfo.Amount);
 		}
 	}
 

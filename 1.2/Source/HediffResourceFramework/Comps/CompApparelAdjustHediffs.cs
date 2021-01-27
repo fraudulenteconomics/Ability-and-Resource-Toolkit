@@ -32,7 +32,7 @@ namespace HediffResourceFramework
             base.CompTick();
             if (this.parent is Apparel apparel && apparel.Wearer != null)
             {
-                if (apparel.Wearer.IsHashIntervalTick(200))
+                if (apparel.Wearer.IsHashIntervalTick(60))
                 {
                     foreach (var option in Props.hediffOptions)
                     {
@@ -42,6 +42,7 @@ namespace HediffResourceFramework
                         {
                             num *= HediffResourceUtils.GetQualityMultiplier(qc);
                         }
+                        num /= 3.33f;
                         HediffResourceUtils.AdjustResourceAmount(apparel.Wearer, option.hediff, num, option);
                     }
                 }

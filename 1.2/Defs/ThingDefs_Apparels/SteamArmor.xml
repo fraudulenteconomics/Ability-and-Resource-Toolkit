@@ -55,6 +55,9 @@
 						<blackListHediffsPreventEquipping>
 							<li>HRF_Mana_Hediff</li>
 						</blackListHediffsPreventEquipping>
+						<dropWeaponOrApparelIfBlacklistHediff>
+							<li>HRF_Mana_Hediff</li>
+						</dropWeaponOrApparelIfBlacklistHediff>
 					</li>
 				</hediffOptions>
 			</li>
@@ -682,7 +685,7 @@
 		<hediffClass>HediffResourceFramework.HediffResource</hediffClass>
 		<maxResourceCapacity>10</maxResourceCapacity>
 		<initialResourceAmount>0.1</initialResourceAmount>
-		
+		<keepWhenEmpty>true</keepWhenEmpty>
 		<shieldProperties>
 			<absorbMeleeDamage>true</absorbMeleeDamage>
             <absorbRangeDamage>true</absorbRangeDamage>

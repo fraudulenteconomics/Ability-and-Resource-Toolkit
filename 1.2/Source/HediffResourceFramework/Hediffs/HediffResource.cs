@@ -29,9 +29,25 @@ namespace HediffResourceFramework
                 {
                     this.pawn.health.RemoveHediff(this);
                 }
+                else
+                {
+                    this.Severity = resourceAmount;
+                }
             }
         }
 
+        public override float Severity
+        {
+            get
+            {
+                return base.Severity;
+            }
+            set
+            {
+                base.Severity = value;
+                ResourceAmount = base.Severity;
+            }
+        }
         public float ResourceCapacity
         {
             get
@@ -51,7 +67,7 @@ namespace HediffResourceFramework
         {
             get
             {
-                return base.TipStringExtra + "\n" + "HRF.Fulfils".Translate((TotalResourceGainAmount() / 3.33f).ToStringDecimalIfSmall());
+                return base.TipStringExtra + "\n" + "HRF.Fulfils".Translate((TotalResourceGainAmount()).ToStringDecimalIfSmall());
             }
         }
 

@@ -45,7 +45,7 @@ namespace HediffResourceFramework
 
             if (this.parent is ThingWithComps equipment && CompEquippable.PrimaryVerb.CasterPawn != null)
             {
-                if (CompEquippable.PrimaryVerb.CasterPawn.IsHashIntervalTick(200))
+                if (CompEquippable.PrimaryVerb.CasterPawn.IsHashIntervalTick(60))
                 {
                     foreach (var option in Props.hediffOptions)
                     {
@@ -55,6 +55,7 @@ namespace HediffResourceFramework
                         {
                             num *= HediffResourceUtils.GetQualityMultiplier(qc);
                         }
+                        num /= 3.33f;
                         HediffResourceUtils.AdjustResourceAmount(CompEquippable.PrimaryVerb.CasterPawn, option.hediff, num, option);
                     }
                 }
