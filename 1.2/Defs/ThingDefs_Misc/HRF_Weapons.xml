@@ -1,0 +1,111 @@
+<Defs>
+
+	<ThingDef ParentName="BaseHumanMakeableGun">
+		<defName>HRF_SteamRepeater</defName>
+		<label>steam repeater</label>
+		<description>A multi-barrel steam powered blaster. It will repeatedly fire rounds until it runs out of steam power, at which point it has a lengthy rearming period before it may be fired again.</description>
+		<graphicData>
+			<texPath>Things/Item/Equipment/WeaponRanged/Minigun</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+		</graphicData>
+		<soundInteract>Interact_Rifle</soundInteract>
+		<thingSetMakerTags>
+			<li>RewardStandardQualitySuper</li>
+		</thingSetMakerTags>
+		<statBases>
+			<WorkToMake>60000</WorkToMake>
+			<Mass>10</Mass>
+			<AccuracyTouch>0.15</AccuracyTouch>
+			<AccuracyShort>0.25</AccuracyShort>
+			<AccuracyMedium>0.25</AccuracyMedium>
+			<AccuracyLong>0.18</AccuracyLong>
+			<RangedWeapon_Cooldown>5</RangedWeapon_Cooldown>
+		</statBases>
+		<costList>
+			<Steel>160</Steel>
+			<ComponentIndustrial>20</ComponentIndustrial>
+		</costList>
+		<recipeMaker>
+			<researchPrerequisite>MultibarrelWeapons</researchPrerequisite>
+			<skillRequirements>
+				<Crafting>7</Crafting>
+			</skillRequirements>
+		</recipeMaker>
+		<techLevel>Industrial</techLevel>
+		<weaponTags>
+			<li>GunHeavy</li>
+		</weaponTags>
+		<equippedStatOffsets>
+			<MoveSpeed>-0.25</MoveSpeed>
+		</equippedStatOffsets>
+		<verbs>
+			<li>
+				<verbClass>Verb_Shoot</verbClass>
+				<label>steamrepeater</label>
+				<hasStandardCommand>true</hasStandardCommand>
+				<defaultProjectile>Bullet_Minigun</defaultProjectile>
+				<warmupTime>0</warmupTime>
+				<range>30.9</range>
+				<burstShotCount>500</burstShotCount>
+				<ticksBetweenBurstShots>5</ticksBetweenBurstShots>
+				<soundCast>Shot_Minigun</soundCast>
+				<soundCastTail>GunTail_Medium</soundCastTail>
+				<muzzleFlashScale>9</muzzleFlashScale>
+			</li>
+		</verbs>
+		<comps>
+			<li Class="MVCF.Comps.CompProperties_VerbGiver">
+				<verbProps>
+					<li>
+						<label>steamrepeater</label>
+						<canBeToggled>true</canBeToggled>
+					</li>
+				</verbProps>
+			</li>
+			<li Class="HediffResourceFramework.CompProperties_WeaponAdjustHediffs">
+				<hediffOptions>
+					<li>
+						<hediff>HRF_Steam_Hediff</hediff>
+						<resourceOffset>100</resourceOffset>
+						<qualityScalesResourceOffset>true</qualityScalesResourceOffset>
+						<addHediffIfMissing>false</addHediffIfMissing> <!-- default is false -->
+						<maxResourceCapacityOffset>5</maxResourceCapacityOffset>
+						<qualityScalesCapacityOffset>true</qualityScalesCapacityOffset>
+						<disallowEquippingIfEmptyNullHediff>true</disallowEquippingIfEmptyNullHediff>
+						<cannotEquipReason>No enough steam</cannotEquipReason>
+						<dropWeaponIfEmptyNullHediff>true</dropWeaponIfEmptyNullHediff>
+						<blackListHediffsPreventEquipping>
+							<li>HRF_Mana_Hediff</li>
+						</blackListHediffsPreventEquipping>
+						<cannotEquipReasonIncompatible>Incompatible with </cannotEquipReasonIncompatible>
+
+					</li>
+				</hediffOptions>
+			</li>
+		</comps>
+		<tools>
+			<li>
+				<label>barrels</label>
+				<capacities>
+					<li>Blunt</li>
+				</capacities>
+				<power>11.7</power>
+				<cooldownTime>2.6</cooldownTime>
+			</li>
+		</tools>
+		<modExtensions>
+			<li Class="HediffResourceFramework.HediffAdjustOptions">
+				<hediffOptions>
+					<li>
+						<hediff>HRF_Steam_Hediff</hediff>
+						<resourceOffset>-0.2</resourceOffset>
+						<disableOnEmptyOrMissingHediff>true</disableOnEmptyOrMissingHediff>
+						<disableReason>Steam is empty</disableReason>
+						<minimumResourceCastRequirement>0.2</minimumResourceCastRequirement>
+					</li>
+				</hediffOptions>
+			</li>
+		</modExtensions>
+	</ThingDef>
+	
+</Defs>
