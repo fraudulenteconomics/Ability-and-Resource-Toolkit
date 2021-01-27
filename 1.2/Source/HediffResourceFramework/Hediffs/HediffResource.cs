@@ -51,7 +51,7 @@ namespace HediffResourceFramework
         {
             get
             {
-                return base.TipStringExtra + "\n" + "HRF.Fulfils".Translate(TotalResourceGainAmount());
+                return base.TipStringExtra + "\n" + "HRF.Fulfils".Translate((TotalResourceGainAmount() / 3.33f).ToStringDecimalIfSmall());
             }
         }
 
