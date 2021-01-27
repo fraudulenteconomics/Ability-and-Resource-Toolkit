@@ -1,6 +1,6 @@
 <Defs>
 
-			<HediffResourceFramework.HediffResourceDef>
+	<HediffResourceFramework.HediffResourceDef>
 		<defName>HRF_Mana_Hediff</defName>
 		<label>Mana</label>
 		<description>no description</description>
@@ -13,13 +13,13 @@
 		<defaultLabelColor>(0.4,0.5,0.9)</defaultLabelColor>
 		<shieldProperties>
 			<absorbMeleeDamage>true</absorbMeleeDamage>
-            <absorbRangeDamage>true</absorbRangeDamage>
-			
+			<absorbRangeDamage>true</absorbRangeDamage>
+
 			<!-- <maxDamageToAbsorb>999</maxDamageToAbsorb> -->
-            <resourceConsumptionPerDamage>10</resourceConsumptionPerDamage>
-			
+			<resourceConsumptionPerDamage>10</resourceConsumptionPerDamage>
+
 			<!-- <ratioPerAbsorb>0.5</ratioPerAbsorb> -->
-			
+
 			<postDamageDelayResourceGainTicks>6000</postDamageDelayResourceGainTicks>
 		</shieldProperties>
 	</HediffResourceFramework.HediffResourceDef>	
@@ -29,22 +29,29 @@
 		<label>Steam</label>
 		<description>no description</description>
 		<hediffClass>HediffResourceFramework.HediffResource</hediffClass>
+		<comps>
+			<li Class="HediffResourceFramework.HediffCompProperties_ResourcePerDay">
+				<resourcePerDay>0.75</resourcePerDay>
+				<showHoursToRecover>true</showHoursToRecover>
+			</li>
+		</comps>
 		<maxResourceCapacity>10</maxResourceCapacity>
 		<initialResourceAmount>0.1</initialResourceAmount>
 		<keepWhenEmpty>true</keepWhenEmpty>
 		<shieldProperties>
 			<absorbMeleeDamage>true</absorbMeleeDamage>
-            <absorbRangeDamage>true</absorbRangeDamage>
+			<absorbRangeDamage>true</absorbRangeDamage>
 
-			
-            <!--<resourceConsumptionPerDamage>1</resourceConsumptionPerDamage>-->
+
+			<!--<resourceConsumptionPerDamage>1</resourceConsumptionPerDamage>-->
 			<ratioPerAbsorb>2</ratioPerAbsorb>
-			
-			<maxDamageToAbsorb>20</maxDamageToAbsorb> <!-- optional if ratioPerAbsorb is set -->
+
+			<maxDamageToAbsorb>20</maxDamageToAbsorb>
+			<!-- optional if ratioPerAbsorb is set -->
 
 			<postDamageDelayResourceGainTicks>6000</postDamageDelayResourceGainTicks>
 		</shieldProperties>
-		
+
 		<!-- <resourceGainPerDamages>
 			<SurgicalCut>5</SurgicalCut>
 			<ExecutionCut>5</ExecutionCut>
@@ -86,14 +93,15 @@
 		<makesSickThought>false</makesSickThought>
 		<defaultLabelColor>(0.9,0.9,0.2)</defaultLabelColor>
 	</HediffResourceFramework.HediffResourceDef>
-	
+
 	<HediffResourceFramework.HediffResourceDef>
 		<defName>HRF_ReactiveVest</defName>
 		<label>reactive plating</label>
 		<description>adaptive armor that hardens as additional damage is sustained.</description>
 		<hediffClass>HediffResourceFramework.HediffResource</hediffClass>
 		<maxResourceCapacity>100</maxResourceCapacity>
-		<initialResourceAmount>1</initialResourceAmount> <!-- Should be 0 once able -->
+		<initialResourceAmount>1</initialResourceAmount>
+		<!-- Should be 0 once able -->
 		<isBad>false</isBad>
 		<tendable>false</tendable>
 		<makesSickThought>false</makesSickThought>
@@ -128,7 +136,7 @@
 			</li>
 		</stages> -->
 	</HediffResourceFramework.HediffResourceDef>
-	
+
 	<HediffResourceFramework.HediffResourceDef>
 		<defName>HRF_Shield_Hediff</defName>
 		<label>shield</label>

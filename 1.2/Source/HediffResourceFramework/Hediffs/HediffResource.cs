@@ -36,18 +36,6 @@ namespace HediffResourceFramework
             }
         }
 
-        public override float Severity
-        {
-            get
-            {
-                return base.Severity;
-            }
-            set
-            {
-                base.Severity = value;
-                ResourceAmount = base.Severity;
-            }
-        }
         public float ResourceCapacity
         {
             get
@@ -71,6 +59,17 @@ namespace HediffResourceFramework
             }
         }
 
+        public override bool ShouldRemove
+        {
+            get
+            {
+                if (this.def.keepWhenEmpty && this.ResourceAmount <= 0)
+                {
+                    return false;
+                }
+                return base.ShouldRemove;
+            }
+        }
         public float TotalResourceGainAmount()
         {
             float num = 0;
@@ -122,6 +121,15 @@ namespace HediffResourceFramework
                         }
                     }
                 }
+            }
+
+            var hediffCompResourcePerDay = this.TryGetComp<HediffComp_ResourcePerDay>();
+            if (hediffCompResourcePerDay != null)
+            {
+                float num2 = hediffCompResourcePerDay.ResourceChangePerDay();
+                num2 *= 0.00333333341f;
+                num2 /= 3.33f;
+                num += num2;
             }
             return num;
         }

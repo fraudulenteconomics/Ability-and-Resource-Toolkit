@@ -45,6 +45,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Comps\HediffComp_ResourcePerDay.cs" />
+    <Compile Include="Comps\IngestionOutcomeDoer_GiveHediffResource.cs" />
     <Compile Include="Comps\CompWeaponAdjustHediffs.cs" />
     <Compile Include="Comps\CompApparelAdjustHediffs.cs" />
     <Compile Include="HarmonyPatches\Patches.cs" />

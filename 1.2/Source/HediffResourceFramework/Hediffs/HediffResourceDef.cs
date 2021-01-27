@@ -40,5 +40,6 @@ namespace HediffResourceFramework
 		public ResourceGainPerDamage resourceGainPerDamages;
 		public float resourceGainPerAllDamages;
 		public ShieldProperties shieldProperties;
+		public bool keepWhenEmpty;
 	}
 }

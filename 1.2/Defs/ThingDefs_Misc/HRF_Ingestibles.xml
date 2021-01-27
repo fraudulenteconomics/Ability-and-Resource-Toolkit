@@ -34,9 +34,10 @@
 		  <chairSearchRadius>25</chairSearchRadius>
 		  <canAutoSelectAsFoodForCaravan>false</canAutoSelectAsFoodForCaravan>
 		  <outcomeDoers>
-			<li Class="IngestionOutcomeDoer_GiveHediff">
+			<li Class="HediffResourceFramework.IngestionOutcomeDoer_GiveHediffResource">
 			  <hediffDef>HRF_Mana_Hediff</hediffDef>
-			  <severity>1</severity>
+			  <resourceOffset>1</resourceOffset>
+			  <!--<resourcePercent>1</resourcePercent> -->
 			</li>
 		  </outcomeDoers>
 		</ingestible>
