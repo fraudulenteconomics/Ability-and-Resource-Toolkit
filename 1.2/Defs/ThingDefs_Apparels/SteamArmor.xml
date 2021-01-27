@@ -67,7 +67,7 @@
 						<resourceOffset>-0.5</resourceOffset>
 						<disableOnEmptyOrMissingHediff>false</disableOnEmptyOrMissingHediff>
 						<disableReason>Steam is empty</disableReason>
-						<!-- <minimumResourceCastRequirement>0.5</minimumResourceCastRequirement> -->
+						<minimumResourceCastRequirement>0.5</minimumResourceCastRequirement>
 					</li>
 				</hediffOptions>
 			</li>
@@ -185,7 +185,7 @@
 				<defaultProjectile>Bullet_Minigun</defaultProjectile>
 				<warmupTime>0</warmupTime>
 				<range>30.9</range>
-				<burstShotCount>25</burstShotCount>
+				<burstShotCount>500</burstShotCount>
 				<ticksBetweenBurstShots>5</ticksBetweenBurstShots>
 				<soundCast>Shot_Minigun</soundCast>
 				<soundCastTail>GunTail_Medium</soundCastTail>
@@ -240,6 +240,7 @@
 						<resourceOffset>-0.2</resourceOffset>
 						<disableOnEmptyOrMissingHediff>true</disableOnEmptyOrMissingHediff>
 						<disableReason>Steam is empty</disableReason>
+						<minimumResourceCastRequirement>0.2</minimumResourceCastRequirement>
 					</li>
 				</hediffOptions>
 			</li>
@@ -455,6 +456,200 @@
 		</ingestible>
 		<techLevel>Neolithic</techLevel>
 	  </ThingDef>
+	  
+	  <ThingDef ParentName="ArmorMachineableBase">
+		<defName>HRF_ReactiveVest</defName>
+		<label>reactive vest</label>
+		<description>An advanced vest that increases it's protective ability based on how much damage the wearer has sustained. This protection fades quickly when not under fire.</description>
+		<techLevel>Industrial</techLevel>
+		<recipeMaker>
+		  <researchPrerequisite>FlakArmor</researchPrerequisite>
+		  <unfinishedThingDef>UnfinishedTechArmor</unfinishedThingDef>
+		  <skillRequirements>
+			<Crafting>4</Crafting>
+		  </skillRequirements>
+		</recipeMaker>
+		<graphicData>
+		  <texPath>Things/Pawn/Humanlike/Apparel/FlakVest/FlakVest</texPath>
+		  <graphicClass>Graphic_Single</graphicClass>
+		  <drawSize>0.90</drawSize>
+		</graphicData>
+		<statBases>
+		  <WorkToMake>9000</WorkToMake>
+		  <MaxHitPoints>200</MaxHitPoints>
+		  <Mass>4</Mass>
+		  <Flammability>0.6</Flammability>
+		  <ArmorRating_Sharp>1.00</ArmorRating_Sharp>
+		  <ArmorRating_Blunt>0.36</ArmorRating_Blunt>
+		  <ArmorRating_Heat>0.27</ArmorRating_Heat>
+		  <Insulation_Cold>1</Insulation_Cold>
+		  <EquipDelay>5</EquipDelay>
+		</statBases>
+		<equippedStatOffsets>
+		  <MoveSpeed>-0.12</MoveSpeed>
+		</equippedStatOffsets>
+		<thingCategories>
+		  <li>ApparelArmor</li>
+		</thingCategories>
+		<costList>
+		  <Cloth>30</Cloth>
+		  <Steel>60</Steel>
+		  <ComponentIndustrial>1</ComponentIndustrial>
+		</costList>
+		<tickerType>Normal</tickerType>
+		<comps>
+			<li Class="VFECore.CompProperties_ApparelHediffs">
+				<hediffDefnames>
+					<li>HRF_ReactiveVest</li>
+				</hediffDefnames>
+			</li>
+			<li Class="HediffResourceFramework.CompProperties_ApparelAdjustHediffs">
+				<hediffOptions>
+				<li>
+					<hediff>HRF_ReactiveVest</hediff>
+					<resourceOffset>1</resourceOffset>
+					<qualityScalesResourceOffset>true</qualityScalesResourceOffset>
+					<addHediffIfMissing>true</addHediffIfMissing> <!-- default is false -->
+				</li>
+				</hediffOptions>
+			</li>
+		</comps>
+		<apparel>
+		  <bodyPartGroups>
+			<li>Torso</li>
+			<li>Neck</li>
+			<li>Shoulders</li>
+		  </bodyPartGroups>
+		  <wornGraphicPath>Things/Pawn/Humanlike/Apparel/FlakVest/FlakVest</wornGraphicPath>
+		  <layers>
+			<li>Middle</li>
+		  </layers>
+		  <tags>
+			<li>IndustrialMilitaryBasic</li>
+		  </tags>
+		  <defaultOutfitTags>
+			<li>Soldier</li>
+		  </defaultOutfitTags>
+		</apparel>
+		<colorGenerator Class="ColorGenerator_Options">
+		  <options>
+			<li>
+			  <only>(0.33,0.33,0.33)</only>
+			</li>
+			<li>
+			  <only>(0.65,0.65,0.65)</only>
+			</li>
+			<li>
+			  <weight>0.5</weight>
+			  <min>(0.3,0.3,0.3)</min>
+			  <max>(0.5,0.5,0.5)</max>
+			</li>
+		  </options>
+		</colorGenerator>
+	  </ThingDef>
+	  
+	    <ThingDef ParentName="ApparelBase">
+			<defName>HRF_ShieldGenerator</defName>
+			<label>absorption shield generator</label>
+			<description>An advanced shield belt with improved sensors, allowing it to intercept ranged and melee attacks. Each time the shield is engaged, 10 energy is consumed. The belt will not restore energy until a short while has passed from when it was last engaged.</description>
+			<!-- <thingClass>ShieldBelt</thingClass> -->
+			<graphicData>
+			  <texPath>Things/Pawn/Humanlike/Apparel/ShieldBelt/ShieldBelt</texPath>
+			  <graphicClass>Graphic_Single</graphicClass>
+			</graphicData>
+			<tickerType>Normal</tickerType>
+
+			<statBases>
+			  <Mass>3</Mass>
+			  <WorkToMake>14000</WorkToMake>
+			  <Flammability>0.4</Flammability>
+			  <!--<EnergyShieldRechargeRate>0.13</EnergyShieldRechargeRate>
+			  <EnergyShieldEnergyMax>1.1</EnergyShieldEnergyMax>-->
+			  <EquipDelay>2</EquipDelay>
+			</statBases>
+			<thingSetMakerTags>
+			  <li>RewardStandardMidFreq</li>
+			  <li>RewardStandardQualitySuper</li>
+			</thingSetMakerTags>
+			<costList>
+			  <ComponentIndustrial>2</ComponentIndustrial>
+			  <Steel>50</Steel>
+			  <Plasteel>20</Plasteel>
+			</costList>
+			<recipeMaker>
+			  <unfinishedThingDef>UnfinishedBelt</unfinishedThingDef>
+			  <researchPrerequisite>ShieldBelt</researchPrerequisite>
+			  <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
+			  <workSkill>Crafting</workSkill>
+			  <effectWorking>Smith</effectWorking>
+			  <soundWorking>Recipe_Machining</soundWorking>
+			  <recipeUsers>
+				<li>TableMachining</li>
+			  </recipeUsers>
+			  <useIngredientsForColor>false</useIngredientsForColor>
+			  <skillRequirements>
+				<Crafting>6</Crafting>
+			  </skillRequirements>
+			</recipeMaker>
+			<thingCategories>
+			  <li>ApparelUtility</li>
+			</thingCategories>
+			<comps>
+				<li Class="HediffResourceFramework.CompProperties_ApparelAdjustHediffs">
+				<hediffOptions>
+					<li>
+						<hediff>HRF_Shield_Hediff</hediff>
+						<resourceOffset>1000</resourceOffset>
+						<qualityScalesResourceOffset>true</qualityScalesResourceOffset>
+						<addHediffIfMissing>true</addHediffIfMissing> <!-- default is false -->
+						<maxResourceCapacityOffset>90</maxResourceCapacityOffset>
+						<qualityScalesCapacityOffset>true</qualityScalesCapacityOffset>
+					</li>
+				</hediffOptions>
+				</li>
+				<li Class="VFECore.CompProperties_ApparelHediffs">
+					<hediffDefnames>
+						<li>HRF_Shield_Hediff</li>
+					</hediffDefnames>
+				</li>
+			</comps>
+			<apparel>
+			  <careIfWornByCorpse>false</careIfWornByCorpse>
+			  <careIfDamaged>false</careIfDamaged>
+			  <wearPerDay>0</wearPerDay>
+			  <bodyPartGroups>
+				<li>Waist</li>
+			  </bodyPartGroups>
+			  <layers>
+				<li>Belt</li>
+			  </layers>
+			  <tags>
+				<li>BeltDefense</li>
+			  </tags>
+			</apparel>
+			<colorGenerator Class="ColorGenerator_Options">
+			  <options>
+				<li>
+				  <weight>10</weight>
+				  <only>(0.33,0.33,0.33,1)</only>
+				</li>
+				<li>
+				  <weight>10</weight>
+				  <only>(0.65,0.65,0.65,1)</only>
+				</li>
+				<li>
+				  <weight>6</weight>
+				  <min>(0.3,0.3,0.3,1)</min>
+				  <max>(0.5,0.5,0.5,1)</max>
+				</li>
+				<li>
+				  <weight>10</weight>
+				  <only>(0.9,0.9,0.9,1)</only>
+				</li>
+			  </options>
+			</colorGenerator>
+		  </ThingDef>
+
 
 	<HediffResourceFramework.HediffResourceDef>
 		<defName>HRF_Mana_Hediff</defName>
@@ -467,17 +662,17 @@
 		<tendable>false</tendable>
 		<makesSickThought>false</makesSickThought>
 		<defaultLabelColor>(0.4,0.5,0.9)</defaultLabelColor>
-		<shieldProperties>
+		<!--<shieldProperties>
 			<absorbMeleeDamage>true</absorbMeleeDamage>
             <absorbRangeDamage>true</absorbRangeDamage>
 			
-			<maxDamageToAbsorb>10</maxDamageToAbsorb>
-            <resourceConsumptionPerDamage>1</resourceConsumptionPerDamage>
+			<maxDamageToAbsorb>999</maxDamageToAbsorb>
+            <resourceConsumptionPerDamage>10</resourceConsumptionPerDamage>
 			
-			<!--<ratioPerAbsorb>0.5</ratioPerAbsorb> -->
+			<ratioPerAbsorb>0.5</ratioPerAbsorb>
 			
 			<postDamageDelayResourceGainTicks>6000</postDamageDelayResourceGainTicks>
-		</shieldProperties>
+		</shieldProperties> -->
 	</HediffResourceFramework.HediffResourceDef>	
 
 	<HediffResourceFramework.HediffResourceDef>
@@ -496,7 +691,7 @@
             <!--<resourceConsumptionPerDamage>1</resourceConsumptionPerDamage>-->
 			<ratioPerAbsorb>0.5</ratioPerAbsorb>
 			
-			<maxDamageToAbsorb>10</maxDamageToAbsorb> <!-- optional if ratioPerAbsorb is set -->
+			<maxDamageToAbsorb>20</maxDamageToAbsorb> <!-- optional if ratioPerAbsorb is set -->
 
 			<postDamageDelayResourceGainTicks>6000</postDamageDelayResourceGainTicks>
 		</shieldProperties>
@@ -541,6 +736,68 @@
 		<tendable>false</tendable>
 		<makesSickThought>false</makesSickThought>
 		<defaultLabelColor>(0.9,0.9,0.2)</defaultLabelColor>
+	</HediffResourceFramework.HediffResourceDef>
+	
+	<HediffResourceFramework.HediffResourceDef>
+		<defName>HRF_ReactiveVest</defName>
+		<label>reactive plating</label>
+		<description>adaptive armor that hardens as additional damage is sustained.</description>
+		<hediffClass>HediffResourceFramework.HediffResource</hediffClass>
+		<maxResourceCapacity>100</maxResourceCapacity>
+		<initialResourceAmount>1</initialResourceAmount> <!-- Should be 0 once able -->
+		<isBad>false</isBad>
+		<tendable>false</tendable>
+		<makesSickThought>false</makesSickThought>
+		<defaultLabelColor>(0.7,0.3,0.4)</defaultLabelColor>
+		<!-- <resourceGainPerDamages>
+			<allDamage>5</allDamage>
+		</resourceGainPerDamages>
+		<stages>
+			<li>
+				<label>inactive</label>
+			</li>
+			<li>
+			  <label>initialized</label>
+			  <minSeverity>5</minSeverity>
+			    <statFactors>
+				  <IncomingDamageFactor>0.9</IncomingDamageFactor>
+				</statFactors>
+			</li>
+			<li>
+			  <label>hardening</label>
+			  <minSeverity>25</minSeverity>
+			    <statFactors>
+				  <IncomingDamageFactor>0.75</IncomingDamageFactor>
+				</statFactors>
+			</li>	
+			<li>
+			  <label>hardened</label>
+			  <minSeverity>50</minSeverity>
+			    <statFactors>
+				  <IncomingDamageFactor>0.5</IncomingDamageFactor>
+				</statFactors>
+			</li>
+		</stages> -->
+	</HediffResourceFramework.HediffResourceDef>
+	
+	<HediffResourceFramework.HediffResourceDef>
+		<defName>HRF_Shield_Hediff</defName>
+		<label>shield</label>
+		<description>An active personal shield.</description>
+		<hediffClass>HediffResourceFramework.HediffResource</hediffClass>
+		<maxResourceCapacity>10</maxResourceCapacity>
+		<initialResourceAmount>1</initialResourceAmount>
+		<isBad>false</isBad>
+		<tendable>false</tendable>
+		<makesSickThought>false</makesSickThought>
+		<defaultLabelColor>(0.5,0.5,0.2)</defaultLabelColor>
+		<!--<shieldProperties>
+			<absorbMeleeDamage>true</absorbMeleeDamage>
+            <absorbRangeDamage>true</absorbRangeDamage>
+            <resourcePerNullify>10</resourcePerNullify>
+			<nullifyOverflow>true</nullifyOverflow>
+			<postDamageDelayResourceGainTicks>6000</postDamageDelayResourceGainTicks>
+		</shieldProperties> -->
 	</HediffResourceFramework.HediffResourceDef>
 
 </Defs>
