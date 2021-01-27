@@ -230,9 +230,9 @@ namespace HediffResourceFramework
 			Log.Message("Pre: " + hediff.def.defName + " - hediff.ResourceAmount: " + hediff.ResourceAmount + " - Damage amount: " + dinfo.Amount);
 			if (shieldProps.resourceConsumptionPerDamage.HasValue && hediff.ResourceAmount >= shieldProps.resourceConsumptionPerDamage.Value)
 			{
-				if (shieldProps.maxDamageToAbsorb.HasValue)
+				if (shieldProps.maxAbsorb.HasValue)
                 {
-					dinfo.SetAmount(dinfo.Amount - shieldProps.maxDamageToAbsorb.Value);
+					dinfo.SetAmount(dinfo.Amount - shieldProps.maxAbsorb.Value);
                 }
 				else
                 {
@@ -240,15 +240,15 @@ namespace HediffResourceFramework
 				}
 				hediff.ResourceAmount -= shieldProps.resourceConsumptionPerDamage.Value;
 			}
-			else if (shieldProps.ratioPerAbsorb.HasValue)
+			else if (shieldProps.damageAbsorbedPerResource.HasValue)
 			{
 				var damageAmount = dinfo.Amount;
-				if (shieldProps.maxDamageToAbsorb.HasValue && damageAmount > shieldProps.maxDamageToAbsorb.Value)
+				if (shieldProps.maxAbsorb.HasValue && damageAmount > shieldProps.maxAbsorb.Value)
 				{
-					damageAmount = shieldProps.maxDamageToAbsorb.Value;
+					damageAmount = shieldProps.maxAbsorb.Value;
 				}
 				var resourceAmount = hediff.ResourceAmount;
-				var ratioPerAbsorb = shieldProps.ratioPerAbsorb.Value;
+				var ratioPerAbsorb = shieldProps.damageAbsorbedPerResource.Value;
 				var resourceCost = damageAmount / ratioPerAbsorb;
 				if (resourceAmount >= resourceCost)
 				{
@@ -263,6 +263,10 @@ namespace HediffResourceFramework
 					Log.Message(" - ProcessDamage - hediff.ResourceAmount = 0; - 24", true);
 					hediff.ResourceAmount = 0;
 				}
+			}
+			if (shieldProps.postDamageDelay.HasValue)
+            {
+				hediff.postDamageDelay = Find.TickManager.TicksGame + shieldProps.postDamageDelay.Value;
 			}
 			Log.Message("Post: " + hediff.def.defName + " - hediff.ResourceAmount: " + hediff.ResourceAmount + " - Damage amount: " + dinfo.Amount);
 		}

@@ -33,6 +33,9 @@ namespace HediffResourceFramework
         public bool dropWeaponIfEmptyNullHediff;
         public bool addHediffIfMissing = false;
         public string disableReason;
+
+        public int postUseDelay;
+
     }
     public class HediffAdjustOptions : DefModExtension
     {

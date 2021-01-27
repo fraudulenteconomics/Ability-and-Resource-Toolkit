@@ -15,12 +15,12 @@
 			<absorbMeleeDamage>true</absorbMeleeDamage>
 			<absorbRangeDamage>true</absorbRangeDamage>
 
-			<!-- <maxDamageToAbsorb>999</maxDamageToAbsorb> -->
+			<!-- <maxAbsorb>999</maxAbsorb> -->
 			<resourceConsumptionPerDamage>10</resourceConsumptionPerDamage>
 
-			<!-- <ratioPerAbsorb>0.5</ratioPerAbsorb> -->
+			<!-- <damageAbsorbedPerResource>0.5</damageAbsorbedPerResource> -->
 
-			<postDamageDelayResourceGainTicks>6000</postDamageDelayResourceGainTicks>
+			<postDamageDelay>6000</postDamageDelay>
 		</shieldProperties>
 	</HediffResourceFramework.HediffResourceDef>	
 
@@ -44,12 +44,13 @@
 
 
 			<!--<resourceConsumptionPerDamage>1</resourceConsumptionPerDamage>-->
-			<ratioPerAbsorb>2</ratioPerAbsorb>
+			<damageAbsorbedPerResource>2</damageAbsorbedPerResource>
 
-			<maxDamageToAbsorb>20</maxDamageToAbsorb>
-			<!-- optional if ratioPerAbsorb is set -->
+			<maxAbsorb>20</maxAbsorb>
+			<!-- optional if damageAbsorbedPerResource is set -->
 
-			<postDamageDelayResourceGainTicks>6000</postDamageDelayResourceGainTicks>
+			<postDamageDelay>6000</postDamageDelay>
+			
 		</shieldProperties>
 
 		<!-- <resourceGainPerDamages>
@@ -153,7 +154,7 @@
             <absorbRangeDamage>true</absorbRangeDamage>
             <resourcePerNullify>10</resourcePerNullify>
 			<nullifyOverflow>true</nullifyOverflow>
-			<postDamageDelayResourceGainTicks>6000</postDamageDelayResourceGainTicks>
+			<postDamageDelay>6000</postDamageDelay>
 		</shieldProperties> -->
 	</HediffResourceFramework.HediffResourceDef>
 

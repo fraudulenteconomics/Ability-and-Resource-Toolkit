@@ -14,11 +14,11 @@ namespace HediffResourceFramework
 		public bool absorbMeleeDamage;
 		public bool absorbRangeDamage;
 
-		public int? maxDamageToAbsorb;
+		public int? maxAbsorb;
 		public int? resourceConsumptionPerDamage;
-		public float? ratioPerAbsorb;
-		public int? postDamageDelayResourceGainTicks;
-    }
+		public float? damageAbsorbedPerResource;
+		public int? postDamageDelay;
+	}
     public class ResourceGainPerDamage
     {
 		public Dictionary<string, float> resourceGainOffsets = new Dictionary<string, float>();
