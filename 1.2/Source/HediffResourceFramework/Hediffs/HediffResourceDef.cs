@@ -9,6 +9,16 @@ using Verse;
 
 namespace HediffResourceFramework
 {
+	public class ShieldProperties
+	{
+		public bool absorbMeleeDamage;
+		public bool absorbRangeDamage;
+
+		public int? maxDamageToAbsorb;
+		public int? resourceConsumptionPerDamage;
+		public float? ratioPerAbsorb;
+		public int? postDamageDelayResourceGainTicks;
+    }
     public class ResourceGainPerDamage
     {
 		public Dictionary<string, float> resourceGainOffsets = new Dictionary<string, float>();
@@ -29,5 +39,6 @@ namespace HediffResourceFramework
         public float initialResourceAmount;
 		public ResourceGainPerDamage resourceGainPerDamages;
 		public float resourceGainPerAllDamages;
+		public ShieldProperties shieldProperties;
 	}
 }

@@ -10,7 +10,7 @@ namespace HediffResourceFramework
 {
     public class HediffResource : HediffWithComps
     {
-        private new HediffResourceDef def => base.def as HediffResourceDef;
+        public new HediffResourceDef def => base.def as HediffResourceDef;
         private float resourceAmount;
         public float ResourceAmount
         {

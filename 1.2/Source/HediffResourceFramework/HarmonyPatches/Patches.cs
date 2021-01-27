@@ -151,6 +151,70 @@ namespace HediffResourceFramework
 		}
 	}
 
+	[HarmonyPatch(typeof(Pawn), "PreApplyDamage")]
+	public static class Patch_PreApplyDamage
+	{
+		private static void Prefix(Pawn __instance, ref DamageInfo dinfo, out bool absorbed)
+		{
+			absorbed = false;
+			foreach (var hediff in __instance?.health?.hediffSet?.hediffs?.Where(x => x is HediffResource).Cast<HediffResource>())
+			{
+				if (dinfo.Amount > 0 && hediff.def.shieldProperties != null)
+				{
+					var shieldProps = hediff.def.shieldProperties;
+					if (shieldProps.absorbRangeDamage && (dinfo.Weapon?.IsRangedWeapon ?? false))
+					{
+						ProcessDamage(ref dinfo, hediff, shieldProps);
+					}
+					else if (shieldProps.absorbMeleeDamage && (dinfo.Weapon is null || dinfo.Weapon.IsMeleeWeapon))
+					{
+						ProcessDamage(ref dinfo, hediff, shieldProps);
+					}
+					if (dinfo.Amount <= 0)
+					{
+						Log.Message(" - Prefix - absorbed = true; - 10", true);
+						absorbed = true;
+					}
+				}
+			}
+		}
+
+		private static void ProcessDamage(ref DamageInfo dinfo, HediffResource hediff, ShieldProperties shieldProps)
+		{
+			Log.Message(hediff.def.defName + " - hediff.ResourceAmount: " + hediff.ResourceAmount + " - Damage amount: " + dinfo.Amount);
+			if (shieldProps.resourceConsumptionPerDamage.HasValue && hediff.ResourceAmount >= shieldProps.resourceConsumptionPerDamage.Value)
+			{
+				dinfo.SetAmount(dinfo.Amount - shieldProps.maxDamageToAbsorb.Value);
+				hediff.ResourceAmount -= shieldProps.resourceConsumptionPerDamage.Value;
+			}
+			else if (shieldProps.ratioPerAbsorb.HasValue)
+			{
+				var damageAmount = dinfo.Amount;
+				if (shieldProps.maxDamageToAbsorb.HasValue && damageAmount > shieldProps.maxDamageToAbsorb.Value)
+				{
+					damageAmount = shieldProps.maxDamageToAbsorb.Value;
+				}
+				var resourceAmount = hediff.ResourceAmount;
+				var ratioPerAbsorb = shieldProps.ratioPerAbsorb.Value;
+				var resourceCost = damageAmount / ratioPerAbsorb;
+				if (resourceAmount >= resourceCost)
+				{
+					Log.Message(" - ProcessDamage - dinfo.SetAmount(0f); - 20", true);
+					dinfo.SetAmount(0f);
+					hediff.ResourceAmount -= resourceCost;
+				}
+				else
+				{
+					damageAmount -= resourceAmount * ratioPerAbsorb;
+					dinfo.SetAmount(damageAmount);
+					Log.Message(" - ProcessDamage - hediff.ResourceAmount = 0; - 24", true);
+					hediff.ResourceAmount = 0;
+				}
+			}
+			Log.Message(hediff.def.defName + " - hediff.ResourceAmount: " + hediff.ResourceAmount + " - Damage amount: " + dinfo.Amount);
+		}
+	}
+
 	[HarmonyPatch(typeof(JobGiver_OptimizeApparel), "ApparelScoreGain_NewTmp")]
 	public static class Patch_HasPartsToWear
 	{

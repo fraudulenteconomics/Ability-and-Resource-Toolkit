@@ -467,6 +467,17 @@
 		<tendable>false</tendable>
 		<makesSickThought>false</makesSickThought>
 		<defaultLabelColor>(0.4,0.5,0.9)</defaultLabelColor>
+		<shieldProperties>
+			<absorbMeleeDamage>true</absorbMeleeDamage>
+            <absorbRangeDamage>true</absorbRangeDamage>
+			
+			<maxDamageToAbsorb>10</maxDamageToAbsorb>
+            <resourceConsumptionPerDamage>1</resourceConsumptionPerDamage>
+			
+			<!--<ratioPerAbsorb>0.5</ratioPerAbsorb> -->
+			
+			<postDamageDelayResourceGainTicks>6000</postDamageDelayResourceGainTicks>
+		</shieldProperties>
 	</HediffResourceFramework.HediffResourceDef>	
 
 	<HediffResourceFramework.HediffResourceDef>
@@ -476,6 +487,20 @@
 		<hediffClass>HediffResourceFramework.HediffResource</hediffClass>
 		<maxResourceCapacity>10</maxResourceCapacity>
 		<initialResourceAmount>0.1</initialResourceAmount>
+		
+		<shieldProperties>
+			<absorbMeleeDamage>true</absorbMeleeDamage>
+            <absorbRangeDamage>true</absorbRangeDamage>
+
+			
+            <!--<resourceConsumptionPerDamage>1</resourceConsumptionPerDamage>-->
+			<ratioPerAbsorb>0.5</ratioPerAbsorb>
+			
+			<maxDamageToAbsorb>10</maxDamageToAbsorb> <!-- optional if ratioPerAbsorb is set -->
+
+			<postDamageDelayResourceGainTicks>6000</postDamageDelayResourceGainTicks>
+		</shieldProperties>
+		
 		<!-- <resourceGainPerDamages>
 			<SurgicalCut>5</SurgicalCut>
 			<ExecutionCut>5</ExecutionCut>
