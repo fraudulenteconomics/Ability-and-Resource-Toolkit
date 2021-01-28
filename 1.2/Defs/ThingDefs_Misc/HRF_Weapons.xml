@@ -15,10 +15,10 @@
 		<statBases>
 			<WorkToMake>60000</WorkToMake>
 			<Mass>10</Mass>
-			<AccuracyTouch>0.15</AccuracyTouch>
-			<AccuracyShort>0.25</AccuracyShort>
-			<AccuracyMedium>0.25</AccuracyMedium>
-			<AccuracyLong>0.18</AccuracyLong>
+			<AccuracyTouch>0.95</AccuracyTouch>
+			<AccuracyShort>0.95</AccuracyShort>
+			<AccuracyMedium>0.95</AccuracyMedium>
+			<AccuracyLong>0.98</AccuracyLong>
 			<RangedWeapon_Cooldown>5</RangedWeapon_Cooldown>
 		</statBases>
 		<costList>
@@ -44,9 +44,9 @@
 				<label>steamrepeater</label>
 				<hasStandardCommand>true</hasStandardCommand>
 				<defaultProjectile>Bullet_Minigun</defaultProjectile>
-				<warmupTime>0</warmupTime>
+				<warmupTime>0.5</warmupTime>
 				<range>30.9</range>
-				<burstShotCount>500</burstShotCount>
+				<burstShotCount>1</burstShotCount>
 				<ticksBetweenBurstShots>5</ticksBetweenBurstShots>
 				<soundCast>Shot_Minigun</soundCast>
 				<soundCastTail>GunTail_Medium</soundCastTail>
@@ -66,14 +66,14 @@
 				<hediffOptions>
 					<li>
 						<hediff>HRF_Steam_Hediff</hediff>
-						<resourceOffset>100</resourceOffset>
-						<qualityScalesResourceOffset>true</qualityScalesResourceOffset>
+						<resourcePerSecond>100</resourcePerSecond>
+						<qualityScalesResourcePerSecond>true</qualityScalesResourcePerSecond>
 						<addHediffIfMissing>false</addHediffIfMissing> <!-- default is false -->
 						<maxResourceCapacityOffset>5</maxResourceCapacityOffset>
 						<qualityScalesCapacityOffset>true</qualityScalesCapacityOffset>
-						<disallowEquippingIfEmptyNullHediff>true</disallowEquippingIfEmptyNullHediff>
+						<disallowEquipIfHediffMissing>true</disallowEquipIfHediffMissing>
 						<cannotEquipReason>No enough steam</cannotEquipReason>
-						<dropWeaponIfEmptyNullHediff>true</dropWeaponIfEmptyNullHediff>
+						<dropIfHediffMissing>true</dropIfHediffMissing>
 						<blackListHediffsPreventEquipping>
 							<li>HRF_Mana_Hediff</li>
 						</blackListHediffsPreventEquipping>
@@ -98,10 +98,15 @@
 				<hediffOptions>
 					<li>
 						<hediff>HRF_Steam_Hediff</hediff>
-						<resourceOffset>-0.2</resourceOffset>
-						<disableOnEmptyOrMissingHediff>true</disableOnEmptyOrMissingHediff>
+						<verbIndex>0</verbIndex>
+						<resourcePerUse>-2</resourcePerUse>
+						<disableIfMissingHediff>true</disableIfMissingHediff>
 						<disableReason>Steam is empty</disableReason>
-						<minimumResourceCastRequirement>0.2</minimumResourceCastRequirement>
+						<minimumResourcePerUse>2</minimumResourcePerUse>
+						<postUseDelay>1000</postUseDelay>
+						<resourcePerCharge>5</resourcePerCharge>
+						<damagePerCharge>1.1</damagePerCharge>
+						<damageScaling>Flat</damageScaling>
 					</li>
 				</hediffOptions>
 			</li>

@@ -43,15 +43,15 @@
 				<hediffOptions>
 					<li>
 						<hediff>HRF_Steam_Hediff</hediff>
-						<resourceOffset>100</resourceOffset>
-						<qualityScalesResourceOffset>true</qualityScalesResourceOffset>
+						<resourcePerSecond>100</resourcePerSecond>
+						<qualityScalesResourcePerSecond>true</qualityScalesResourcePerSecond>
 						<addHediffIfMissing>true</addHediffIfMissing>
 						<!-- default is false -->
 						<maxResourceCapacityOffset>5</maxResourceCapacityOffset>
 						<qualityScalesCapacityOffset>true</qualityScalesCapacityOffset>
-						<disallowEquippingIfEmptyNullHediff>false</disallowEquippingIfEmptyNullHediff>
+						<disallowEquipIfHediffMissing>false</disallowEquipIfHediffMissing>
 						
-						<dropApparelIfEmptyNullHediff>false</dropApparelIfEmptyNullHediff>
+						<dropIfHediffMissing>false</dropIfHediffMissing>
 						<blackListHediffsPreventEquipping>
 							<li>HRF_Mana_Hediff</li>
 						</blackListHediffsPreventEquipping>
@@ -67,10 +67,10 @@
 				<hediffOptions>
 					<li>
 						<hediff>HRF_Steam_Hediff</hediff>
-						<resourceOffset>-0.5</resourceOffset>
-						<disableOnEmptyOrMissingHediff>false</disableOnEmptyOrMissingHediff>
+						<resourcePerUse>-0.5</resourcePerUse>
+						<disableIfMissingHediff>false</disableIfMissingHediff>
 						<disableReason>Steam is empty</disableReason>
-						<minimumResourceCastRequirement>0.5</minimumResourceCastRequirement>
+						<minimumResourcePerUse>0.5</minimumResourcePerUse>
 					</li>
 				</hediffOptions>
 			</li>
@@ -115,10 +115,10 @@
 						<hediff>HRF_Steam_Hediff</hediff>
 						<addHediffIfMissing>false</addHediffIfMissing>
 						<maxResourceCapacityOffset>-2</maxResourceCapacityOffset>
-						<qualityScalesCapacityOffset>false</qualityScalesCapacityOffset>
-						<disallowEquippingIfEmptyNullHediff>true</disallowEquippingIfEmptyNullHediff>
+						<qualityScalesResourcePerSecond>false</qualityScalesResourcePerSecond>
+						<disallowEquipIfHediffMissing>true</disallowEquipIfHediffMissing>
 						<cannotEquipReason>No enough steam</cannotEquipReason>
-						<dropApparelIfEmptyNullHediff>true</dropApparelIfEmptyNullHediff>
+						<dropIfHediffMissing>true</dropIfHediffMissing>
 						<blackListHediffsPreventEquipping>
 							<li>HRF_Mana_Hediff</li>
 						</blackListHediffsPreventEquipping>
@@ -132,10 +132,10 @@
 				<hediffOptions>
 					<li>
 						<hediff>HRF_Steam_Hediff</hediff>
-						<resourceOffset>-2.5</resourceOffset>
-						<disableOnEmptyOrMissingHediff>true</disableOnEmptyOrMissingHediff>
+						<resourcePerUse>-2.5</resourcePerUse>
+						<disableIfMissingHediff>true</disableIfMissingHediff>
 						<disableReason>Steam is empty</disableReason>
-						<minimumResourceCastRequirement>2.5</minimumResourceCastRequirement>
+						<minimumResourcePerUse>2.5</minimumResourcePerUse>
 					</li>
 				</hediffOptions>
 			</li>
@@ -204,9 +204,9 @@
 				<hediffOptions>
 					<li>
 						<hediff>HRF_Mana_Hediff</hediff>
-						<resourceOffset>300</resourceOffset>
-						<disallowEquippingIfEmptyNullHediff>false</disallowEquippingIfEmptyNullHediff>
-						<dropApparelIfEmptyNullHediff>false</dropApparelIfEmptyNullHediff>
+						<resourcePerSecond>300</resourcePerSecond>
+						<disallowEquipIfHediffMissing>false</disallowEquipIfHediffMissing>
+						<dropIfHediffMissing>false</dropIfHediffMissing>
 						<blackListHediffsPreventEquipping>
 							<li>HRF_Steam_Hediff</li>
 						</blackListHediffsPreventEquipping>
@@ -291,18 +291,18 @@
 					<li>
 						<hediff>HRF_Mana_Hediff</hediff>
 						<verbIndex>0</verbIndex>
-						<resourceOffset>-1.33</resourceOffset>
-						<disableOnEmptyOrMissingHediff>true</disableOnEmptyOrMissingHediff>
+						<resourcePerUse>-1.33</resourcePerUse>
+						<disableIfMissingHediff>true</disableIfMissingHediff>
 						<disableReason>Mana is empty</disableReason>
-						<minimumResourceCastRequirement>5</minimumResourceCastRequirement>
+						<minimumResourcePerUse>5</minimumResourcePerUse>
 					</li>
 					<li>
 						<hediff>HRF_Mana_Hediff</hediff>
 						<verbIndex>1</verbIndex>
-						<resourceOffset>-15</resourceOffset>
-						<disableOnEmptyOrMissingHediff>true</disableOnEmptyOrMissingHediff>
+						<resourcePerUse>-15</resourcePerUse>
+						<disableIfMissingHediff>true</disableIfMissingHediff>
 						<disableReason>Mana is empty</disableReason>
-						<minimumResourceCastRequirement>15</minimumResourceCastRequirement>
+						<minimumResourcePerUse>15</minimumResourcePerUse>
 					</li>
 				</hediffOptions>
 			</li>
@@ -359,8 +359,8 @@
 				<hediffOptions>
 				<li>
 					<hediff>HRF_ReactiveVest</hediff>
-					<resourceOffset>1</resourceOffset>
-					<qualityScalesResourceOffset>true</qualityScalesResourceOffset>
+					<resourcePerSecond>-100</resourcePerSecond>
+					<qualityScalesResourcePerSecond>true</qualityScalesResourcePerSecond>
 					<addHediffIfMissing>true</addHediffIfMissing> <!-- default is false -->
 				</li>
 				</hediffOptions>
@@ -451,8 +451,8 @@
 				<hediffOptions>
 					<li>
 						<hediff>HRF_Shield_Hediff</hediff>
-						<resourceOffset>1000</resourceOffset>
-						<qualityScalesResourceOffset>true</qualityScalesResourceOffset>
+						<resourcePerSecond>1000</resourcePerSecond>
+						<qualityScalesResourcePerSecond>true</qualityScalesResourcePerSecond>
 						<addHediffIfMissing>true</addHediffIfMissing> <!-- default is false -->
 						<maxResourceCapacityOffset>90</maxResourceCapacityOffset>
 						<qualityScalesCapacityOffset>true</qualityScalesCapacityOffset>
