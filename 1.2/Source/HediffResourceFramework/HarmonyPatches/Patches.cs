@@ -37,7 +37,7 @@ namespace HediffResourceFramework
 					{
 						if (HediffResourceUtils.VerbMatches(__instance, option))
 						{
-							HediffResourceUtils.AdjustResourceAmount(__instance.CasterPawn, option.hediff, option.resourceOffset, option);
+							HediffResourceUtils.AdjustResourceAmount(__instance.CasterPawn, option.hediff, option.resourceOffset, option.addHediffIfMissing);
 						}
 					}
 				}
@@ -264,6 +264,7 @@ namespace HediffResourceFramework
 					hediff.ResourceAmount = 0;
 				}
 			}
+
 			if (shieldProps.postDamageDelay.HasValue)
             {
 				hediff.postDamageDelay = Find.TickManager.TicksGame + shieldProps.postDamageDelay.Value;
@@ -334,7 +335,7 @@ namespace HediffResourceFramework
 			{
 				foreach (var option in hediffComp.Props.hediffOptions)
 				{
-					if (option.disallowEquippingIfEmptyNullHediff)
+					if (option.disallowEquipIfHediffMissing)
 					{
 						var hediff = pawn.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
 						if (hediff is null || hediff.ResourceAmount <= 0)
@@ -369,7 +370,7 @@ namespace HediffResourceFramework
 			{
 				foreach (var option in hediffComp.Props.hediffOptions)
 				{
-					if (option.disallowEquippingIfEmptyNullHediff)
+					if (option.disallowEquipIfHediffMissing)
 					{
 						var hediff = pawn.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
 						if (hediff is null || hediff.ResourceAmount <= 0)

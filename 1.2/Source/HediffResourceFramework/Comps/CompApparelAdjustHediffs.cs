@@ -8,9 +8,31 @@ using Verse;
 
 namespace HediffResourceFramework
 {
+    public class HediffAdjust
+    {
+        public HediffAdjust()
+        {
+
+        }
+
+        public HediffResourceDef hediff;
+        public float resourcePerSecond;
+        public bool qualityScalesResourcePerSecond;
+        public float maxResourceCapacityOffset;
+        public bool qualityScalesCapacityOffset;
+
+        public bool disallowEquipIfHediffMissing;
+        public string cannotEquipReason;
+        public List<HediffDef> blackListHediffsPreventEquipping;
+        public List<HediffDef> dropWeaponOrApparelIfBlacklistHediff;
+        public string cannotEquipReasonIncompatible;
+
+        public bool dropIfHediffMissing;
+        public bool addHediffIfMissing = false;
+    }
     public class CompProperties_ApparelAdjustHediffs : CompProperties
     {
-        public List<HediffOption> hediffOptions;
+        public List<HediffAdjust> hediffOptions;
 
         public CompProperties_ApparelAdjustHediffs()
         {
@@ -36,14 +58,14 @@ namespace HediffResourceFramework
                 {
                     foreach (var option in Props.hediffOptions)
                     {
-                        float num = option.resourceOffset;
+                        float num = option.resourcePerSecond;
                         num *= 0.00333333341f;
-                        if (option.qualityScalesResourceOffset && apparel.TryGetQuality(out QualityCategory qc))
+                        if (option.qualityScalesResourcePerSecond && apparel.TryGetQuality(out QualityCategory qc))
                         {
                             num *= HediffResourceUtils.GetQualityMultiplier(qc);
                         }
                         num /= 3.33f;
-                        HediffResourceUtils.AdjustResourceAmount(apparel.Wearer, option.hediff, num, option);
+                        HediffResourceUtils.AdjustResourceAmount(apparel.Wearer, option.hediff, num, option.addHediffIfMissing);
                     }
                 }
             }

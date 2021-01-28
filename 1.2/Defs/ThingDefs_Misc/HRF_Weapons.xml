@@ -66,14 +66,14 @@
 				<hediffOptions>
 					<li>
 						<hediff>HRF_Steam_Hediff</hediff>
-						<resourceOffset>100</resourceOffset>
-						<qualityScalesResourceOffset>true</qualityScalesResourceOffset>
+						<resourcePerSecond>100</resourcePerSecond>
+						<qualityScalesResourcePerSecond>true</qualityScalesResourcePerSecond>
 						<addHediffIfMissing>false</addHediffIfMissing> <!-- default is false -->
 						<maxResourceCapacityOffset>5</maxResourceCapacityOffset>
 						<qualityScalesCapacityOffset>true</qualityScalesCapacityOffset>
-						<disallowEquippingIfEmptyNullHediff>true</disallowEquippingIfEmptyNullHediff>
+						<disallowEquipIfHediffMissing>true</disallowEquipIfHediffMissing>
 						<cannotEquipReason>No enough steam</cannotEquipReason>
-						<dropWeaponIfEmptyNullHediff>true</dropWeaponIfEmptyNullHediff>
+						<dropIfHediffMissing>true</dropIfHediffMissing>
 						<blackListHediffsPreventEquipping>
 							<li>HRF_Mana_Hediff</li>
 						</blackListHediffsPreventEquipping>

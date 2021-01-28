@@ -39,7 +39,7 @@ namespace HediffResourceFramework
             }
 			return result;
         }
-		public static void AdjustResourceAmount(Pawn pawn, HediffResourceDef hdDef, float sevOffset, HediffOption hediffOption)
+		public static void AdjustResourceAmount(Pawn pawn, HediffResourceDef hdDef, float sevOffset, bool addHediffIfMissing)
 		{
 			if (sevOffset != 0f)
 			{
@@ -48,7 +48,7 @@ namespace HediffResourceFramework
 				{
 					firstHediffOfDef.ResourceAmount += sevOffset;
 				}
-				else if (sevOffset > 0f && hediffOption.addHediffIfMissing)
+				else if (sevOffset > 0f && addHediffIfMissing)
 				{
 					firstHediffOfDef = HediffMaker.MakeHediff(hdDef, pawn) as HediffResource;
 					firstHediffOfDef.ResourceAmount = sevOffset;
