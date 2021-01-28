@@ -79,7 +79,7 @@ namespace HediffResourceFramework
 
 		private static void DoFlatDamage(ref DamageInfo dinfo, HediffResource hediffResource, HediffOption option)
         {
-			var amount = dinfo.Amount * (Mathf.Pow(option.damagePerCharge, ((hediffResource.ResourceAmount - option.minimumResourcePerUse)) / option.resourcePerCharge));
+			var amount = dinfo.Amount * Mathf.Pow((hediffResource.ResourceAmount - option.minimumResourcePerUse) / option.resourcePerCharge, option.damagePerCharge);
 			Log.Message("Flat: old damage: " + dinfo.Amount + " - new damage: " + amount);
 			dinfo.SetAmount(amount);
 		}
