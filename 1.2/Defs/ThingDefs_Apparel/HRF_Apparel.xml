@@ -359,7 +359,7 @@
 				<hediffOptions>
 				<li>
 					<hediff>HRF_ReactiveVest</hediff>
-					<resourcePerSecond>1</resourcePerSecond>
+					<resourcePerSecond>-100</resourcePerSecond>
 					<qualityScalesResourcePerSecond>true</qualityScalesResourcePerSecond>
 					<addHediffIfMissing>true</addHediffIfMissing> <!-- default is false -->
 				</li>

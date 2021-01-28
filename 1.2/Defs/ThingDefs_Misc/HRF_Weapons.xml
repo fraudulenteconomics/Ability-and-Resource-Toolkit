@@ -15,10 +15,10 @@
 		<statBases>
 			<WorkToMake>60000</WorkToMake>
 			<Mass>10</Mass>
-			<AccuracyTouch>0.15</AccuracyTouch>
-			<AccuracyShort>0.25</AccuracyShort>
-			<AccuracyMedium>0.25</AccuracyMedium>
-			<AccuracyLong>0.18</AccuracyLong>
+			<AccuracyTouch>0.95</AccuracyTouch>
+			<AccuracyShort>0.95</AccuracyShort>
+			<AccuracyMedium>0.95</AccuracyMedium>
+			<AccuracyLong>0.98</AccuracyLong>
 			<RangedWeapon_Cooldown>5</RangedWeapon_Cooldown>
 		</statBases>
 		<costList>
@@ -44,9 +44,9 @@
 				<label>steamrepeater</label>
 				<hasStandardCommand>true</hasStandardCommand>
 				<defaultProjectile>Bullet_Minigun</defaultProjectile>
-				<warmupTime>0</warmupTime>
+				<warmupTime>0.5</warmupTime>
 				<range>30.9</range>
-				<burstShotCount>500</burstShotCount>
+				<burstShotCount>1</burstShotCount>
 				<ticksBetweenBurstShots>5</ticksBetweenBurstShots>
 				<soundCast>Shot_Minigun</soundCast>
 				<soundCastTail>GunTail_Medium</soundCastTail>
@@ -99,13 +99,14 @@
 				<hediffOptions>
 					<li>
 						<hediff>HRF_Steam_Hediff</hediff>
-						<resourcePerUse>-0.2</resourcePerUse>
+						<verbIndex>0</verbIndex>
+						<resourcePerUse>-2</resourcePerUse>
 						<disableIfMissingHediff>true</disableIfMissingHediff>
 						<disableReason>Steam is empty</disableReason>
-						<minimumResourcePerUse>0.2</minimumResourcePerUse>
+						<minimumResourcePerUse>2</minimumResourcePerUse>
 						<postUseDelay>1000</postUseDelay>
 						<resourcePerCharge>5</resourcePerCharge>
-						<damagePerCharge></damagePerCharge>
+						<damagePerCharge>1.1</damagePerCharge>
 						<damageScaling>Flat</damageScaling>
 					</li>
 				</hediffOptions>

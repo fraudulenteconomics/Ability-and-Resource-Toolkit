@@ -6,7 +6,7 @@
 		<description>no description</description>
 		<hediffClass>HediffResourceFramework.HediffResource</hediffClass>
 		<maxResourceCapacity>100</maxResourceCapacity>
-		<initialResourceAmount>0.1</initialResourceAmount>
+		<keepWhenEmpty>true</keepWhenEmpty>
 		<isBad>false</isBad>
 		<tendable>false</tendable>
 		<makesSickThought>false</makesSickThought>
@@ -29,28 +29,20 @@
 		<label>Steam</label>
 		<description>no description</description>
 		<hediffClass>HediffResourceFramework.HediffResource</hediffClass>
-		<comps>
+		<!--<comps>
 			<li Class="HediffResourceFramework.HediffCompProperties_ResourcePerDay">
 				<resourcePerDay>0.75</resourcePerDay>
 				<showHoursToRecover>true</showHoursToRecover>
 			</li>
-		</comps>
+		</comps>-->
 		<maxResourceCapacity>10</maxResourceCapacity>
-		<initialResourceAmount>0.1</initialResourceAmount>
 		<keepWhenEmpty>true</keepWhenEmpty>
 		<shieldProperties>
 			<absorbMeleeDamage>true</absorbMeleeDamage>
 			<absorbRangeDamage>true</absorbRangeDamage>
-
-
-			<!--<resourceConsumptionPerDamage>1</resourceConsumptionPerDamage>-->
 			<damageAbsorbedPerResource>2</damageAbsorbedPerResource>
-
 			<maxAbsorb>20</maxAbsorb>
-			<!-- optional if damageAbsorbedPerResource is set -->
-
 			<postDamageDelay>6000</postDamageDelay>
-			
 		</shieldProperties>
 
 		<!-- <resourceGainPerDamages>
@@ -101,15 +93,13 @@
 		<description>adaptive armor that hardens as additional damage is sustained.</description>
 		<hediffClass>HediffResourceFramework.HediffResource</hediffClass>
 		<maxResourceCapacity>100</maxResourceCapacity>
-		<initialResourceAmount>1</initialResourceAmount>
-		<!-- Should be 0 once able -->
+		<initialResourceAmount>0.1</initialResourceAmount>
+		<keepWhenEmpty>true</keepWhenEmpty>
 		<isBad>false</isBad>
 		<tendable>false</tendable>
 		<makesSickThought>false</makesSickThought>
 		<defaultLabelColor>(0.7,0.3,0.4)</defaultLabelColor>
-		<!-- <resourceGainPerDamages>
-			<allDamage>5</allDamage>
-		</resourceGainPerDamages>
+		<resourceGainPerAllDamages>5</resourceGainPerAllDamages>
 		<stages>
 			<li>
 				<label>inactive</label>
@@ -135,7 +125,7 @@
 				  <IncomingDamageFactor>0.5</IncomingDamageFactor>
 				</statFactors>
 			</li>
-		</stages> -->
+		</stages>
 	</HediffResourceFramework.HediffResourceDef>
 
 	<HediffResourceFramework.HediffResourceDef>
@@ -144,18 +134,17 @@
 		<description>An active personal shield.</description>
 		<hediffClass>HediffResourceFramework.HediffResource</hediffClass>
 		<maxResourceCapacity>10</maxResourceCapacity>
-		<initialResourceAmount>1</initialResourceAmount>
+		<keepWhenEmpty>true</keepWhenEmpty>
 		<isBad>false</isBad>
 		<tendable>false</tendable>
 		<makesSickThought>false</makesSickThought>
 		<defaultLabelColor>(0.5,0.5,0.2)</defaultLabelColor>
-		<!--<shieldProperties>
+		<shieldProperties>
 			<absorbMeleeDamage>true</absorbMeleeDamage>
             <absorbRangeDamage>true</absorbRangeDamage>
-            <resourcePerNullify>10</resourcePerNullify>
-			<nullifyOverflow>true</nullifyOverflow>
+			<damageAbsorbedPerResource>1</damageAbsorbedPerResource>
 			<postDamageDelay>6000</postDamageDelay>
-		</shieldProperties> -->
+		</shieldProperties>
 	</HediffResourceFramework.HediffResourceDef>
 
 </Defs>
