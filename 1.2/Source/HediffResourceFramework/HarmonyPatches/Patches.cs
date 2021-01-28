@@ -45,6 +45,53 @@ namespace HediffResourceFramework
 		}
 	}
 
+	[HarmonyPatch(typeof(Thing), nameof(Thing.TakeDamage))]
+	internal static class TakeDamage_Patch
+	{
+		private static void Prefix(Thing __instance, ref DamageInfo dinfo)
+		{
+			if (dinfo.Instigator is Pawn launcher)
+			{
+				var equipment = launcher.equipment?.Primary;
+
+				if (equipment != null && dinfo.Weapon == equipment.def)
+				{
+					var options = equipment.def.GetModExtension<HediffAdjustOptions>();
+					if (options != null)
+					{
+						foreach (var option in options.hediffOptions)
+						{
+							var hediffResource = launcher.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
+							if (hediffResource != null && option.damageScaling.HasValue)
+							{
+								switch (option.damageScaling.Value)
+								{
+									case DamageScalingMode.Flat: DoFlatDamage(ref dinfo, hediffResource, option); continue;
+									case DamageScalingMode.Scalar: DoScalarDamage(ref dinfo, hediffResource, option); continue;
+									default: continue;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		private static void DoFlatDamage(ref DamageInfo dinfo, HediffResource hediffResource, HediffOption option)
+        {
+			var amount = dinfo.Amount * (Mathf.Pow(option.damagePerCharge, ((hediffResource.ResourceAmount - option.minimumResourcePerUse)) / option.resourcePerCharge));
+			Log.Message("Flat: old damage: " + dinfo.Amount + " - new damage: " + amount);
+			dinfo.SetAmount(amount);
+		}
+		private static void DoScalarDamage(ref DamageInfo dinfo, HediffResource hediffResource, HediffOption option)
+		{
+			var amount = dinfo.Amount * option.damagePerCharge * ((hediffResource.ResourceAmount - option.minimumResourcePerUse) / option.resourcePerCharge);
+			Log.Message("Scalar: old damage: " + dinfo.Amount + " - new damage: " + amount);
+			dinfo.SetAmount(amount);
+		}
+	}
+
+
 	[HarmonyPatch(typeof(CompReloadable), "CreateVerbTargetCommand")]
 	public static class Patch_CreateVerbTargetCommand
 	{

@@ -7,6 +7,11 @@ using Verse;
 
 namespace HediffResourceFramework
 {
+    public enum DamageScalingMode
+    {
+        Scalar,
+        Flat
+    }
     public class HediffOption
     {
         public HediffOption()
@@ -24,7 +29,11 @@ namespace HediffResourceFramework
 
         public bool addHediffIfMissing = false;
         public string disableReason;
+
         public int postUseDelay;
+        public float resourcePerCharge;
+        public float damagePerCharge;
+        public DamageScalingMode? damageScaling;
     }
     public class HediffAdjustOptions : DefModExtension
     {

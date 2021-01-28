@@ -102,6 +102,10 @@
 						<disableIfMissingHediff>true</disableIfMissingHediff>
 						<disableReason>Steam is empty</disableReason>
 						<minimumResourcePerUse>0.2</minimumResourcePerUse>
+						<postUseDelay>1000</postUseDelay>
+						<resourcePerCharge>5</resourcePerCharge>
+						<damagePerCharge></damagePerCharge>
+						<damageScaling>Flat</damageScaling>
 					</li>
 				</hediffOptions>
 			</li>
