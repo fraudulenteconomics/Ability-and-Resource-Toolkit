@@ -91,11 +91,24 @@ namespace HediffResourceFramework
 			}
 			return true;
 		}
-        public static bool IsUsableBy(Verb verb, out bool verbIsFromHediffResource)
+        public static bool IsUsableBy(Verb verb, out bool verbIsFromHediffResource, out string disableReason)
         {
 			verbIsFromHediffResource = false;
+			disableReason = "";
 			if (verb.CasterIsPawn && verb.EquipmentSource != null)
             {
+				var compWeapon = verb.EquipmentSource.GetComp<CompWeaponAdjustHediffs>();
+				if (compWeapon != null && compWeapon.postUseDelayTicks.TryGetValue(verb, out VerbDisable value) && value.delayTicks > Find.TickManager.TicksGame)
+                {
+					disableReason = value.disableReason;
+					return false;
+                }
+				var compApparel = verb.EquipmentSource.GetComp<CompApparelAdjustHediffs>();
+				if (compApparel != null && compApparel.postUseDelayTicks.TryGetValue(verb, out VerbDisable value2) && value2.delayTicks > Find.TickManager.TicksGame)
+				{
+					disableReason = value2.disableReason;
+					return false;
+				}
 				var options = verb.EquipmentSource.def.GetModExtension<HediffAdjustOptions>();
 				if (options != null)
 				{
@@ -110,6 +123,7 @@ namespace HediffResourceFramework
 								bool manaIsEmptyOrNull = manaHediff != null ? manaHediff.ResourceAmount <= 0 : true;
 								if (manaIsEmptyOrNull)
 								{
+									disableReason = option.disableReason;
 									return false;
 								}
 							}
@@ -117,6 +131,7 @@ namespace HediffResourceFramework
 							{
 								if (manaHediff.ResourceAmount < option.minimumResourcePerUse)
 								{
+									disableReason = option.disableReason;
 									return false;
 								}
 							}
@@ -125,6 +140,7 @@ namespace HediffResourceFramework
 								var num = manaHediff.ResourceAmount - option.resourcePerUse;
 								if (num < 0)
 								{
+									disableReason = option.disableReason;
 									return false;
 								}
 							}
@@ -135,9 +151,9 @@ namespace HediffResourceFramework
 			return true;
 		}
 
-		public static void DisableGizmoOnEmptyOrMissingHediff(HediffOption option, Gizmo gizmo)
+		public static void DisableGizmo(Gizmo gizmo, string disableReason)
 		{
-			gizmo.Disable(option.disableReason);
+			gizmo.Disable(disableReason);
 		}
 	}
 }

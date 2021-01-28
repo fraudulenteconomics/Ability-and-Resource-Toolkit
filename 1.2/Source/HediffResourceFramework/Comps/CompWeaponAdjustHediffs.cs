@@ -11,12 +11,14 @@ namespace HediffResourceFramework
     public class CompProperties_WeaponAdjustHediffs : CompProperties
     {
         public List<HediffAdjust> hediffOptions;
+
+        public string disableWeaponPostUse;
         public CompProperties_WeaponAdjustHediffs()
         {
             this.compClass = typeof(CompWeaponAdjustHediffs);
         }
     }
-    public class CompWeaponAdjustHediffs : ThingComp
+    public class CompWeaponAdjustHediffs : CompAdjustHediffs
     {
         public CompProperties_WeaponAdjustHediffs Props
         {
@@ -41,8 +43,7 @@ namespace HediffResourceFramework
         public override void CompTick()
         {
             base.CompTick();
-
-            if (this.parent is ThingWithComps equipment && CompEquippable.PrimaryVerb.CasterPawn != null)
+            if (Find.TickManager.TicksGame >= this.delayTicks && this.parent is ThingWithComps equipment && CompEquippable.PrimaryVerb.CasterPawn != null)
             {
                 if (CompEquippable.PrimaryVerb.CasterPawn.IsHashIntervalTick(60))
                 {
@@ -59,6 +60,12 @@ namespace HediffResourceFramework
                     }
                 }
             }
+        }
+
+        public override void PostExposeData()
+        {
+            base.PostExposeData();
+            Scribe_Values.Look(ref postUseDelayTicks, "postUseDelayTicks");
         }
     }
 

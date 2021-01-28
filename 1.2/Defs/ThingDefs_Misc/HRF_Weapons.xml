@@ -63,6 +63,7 @@
 				</verbProps>
 			</li>
 			<li Class="HediffResourceFramework.CompProperties_WeaponAdjustHediffs">
+				<disableWeaponPostUse>Inactive (post use)</disableWeaponPostUse>
 				<hediffOptions>
 					<li>
 						<hediff>HRF_Steam_Hediff</hediff>
