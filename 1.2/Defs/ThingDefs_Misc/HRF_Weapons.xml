@@ -98,10 +98,10 @@
 				<hediffOptions>
 					<li>
 						<hediff>HRF_Steam_Hediff</hediff>
-						<resourceOffset>-0.2</resourceOffset>
-						<disableOnEmptyOrMissingHediff>true</disableOnEmptyOrMissingHediff>
+						<resourcePerUse>-0.2</resourcePerUse>
+						<disableIfMissingHediff>true</disableIfMissingHediff>
 						<disableReason>Steam is empty</disableReason>
-						<minimumResourceCastRequirement>0.2</minimumResourceCastRequirement>
+						<minimumResourcePerUse>0.2</minimumResourcePerUse>
 					</li>
 				</hediffOptions>
 			</li>

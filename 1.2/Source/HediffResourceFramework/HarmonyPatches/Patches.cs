@@ -37,7 +37,7 @@ namespace HediffResourceFramework
 					{
 						if (HediffResourceUtils.VerbMatches(__instance, option))
 						{
-							HediffResourceUtils.AdjustResourceAmount(__instance.CasterPawn, option.hediff, option.resourceOffset, option.addHediffIfMissing);
+							HediffResourceUtils.AdjustResourceAmount(__instance.CasterPawn, option.hediff, option.resourcePerUse, option.addHediffIfMissing);
 						}
 					}
 				}
@@ -60,7 +60,7 @@ namespace HediffResourceFramework
 						if (HediffResourceUtils.VerbMatches(verb, option))
 						{
 							var manaHediff = verb.CasterPawn.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
-							if (option.disableOnEmptyOrMissingHediff)
+							if (option.disableIfMissingHediff)
 							{
 								bool manaIsEmptyOrNull = manaHediff != null ? manaHediff.ResourceAmount <= 0 : false;
 								if (manaIsEmptyOrNull)
@@ -68,9 +68,9 @@ namespace HediffResourceFramework
 									HediffResourceUtils.DisableGizmoOnEmptyOrMissingHediff(option, __result);
 								}
 							}
-							if (option.minimumResourceCastRequirement != -1f)
+							if (option.minimumResourcePerUse != -1f)
 							{
-								if (manaHediff != null && manaHediff.ResourceAmount < option.minimumResourceCastRequirement)
+								if (manaHediff != null && manaHediff.ResourceAmount < option.minimumResourcePerUse)
 								{
 									HediffResourceUtils.DisableGizmoOnEmptyOrMissingHediff(option, __result);
 								}
@@ -98,7 +98,7 @@ namespace HediffResourceFramework
 						if (HediffResourceUtils.VerbMatches(verb, option))
 						{
 							var manaHediff = verb.CasterPawn.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
-							if (option.disableOnEmptyOrMissingHediff)
+							if (option.disableIfMissingHediff)
 							{
 								bool manaIsEmptyOrNull = manaHediff != null ? manaHediff.ResourceAmount <= 0 : true;
 								if (manaIsEmptyOrNull)
@@ -109,9 +109,9 @@ namespace HediffResourceFramework
 									}
 								}
 							}
-							if (option.minimumResourceCastRequirement != -1f)
+							if (option.minimumResourcePerUse != -1f)
 							{
-								if (manaHediff != null && manaHediff.ResourceAmount < option.minimumResourceCastRequirement)
+								if (manaHediff != null && manaHediff.ResourceAmount < option.minimumResourcePerUse)
 								{
 									foreach (var g in list)
 									{

@@ -15,11 +15,12 @@ namespace HediffResourceFramework
         }
 
         public HediffResourceDef hediff;
-        public float resourceOffset;
         public int verbIndex = -1;
         public string verbLabel;
-        public bool disableOnEmptyOrMissingHediff;
-        public float minimumResourceCastRequirement = -1f;
+        
+        public float resourcePerUse;
+        public bool disableIfMissingHediff;
+        public float minimumResourcePerUse = -1f;
 
         public bool addHediffIfMissing = false;
         public string disableReason;

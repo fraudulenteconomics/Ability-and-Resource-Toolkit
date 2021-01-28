@@ -36,7 +36,7 @@
 		  <outcomeDoers>
 			<li Class="HediffResourceFramework.IngestionOutcomeDoer_GiveHediffResource">
 			  <hediffDef>HRF_Mana_Hediff</hediffDef>
-			  <resourceOffset>1</resourceOffset>
+			  <resourceAdjust>1</resourceAdjust>
 			  <!--<resourcePercent>1</resourcePercent> -->
 			</li>
 		  </outcomeDoers>

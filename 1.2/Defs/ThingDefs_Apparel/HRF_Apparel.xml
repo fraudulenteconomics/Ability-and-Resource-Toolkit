@@ -67,10 +67,10 @@
 				<hediffOptions>
 					<li>
 						<hediff>HRF_Steam_Hediff</hediff>
-						<resourceOffset>-0.5</resourceOffset>
-						<disableOnEmptyOrMissingHediff>false</disableOnEmptyOrMissingHediff>
+						<resourcePerUse>-0.5</resourcePerUse>
+						<disableIfMissingHediff>false</disableIfMissingHediff>
 						<disableReason>Steam is empty</disableReason>
-						<minimumResourceCastRequirement>0.5</minimumResourceCastRequirement>
+						<minimumResourcePerUse>0.5</minimumResourcePerUse>
 					</li>
 				</hediffOptions>
 			</li>
@@ -132,10 +132,10 @@
 				<hediffOptions>
 					<li>
 						<hediff>HRF_Steam_Hediff</hediff>
-						<resourceOffset>-2.5</resourceOffset>
-						<disableOnEmptyOrMissingHediff>true</disableOnEmptyOrMissingHediff>
+						<resourcePerUse>-2.5</resourcePerUse>
+						<disableIfMissingHediff>true</disableIfMissingHediff>
 						<disableReason>Steam is empty</disableReason>
-						<minimumResourceCastRequirement>2.5</minimumResourceCastRequirement>
+						<minimumResourcePerUse>2.5</minimumResourcePerUse>
 					</li>
 				</hediffOptions>
 			</li>
@@ -291,18 +291,18 @@
 					<li>
 						<hediff>HRF_Mana_Hediff</hediff>
 						<verbIndex>0</verbIndex>
-						<resourceOffset>-1.33</resourceOffset>
-						<disableOnEmptyOrMissingHediff>true</disableOnEmptyOrMissingHediff>
+						<resourcePerUse>-1.33</resourcePerUse>
+						<disableIfMissingHediff>true</disableIfMissingHediff>
 						<disableReason>Mana is empty</disableReason>
-						<minimumResourceCastRequirement>5</minimumResourceCastRequirement>
+						<minimumResourcePerUse>5</minimumResourcePerUse>
 					</li>
 					<li>
 						<hediff>HRF_Mana_Hediff</hediff>
 						<verbIndex>1</verbIndex>
-						<resourceOffset>-15</resourceOffset>
-						<disableOnEmptyOrMissingHediff>true</disableOnEmptyOrMissingHediff>
+						<resourcePerUse>-15</resourcePerUse>
+						<disableIfMissingHediff>true</disableIfMissingHediff>
 						<disableReason>Mana is empty</disableReason>
-						<minimumResourceCastRequirement>15</minimumResourceCastRequirement>
+						<minimumResourcePerUse>15</minimumResourcePerUse>
 					</li>
 				</hediffOptions>
 			</li>
