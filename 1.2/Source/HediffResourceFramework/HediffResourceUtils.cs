@@ -39,7 +39,7 @@ namespace HediffResourceFramework
             }
 			return result;
         }
-		public static void AdjustResourceAmount(Pawn pawn, HediffResourceDef hdDef, float sevOffset, HediffOption hediffOption)
+		public static void AdjustResourceAmount(Pawn pawn, HediffResourceDef hdDef, float sevOffset, bool addHediffIfMissing)
 		{
 			if (sevOffset != 0f)
 			{
@@ -48,7 +48,7 @@ namespace HediffResourceFramework
 				{
 					firstHediffOfDef.ResourceAmount += sevOffset;
 				}
-				else if (sevOffset > 0f && hediffOption.addHediffIfMissing)
+				else if (sevOffset > 0f && addHediffIfMissing)
 				{
 					firstHediffOfDef = HediffMaker.MakeHediff(hdDef, pawn) as HediffResource;
 					firstHediffOfDef.ResourceAmount = sevOffset;
@@ -105,7 +105,7 @@ namespace HediffResourceFramework
                         {
 							verbIsFromHediffResource = true;
 							var manaHediff = verb.CasterPawn.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
-							if (option.disableOnEmptyOrMissingHediff)
+							if (option.disableIfMissingHediff)
 							{
 								bool manaIsEmptyOrNull = manaHediff != null ? manaHediff.ResourceAmount <= 0 : true;
 								if (manaIsEmptyOrNull)
@@ -113,16 +113,16 @@ namespace HediffResourceFramework
 									return false;
 								}
 							}
-							if (option.minimumResourceCastRequirement != -1f)
+							if (option.minimumResourcePerUse != -1f)
 							{
-								if (manaHediff.ResourceAmount < option.minimumResourceCastRequirement)
+								if (manaHediff.ResourceAmount < option.minimumResourcePerUse)
 								{
 									return false;
 								}
 							}
-							if (option.resourceOffset != 0f)
+							if (option.resourcePerUse != 0f)
                             {
-								var num = manaHediff.ResourceAmount - option.resourceOffset;
+								var num = manaHediff.ResourceAmount - option.resourcePerUse;
 								if (num < 0)
 								{
 									return false;

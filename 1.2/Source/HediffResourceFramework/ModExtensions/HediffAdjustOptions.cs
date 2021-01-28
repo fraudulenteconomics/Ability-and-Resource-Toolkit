@@ -7,6 +7,11 @@ using Verse;
 
 namespace HediffResourceFramework
 {
+    public enum DamageScalingMode
+    {
+        Scalar,
+        Flat
+    }
     public class HediffOption
     {
         public HediffOption()
@@ -15,27 +20,20 @@ namespace HediffResourceFramework
         }
 
         public HediffResourceDef hediff;
-        public float resourceOffset;
-        public bool qualityScalesResourceOffset;
-        public float maxResourceCapacityOffset;
-        public bool qualityScalesCapacityOffset;
         public int verbIndex = -1;
         public string verbLabel;
-        public bool disableOnEmptyOrMissingHediff;
-        public float minimumResourceCastRequirement = -1f;
-        public bool disallowEquippingIfEmptyNullHediff;
-        public string cannotEquipReason;
-        public List<HediffDef> blackListHediffsPreventEquipping;
-        public List<HediffDef> dropWeaponOrApparelIfBlacklistHediff;
-        public string cannotEquipReasonIncompatible;
+        
+        public float resourcePerUse;
+        public bool disableIfMissingHediff;
+        public float minimumResourcePerUse = -1f;
 
-        public bool dropApparelIfEmptyNullHediff;
-        public bool dropWeaponIfEmptyNullHediff;
         public bool addHediffIfMissing = false;
         public string disableReason;
 
         public int postUseDelay;
-
+        public float resourcePerCharge;
+        public float damagePerCharge;
+        public DamageScalingMode? damageScaling;
     }
     public class HediffAdjustOptions : DefModExtension
     {

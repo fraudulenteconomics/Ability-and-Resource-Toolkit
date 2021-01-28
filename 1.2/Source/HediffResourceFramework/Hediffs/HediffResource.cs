@@ -89,9 +89,9 @@ namespace HediffResourceFramework
                         {
                             if (option.hediff == def)
                             {
-                                var num2 = option.resourceOffset;
+                                var num2 = option.resourcePerSecond;
                                 num2 *= 0.00333333341f;
-                                if (option.qualityScalesResourceOffset && apparel.TryGetQuality(out QualityCategory qc))
+                                if (option.qualityScalesResourcePerSecond && apparel.TryGetQuality(out QualityCategory qc))
                                 {
                                     num2 *= HediffResourceUtils.GetQualityMultiplier(qc);
                                 }
@@ -114,9 +114,9 @@ namespace HediffResourceFramework
                         {
                             if (option.hediff == def)
                             {
-                                var num2 = option.resourceOffset;
+                                var num2 = option.resourcePerSecond;
                                 num2 *= 0.00333333341f;
-                                if (option.qualityScalesResourceOffset && equipment.TryGetQuality(out QualityCategory qc))
+                                if (option.qualityScalesResourcePerSecond && equipment.TryGetQuality(out QualityCategory qc))
                                 {
                                     num2 *= HediffResourceUtils.GetQualityMultiplier(qc);
                                 }
@@ -168,7 +168,7 @@ namespace HediffResourceFramework
                     {
                         foreach (var option in hediffComp.Props.hediffOptions)
                         {
-                            if (option.dropApparelIfEmptyNullHediff && option.hediff == def)
+                            if (option.dropIfHediffMissing && option.hediff == def)
                             {
                                 pawn.apparel.TryDrop(apparel);
                             }
@@ -187,7 +187,7 @@ namespace HediffResourceFramework
                     {
                         foreach (var option in hediffComp.Props.hediffOptions)
                         {
-                            if (option.dropWeaponIfEmptyNullHediff && option.hediff == def)
+                            if (option.dropIfHediffMissing && option.hediff == def)
                             {
                                 pawn.equipment.TryDropEquipment(equipment, out ThingWithComps result, pawn.Position);
                             }

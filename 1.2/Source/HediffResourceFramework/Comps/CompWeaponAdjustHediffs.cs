@@ -10,8 +10,7 @@ namespace HediffResourceFramework
 {
     public class CompProperties_WeaponAdjustHediffs : CompProperties
     {
-        public List<HediffOption> hediffOptions;
-
+        public List<HediffAdjust> hediffOptions;
         public CompProperties_WeaponAdjustHediffs()
         {
             this.compClass = typeof(CompWeaponAdjustHediffs);
@@ -49,14 +48,14 @@ namespace HediffResourceFramework
                 {
                     foreach (var option in Props.hediffOptions)
                     {
-                        float num = option.resourceOffset;
+                        float num = option.resourcePerSecond;
                         num *= 0.00333333341f;
-                        if (option.qualityScalesResourceOffset && equipment.TryGetQuality(out QualityCategory qc))
+                        if (option.qualityScalesResourcePerSecond && equipment.TryGetQuality(out QualityCategory qc))
                         {
                             num *= HediffResourceUtils.GetQualityMultiplier(qc);
                         }
                         num /= 3.33f;
-                        HediffResourceUtils.AdjustResourceAmount(CompEquippable.PrimaryVerb.CasterPawn, option.hediff, num, option);
+                        HediffResourceUtils.AdjustResourceAmount(CompEquippable.PrimaryVerb.CasterPawn, option.hediff, num, option.addHediffIfMissing);
                     }
                 }
             }

@@ -37,13 +37,60 @@ namespace HediffResourceFramework
 					{
 						if (HediffResourceUtils.VerbMatches(__instance, option))
 						{
-							HediffResourceUtils.AdjustResourceAmount(__instance.CasterPawn, option.hediff, option.resourceOffset, option);
+							HediffResourceUtils.AdjustResourceAmount(__instance.CasterPawn, option.hediff, option.resourcePerUse, option.addHediffIfMissing);
 						}
 					}
 				}
 			}
 		}
 	}
+
+	[HarmonyPatch(typeof(Thing), nameof(Thing.TakeDamage))]
+	internal static class TakeDamage_Patch
+	{
+		private static void Prefix(Thing __instance, ref DamageInfo dinfo)
+		{
+			if (dinfo.Instigator is Pawn launcher)
+			{
+				var equipment = launcher.equipment?.Primary;
+
+				if (equipment != null && dinfo.Weapon == equipment.def)
+				{
+					var options = equipment.def.GetModExtension<HediffAdjustOptions>();
+					if (options != null)
+					{
+						foreach (var option in options.hediffOptions)
+						{
+							var hediffResource = launcher.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
+							if (hediffResource != null && option.damageScaling.HasValue)
+							{
+								switch (option.damageScaling.Value)
+								{
+									case DamageScalingMode.Flat: DoFlatDamage(ref dinfo, hediffResource, option); continue;
+									case DamageScalingMode.Scalar: DoScalarDamage(ref dinfo, hediffResource, option); continue;
+									default: continue;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		private static void DoFlatDamage(ref DamageInfo dinfo, HediffResource hediffResource, HediffOption option)
+        {
+			var amount = dinfo.Amount * Mathf.Pow((hediffResource.ResourceAmount - option.minimumResourcePerUse) / option.resourcePerCharge, option.damagePerCharge);
+			Log.Message("Flat: old damage: " + dinfo.Amount + " - new damage: " + amount);
+			dinfo.SetAmount(amount);
+		}
+		private static void DoScalarDamage(ref DamageInfo dinfo, HediffResource hediffResource, HediffOption option)
+		{
+			var amount = dinfo.Amount * option.damagePerCharge * ((hediffResource.ResourceAmount - option.minimumResourcePerUse) / option.resourcePerCharge);
+			Log.Message("Scalar: old damage: " + dinfo.Amount + " - new damage: " + amount);
+			dinfo.SetAmount(amount);
+		}
+	}
+
 
 	[HarmonyPatch(typeof(CompReloadable), "CreateVerbTargetCommand")]
 	public static class Patch_CreateVerbTargetCommand
@@ -60,7 +107,7 @@ namespace HediffResourceFramework
 						if (HediffResourceUtils.VerbMatches(verb, option))
 						{
 							var manaHediff = verb.CasterPawn.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
-							if (option.disableOnEmptyOrMissingHediff)
+							if (option.disableIfMissingHediff)
 							{
 								bool manaIsEmptyOrNull = manaHediff != null ? manaHediff.ResourceAmount <= 0 : false;
 								if (manaIsEmptyOrNull)
@@ -68,9 +115,9 @@ namespace HediffResourceFramework
 									HediffResourceUtils.DisableGizmoOnEmptyOrMissingHediff(option, __result);
 								}
 							}
-							if (option.minimumResourceCastRequirement != -1f)
+							if (option.minimumResourcePerUse != -1f)
 							{
-								if (manaHediff != null && manaHediff.ResourceAmount < option.minimumResourceCastRequirement)
+								if (manaHediff != null && manaHediff.ResourceAmount < option.minimumResourcePerUse)
 								{
 									HediffResourceUtils.DisableGizmoOnEmptyOrMissingHediff(option, __result);
 								}
@@ -98,7 +145,7 @@ namespace HediffResourceFramework
 						if (HediffResourceUtils.VerbMatches(verb, option))
 						{
 							var manaHediff = verb.CasterPawn.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
-							if (option.disableOnEmptyOrMissingHediff)
+							if (option.disableIfMissingHediff)
 							{
 								bool manaIsEmptyOrNull = manaHediff != null ? manaHediff.ResourceAmount <= 0 : true;
 								if (manaIsEmptyOrNull)
@@ -109,9 +156,9 @@ namespace HediffResourceFramework
 									}
 								}
 							}
-							if (option.minimumResourceCastRequirement != -1f)
+							if (option.minimumResourcePerUse != -1f)
 							{
-								if (manaHediff != null && manaHediff.ResourceAmount < option.minimumResourceCastRequirement)
+								if (manaHediff != null && manaHediff.ResourceAmount < option.minimumResourcePerUse)
 								{
 									foreach (var g in list)
 									{
@@ -264,6 +311,7 @@ namespace HediffResourceFramework
 					hediff.ResourceAmount = 0;
 				}
 			}
+
 			if (shieldProps.postDamageDelay.HasValue)
             {
 				hediff.postDamageDelay = Find.TickManager.TicksGame + shieldProps.postDamageDelay.Value;
@@ -334,7 +382,7 @@ namespace HediffResourceFramework
 			{
 				foreach (var option in hediffComp.Props.hediffOptions)
 				{
-					if (option.disallowEquippingIfEmptyNullHediff)
+					if (option.disallowEquipIfHediffMissing)
 					{
 						var hediff = pawn.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
 						if (hediff is null || hediff.ResourceAmount <= 0)
@@ -369,7 +417,7 @@ namespace HediffResourceFramework
 			{
 				foreach (var option in hediffComp.Props.hediffOptions)
 				{
-					if (option.disallowEquippingIfEmptyNullHediff)
+					if (option.disallowEquipIfHediffMissing)
 					{
 						var hediff = pawn.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
 						if (hediff is null || hediff.ResourceAmount <= 0)

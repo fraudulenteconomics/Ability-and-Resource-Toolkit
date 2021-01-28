@@ -12,7 +12,7 @@ namespace HediffResourceFramework
 	{
 		public HediffResourceDef hediffDef;
 
-		public float resourceOffset = 0f;
+		public float resourceAdjust = 0f;
 
 		public float resourcePercent = -1f;
 		protected override void DoIngestionOutcomeSpecial(Pawn pawn, Thing ingested)
@@ -22,9 +22,9 @@ namespace HediffResourceFramework
             {
 				hediff = HediffMaker.MakeHediff(hediffDef, pawn) as HediffResource;
             }
-			if (resourceOffset != 0f)
+			if (resourceAdjust != 0f)
             {
-				hediff.ResourceAmount += resourceOffset;
+				hediff.ResourceAmount += resourceAdjust;
             }
 			if (resourcePercent != 0f)
             {
