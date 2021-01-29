@@ -46,7 +46,7 @@
 				<defaultProjectile>Bullet_Minigun</defaultProjectile>
 				<warmupTime>0.5</warmupTime>
 				<range>30.9</range>
-				<burstShotCount>1</burstShotCount>
+				<burstShotCount>500</burstShotCount>
 				<ticksBetweenBurstShots>5</ticksBetweenBurstShots>
 				<soundCast>Shot_Minigun</soundCast>
 				<soundCastTail>GunTail_Medium</soundCastTail>
@@ -54,6 +54,11 @@
 			</li>
 		</verbs>
 		<comps>
+			<li Class="VFECore.CompProperties_ApparelHediffs">
+				<hediffDefnames>
+					<li>HRF_Charge_Battery</li>
+				</hediffDefnames>
+			</li>
 			<li Class="MVCF.Comps.CompProperties_VerbGiver">
 				<verbProps>
 					<li>
@@ -63,11 +68,12 @@
 				</verbProps>
 			</li>
 			<li Class="HediffResourceFramework.CompProperties_WeaponAdjustHediffs">
+				<disableWeaponPostUse>Inactive (post use)</disableWeaponPostUse>
 				<hediffOptions>
 					<li>
 						<hediff>HRF_Steam_Hediff</hediff>
-						<resourcePerSecond>100</resourcePerSecond>
-						<qualityScalesResourcePerSecond>true</qualityScalesResourcePerSecond>
+						<resourcePerTick>100</resourcePerTick>
+						<qualityScalesResourcePerTick>true</qualityScalesResourcePerTick>
 						<addHediffIfMissing>false</addHediffIfMissing> <!-- default is false -->
 						<maxResourceCapacityOffset>5</maxResourceCapacityOffset>
 						<qualityScalesCapacityOffset>true</qualityScalesCapacityOffset>
@@ -82,6 +88,13 @@
 					</li>
 				</hediffOptions>
 			</li>
+			<!-- <li Class="HediffResourceFramework.CompProperties_ChargeResource">
+				<hediffResource>HRF_Steam_Hediff</hediffResource>
+				<minimumResourcePerUse>2</minimumResourcePerUse>
+				<resourcePerCharge>5</resourcePerCharge>
+				<damagePerCharge>1.1</damagePerCharge>
+				<damageScaling>Flat</damageScaling>
+			</li> -->
 		</comps>
 		<tools>
 			<li>
@@ -99,18 +112,121 @@
 					<li>
 						<hediff>HRF_Steam_Hediff</hediff>
 						<verbIndex>0</verbIndex>
-						<resourcePerUse>-2</resourcePerUse>
+						<resourcePerUse>-0.2</resourcePerUse>
 						<disableIfMissingHediff>true</disableIfMissingHediff>
 						<disableReason>Steam is empty</disableReason>
-						<minimumResourcePerUse>2</minimumResourcePerUse>
 						<postUseDelay>1000</postUseDelay>
-						<resourcePerCharge>5</resourcePerCharge>
-						<damagePerCharge>1.1</damagePerCharge>
-						<damageScaling>Flat</damageScaling>
 					</li>
 				</hediffOptions>
 			</li>
 		</modExtensions>
 	</ThingDef>
+	
+	  <ThingDef ParentName="BaseHumanMakeableGun">
+		<defName>HRF_ChargeRifle</defName>
+		<label>charge rifle</label>
+		<description>An advanced rifle with a self-charging battery. The rounds fired from this weapon gain in power based on how many charges are available when it is fired.</description>
+		<graphicData>
+		  <texPath>Things/Item/Equipment/WeaponRanged/SniperRifle</texPath>
+		  <graphicClass>Graphic_Single</graphicClass>
+		</graphicData>
+		<soundInteract>Interact_Rifle</soundInteract>
+		<recipeMaker>
+		  <researchPrerequisite>PrecisionRifling</researchPrerequisite>
+		  <skillRequirements>
+			<Crafting>7</Crafting>
+		  </skillRequirements>
+		</recipeMaker>
+		<thingSetMakerTags><li>RewardStandardQualitySuper</li></thingSetMakerTags>
+		<statBases>
+		  <WorkToMake>45000</WorkToMake>
+		  <Mass>4</Mass>
+		  <AccuracyTouch>0.90</AccuracyTouch>
+		  <AccuracyShort>0.90</AccuracyShort>
+		  <AccuracyMedium>0.96</AccuracyMedium>
+		  <AccuracyLong>0.98</AccuracyLong>
+		  <RangedWeapon_Cooldown>2.5</RangedWeapon_Cooldown>
+		</statBases>
+		<costList>
+		  <Steel>60</Steel>
+		  <ComponentIndustrial>8</ComponentIndustrial>
+		</costList>
+		<verbs>
+		  <li>
+			<verbClass>Verb_Shoot</verbClass>
+			<hasStandardCommand>true</hasStandardCommand>
+			<defaultProjectile>Bullet_SniperRifle</defaultProjectile>
+			<warmupTime>2.5</warmupTime>
+			<range>44.9</range>
+			<soundCast>Shot_SniperRifle</soundCast>
+			<soundCastTail>GunTail_Heavy</soundCastTail>
+			<muzzleFlashScale>9</muzzleFlashScale>
+		  </li>
+		</verbs>
+		<tools>
+		  <li>
+			<label>stock</label>
+			<capacities>
+			  <li>Blunt</li>
+			</capacities>
+			<power>9</power>
+			<cooldownTime>2</cooldownTime>
+		  </li>
+		  <li>
+			<label>barrel</label>
+			<capacities>
+			  <li>Blunt</li>
+			  <li>Poke</li>
+			</capacities>
+			<power>9</power>
+			<cooldownTime>2</cooldownTime>
+		  </li>
+		</tools>
+		<weaponTags Inherit="False">
+		  <li>SniperRifle</li>
+		</weaponTags>
+		<comps>
+			<li Class="HediffResourceFramework.CompProperties_WeaponAdjustHediffs">
+				<disableWeaponPostUse>Inactive (post use)</disableWeaponPostUse>
+				<hediffOptions>
+					<li>
+						<hediff>HRF_Charge_Battery</hediff>
+						<resourcePerTick>1200</resourcePerTick>
+						<qualityScalesResourcePerTick>true</qualityScalesResourcePerTick>
+						<addHediffIfMissing>true</addHediffIfMissing> <!-- default is false -->
+						<maxResourceCapacityOffset>4</maxResourceCapacityOffset>
+						<qualityScalesCapacityOffset>false</qualityScalesCapacityOffset>
+						<disallowEquipIfHediffMissing>false</disallowEquipIfHediffMissing>
+						<cannotEquipReason>Invalid</cannotEquipReason>
+						<dropIfHediffMissing>false</dropIfHediffMissing>
+						<blackListHediffsPreventEquipping>
+						</blackListHediffsPreventEquipping>
+						<cannotEquipReasonIncompatible>Invalid</cannotEquipReasonIncompatible>
+					</li>
+				</hediffOptions>
+			</li>
+			<li Class="HediffResourceFramework.CompProperties_ChargeResource">
+				<hediffResource>HRF_Charge_Battery</hediffResource>
+				<minimumResourcePerUse>0</minimumResourcePerUse>
+				<resourcePerCharge>1</resourcePerCharge>
+				<damagePerCharge>2</damagePerCharge>
+				<damageScaling>Flat</damageScaling>
+			</li>
+		</comps>
+		<modExtensions>
+			<li Class="HediffResourceFramework.HediffAdjustOptions">
+				<hediffOptions>
+					<li>
+						<hediff>HRF_Charge_Battery</hediff>
+						<verbIndex>0</verbIndex>
+						<resourcePerUse>0</resourcePerUse>
+						<disableIfMissingHediff>false</disableIfMissingHediff>
+						<disableReason>Invalid</disableReason>
+						<postUseDelay>300</postUseDelay>
+					</li>
+				</hediffOptions>
+			</li>
+		</modExtensions>
+	  </ThingDef>
 	
 </Defs>

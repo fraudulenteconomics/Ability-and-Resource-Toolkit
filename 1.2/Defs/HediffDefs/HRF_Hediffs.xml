@@ -20,7 +20,7 @@
 
 			<!-- <damageAbsorbedPerResource>0.5</damageAbsorbedPerResource> -->
 
-			<postDamageDelay>6000</postDamageDelay>
+			<postDamageDelay>600</postDamageDelay>
 		</shieldProperties>
 	</HediffResourceFramework.HediffResourceDef>	
 
@@ -29,12 +29,12 @@
 		<label>Steam</label>
 		<description>no description</description>
 		<hediffClass>HediffResourceFramework.HediffResource</hediffClass>
-		<!--<comps>
+		<comps>
 			<li Class="HediffResourceFramework.HediffCompProperties_ResourcePerDay">
-				<resourcePerDay>0.75</resourcePerDay>
+				<resourcePerDay>10</resourcePerDay>
 				<showHoursToRecover>true</showHoursToRecover>
 			</li>
-		</comps>-->
+		</comps>
 		<maxResourceCapacity>10</maxResourceCapacity>
 		<keepWhenEmpty>true</keepWhenEmpty>
 		<shieldProperties>
@@ -42,7 +42,7 @@
 			<absorbRangeDamage>true</absorbRangeDamage>
 			<damageAbsorbedPerResource>2</damageAbsorbedPerResource>
 			<maxAbsorb>20</maxAbsorb>
-			<postDamageDelay>6000</postDamageDelay>
+			<postDamageDelay>600</postDamageDelay>
 		</shieldProperties>
 
 		<!-- <resourceGainPerDamages>
@@ -113,14 +113,14 @@
 			</li>
 			<li>
 			  <label>hardening</label>
-			  <minSeverity>25</minSeverity>
+			  <minSeverity>10</minSeverity>
 			    <statFactors>
 				  <IncomingDamageFactor>0.75</IncomingDamageFactor>
 				</statFactors>
 			</li>	
 			<li>
 			  <label>hardened</label>
-			  <minSeverity>50</minSeverity>
+			  <minSeverity>15</minSeverity>
 			    <statFactors>
 				  <IncomingDamageFactor>0.5</IncomingDamageFactor>
 				</statFactors>
@@ -143,8 +143,28 @@
 			<absorbMeleeDamage>true</absorbMeleeDamage>
             <absorbRangeDamage>true</absorbRangeDamage>
 			<damageAbsorbedPerResource>1</damageAbsorbedPerResource>
-			<postDamageDelay>6000</postDamageDelay>
+			<postDamageDelay>600</postDamageDelay>
 		</shieldProperties>
+	</HediffResourceFramework.HediffResourceDef>
+	
+	<HediffResourceFramework.HediffResourceDef>
+		<defName>HRF_Charge_Battery</defName>
+		<label>charge battery</label>
+		<description>Internal, self charging batteries that increase the damage of the firing weapon.</description>
+		<hediffClass>HediffResourceFramework.HediffResource</hediffClass>
+		<comps>
+			<li Class="HediffResourceFramework.HediffCompProperties_ResourcePerDay">
+				<resourcePerDay>600</resourcePerDay>
+				<showHoursToRecover>true</showHoursToRecover>
+			</li>
+		</comps>
+		<maxResourceCapacity>1</maxResourceCapacity>
+		<initialResourceAmount>0.1</initialResourceAmount>
+		<keepWhenEmpty>true</keepWhenEmpty>
+		<isBad>false</isBad>
+		<tendable>false</tendable>
+		<makesSickThought>false</makesSickThought>
+		<defaultLabelColor>(0.1,0.7,0.8)</defaultLabelColor>
 	</HediffResourceFramework.HediffResourceDef>
 
 </Defs>
