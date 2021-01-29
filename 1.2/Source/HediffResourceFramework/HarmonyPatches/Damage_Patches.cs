@@ -20,19 +20,14 @@ namespace HediffResourceFramework
 	{
 		private static void Prefix(Thing __instance, ref DamageInfo dinfo)
 		{
-			Log.Message(" - Prefix - if (dinfo.Instigator is Pawn launcher) - 1", true);
 			if (dinfo.Instigator is Pawn launcher)
 			{
-				Log.Message(" - Prefix - var equipment = launcher.equipment?.Primary; - 2", true);
 				var equipment = launcher.equipment?.Primary;
-				Log.Message(" - Prefix - if (equipment != null && dinfo.Weapon == equipment.def) - 3", true);
 				if (equipment != null && dinfo.Weapon == equipment.def)
 				{
-					Log.Message(" - Prefix - var compCharge = equipment.GetComp<CompChargeResource>(); - 4", true);
 					var compCharge = equipment.GetComp<CompChargeResource>();
-					Log.Message(" - Prefix - var hediffResource = launcher.health.hediffSet.GetFirstHediffOfDef(compCharge.Props.hediffResource) as HediffResource; - 5", true);
 					var hediffResource = launcher.health.hediffSet.GetFirstHediffOfDef(compCharge.Props.hediffResource) as HediffResource;
-					Log.Message(" - Prefix - if (hediffResource != null && compCharge.Props.damageScaling.HasValue) - 6", true);
+					Log.Message("hediffResource: " + hediffResource + " - compCharge.Props.damageScaling.HasValue: " + compCharge.Props.damageScaling.HasValue);
 					if (hediffResource != null && compCharge.Props.damageScaling.HasValue)
 					{
 						switch (compCharge.Props.damageScaling.Value)

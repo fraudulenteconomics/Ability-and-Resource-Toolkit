@@ -157,8 +157,9 @@ namespace HediffResourceFramework
             var apparels = pawn.apparel?.WornApparel?.ToList();
             if (apparels != null)
             {
-                foreach (var apparel in apparels)
+                for (int num = apparels.Count - 1; num >= 0; num--)
                 {
+                    var apparel = apparels[num];
                     var hediffComp = apparel.GetComp<CompApparelAdjustHediffs>();
                     if (hediffComp?.Props.hediffOptions != null)
                     {
@@ -176,8 +177,9 @@ namespace HediffResourceFramework
             var equipments = pawn.equipment.AllEquipmentListForReading;
             if (equipments != null)
             {
-                foreach (var equipment in equipments)
+                for (int num = equipments.Count - 1; num >= 0; num--)
                 {
+                    var equipment = equipments[num];
                     var hediffComp = equipment.GetComp<CompWeaponAdjustHediffs>();
                     if (hediffComp?.Props.hediffOptions != null)
                     {

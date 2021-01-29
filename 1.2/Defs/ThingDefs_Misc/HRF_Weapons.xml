@@ -84,6 +84,7 @@
 				</hediffOptions>
 			</li>
 			<li Class="HediffResourceFramework.CompProperties_ChargeResource">
+				<hediffResource>HRF_Steam_Hediff</hediffResource>
 				<minimumResourcePerUse>2</minimumResourcePerUse>
 				<resourcePerCharge>5</resourcePerCharge>
 				<damagePerCharge>1.1</damagePerCharge>
