@@ -12,7 +12,6 @@ namespace HediffResourceFramework
     {
         public new HediffResourceDef def => base.def as HediffResourceDef;
         private float resourceAmount;
-        public float postDamageDelay;
         public float ResourceAmount
         {
             get
@@ -21,21 +20,18 @@ namespace HediffResourceFramework
             }
             set
             {
-                if (Find.TickManager.TicksGame > postDamageDelay)
+                resourceAmount = value;
+                if (resourceAmount > ResourceCapacity)
                 {
-                    resourceAmount = value;
-                    if (resourceAmount > ResourceCapacity)
-                    {
-                        resourceAmount = ResourceCapacity;
-                    }
-                    if (resourceAmount < 0)
-                    {
-                        this.pawn.health.RemoveHediff(this);
-                    }
-                    else
-                    {
-                        this.Severity = resourceAmount;
-                    }
+                    resourceAmount = ResourceCapacity;
+                }
+                if (resourceAmount < 0)
+                {
+                    this.pawn.health.RemoveHediff(this);
+                }
+                else
+                {
+                    this.Severity = resourceAmount;
                 }
             }
         }
@@ -89,9 +85,9 @@ namespace HediffResourceFramework
                         {
                             if (option.hediff == def)
                             {
-                                var num2 = option.resourcePerSecond;
+                                var num2 = option.resourcePerTick;
                                 num2 *= 0.00333333341f;
-                                if (option.qualityScalesResourcePerSecond && apparel.TryGetQuality(out QualityCategory qc))
+                                if (option.qualityScalesResourcePerTick && apparel.TryGetQuality(out QualityCategory qc))
                                 {
                                     num2 *= HediffResourceUtils.GetQualityMultiplier(qc);
                                 }
@@ -114,9 +110,9 @@ namespace HediffResourceFramework
                         {
                             if (option.hediff == def)
                             {
-                                var num2 = option.resourcePerSecond;
+                                var num2 = option.resourcePerTick;
                                 num2 *= 0.00333333341f;
-                                if (option.qualityScalesResourcePerSecond && equipment.TryGetQuality(out QualityCategory qc))
+                                if (option.qualityScalesResourcePerTick && equipment.TryGetQuality(out QualityCategory qc))
                                 {
                                     num2 *= HediffResourceUtils.GetQualityMultiplier(qc);
                                 }
@@ -161,8 +157,9 @@ namespace HediffResourceFramework
             var apparels = pawn.apparel?.WornApparel?.ToList();
             if (apparels != null)
             {
-                foreach (var apparel in apparels)
+                for (int num = apparels.Count - 1; num >= 0; num--)
                 {
+                    var apparel = apparels[num];
                     var hediffComp = apparel.GetComp<CompApparelAdjustHediffs>();
                     if (hediffComp?.Props.hediffOptions != null)
                     {
@@ -180,8 +177,9 @@ namespace HediffResourceFramework
             var equipments = pawn.equipment.AllEquipmentListForReading;
             if (equipments != null)
             {
-                foreach (var equipment in equipments)
+                for (int num = equipments.Count - 1; num >= 0; num--)
                 {
+                    var equipment = equipments[num];
                     var hediffComp = equipment.GetComp<CompWeaponAdjustHediffs>();
                     if (hediffComp?.Props.hediffOptions != null)
                     {
@@ -201,7 +199,6 @@ namespace HediffResourceFramework
         {
             base.ExposeData();
             Scribe_Values.Look(ref resourceAmount, "resourceAmount");
-            Scribe_Values.Look(ref postDamageDelay, "postDamageDelay");
         }
     }
 }

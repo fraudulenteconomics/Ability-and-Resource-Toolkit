@@ -11,12 +11,14 @@ namespace HediffResourceFramework
     public class CompProperties_WeaponAdjustHediffs : CompProperties
     {
         public List<HediffAdjust> hediffOptions;
+
+        public string disableWeaponPostUse;
         public CompProperties_WeaponAdjustHediffs()
         {
             this.compClass = typeof(CompWeaponAdjustHediffs);
         }
     }
-    public class CompWeaponAdjustHediffs : ThingComp
+    public class CompWeaponAdjustHediffs : CompAdjustHediffs
     {
         public CompProperties_WeaponAdjustHediffs Props
         {
@@ -41,16 +43,15 @@ namespace HediffResourceFramework
         public override void CompTick()
         {
             base.CompTick();
-
-            if (this.parent is ThingWithComps equipment && CompEquippable.PrimaryVerb.CasterPawn != null)
+            if (Find.TickManager.TicksGame >= this.delayTicks && this.parent is ThingWithComps equipment && CompEquippable.PrimaryVerb.CasterPawn != null)
             {
                 if (CompEquippable.PrimaryVerb.CasterPawn.IsHashIntervalTick(60))
                 {
                     foreach (var option in Props.hediffOptions)
                     {
-                        float num = option.resourcePerSecond;
+                        float num = option.resourcePerTick;
                         num *= 0.00333333341f;
-                        if (option.qualityScalesResourcePerSecond && equipment.TryGetQuality(out QualityCategory qc))
+                        if (option.qualityScalesResourcePerTick && equipment.TryGetQuality(out QualityCategory qc))
                         {
                             num *= HediffResourceUtils.GetQualityMultiplier(qc);
                         }
@@ -61,5 +62,4 @@ namespace HediffResourceFramework
             }
         }
     }
-
 }

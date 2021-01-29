@@ -8,28 +8,6 @@ using Verse;
 
 namespace HediffResourceFramework
 {
-    public class HediffAdjust
-    {
-        public HediffAdjust()
-        {
-
-        }
-
-        public HediffResourceDef hediff;
-        public float resourcePerSecond;
-        public bool qualityScalesResourcePerSecond;
-        public float maxResourceCapacityOffset;
-        public bool qualityScalesCapacityOffset;
-
-        public bool disallowEquipIfHediffMissing;
-        public string cannotEquipReason;
-        public List<HediffDef> blackListHediffsPreventEquipping;
-        public List<HediffDef> dropWeaponOrApparelIfBlacklistHediff;
-        public string cannotEquipReasonIncompatible;
-
-        public bool dropIfHediffMissing;
-        public bool addHediffIfMissing = false;
-    }
     public class CompProperties_ApparelAdjustHediffs : CompProperties
     {
         public List<HediffAdjust> hediffOptions;
@@ -39,7 +17,8 @@ namespace HediffResourceFramework
             this.compClass = typeof(CompApparelAdjustHediffs);
         }
     }
-    public class CompApparelAdjustHediffs : ThingComp
+
+    public class CompApparelAdjustHediffs : CompAdjustHediffs
     {
         public CompProperties_ApparelAdjustHediffs Props
         {
@@ -52,15 +31,15 @@ namespace HediffResourceFramework
         public override void CompTick()
         {
             base.CompTick();
-            if (this.parent is Apparel apparel && apparel.Wearer != null)
+            if (Find.TickManager.TicksGame >= this.delayTicks && this.parent is Apparel apparel && apparel.Wearer != null)
             {
                 if (apparel.Wearer.IsHashIntervalTick(60))
                 {
                     foreach (var option in Props.hediffOptions)
                     {
-                        float num = option.resourcePerSecond;
+                        float num = option.resourcePerTick;
                         num *= 0.00333333341f;
-                        if (option.qualityScalesResourcePerSecond && apparel.TryGetQuality(out QualityCategory qc))
+                        if (option.qualityScalesResourcePerTick && apparel.TryGetQuality(out QualityCategory qc))
                         {
                             num *= HediffResourceUtils.GetQualityMultiplier(qc);
                         }
