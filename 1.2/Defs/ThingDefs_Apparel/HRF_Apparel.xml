@@ -43,8 +43,8 @@
 				<hediffOptions>
 					<li>
 						<hediff>HRF_Steam_Hediff</hediff>
-						<resourcePerSecond>100</resourcePerSecond>
-						<qualityScalesResourcePerSecond>true</qualityScalesResourcePerSecond>
+						<resourcePerTick>100</resourcePerTick>
+						<qualityScalesResourcePerTick>true</qualityScalesResourcePerTick>
 						<addHediffIfMissing>true</addHediffIfMissing>
 						<!-- default is false -->
 						<maxResourceCapacityOffset>5</maxResourceCapacityOffset>
@@ -115,7 +115,7 @@
 						<hediff>HRF_Steam_Hediff</hediff>
 						<addHediffIfMissing>false</addHediffIfMissing>
 						<maxResourceCapacityOffset>-2</maxResourceCapacityOffset>
-						<qualityScalesResourcePerSecond>false</qualityScalesResourcePerSecond>
+						<qualityScalesResourcePerTick>false</qualityScalesResourcePerTick>
 						<disallowEquipIfHediffMissing>true</disallowEquipIfHediffMissing>
 						<cannotEquipReason>No enough steam</cannotEquipReason>
 						<dropIfHediffMissing>true</dropIfHediffMissing>
@@ -204,7 +204,7 @@
 				<hediffOptions>
 					<li>
 						<hediff>HRF_Mana_Hediff</hediff>
-						<resourcePerSecond>300</resourcePerSecond>
+						<resourcePerTick>300</resourcePerTick>
 						<disallowEquipIfHediffMissing>false</disallowEquipIfHediffMissing>
 						<dropIfHediffMissing>false</dropIfHediffMissing>
 						<blackListHediffsPreventEquipping>
@@ -359,8 +359,8 @@
 				<hediffOptions>
 				<li>
 					<hediff>HRF_ReactiveVest</hediff>
-					<resourcePerSecond>-100</resourcePerSecond>
-					<qualityScalesResourcePerSecond>true</qualityScalesResourcePerSecond>
+					<resourcePerTick>-100</resourcePerTick>
+					<qualityScalesResourcePerTick>true</qualityScalesResourcePerTick>
 					<addHediffIfMissing>true</addHediffIfMissing> <!-- default is false -->
 				</li>
 				</hediffOptions>
@@ -451,8 +451,8 @@
 				<hediffOptions>
 					<li>
 						<hediff>HRF_Shield_Hediff</hediff>
-						<resourcePerSecond>1000</resourcePerSecond>
-						<qualityScalesResourcePerSecond>true</qualityScalesResourcePerSecond>
+						<resourcePerTick>1000</resourcePerTick>
+						<qualityScalesResourcePerTick>true</qualityScalesResourcePerTick>
 						<addHediffIfMissing>true</addHediffIfMissing> <!-- default is false -->
 						<maxResourceCapacityOffset>90</maxResourceCapacityOffset>
 						<qualityScalesCapacityOffset>true</qualityScalesCapacityOffset>

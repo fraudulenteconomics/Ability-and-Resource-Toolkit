@@ -16,8 +16,8 @@ namespace HediffResourceFramework
         }
 
         public HediffResourceDef hediff;
-        public float resourcePerSecond;
-        public bool qualityScalesResourcePerSecond;
+        public float resourcePerTick;
+        public bool qualityScalesResourcePerTick;
         public float maxResourceCapacityOffset;
         public bool qualityScalesCapacityOffset;
 

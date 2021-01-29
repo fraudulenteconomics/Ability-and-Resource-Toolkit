@@ -20,13 +20,19 @@ namespace HediffResourceFramework
 	{
 		private static void Prefix(Thing __instance, ref DamageInfo dinfo)
 		{
+			Log.Message(" - Prefix - if (dinfo.Instigator is Pawn launcher) - 1", true);
 			if (dinfo.Instigator is Pawn launcher)
 			{
+				Log.Message(" - Prefix - var equipment = launcher.equipment?.Primary; - 2", true);
 				var equipment = launcher.equipment?.Primary;
-				if (equipment != null && dinfo.Weapon == equipment.def && dinfo.Def.isRanged)
+				Log.Message(" - Prefix - if (equipment != null && dinfo.Weapon == equipment.def) - 3", true);
+				if (equipment != null && dinfo.Weapon == equipment.def)
 				{
+					Log.Message(" - Prefix - var compCharge = equipment.GetComp<CompChargeResource>(); - 4", true);
 					var compCharge = equipment.GetComp<CompChargeResource>();
+					Log.Message(" - Prefix - var hediffResource = launcher.health.hediffSet.GetFirstHediffOfDef(compCharge.Props.hediffResource) as HediffResource; - 5", true);
 					var hediffResource = launcher.health.hediffSet.GetFirstHediffOfDef(compCharge.Props.hediffResource) as HediffResource;
+					Log.Message(" - Prefix - if (hediffResource != null && compCharge.Props.damageScaling.HasValue) - 6", true);
 					if (hediffResource != null && compCharge.Props.damageScaling.HasValue)
 					{
 						switch (compCharge.Props.damageScaling.Value)
@@ -39,18 +45,20 @@ namespace HediffResourceFramework
 				}
 			}
 		}
-
+	
 		private static void DoFlatDamage(ref DamageInfo dinfo, HediffResource hediffResource, CompChargeResource compCharge)
 		{
 			var amount = dinfo.Amount * Mathf.Pow(compCharge.Props.damagePerCharge, (hediffResource.ResourceAmount - compCharge.Props.minimumResourcePerUse) / compCharge.Props.resourcePerCharge);
 			Log.Message("Flat: old damage: " + dinfo.Amount + " - new damage: " + amount);
 			dinfo.SetAmount(amount);
+			hediffResource.ResourceAmount = 0;
 		}
 		private static void DoScalarDamage(ref DamageInfo dinfo, HediffResource hediffResource, CompChargeResource compCharge)
 		{
 			var amount = dinfo.Amount * compCharge.Props.damagePerCharge * ((hediffResource.ResourceAmount - compCharge.Props.minimumResourcePerUse) / compCharge.Props.resourcePerCharge);
 			Log.Message("Scalar: old damage: " + dinfo.Amount + " - new damage: " + amount);
 			dinfo.SetAmount(amount);
+			hediffResource.ResourceAmount = 0;
 		}
 	}
 
@@ -60,7 +68,7 @@ namespace HediffResourceFramework
 		private static void Prefix(Pawn __instance, ref DamageInfo dinfo, out bool absorbed)
 		{
 			absorbed = false;
-			foreach (var hediff in __instance?.health?.hediffSet?.hediffs?.Where(x => x is HediffResource).Cast<HediffResource>())
+			foreach (var hediff in __instance?.health?.hediffSet?.hediffs?.OfType<HediffResource>())
 			{
 				if (dinfo.Amount > 0 && hediff.def.shieldProperties != null)
 				{

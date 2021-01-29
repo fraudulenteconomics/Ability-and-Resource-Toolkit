@@ -41,27 +41,34 @@ namespace HediffResourceFramework
 	[HarmonyPatch(typeof(Verb), "TryCastNextBurstShot")]
 	public static class Patch_TryCastNextBurstShot
 	{
-		private static void Postfix(Verb __instance)
-		{
-			if (__instance.Available() && __instance.CasterIsPawn && __instance.EquipmentSource != null)
-			{
-				var options = __instance.EquipmentSource.def.GetModExtension<HediffAdjustOptions>();
-				if (options != null)
-				{
-					foreach (var option in options.hediffOptions)
-					{
-						if (HediffResourceUtils.VerbMatches(__instance, option))
-						{
-							HediffResourceUtils.AdjustResourceAmount(__instance.CasterPawn, option.hediff, option.resourcePerUse, option.addHediffIfMissing);
-						}
-						if (option.postUseDelay != 0)
-						{
-							var comp = __instance.EquipmentSource.GetComp<CompWeaponAdjustHediffs>();
-							comp.postUseDelayTicks[__instance] = new VerbDisable(option.postUseDelay, comp.Props.disableWeaponPostUse);
-						}
-					}
-				}
-			}
-		}
+        private static void Postfix(Verb __instance)
+        {
+            if (__instance.Available() && __instance.CasterIsPawn && __instance.EquipmentSource != null)
+            {
+                var options = __instance.EquipmentSource.def.GetModExtension<HediffAdjustOptions>();
+                if (options != null)
+                {
+                    foreach (var option in options.hediffOptions)
+                    {
+                        if (HediffResourceUtils.VerbMatches(__instance, option))
+                        {
+                            HediffResourceUtils.AdjustResourceAmount(__instance.CasterPawn, option.hediff, option.resourcePerUse, option.addHediffIfMissing);
+                        }
+                        if (option.postUseDelay != 0)
+                        {
+                            var comp = __instance.EquipmentSource.GetComp<CompWeaponAdjustHediffs>();
+                            if (comp != null)
+                            {
+                                if (comp.postUseDelayTicks is null)
+                                {
+                                    comp.postUseDelayTicks = new Dictionary<Verb, VerbDisable>();
+                                }
+                                comp.postUseDelayTicks[__instance] = new VerbDisable(option.postUseDelay, comp.Props.disableWeaponPostUse);
+                            }
+                        }
+                    }
+                }
+            }
+        }
 	}
 }

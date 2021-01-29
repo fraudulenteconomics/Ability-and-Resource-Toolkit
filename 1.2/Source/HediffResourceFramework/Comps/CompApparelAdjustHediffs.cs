@@ -37,9 +37,9 @@ namespace HediffResourceFramework
                 {
                     foreach (var option in Props.hediffOptions)
                     {
-                        float num = option.resourcePerSecond;
+                        float num = option.resourcePerTick;
                         num *= 0.00333333341f;
-                        if (option.qualityScalesResourcePerSecond && apparel.TryGetQuality(out QualityCategory qc))
+                        if (option.qualityScalesResourcePerTick && apparel.TryGetQuality(out QualityCategory qc))
                         {
                             num *= HediffResourceUtils.GetQualityMultiplier(qc);
                         }

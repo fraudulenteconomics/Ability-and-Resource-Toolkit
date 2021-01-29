@@ -37,6 +37,32 @@ namespace HediffResourceFramework
                     }
                 }
             }
+
+			var equipments = pawn.equipment.AllEquipmentListForReading;
+			if (equipments != null)
+			{
+				foreach (var equipment in equipments)
+				{
+					var hediffComp = equipment.GetComp<CompWeaponAdjustHediffs>();
+					if (hediffComp?.Props.hediffOptions != null)
+					{
+						foreach (var option in hediffComp.Props.hediffOptions)
+						{
+							if (option.hediff == hdDef && option.maxResourceCapacityOffset != 0f)
+							{
+								if (option.qualityScalesCapacityOffset && equipment.TryGetQuality(out QualityCategory qc))
+								{
+									result += (option.maxResourceCapacityOffset * GetQualityMultiplier(qc));
+								}
+								else
+								{
+									result += option.maxResourceCapacityOffset;
+								}
+							}
+						}
+					}
+				}
+			}
 			return result;
         }
 		public static void AdjustResourceAmount(Pawn pawn, HediffResourceDef hdDef, float sevOffset, bool addHediffIfMissing)

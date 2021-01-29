@@ -67,8 +67,8 @@
 				<hediffOptions>
 					<li>
 						<hediff>HRF_Steam_Hediff</hediff>
-						<resourcePerSecond>100</resourcePerSecond>
-						<qualityScalesResourcePerSecond>true</qualityScalesResourcePerSecond>
+						<resourcePerTick>100</resourcePerTick>
+						<qualityScalesResourcePerTick>true</qualityScalesResourcePerTick>
 						<addHediffIfMissing>false</addHediffIfMissing> <!-- default is false -->
 						<maxResourceCapacityOffset>5</maxResourceCapacityOffset>
 						<qualityScalesCapacityOffset>true</qualityScalesCapacityOffset>
