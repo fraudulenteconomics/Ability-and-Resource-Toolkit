@@ -83,6 +83,12 @@
 					</li>
 				</hediffOptions>
 			</li>
+			<li Class="HediffResourceFramework.CompProperties_ChargeResource">
+				<minimumResourcePerUse>2</minimumResourcePerUse>
+				<resourcePerCharge>5</resourcePerCharge>
+				<damagePerCharge>1.1</damagePerCharge>
+				<damageScaling>Flat</damageScaling>
+			</li>
 		</comps>
 		<tools>
 			<li>
@@ -103,11 +109,7 @@
 						<resourcePerUse>-2</resourcePerUse>
 						<disableIfMissingHediff>true</disableIfMissingHediff>
 						<disableReason>Steam is empty</disableReason>
-						<minimumResourcePerUse>2</minimumResourcePerUse>
 						<postUseDelay>1000</postUseDelay>
-						<resourcePerCharge>5</resourcePerCharge>
-						<damagePerCharge>1.1</damagePerCharge>
-						<damageScaling>Flat</damageScaling>
 					</li>
 				</hediffOptions>
 			</li>

@@ -31,9 +31,6 @@ namespace HediffResourceFramework
         public string disableReason;
 
         public int postUseDelay;
-        public float resourcePerCharge;
-        public float damagePerCharge;
-        public DamageScalingMode? damageScaling;
     }
     public class HediffAdjustOptions : DefModExtension
     {

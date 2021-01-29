@@ -22,15 +22,15 @@ namespace HediffResourceFramework
             {
 				hediff = HediffMaker.MakeHediff(hediffDef, pawn) as HediffResource;
             }
+			pawn.health.AddHediff(hediff);
 			if (resourceAdjust != 0f)
             {
 				hediff.ResourceAmount += resourceAdjust;
             }
-			if (resourcePercent != 0f)
+			if (resourcePercent != -1f)
             {
 				hediff.ResourceAmount += hediff.ResourceCapacity * resourcePercent;
 			}
-			pawn.health.AddHediff(hediff);
 		}
 
 		public override IEnumerable<StatDrawEntry> SpecialDisplayStats(ThingDef parentDef)

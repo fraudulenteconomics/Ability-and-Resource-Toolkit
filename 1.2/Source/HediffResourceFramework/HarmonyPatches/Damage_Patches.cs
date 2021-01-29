@@ -25,36 +25,30 @@ namespace HediffResourceFramework
 				var equipment = launcher.equipment?.Primary;
 				if (equipment != null && dinfo.Weapon == equipment.def && dinfo.Def.isRanged)
 				{
-					var options = equipment.def.GetModExtension<HediffAdjustOptions>();
-					if (options != null)
+					var compCharge = equipment.GetComp<CompChargeResource>();
+					var hediffResource = launcher.health.hediffSet.GetFirstHediffOfDef(compCharge.Props.hediffResource) as HediffResource;
+					if (hediffResource != null && compCharge.Props.damageScaling.HasValue)
 					{
-						foreach (var option in options.hediffOptions)
+						switch (compCharge.Props.damageScaling.Value)
 						{
-							var hediffResource = launcher.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
-							if (hediffResource != null && option.damageScaling.HasValue)
-							{
-								switch (option.damageScaling.Value)
-								{
-									case DamageScalingMode.Flat: DoFlatDamage(ref dinfo, hediffResource, option); continue;
-									case DamageScalingMode.Scalar: DoScalarDamage(ref dinfo, hediffResource, option); continue;
-									default: continue;
-								}
-							}
+							case DamageScalingMode.Flat: DoFlatDamage(ref dinfo, hediffResource, compCharge); break;
+							case DamageScalingMode.Scalar: DoScalarDamage(ref dinfo, hediffResource, compCharge); break;
+							default: break;
 						}
 					}
 				}
 			}
 		}
 
-		private static void DoFlatDamage(ref DamageInfo dinfo, HediffResource hediffResource, HediffOption option)
+		private static void DoFlatDamage(ref DamageInfo dinfo, HediffResource hediffResource, CompChargeResource compCharge)
 		{
-			var amount = dinfo.Amount * Mathf.Pow(option.damagePerCharge, (hediffResource.ResourceAmount - option.minimumResourcePerUse) / option.resourcePerCharge);
+			var amount = dinfo.Amount * Mathf.Pow(compCharge.Props.damagePerCharge, (hediffResource.ResourceAmount - compCharge.Props.minimumResourcePerUse) / compCharge.Props.resourcePerCharge);
 			Log.Message("Flat: old damage: " + dinfo.Amount + " - new damage: " + amount);
 			dinfo.SetAmount(amount);
 		}
-		private static void DoScalarDamage(ref DamageInfo dinfo, HediffResource hediffResource, HediffOption option)
+		private static void DoScalarDamage(ref DamageInfo dinfo, HediffResource hediffResource, CompChargeResource compCharge)
 		{
-			var amount = dinfo.Amount * option.damagePerCharge * ((hediffResource.ResourceAmount - option.minimumResourcePerUse) / option.resourcePerCharge);
+			var amount = dinfo.Amount * compCharge.Props.damagePerCharge * ((hediffResource.ResourceAmount - compCharge.Props.minimumResourcePerUse) / compCharge.Props.resourcePerCharge);
 			Log.Message("Scalar: old damage: " + dinfo.Amount + " - new damage: " + amount);
 			dinfo.SetAmount(amount);
 		}
@@ -73,11 +67,11 @@ namespace HediffResourceFramework
 					var shieldProps = hediff.def.shieldProperties;
 					if (shieldProps.absorbRangeDamage && (dinfo.Weapon?.IsRangedWeapon ?? false))
 					{
-						ProcessDamage(ref dinfo, hediff, shieldProps);
+						ProcessDamage(__instance, ref dinfo, hediff, shieldProps);
 					}
 					else if (shieldProps.absorbMeleeDamage && (dinfo.Weapon is null || dinfo.Weapon.IsMeleeWeapon))
 					{
-						ProcessDamage(ref dinfo, hediff, shieldProps);
+						ProcessDamage(__instance, ref dinfo, hediff, shieldProps);
 					}
 					if (dinfo.Amount <= 0)
 					{
@@ -88,9 +82,10 @@ namespace HediffResourceFramework
 			}
 		}
 
-		private static void ProcessDamage(ref DamageInfo dinfo, HediffResource hediff, ShieldProperties shieldProps)
+		private static void ProcessDamage(Pawn pawn, ref DamageInfo dinfo, HediffResource hediff, ShieldProperties shieldProps)
 		{
 			Log.Message("Pre: " + hediff.def.defName + " - hediff.ResourceAmount: " + hediff.ResourceAmount + " - Damage amount: " + dinfo.Amount);
+			bool damageIsProcessed = false;
 			if (shieldProps.resourceConsumptionPerDamage.HasValue && hediff.ResourceAmount >= shieldProps.resourceConsumptionPerDamage.Value)
 			{
 				if (shieldProps.maxAbsorb.HasValue)
@@ -102,6 +97,7 @@ namespace HediffResourceFramework
 					dinfo.SetAmount(0);
 				}
 				hediff.ResourceAmount -= shieldProps.resourceConsumptionPerDamage.Value;
+				damageIsProcessed = true;
 			}
 			else if (shieldProps.damageAbsorbedPerResource.HasValue)
 			{
@@ -126,12 +122,37 @@ namespace HediffResourceFramework
 					Log.Message(" - ProcessDamage - hediff.ResourceAmount = 0; - 24", true);
 					hediff.ResourceAmount = 0;
 				}
+				damageIsProcessed = true;
 			}
 
-			if (shieldProps.postDamageDelay.HasValue)
+			if (damageIsProcessed && shieldProps.postDamageDelay.HasValue)
 			{
 				var delayTicks = Find.TickManager.TicksGame + shieldProps.postDamageDelay.Value;
+				var apparels = pawn.apparel?.WornApparel?.ToList();
+				if (apparels != null)
+				{
+					foreach (var apparel in apparels)
+					{
+						var hediffComp = apparel.GetComp<CompAdjustHediffs>();
+						if (hediffComp != null)
+                        {
+							hediffComp.delayTicks = delayTicks;
+						}
+					}
+				}
 
+				var equipments = pawn.equipment.AllEquipmentListForReading;
+				if (equipments != null)
+                {
+					foreach (var equipment in equipments)
+					{
+						var hediffComp = equipment.GetComp<CompAdjustHediffs>();
+						if (hediffComp != null)
+						{
+							hediffComp.delayTicks = delayTicks;
+						}
+					}
+				}
 			}
 			Log.Message("Post: " + hediff.def.defName + " - hediff.ResourceAmount: " + hediff.ResourceAmount + " - Damage amount: " + dinfo.Amount);
 		}

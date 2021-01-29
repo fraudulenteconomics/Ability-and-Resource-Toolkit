@@ -98,13 +98,13 @@ namespace HediffResourceFramework
 			if (verb.CasterIsPawn && verb.EquipmentSource != null)
             {
 				var compWeapon = verb.EquipmentSource.GetComp<CompWeaponAdjustHediffs>();
-				if (compWeapon != null && compWeapon.postUseDelayTicks.TryGetValue(verb, out VerbDisable value) && value.delayTicks > Find.TickManager.TicksGame)
+				if (compWeapon?.postUseDelayTicks != null && compWeapon.postUseDelayTicks.TryGetValue(verb, out VerbDisable value) && value.delayTicks > Find.TickManager.TicksGame)
                 {
 					disableReason = value.disableReason;
 					return false;
                 }
 				var compApparel = verb.EquipmentSource.GetComp<CompApparelAdjustHediffs>();
-				if (compApparel != null && compApparel.postUseDelayTicks.TryGetValue(verb, out VerbDisable value2) && value2.delayTicks > Find.TickManager.TicksGame)
+				if (compApparel?.postUseDelayTicks != null && compApparel.postUseDelayTicks.TryGetValue(verb, out VerbDisable value2) && value2.delayTicks > Find.TickManager.TicksGame)
 				{
 					disableReason = value2.disableReason;
 					return false;

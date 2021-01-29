@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Comps\CompAdjustHediffs.cs" />
+    <Compile Include="Comps\CompChargeResource.cs" />
     <Compile Include="Comps\HediffComp_ResourcePerDay.cs" />
     <Compile Include="Comps\IngestionOutcomeDoer_GiveHediffResource.cs" />
     <Compile Include="Comps\CompWeaponAdjustHediffs.cs" />
