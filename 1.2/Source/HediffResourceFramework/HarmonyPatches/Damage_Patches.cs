@@ -47,14 +47,14 @@ namespace HediffResourceFramework
 		private static void DoFlatDamage(ref int __result, HediffResource hediffResource, CompChargeResource compCharge)
 		{
 			var oldDamage = __result;
-			__result = (int)(__result * Mathf.Pow(compCharge.Props.damagePerCharge, (hediffResource.ResourceAmount - compCharge.Props.minimumResourcePerUse) / compCharge.Props.resourcePerCharge));
+			__result = (int)(__result * Mathf.Pow((1 + compCharge.Props.damagePerCharge), (hediffResource.ResourceAmount - compCharge.Props.minimumResourcePerUse) / compCharge.Props.resourcePerCharge));
 			Log.Message("Flat: old damage: " + oldDamage + " - new damage: " + __result);
 			hediffResource.ResourceAmount = 0;
 		}
 		private static void DoScalarDamage(ref int __result, HediffResource hediffResource, CompChargeResource compCharge)
 		{
 			var oldDamage = __result;
-			__result = (int)(__result * compCharge.Props.damagePerCharge * ((hediffResource.ResourceAmount - compCharge.Props.minimumResourcePerUse) / compCharge.Props.resourcePerCharge));
+			__result = (int)(__result * Mathf.Pow((1 + compCharge.Props.damagePerCharge), (hediffResource.ResourceAmount - compCharge.Props.minimumResourcePerUse) / compCharge.Props.resourcePerCharge));
 			Log.Message("Scalar: old damage: " + oldDamage + " - new damage: " + __result);
 			hediffResource.ResourceAmount = 0;
 		}
@@ -62,7 +62,7 @@ namespace HediffResourceFramework
 		private static void DoLinearDamage(ref int __result, HediffResource hediffResource, CompChargeResource compCharge)
 		{
 			var oldDamage = __result;
-			__result = (int)(__result * compCharge.Props.damagePerCharge * (hediffResource.ResourceAmount - compCharge.Props.minimumResourcePerUse) / compCharge.Props.resourcePerCharge);
+			__result = (int)(__result * (1 + (compCharge.Props.damagePerCharge * (hediffResource.ResourceAmount - compCharge.Props.minimumResourcePerUse) / compCharge.Props.resourcePerCharge)));
 			Log.Message("Linear: old damage: " + oldDamage + " - new damage: " + __result);
 			hediffResource.ResourceAmount = 0;
 		}
