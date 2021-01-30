@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+	<StatCategoryDef>
+		<defName>HRF_Resource</defName>
+		<label>Resource</label>
+		<displayOrder>0</displayOrder>
+		<displayAllByDefault>true</displayAllByDefault>
+	</StatCategoryDef>
+
+	<StatDef>
+		<defName>HRF_SteamResourceOffset</defName>
+		<workerClass>HediffResourceFramework.StatWorker_ResourceOffset</workerClass>
+		<label>Steam resource offset</label>
+		<description>ResourceOffset</description>
+		<category>HRF_Resource</category>
+		<displayPriorityInCategory>10</displayPriorityInCategory>
+		<toStringStyle>FloatTwo</toStringStyle>
+		<defaultBaseValue>0</defaultBaseValue>
+		<minValue>0</minValue>
+		<modExtensions>
+			<li Class="HediffResourceFramework.StatWorkerExtender">
+				<hediffResource>HRF_Steam_Hediff</hediffResource>
+			</li>
+		</modExtensions>
+	</StatDef>
+
+	<StatDef>
+		<defName>HRF_ManaResourceOffset</defName>
+		<workerClass>HediffResourceFramework.StatWorker_ResourceOffset</workerClass>
+		<label>Resource offset</label>
+		<description>ResourceOffset</description>
+		<category>HRF_Resource</category>
+		<displayPriorityInCategory>10</displayPriorityInCategory>
+		<toStringStyle>FloatTwo</toStringStyle>
+		<defaultBaseValue>0</defaultBaseValue>
+		<minValue>0</minValue>
+		<modExtensions>
+			<li Class="HediffResourceFramework.StatWorkerExtender">
+				<hediffResource>HRF_Mana_Hediff</hediffResource>
+			</li>
+		</modExtensions>
+	</StatDef>
+
+	<StatDef>
+		<defName>HRF_SteamMaxResourceCapacityOffset</defName>
+		<workerClass>HediffResourceFramework.StatWorker_MaxResourceCapacityOffset</workerClass>
+		<label>Steam max resource capacity offset</label>
+		<description>Max resource capacity offset</description>
+		<category>HRF_Resource</category>
+		<displayPriorityInCategory>9</displayPriorityInCategory>
+		<toStringStyle>FloatTwo</toStringStyle>
+		<modExtensions>
+			<li Class="HediffResourceFramework.StatWorkerExtender">
+				<hediffResource>HRF_Steam_Hediff</hediffResource>
+			</li>
+		</modExtensions>
+	</StatDef>
+	
+	<StatDef>
+		<defName>HRF_ManaMaxResourceCapacityOffset</defName>
+		<workerClass>HediffResourceFramework.StatWorker_MaxResourceCapacityOffset</workerClass>
+		<label>Mana max resource capacity offset</label>
+		<description>Max resource capacity offset</description>
+		<category>HRF_Resource</category>
+		<displayPriorityInCategory>9</displayPriorityInCategory>
+		<toStringStyle>FloatTwo</toStringStyle>
+		<modExtensions>
+			<li Class="HediffResourceFramework.StatWorkerExtender">
+				<hediffResource>HRF_Mana_Hediff</hediffResource>
+			</li>
+		</modExtensions>
+	</StatDef>
+</Defs>

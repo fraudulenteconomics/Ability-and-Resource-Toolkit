@@ -48,19 +48,15 @@ namespace HediffResourceFramework
             {
                 if (CompEquippable.PrimaryVerb.CasterPawn.IsHashIntervalTick(60))
                 {
-                    Log.Message(" - Comp - foreach (var option in Props.hediffOptions) - 4", true);
                     foreach (var option in Props.hediffOptions)
                     {
                         float num = option.resourcePerTick;
-                        Log.Message(" - Comp - num *= 0.00333333341f; - 6", true);
                         num *= 0.00333333341f;
                         if (option.qualityScalesResourcePerTick && equipment.TryGetQuality(out QualityCategory qc))
                         {
-                            Log.Message(" - Comp - num *= HediffResourceUtils.GetQualityMultiplier(qc); - 8", true);
                             num *= HediffResourceUtils.GetQualityMultiplier(qc);
                         }
                         num /= 3.33f;
-                        Log.Message(" - Comp - HediffResourceUtils.AdjustResourceAmount(CompEquippable.PrimaryVerb.CasterPawn, option.hediff, num, option.addHediffIfMissing); - 10", true);
                         HediffResourceUtils.AdjustResourceAmount(CompEquippable.PrimaryVerb.CasterPawn, option.hediff, num, option.addHediffIfMissing);
                     }
                 }

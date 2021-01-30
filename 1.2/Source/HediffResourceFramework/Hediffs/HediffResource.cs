@@ -13,7 +13,7 @@ namespace HediffResourceFramework
     {
         public new HediffResourceDef def => base.def as HediffResourceDef;
         private float resourceAmount;
-        private int duration;
+        public int duration;
         public float ResourceAmount
         {
             get
