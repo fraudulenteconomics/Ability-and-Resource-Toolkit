@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 using Verse;
 
 namespace HediffResourceFramework
@@ -51,7 +52,7 @@ namespace HediffResourceFramework
                 var label = base.Label + ": " + this.ResourceAmount.ToStringDecimalIfSmall() + " / " + this.ResourceCapacity.ToStringDecimalIfSmall();
                 if (this.def.lifetimeTicks != -1)
                 {
-                    label += " (" + (int)((this.def.lifetimeTicks - this.duration).TicksToSeconds()) + "s)";
+                    label += " (" + Mathf.CeilToInt((this.def.lifetimeTicks - this.duration).TicksToSeconds()) + "s)";
                 }
                 return label;
             }

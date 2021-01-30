@@ -41,7 +41,7 @@ namespace HediffResourceFramework
         public override void ExposeData()
         {
             base.ExposeData();
-            Scribe_Collections.Look(ref compHediffResources, "compHediffResources");
+            Scribe_Collections.Look(ref compHediffResources, "compHediffResources", LookMode.Deep);
         }
 
     }
