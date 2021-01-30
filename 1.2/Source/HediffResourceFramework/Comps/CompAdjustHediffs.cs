@@ -62,6 +62,29 @@ namespace HediffResourceFramework
             base.PostExposeData();
             Scribe_Values.Look(ref delayTicks, "delayTicks", 0);
             Scribe_Collections.Look(ref postUseDelayTicks, "postUseDelayTicks", LookMode.Reference, LookMode.Deep, ref verbKeys, ref verbDisablesValues);
+            if (Scribe.mode == LoadSaveMode.PostLoadInit)
+            {
+                var gameComp = Current.Game.GetComponent<HediffResourceManager>();
+                gameComp.RegisterComp(this);
+            }
+        }
+
+        public override void PostSpawnSetup(bool respawningAfterLoad)
+        {
+            base.PostSpawnSetup(respawningAfterLoad);
+            var gameComp = Current.Game.GetComponent<HediffResourceManager>();
+            gameComp.RegisterComp(this);
+        }
+
+        public override void PostPostMake()
+        {
+            base.PostPostMake();
+            var gameComp = Current.Game.GetComponent<HediffResourceManager>();
+            gameComp.RegisterComp(this);
+        }
+
+        public virtual void ResourceTick()
+        {
         }
 
         private List<Verb> verbKeys;

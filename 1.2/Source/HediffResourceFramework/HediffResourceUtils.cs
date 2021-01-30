@@ -117,10 +117,8 @@ namespace HediffResourceFramework
 			}
 			return true;
 		}
-		public static bool IsUsableBy(Verb verb, out bool verbIsFromHediffResource, out string disableReason)
+		public static bool IsUsableBy(Verb verb, out string disableReason)
 		{
-			verbIsFromHediffResource = false;
-			disableReason = "";
 			if (verb.CasterIsPawn && verb.EquipmentSource != null)
 			{
 				var compWeapon = verb.EquipmentSource.GetComp<CompWeaponAdjustHediffs>();
@@ -135,6 +133,32 @@ namespace HediffResourceFramework
 					disableReason = value2.disableReason;
 					return false;
 				}
+				var hediffResources = verb.CasterPawn.health.hediffSet.hediffs.OfType<HediffResource>().ToHashSet();
+				foreach (var hediff in hediffResources)
+                {
+					if (hediff.def.shieldProperties?.cannotUseVerbType != null)
+                    {
+						if (hediff.def.shieldProperties.cannotUseVerbType == VerbType.Both)
+                        {
+							disableReason = "HRF.ShieldPreventAllAttack".Translate();
+							return false;
+						}
+						else if (hediff.def.shieldProperties.cannotUseVerbType == VerbType.None)
+						{
+							continue;
+						}
+						else if (verb.IsMeleeAttack && hediff.def.shieldProperties.cannotUseVerbType == VerbType.Melee)
+                        {
+							disableReason = "HRF.ShieldPreventMeleeAttack".Translate();
+							return false;
+                        }
+						else if (hediff.def.shieldProperties.cannotUseVerbType == VerbType.Range)
+                        {
+							disableReason = "HRF.ShieldPreventRangeAttack".Translate();
+							return false;
+						}
+					}
+                }
 				var options = verb.EquipmentSource.def.GetModExtension<HediffAdjustOptions>();
 				if (options != null)
 				{
@@ -142,7 +166,6 @@ namespace HediffResourceFramework
 					{
 						if (VerbMatches(verb, option))
 						{
-							verbIsFromHediffResource = true;
 							var manaHediff = verb.CasterPawn.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
 							if (option.disableIfMissingHediff)
 							{
@@ -178,6 +201,8 @@ namespace HediffResourceFramework
 					}
 				}
 			}
+
+			disableReason = "";
 			return true;
 		}
 

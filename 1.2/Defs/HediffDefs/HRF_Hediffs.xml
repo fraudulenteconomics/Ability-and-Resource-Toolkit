@@ -37,12 +37,14 @@
 		</comps>
 		<maxResourceCapacity>10</maxResourceCapacity>
 		<keepWhenEmpty>true</keepWhenEmpty>
+		<lifetimeTicks>600</lifetimeTicks>
 		<shieldProperties>
 			<absorbMeleeDamage>true</absorbMeleeDamage>
 			<absorbRangeDamage>true</absorbRangeDamage>
 			<damageAbsorbedPerResource>2</damageAbsorbedPerResource>
 			<maxAbsorb>20</maxAbsorb>
 			<postDamageDelay>600</postDamageDelay>
+			<cannotUseVerbType>Melee</cannotUseVerbType>
 		</shieldProperties>
 
 		<!-- <resourceGainPerDamages>

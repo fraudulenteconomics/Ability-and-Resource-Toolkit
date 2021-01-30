@@ -27,10 +27,9 @@ namespace HediffResourceFramework
                 return (CompProperties_ApparelAdjustHediffs)this.props;
             }
         }
-
-        public override void CompTick()
+        public override void ResourceTick()
         {
-            base.CompTick();
+            base.ResourceTick();
             if (Find.TickManager.TicksGame >= this.delayTicks && this.parent is Apparel apparel && apparel.Wearer != null)
             {
                 if (apparel.Wearer.IsHashIntervalTick(60))

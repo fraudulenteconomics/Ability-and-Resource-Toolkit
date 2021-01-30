@@ -21,7 +21,7 @@ namespace HediffResourceFramework
 		{
 			if (__result)
 			{
-				__result = HediffResourceUtils.IsUsableBy(__instance, out bool verbIsFromHediffResource, out string disableReason);
+				__result = HediffResourceUtils.IsUsableBy(__instance, out string disableReason);
 			}
 		}
 	}
@@ -33,7 +33,7 @@ namespace HediffResourceFramework
 		{
 			if (__result)
 			{
-				__result = HediffResourceUtils.IsUsableBy(__instance, out bool verbIsFromHediffResource, out string disableReason);
+				__result = HediffResourceUtils.IsUsableBy(__instance, out string disableReason);
 			}
 		}
 	}

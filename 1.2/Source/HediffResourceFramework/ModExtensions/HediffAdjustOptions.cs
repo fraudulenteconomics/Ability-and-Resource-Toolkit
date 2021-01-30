@@ -10,7 +10,8 @@ namespace HediffResourceFramework
     public enum DamageScalingMode
     {
         Scalar,
-        Flat
+        Flat,
+        Linear
     }
     public class HediffOption
     {

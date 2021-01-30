@@ -88,21 +88,13 @@
 					</li>
 				</hediffOptions>
 			</li>
-<<<<<<< HEAD
-			<!-- <li Class="HediffResourceFramework.CompProperties_ChargeResource">
-=======
 			<li Class="HediffResourceFramework.CompProperties_ChargeResource">
->>>>>>> 71e8c9852f482a6e98d3b3a7f1f46602b157809f
 				<hediffResource>HRF_Steam_Hediff</hediffResource>
 				<minimumResourcePerUse>2</minimumResourcePerUse>
 				<resourcePerCharge>5</resourcePerCharge>
 				<damagePerCharge>1.1</damagePerCharge>
 				<damageScaling>Flat</damageScaling>
-<<<<<<< HEAD
-			</li> -->
-=======
 			</li>
->>>>>>> 71e8c9852f482a6e98d3b3a7f1f46602b157809f
 		</comps>
 		<tools>
 			<li>

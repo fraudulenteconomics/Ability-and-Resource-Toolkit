@@ -9,6 +9,13 @@ using Verse;
 
 namespace HediffResourceFramework
 {
+	public enum VerbType
+    {
+		None,
+		Both,
+		Range,
+		Melee
+    }
 	public class ShieldProperties
 	{
 		public bool absorbMeleeDamage;
@@ -18,6 +25,7 @@ namespace HediffResourceFramework
 		public int? resourceConsumptionPerDamage;
 		public float? damageAbsorbedPerResource;
 		public int? postDamageDelay;
+		public VerbType cannotUseVerbType;
 	}
     public class ResourceGainPerDamage
     {
@@ -41,5 +49,6 @@ namespace HediffResourceFramework
 		public float resourceGainPerAllDamages;
 		public ShieldProperties shieldProperties;
 		public bool keepWhenEmpty;
+		public int lifetimeTicks = -1;
 	}
 }

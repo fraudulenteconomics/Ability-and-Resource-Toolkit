@@ -24,7 +24,7 @@ namespace HediffResourceFramework
 		{
 			if (__result != null && verb.CasterIsPawn && verb.EquipmentSource != null)
 			{
-				if (!HediffResourceUtils.IsUsableBy(verb, out bool verbIsFromHediffResource, out string disableReason))
+				if (!HediffResourceUtils.IsUsableBy(verb, out string disableReason))
 				{
 					HediffResourceUtils.DisableGizmo(__result, disableReason);
 				}
@@ -40,7 +40,7 @@ namespace HediffResourceFramework
 			if (verb.CasterIsPawn && verb.EquipmentSource != null)
 			{
 				var list = __result.ToList();
-				if (!HediffResourceUtils.IsUsableBy(verb, out bool verbIsFromHediffResource, out string disableReason))
+				if (!HediffResourceUtils.IsUsableBy(verb, out string disableReason))
                 {
 					foreach (var gizmo in list)
                     {

@@ -3,7 +3,8 @@
 	<ThingDef ParentName="ApparelArmorReconBase">
 		<defName>HRF_SteamArmor</defName>
 		<label>steam armor</label>
-		<description>A suit of armor with an onboard steam generator that steadily creates steam pressure. This steam can be used to power additional steam devices including accessories, apparel, and weapons. It also comes with an internal steam repeater.</description>
+		<description>A suit of armor with an onboard steam generator that steadily creates steam pressure. This steam can be used to power additional steam devices including accessories, apparel, and weapons. It also comes with an internal steam repeater
+		.</description>
 		<apparel>
 			<tags>
 				<li>SpacerMilitary</li>
@@ -360,11 +361,7 @@
 				<li>
 					<hediff>HRF_ReactiveVest</hediff>
 					<resourcePerTick>-100</resourcePerTick>
-<<<<<<< HEAD
-					<qualityScalesResourcePerTick>false</qualityScalesResourcePerTick>
-=======
 					<qualityScalesResourcePerTick>true</qualityScalesResourcePerTick>
->>>>>>> 71e8c9852f482a6e98d3b3a7f1f46602b157809f
 					<addHediffIfMissing>true</addHediffIfMissing> <!-- default is false -->
 				</li>
 				</hediffOptions>

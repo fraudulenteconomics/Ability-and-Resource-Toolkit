@@ -13,49 +13,105 @@ using Verse.AI;
 
 namespace HediffResourceFramework
 {
-
-
-	[HarmonyPatch(typeof(Thing), nameof(Thing.TakeDamage))]
-	internal static class TakeDamage_Patch
+	[HarmonyPatch(typeof(Projectile), "DamageAmount", MethodType.Getter)]
+	internal static class DamageAmount_Patch
 	{
-		private static void Prefix(Thing __instance, ref DamageInfo dinfo)
+		private static void Postfix(Projectile __instance, ref int __result)
 		{
-			if (dinfo.Instigator is Pawn launcher)
+			if (__instance.Launcher is Pawn launcher)
 			{
 				var equipment = launcher.equipment?.Primary;
-				if (equipment != null && dinfo.Weapon == equipment.def)
+				if (equipment != null && __instance.EquipmentDef == equipment.def)
 				{
 					var compCharge = equipment.GetComp<CompChargeResource>();
-					var hediffResource = launcher.health.hediffSet.GetFirstHediffOfDef(compCharge.Props.hediffResource) as HediffResource;
-					Log.Message("hediffResource: " + hediffResource + " - compCharge.Props.damageScaling.HasValue: " + compCharge.Props.damageScaling.HasValue);
-					if (hediffResource != null && compCharge.Props.damageScaling.HasValue)
+					if (compCharge != null)
 					{
-						switch (compCharge.Props.damageScaling.Value)
+						var hediffResource = launcher.health.hediffSet.GetFirstHediffOfDef(compCharge.Props.hediffResource) as HediffResource;
+						Log.Message("1 instance - " + __instance + " - __result: " + __result + " - hediffResource: " + hediffResource + " - compCharge.Props.damageScaling.HasValue: " + compCharge.Props.damageScaling.HasValue);
+						if (hediffResource != null && compCharge.Props.damageScaling.HasValue)
 						{
-							case DamageScalingMode.Flat: DoFlatDamage(ref dinfo, hediffResource, compCharge); break;
-							case DamageScalingMode.Scalar: DoScalarDamage(ref dinfo, hediffResource, compCharge); break;
-							default: break;
+							switch (compCharge.Props.damageScaling.Value)
+							{
+								case DamageScalingMode.Flat: DoFlatDamage(ref __result, hediffResource, compCharge); break;
+								case DamageScalingMode.Scalar: DoScalarDamage(ref __result, hediffResource, compCharge); break;
+								case DamageScalingMode.Linear: DoLinearDamage(ref __result, hediffResource, compCharge); break;
+								default: break;
+							}
 						}
+						Log.Message("2 instance - " + __instance + " - result: " + __result + " - hediffResource: " + hediffResource + " - compCharge.Props.damageScaling.HasValue: " + compCharge.Props.damageScaling.HasValue);
 					}
 				}
 			}
 		}
-	
-		private static void DoFlatDamage(ref DamageInfo dinfo, HediffResource hediffResource, CompChargeResource compCharge)
+
+		private static void DoFlatDamage(ref int __result, HediffResource hediffResource, CompChargeResource compCharge)
 		{
-			var amount = dinfo.Amount * Mathf.Pow(compCharge.Props.damagePerCharge, (hediffResource.ResourceAmount - compCharge.Props.minimumResourcePerUse) / compCharge.Props.resourcePerCharge);
-			Log.Message("Flat: old damage: " + dinfo.Amount + " - new damage: " + amount);
-			dinfo.SetAmount(amount);
+			var oldDamage = __result;
+			__result = (int)(__result * Mathf.Pow(compCharge.Props.damagePerCharge, (hediffResource.ResourceAmount - compCharge.Props.minimumResourcePerUse) / compCharge.Props.resourcePerCharge));
+			Log.Message("Flat: old damage: " + oldDamage + " - new damage: " + __result);
 			hediffResource.ResourceAmount = 0;
 		}
-		private static void DoScalarDamage(ref DamageInfo dinfo, HediffResource hediffResource, CompChargeResource compCharge)
+		private static void DoScalarDamage(ref int __result, HediffResource hediffResource, CompChargeResource compCharge)
 		{
-			var amount = dinfo.Amount * compCharge.Props.damagePerCharge * ((hediffResource.ResourceAmount - compCharge.Props.minimumResourcePerUse) / compCharge.Props.resourcePerCharge);
-			Log.Message("Scalar: old damage: " + dinfo.Amount + " - new damage: " + amount);
-			dinfo.SetAmount(amount);
+			var oldDamage = __result;
+			__result = (int)(__result * compCharge.Props.damagePerCharge * ((hediffResource.ResourceAmount - compCharge.Props.minimumResourcePerUse) / compCharge.Props.resourcePerCharge));
+			Log.Message("Scalar: old damage: " + oldDamage + " - new damage: " + __result);
+			hediffResource.ResourceAmount = 0;
+		}
+
+		private static void DoLinearDamage(ref int __result, HediffResource hediffResource, CompChargeResource compCharge)
+		{
+			var oldDamage = __result;
+			__result = (int)(__result * compCharge.Props.damagePerCharge * (hediffResource.ResourceAmount - compCharge.Props.minimumResourcePerUse) / compCharge.Props.resourcePerCharge);
+			Log.Message("Linear: old damage: " + oldDamage + " - new damage: " + __result);
 			hediffResource.ResourceAmount = 0;
 		}
 	}
+
+	//[HarmonyPatch(typeof(Thing), nameof(Thing.TakeDamage))]
+	//internal static class TakeDamage_Patch
+	//{
+	//	private static void Prefix(Thing __instance, ref DamageInfo dinfo)
+	//	{
+	//		if (dinfo.Instigator is Pawn launcher)
+	//		{
+	//			var equipment = launcher.equipment?.Primary;
+	//			if (equipment != null && dinfo.Weapon == equipment.def)
+	//			{
+	//				var compCharge = equipment.GetComp<CompChargeResource>();
+	//				if (compCharge != null)
+    //                {
+	//					var hediffResource = launcher.health.hediffSet.GetFirstHediffOfDef(compCharge.Props.hediffResource) as HediffResource;
+	//					Log.Message("hediffResource: " + hediffResource + " - compCharge.Props.damageScaling.HasValue: " + compCharge.Props.damageScaling.HasValue);
+	//					if (hediffResource != null && compCharge.Props.damageScaling.HasValue)
+	//					{
+	//						switch (compCharge.Props.damageScaling.Value)
+	//						{
+	//							case DamageScalingMode.Flat: DoFlatDamage(ref dinfo, hediffResource, compCharge); break;
+	//							case DamageScalingMode.Scalar: DoScalarDamage(ref dinfo, hediffResource, compCharge); break;
+	//							default: break;
+	//						}
+	//					}
+	//				}
+	//			}
+	//		}
+	//	}
+	//
+	//	private static void DoFlatDamage(ref DamageInfo dinfo, HediffResource hediffResource, CompChargeResource compCharge)
+	//	{
+	//		var amount = dinfo.Amount * Mathf.Pow(compCharge.Props.damagePerCharge, (hediffResource.ResourceAmount - compCharge.Props.minimumResourcePerUse) / compCharge.Props.resourcePerCharge);
+	//		Log.Message("Flat: old damage: " + dinfo.Amount + " - new damage: " + amount);
+	//		dinfo.SetAmount(amount);
+	//		hediffResource.ResourceAmount = 0;
+	//	}
+	//	private static void DoScalarDamage(ref DamageInfo dinfo, HediffResource hediffResource, CompChargeResource compCharge)
+	//	{
+	//		var amount = dinfo.Amount * compCharge.Props.damagePerCharge * ((hediffResource.ResourceAmount - compCharge.Props.minimumResourcePerUse) / compCharge.Props.resourcePerCharge);
+	//		Log.Message("Scalar: old damage: " + dinfo.Amount + " - new damage: " + amount);
+	//		dinfo.SetAmount(amount);
+	//		hediffResource.ResourceAmount = 0;
+	//	}
+	//}
 
 	[HarmonyPatch(typeof(Pawn), "PreApplyDamage")]
 	public static class Patch_PreApplyDamage

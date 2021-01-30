@@ -57,6 +57,7 @@
     <Compile Include="HarmonyPatches\Gizmo_Patches.cs" />
     <Compile Include="HarmonyPatches\Verb_Patches.cs" />
     <Compile Include="HarmonyPatches\Equipment_Apparel_Patches.cs" />
+    <Compile Include="HediffResourceManager.cs" />
     <Compile Include="HediffResourceUtils.cs" />
     <Compile Include="Hediffs\HediffResource.cs" />
     <Compile Include="Hediffs\HediffResourceDef.cs" />

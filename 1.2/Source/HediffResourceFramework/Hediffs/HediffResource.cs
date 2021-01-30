@@ -12,6 +12,7 @@ namespace HediffResourceFramework
     {
         public new HediffResourceDef def => base.def as HediffResourceDef;
         private float resourceAmount;
+        private int duration;
         public float ResourceAmount
         {
             get
@@ -25,7 +26,7 @@ namespace HediffResourceFramework
                 {
                     resourceAmount = ResourceCapacity;
                 }
-                if (resourceAmount < 0)
+                if (resourceAmount < 0 && !this.def.keepWhenEmpty)
                 {
                     this.pawn.health.RemoveHediff(this);
                 }
@@ -63,12 +64,27 @@ namespace HediffResourceFramework
         {
             get
             {
+                if (this.def.lifetimeTicks != -1 && duration > this.def.lifetimeTicks)
+                {
+                    return true;
+                }
                 if (this.def.keepWhenEmpty && this.ResourceAmount <= 0)
                 {
                     return false;
                 }
-                return base.ShouldRemove;
+                var value = base.ShouldRemove;
+                if (value)
+                {
+                    Log.Message("Removing: " + this + " this.ResourceAmount: " + this.ResourceAmount);
+                }
+                return value;
             }
+        }
+
+        public override void Tick()
+        {
+            base.Tick();
+            this.duration++;
         }
         public float TotalResourceGainAmount()
         {
@@ -149,6 +165,7 @@ namespace HediffResourceFramework
         {
             base.PostAdd(dinfo);
             this.resourceAmount = this.def.initialResourceAmount;
+            this.duration = 0;
         }
 
         public override void PostRemoved()
