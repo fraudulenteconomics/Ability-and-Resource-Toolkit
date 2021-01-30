@@ -47,7 +47,7 @@ namespace HediffResourceFramework
 		private static void DoFlatDamage(ref int __result, HediffResource hediffResource, CompChargeResource compCharge)
 		{
 			var oldDamage = __result;
-			__result = (int)(__result * Mathf.Pow((1 + compCharge.Props.damagePerCharge), (hediffResource.ResourceAmount - compCharge.Props.minimumResourcePerUse) / compCharge.Props.resourcePerCharge));
+			__result = (int)(__result + (compCharge.Props.damagePerCharge * (hediffResource.ResourceAmount - compCharge.Props.minimumResourcePerUse) / compCharge.Props.resourcePerCharge));
 			Log.Message("Flat: old damage: " + oldDamage + " - new damage: " + __result);
 			hediffResource.ResourceAmount = 0;
 		}
