@@ -48,7 +48,12 @@ namespace HediffResourceFramework
         {
             get 
             {
-                return base.Label + ": " + this.ResourceAmount.ToStringDecimalIfSmall() + " / " + this.ResourceCapacity.ToStringDecimalIfSmall();
+                var label = base.Label + ": " + this.ResourceAmount.ToStringDecimalIfSmall() + " / " + this.ResourceCapacity.ToStringDecimalIfSmall();
+                if (this.def.lifetimeTicks != -1)
+                {
+                    label += " (" + (int)((this.def.lifetimeTicks - this.duration).TicksToSeconds()) + "s)";
+                }
+                return label;
             }
         }
 
