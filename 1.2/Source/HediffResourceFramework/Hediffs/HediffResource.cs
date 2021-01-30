@@ -222,6 +222,7 @@ namespace HediffResourceFramework
         {
             base.ExposeData();
             Scribe_Values.Look(ref resourceAmount, "resourceAmount");
+            Scribe_Values.Look(ref duration, "duration");
         }
     }
 }

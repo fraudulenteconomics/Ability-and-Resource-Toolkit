@@ -85,6 +85,7 @@ namespace HediffResourceFramework
 
         public virtual void ResourceTick()
         {
+
         }
 
         private List<Verb> verbKeys;
