@@ -27,7 +27,7 @@ namespace HediffResourceFramework
         public float resourcePerUse;
         public bool disableIfMissingHediff;
         public float minimumResourcePerUse = -1f;
-
+        public float disableAboveResource = -1f;
         public bool addHediffIfMissing = false;
         public string disableReason;
 

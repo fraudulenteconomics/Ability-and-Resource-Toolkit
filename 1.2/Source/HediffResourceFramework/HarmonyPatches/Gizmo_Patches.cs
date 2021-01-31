@@ -54,8 +54,8 @@ namespace HediffResourceFramework
 	{
 		public HediffResource hediffResource;
 
-		private static readonly Texture2D FullShieldBarTex = SolidColorMaterials.NewSolidColorTexture(new Color(0.2f, 0.2f, 0.24f));
-
+		//private static readonly Texture2D FullShieldBarTex = SolidColorMaterials.NewSolidColorTexture(new Color(0.2f, 0.2f, 0.24f));
+		//
 		private static readonly Texture2D EmptyShieldBarTex = SolidColorMaterials.NewSolidColorTexture(Color.clear);
 		public Gizmo_ResourceStatus()
 		{
@@ -71,7 +71,7 @@ namespace HediffResourceFramework
 		{
 			Rect rect = new Rect(topLeft.x, topLeft.y, GetWidth(maxWidth), 75f);
 			Rect rect2 = rect.ContractedBy(6f);
-			Widgets.DrawWindowBackground(rect);
+			DrawWindowBackground(rect, hediffResource.def);
 			Rect rect3 = rect2;
 			rect3.height = rect.height / 2f;
 			Text.Font = GameFont.Tiny;
@@ -84,12 +84,32 @@ namespace HediffResourceFramework
 			Rect rect4 = rect2;
 			rect4.yMin = rect2.y + rect2.height / 2f;
 			float fillPercent = hediffResource.ResourceAmount / hediffResource.ResourceCapacity;
-			Widgets.FillableBar(rect4, fillPercent, FullShieldBarTex, EmptyShieldBarTex, doBorder: false);
+			Color fullShieldBarColor;
+
+			if (hediffResource.def.progressBarColor.HasValue)
+            {
+				fullShieldBarColor = hediffResource.def.progressBarColor.Value;
+			}
+			else
+            {
+				fullShieldBarColor = hediffResource.def.defaultLabelColor;
+			}
+			var fullShieldBarTex = SolidColorMaterials.NewSolidColorTexture(fullShieldBarColor);
+			Widgets.FillableBar(rect4, fillPercent, fullShieldBarTex, EmptyShieldBarTex, doBorder: false);
 			Text.Font = GameFont.Small;
 			Text.Anchor = TextAnchor.MiddleCenter;
 			Widgets.Label(rect4, (hediffResource.ResourceAmount).ToString("F0") + " / " + (hediffResource.ResourceCapacity).ToString("F0"));
 			Text.Anchor = TextAnchor.UpperLeft;
 			return new GizmoResult(GizmoState.Clear);
+		}
+
+		public static void DrawWindowBackground(Rect rect, HediffResourceDef hediffResourceDef)
+		{
+			GUI.color = hediffResourceDef.backgroundBarColor.HasValue ? hediffResourceDef.backgroundBarColor.Value : Widgets.WindowBGFillColor;
+			GUI.DrawTexture(rect, BaseContent.WhiteTex);
+			GUI.color = new ColorInt(97, 108, 122).ToColor;
+			Widgets.DrawBox(rect);
+			GUI.color = Color.white;
 		}
 	}
 
@@ -106,9 +126,12 @@ namespace HediffResourceFramework
                 {
 					foreach (var hediffResource in hediffResources)
                     {
-						Gizmo_ResourceStatus gizmo_hediffResourceStatus = new Gizmo_ResourceStatus();
-						gizmo_hediffResourceStatus.hediffResource = hediffResource;
-						list.Add(gizmo_hediffResourceStatus);
+						if (hediffResource.def.showResourceBar)
+                        {
+							Gizmo_ResourceStatus gizmo_hediffResourceStatus = new Gizmo_ResourceStatus();
+							gizmo_hediffResourceStatus.hediffResource = hediffResource;
+							list.Add(gizmo_hediffResourceStatus);
+						}
 					}
                 }
 				__result = list;
@@ -123,23 +146,27 @@ namespace HediffResourceFramework
 		{
 			if (__instance is Command_VerbTarget verbTarget)
             {
-				if (TryGetAmmoString(verbTarget.verb, out string ammoString, out int hediffCount))
-                {
+				if (TryGetAmmoString(verbTarget.verb, out List<Tuple<HediffOption, HediffResource>> hediffs))
+				{
 					var butRect = new Rect(topLeft.x, topLeft.y, verbTarget.GetWidth(maxWidth), 75f);
-					var pos = 70f - (hediffCount * 18f);
-					Vector2 vector = new Vector2(10f, pos);
-					Text.Font = GameFont.Tiny;
-					Widgets.Label(new Rect(butRect.x + vector.x, butRect.y + vector.y, butRect.width - 3f, 75f - pos), ammoString);
-					Text.Font = GameFont.Small;
+					for (var i = 0; i < hediffs.Count; i++)
+                    {
+						var pos = 70f - ((i + 1) * 18f);
+						Vector2 vector = new Vector2(10f, pos);
+						Text.Font = GameFont.Tiny;
+						GUI.color = hediffs[i].Item2.def.defaultLabelColor;
+						Widgets.Label(new Rect(butRect.x + vector.x, butRect.y + vector.y, butRect.width - 3f, 75f - pos), hediffs[i].Item1.minimumResourcePerUse + "/" + (int)hediffs[i].Item2.ResourceAmount); ;
+						GUI.color = Color.white;
+						Text.Font = GameFont.Small;
+					}
 
 				}
 			}
 		}
 
-		public static bool TryGetAmmoString(Verb verb, out string ammoString, out int hediffCount)
+		public static bool TryGetAmmoString(Verb verb, out List<Tuple<HediffOption, HediffResource>> hediffs)
 		{
-			ammoString = "";
-			hediffCount = 0;
+			hediffs = new List<Tuple<HediffOption, HediffResource>>();
 			if (verb.CasterIsPawn && verb.EquipmentSource != null)
 			{
 				var options = verb.EquipmentSource.def.GetModExtension<HediffAdjustOptions>();
@@ -149,17 +176,16 @@ namespace HediffResourceFramework
 					{
 						if (HediffResourceUtils.VerbMatches(verb, option))
 						{
-							var manaHediff = verb.CasterPawn.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
-							if (manaHediff != null)
+							var resourceHediff = verb.CasterPawn.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
+							if (resourceHediff != null)
                             {
-								ammoString += (int)option.minimumResourcePerUse + "/" + (int)manaHediff.ResourceAmount + " " + manaHediff.def.label + "\n";
-								hediffCount++;
+								hediffs.Add(new Tuple<HediffOption, HediffResource>(option, resourceHediff));
 							}
 						}
 					}
 				}
 			}
-			if (hediffCount > 0)
+			if (hediffs.Count > 0)
             {
 				return true;
             }

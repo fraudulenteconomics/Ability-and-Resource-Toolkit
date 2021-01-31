@@ -4,10 +4,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 using Verse;
 
 namespace HediffResourceFramework
 {
+	[StaticConstructorOnStartup]
 	public static class HediffResourceUtils
 	{
 		public static float GetHediffResourceCapacityGainFor(Pawn pawn, HediffResourceDef hdDef)
@@ -166,10 +168,10 @@ namespace HediffResourceFramework
 					{
 						if (VerbMatches(verb, option))
 						{
-							var manaHediff = verb.CasterPawn.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
+							var resourceHediff = verb.CasterPawn.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
 							if (option.disableIfMissingHediff)
 							{
-								bool manaIsEmptyOrNull = manaHediff != null ? manaHediff.ResourceAmount <= 0 : true;
+								bool manaIsEmptyOrNull = resourceHediff != null ? resourceHediff.ResourceAmount <= 0 : true;
 								if (manaIsEmptyOrNull)
 								{
 									disableReason = option.disableReason;
@@ -179,7 +181,15 @@ namespace HediffResourceFramework
 
 							if (option.minimumResourcePerUse != -1f)
 							{
-								if (manaHediff != null && manaHediff.ResourceAmount < option.minimumResourcePerUse)
+								if (resourceHediff != null && resourceHediff.ResourceAmount < option.minimumResourcePerUse)
+								{
+									disableReason = option.disableReason;
+									return false;
+								}
+							}
+							if (option.disableAboveResource != -1f)
+                            {
+								if (resourceHediff != null && resourceHediff.ResourceAmount > option.disableAboveResource)
 								{
 									disableReason = option.disableReason;
 									return false;
@@ -187,9 +197,9 @@ namespace HediffResourceFramework
 							}
 							if (option.resourcePerUse != 0f)
 							{
-								if (manaHediff != null)
+								if (resourceHediff != null)
                                 {
-									var num = manaHediff.ResourceAmount - option.resourcePerUse;
+									var num = resourceHediff.ResourceAmount - option.resourcePerUse;
 									if (num < 0)
 									{
 										disableReason = option.disableReason;

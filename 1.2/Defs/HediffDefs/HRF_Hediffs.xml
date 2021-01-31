@@ -38,6 +38,10 @@
 		<maxResourceCapacity>10</maxResourceCapacity>
 		<keepWhenEmpty>true</keepWhenEmpty>
 		<lifetimeTicks>600</lifetimeTicks>
+		
+		<showResourceBar>true</showResourceBar>
+		<backgroundBarColor>(3, 108, 0)</backgroundBarColor>
+		<progressBarColor>(83, 108, 0)</progressBarColor>
 		<shieldProperties>
 			<absorbMeleeDamage>true</absorbMeleeDamage>
 			<absorbRangeDamage>true</absorbRangeDamage>
@@ -45,6 +49,7 @@
 			<maxAbsorb>20</maxAbsorb>
 			<postDamageDelay>600</postDamageDelay>
 			<cannotUseVerbType>Melee</cannotUseVerbType>
+			<shieldColor>(83, 108, 0)</shieldColor>
 		</shieldProperties>
 
 		<!-- <resourceGainPerDamages>

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using UnityEngine;
 using Verse;
 
 namespace HediffResourceFramework
@@ -25,6 +26,7 @@ namespace HediffResourceFramework
 		public int? resourceConsumptionPerDamage;
 		public float? damageAbsorbedPerResource;
 		public int? postDamageDelay;
+		public Color shieldColor = Color.white;
 		public VerbType cannotUseVerbType;
 	}
     public class ResourceGainPerDamage
@@ -50,5 +52,9 @@ namespace HediffResourceFramework
 		public ShieldProperties shieldProperties;
 		public bool keepWhenEmpty;
 		public int lifetimeTicks = -1;
+
+		public bool showResourceBar;
+		public Color? backgroundBarColor;
+		public Color? progressBarColor;
 	}
 }

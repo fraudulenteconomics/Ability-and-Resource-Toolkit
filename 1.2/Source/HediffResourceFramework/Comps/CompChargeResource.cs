@@ -11,9 +11,9 @@ namespace HediffResourceFramework
     public class CompProperties_ChargeResource : CompProperties
     {
         public HediffResourceDef hediffResource;
-        public float resourcePerCharge;
-        public float damagePerCharge;
-        public int minimumResourcePerUse;
+        public float resourcePerCharge = -1f;
+        public float damagePerCharge = -1f;
+        public float minimumResourcePerUse = -1f;
         public DamageScalingMode? damageScaling;
         public CompProperties_ChargeResource()
         {

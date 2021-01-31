@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using Verse;
+using Verse.Sound;
 
 namespace HediffResourceFramework
 {
@@ -91,6 +92,60 @@ namespace HediffResourceFramework
         {
             base.Tick();
             this.duration++;
+        }
+
+        
+        private Vector3 impactAngleVect;
+
+        private int lastAbsorbDamageTick = -9999;
+        public void AbsorbedDamage(DamageInfo dinfo)
+        {
+            SoundDefOf.EnergyShield_AbsorbDamage.PlayOneShot(new TargetInfo(base.pawn.Position, base.pawn.Map));
+            impactAngleVect = Vector3Utility.HorizontalVectorFromAngle(dinfo.Angle);
+            Vector3 loc = base.pawn.TrueCenter() + impactAngleVect.RotatedBy(180f) * 0.5f;
+            float num = Mathf.Min(10f, 2f + dinfo.Amount / 10f);
+            MoteMaker.MakeStaticMote(loc, base.pawn.Map, ThingDefOf.Mote_ExplosionFlash, num);
+            int num2 = (int)num;
+            for (int i = 0; i < num2; i++)
+            {
+                MoteMaker.ThrowDustPuff(loc, base.pawn.Map, Rand.Range(0.8f, 1.2f));
+            }
+            lastAbsorbDamageTick = Find.TickManager.TicksGame;
+        }
+
+        private Material bubbleMat;
+
+        public Material BubbleMat
+        {
+            get
+            {
+                if (bubbleMat is null)
+                {
+                    bubbleMat = MaterialPool.MatFrom("Other/ShieldBubble", ShaderDatabase.Transparent, this.def.shieldProperties.shieldColor);
+                }
+                return bubbleMat;
+            }
+        }
+        public void Draw()
+        {
+            if (this.def.shieldProperties != null)
+            {
+                float num = Mathf.Lerp(1.2f, 1.55f, this.def.lifetimeTicks != -1 ? (this.def.lifetimeTicks - duration) / this.def.lifetimeTicks : 1);
+                Vector3 drawPos = base.pawn.Drawer.DrawPos;
+                drawPos.y = AltitudeLayer.MoteOverhead.AltitudeFor();
+                int num2 = Find.TickManager.TicksGame - lastAbsorbDamageTick;
+                if (num2 < 8)
+                {
+                    float num3 = (float)(8 - num2) / 8f * 0.05f;
+                    drawPos += impactAngleVect * num3;
+                    num -= num3;
+                }
+                float angle = Rand.Range(0, 360);
+                Vector3 s = new Vector3(num, 1f, num);
+                Matrix4x4 matrix = default(Matrix4x4);
+                matrix.SetTRS(drawPos, Quaternion.AngleAxis(angle, Vector3.up), s);
+                Graphics.DrawMesh(MeshPool.plane10, matrix, BubbleMat, 0);
+            }
         }
         public float TotalResourceGainAmount()
         {
