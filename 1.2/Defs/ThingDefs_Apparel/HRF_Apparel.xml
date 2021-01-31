@@ -208,6 +208,8 @@
 						<resourcePerTick>300</resourcePerTick>
 						<disallowEquipIfHediffMissing>false</disallowEquipIfHediffMissing>
 						<dropIfHediffMissing>false</dropIfHediffMissing>
+						<addHediffIfMissing>true</addHediffIfMissing>
+
 						<blackListHediffsPreventEquipping>
 							<li>HRF_Steam_Hediff</li>
 						</blackListHediffsPreventEquipping>

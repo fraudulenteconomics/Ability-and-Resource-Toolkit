@@ -151,8 +151,8 @@ namespace HediffResourceFramework
 					var butRect = new Rect(topLeft.x, topLeft.y, verbTarget.GetWidth(maxWidth), 75f);
 					for (var i = 0; i < hediffs.Count; i++)
                     {
-						var pos = 70f - ((i + 1) * 18f);
-						Vector2 vector = new Vector2(10f, pos);
+						var pos = 35f - ((i + 1) * 18f);
+						Vector2 vector = new Vector2(5f, pos);
 						Text.Font = GameFont.Tiny;
 						GUI.color = hediffs[i].Item2.def.defaultLabelColor;
 						Widgets.Label(new Rect(butRect.x + vector.x, butRect.y + vector.y, butRect.width - 3f, 75f - pos), hediffs[i].Item1.minimumResourcePerUse + "/" + (int)hediffs[i].Item2.ResourceAmount); ;

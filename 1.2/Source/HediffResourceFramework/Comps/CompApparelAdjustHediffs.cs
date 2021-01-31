@@ -27,23 +27,80 @@ namespace HediffResourceFramework
                 return (CompProperties_ApparelAdjustHediffs)this.props;
             }
         }
+
+        public Apparel Apparel => this.parent as Apparel;
+        public override void Notify_Removed()
+        {
+            base.Notify_Removed();
+            List<HediffResourceDef> hediffResourcesToRemove = Apparel.Wearer.health.hediffSet.hediffs.OfType<HediffResource>().Select(x => x.def).ToList();
+            var apparels = Apparel.Wearer.apparel.WornApparel;
+            if (apparels != null)
+            {
+                foreach (var ap in apparels)
+                {
+                    if (ap != Apparel)
+                    {
+                        var comp = ap.TryGetComp<CompApparelAdjustHediffs>();
+                        if (comp?.Props?.hediffOptions != null)
+                        {
+                            foreach (var hediffOption in comp.Props.hediffOptions)
+                            {
+                                if (hediffResourcesToRemove.Contains(hediffOption.hediff))
+                                {
+                                    hediffResourcesToRemove.Remove(hediffOption.hediff);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            var equipments = Apparel.Wearer.equipment.AllEquipmentListForReading;
+            if (equipments != null)
+            {
+                foreach (var eq in equipments)
+                {
+                    var comp = eq.TryGetComp<CompWeaponAdjustHediffs>();
+                    if (comp?.Props?.hediffOptions != null)
+                    {
+                        foreach (var hediffOption in comp.Props.hediffOptions)
+                        {
+                            if (hediffResourcesToRemove.Contains(hediffOption.hediff))
+                            {
+                                hediffResourcesToRemove.Remove(hediffOption.hediff);
+                            }
+                        }
+                    }
+                }
+            }
+
+            foreach (var hediffDef in hediffResourcesToRemove)
+            {
+                var hediff = Apparel.Wearer.health.hediffSet.GetFirstHediffOfDef(hediffDef);
+                if (hediff != null)
+                {
+                    Apparel.Wearer.health.RemoveHediff(hediff);
+                }
+            }
+        }
         public override void ResourceTick()
         {
             base.ResourceTick();
-            if (Find.TickManager.TicksGame >= this.delayTicks && this.parent is Apparel apparel && apparel.Wearer != null)
+            if (Find.TickManager.TicksGame >= this.delayTicks && Apparel.Wearer != null)
             {
-                if (apparel.Wearer.IsHashIntervalTick(60))
+                if (Apparel.Wearer.IsHashIntervalTick(60))
                 {
                     foreach (var option in Props.hediffOptions)
                     {
+                        Log.Message("Should adjust: " + this);
                         float num = option.resourcePerTick;
                         num *= 0.00333333341f;
-                        if (option.qualityScalesResourcePerTick && apparel.TryGetQuality(out QualityCategory qc))
+                        if (option.qualityScalesResourcePerTick && Apparel.TryGetQuality(out QualityCategory qc))
                         {
                             num *= HediffResourceUtils.GetQualityMultiplier(qc);
                         }
                         num /= 3.33f;
-                        HediffResourceUtils.AdjustResourceAmount(apparel.Wearer, option.hediff, num, option.addHediffIfMissing);
+                        HediffResourceUtils.AdjustResourceAmount(Apparel.Wearer, option.hediff, num, option.addHediffIfMissing);
                     }
                 }
             }

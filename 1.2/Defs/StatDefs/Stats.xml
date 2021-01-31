@@ -50,6 +50,7 @@
 		<category>HRF_Resource</category>
 		<displayPriorityInCategory>9</displayPriorityInCategory>
 		<toStringStyle>FloatTwo</toStringStyle>
+		<defaultBaseValue>0</defaultBaseValue>
 		<modExtensions>
 			<li Class="HediffResourceFramework.StatWorkerExtender">
 				<hediffResource>HRF_Steam_Hediff</hediffResource>
@@ -65,6 +66,7 @@
 		<category>HRF_Resource</category>
 		<displayPriorityInCategory>9</displayPriorityInCategory>
 		<toStringStyle>FloatTwo</toStringStyle>
+		<defaultBaseValue>0</defaultBaseValue>
 		<modExtensions>
 			<li Class="HediffResourceFramework.StatWorkerExtender">
 				<hediffResource>HRF_Mana_Hediff</hediffResource>

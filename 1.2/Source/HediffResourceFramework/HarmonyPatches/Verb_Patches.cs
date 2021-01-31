@@ -54,6 +54,7 @@ namespace HediffResourceFramework
                         {
                             HediffResourceUtils.AdjustResourceAmount(__instance.CasterPawn, option.hediff, option.resourcePerUse, option.addHediffIfMissing);
                         }
+
                         if (option.postUseDelay != 0)
                         {
                             var comp = __instance.EquipmentSource.GetComp<CompWeaponAdjustHediffs>();
@@ -63,7 +64,8 @@ namespace HediffResourceFramework
                                 {
                                     comp.postUseDelayTicks = new Dictionary<Verb, VerbDisable>();
                                 }
-                                comp.postUseDelayTicks[__instance] = new VerbDisable(option.postUseDelay, comp.Props.disableWeaponPostUse);
+                                comp.postUseDelayTicks[__instance] = new VerbDisable(Find.TickManager.TicksGame + option.postUseDelay, comp.Props.disableWeaponPostUse);
+                                Log.Message($"option.postUseDelay: comp: {comp} postUse: {option.postUseDelay}");
                             }
                         }
                     }

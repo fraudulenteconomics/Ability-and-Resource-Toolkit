@@ -41,6 +41,62 @@ namespace HediffResourceFramework
             }
         }
 
+        public CompEquippable Equipment => this.parent.GetComp<CompEquippable>();
+        public override void Notify_Removed()
+        {
+            base.Notify_Removed();
+            List<HediffResourceDef> hediffResourcesToRemove = Equipment.PrimaryVerb.CasterPawn.health.hediffSet.hediffs.OfType<HediffResource>().Select(x => x.def).ToList();
+            
+            var equipments = Equipment.PrimaryVerb.CasterPawn.equipment.AllEquipmentListForReading;
+            if (equipments != null)
+            {
+                foreach (var eq in equipments)
+                {
+                    if (eq != Equipment.parent)
+                    {
+                        var comp = eq.TryGetComp<CompWeaponAdjustHediffs>();
+                        if (comp?.Props?.hediffOptions != null)
+                        {
+                            foreach (var hediffOption in comp.Props.hediffOptions)
+                            {
+                                if (hediffResourcesToRemove.Contains(hediffOption.hediff))
+                                {
+                                    hediffResourcesToRemove.Remove(hediffOption.hediff);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            var apparels = Equipment.PrimaryVerb.CasterPawn.apparel.WornApparel;
+            if (apparels != null)
+            {
+                foreach (var ap in apparels)
+                {
+                    var comp = ap.TryGetComp<CompApparelAdjustHediffs>();
+                    if (comp?.Props?.hediffOptions != null)
+                    {
+                        foreach (var hediffOption in comp.Props.hediffOptions)
+                        {
+                            if (hediffResourcesToRemove.Contains(hediffOption.hediff))
+                            {
+                                hediffResourcesToRemove.Remove(hediffOption.hediff);
+                            }
+                        }
+                    }
+                }
+            }
+
+            foreach (var hediffDef in hediffResourcesToRemove)
+            {
+                var hediff = Equipment.PrimaryVerb.CasterPawn.health.hediffSet.GetFirstHediffOfDef(hediffDef);
+                if (hediff != null)
+                {
+                    Equipment.PrimaryVerb.CasterPawn.health.RemoveHediff(hediff);
+                }
+            }
+        }
         public override void ResourceTick()
         {
             base.ResourceTick();

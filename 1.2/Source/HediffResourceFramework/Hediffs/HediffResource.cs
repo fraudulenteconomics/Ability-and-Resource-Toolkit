@@ -28,7 +28,13 @@ namespace HediffResourceFramework
                 {
                     resourceAmount = ResourceCapacity;
                 }
-                if (resourceAmount < 0 && !this.def.keepWhenEmpty)
+
+                if (resourceAmount < 0)
+                {
+                    resourceAmount = 0;
+                }
+
+                if (resourceAmount <= 0 && !this.def.keepWhenEmpty)
                 {
                     this.pawn.health.RemoveHediff(this);
                 }
@@ -63,7 +69,7 @@ namespace HediffResourceFramework
         {
             get
             {
-                return base.TipStringExtra + "\n" + "HRF.Fulfils".Translate((TotalResourceGainAmount()).ToStringDecimalIfSmall());
+                return base.TipStringExtra + "\n" + this.def.fulfilsTranslationKey.Translate((TotalResourceGainAmount()).ToStringDecimalIfSmall());
             }
         }
 
@@ -128,7 +134,7 @@ namespace HediffResourceFramework
         }
         public void Draw()
         {
-            if (this.def.shieldProperties != null)
+            if (this.def.shieldProperties != null && this.ResourceAmount > 0)
             {
                 float num = Mathf.Lerp(1.2f, 1.55f, this.def.lifetimeTicks != -1 ? (this.def.lifetimeTicks - duration) / this.def.lifetimeTicks : 1);
                 Vector3 drawPos = base.pawn.Drawer.DrawPos;
@@ -245,7 +251,14 @@ namespace HediffResourceFramework
                         {
                             if (option.dropIfHediffMissing && option.hediff == def)
                             {
-                                pawn.apparel.TryDrop(apparel);
+                                if (pawn.Map != null)
+                                {
+                                    pawn.apparel.TryDrop(apparel);
+                                }
+                                else
+                                {
+                                    pawn.inventory.TryAddItemNotForSale(apparel);
+                                }
                             }
                         }
                     }
@@ -265,7 +278,14 @@ namespace HediffResourceFramework
                         {
                             if (option.dropIfHediffMissing && option.hediff == def)
                             {
-                                pawn.equipment.TryDropEquipment(equipment, out ThingWithComps result, pawn.Position);
+                                if (pawn.Map != null)
+                                {
+                                    pawn.equipment.TryDropEquipment(equipment, out ThingWithComps result, pawn.Position);
+                                }
+                                else
+                                {
+                                    pawn.inventory.TryAddItemNotForSale(equipment);
+                                }
                             }
                         }
                     }

@@ -14,12 +14,40 @@ using Verse.AI;
 namespace HediffResourceFramework
 {
 
+	[HarmonyPatch(typeof(Pawn_EquipmentTracker), "TryDropEquipment")]
+	public static class Patch_TryDropEquipment
+	{
+		private static void Prefix(ThingWithComps eq)
+		{
+			var comp = eq.TryGetComp<CompWeaponAdjustHediffs>();
+			if (comp != null)
+            {
+				comp.Notify_Removed();
+            }
+		}
+	}
+
+	[HarmonyPatch(typeof(Pawn_ApparelTracker), "TryDrop", 
+		new Type[] { typeof(Apparel), typeof(Apparel), typeof(IntVec3), typeof(bool)}, 
+		new ArgumentType[] { ArgumentType.Normal, ArgumentType.Out, ArgumentType.Normal, ArgumentType.Normal })]
+	public static class Patch_TryDrop
+	{
+		private static void Prefix(Apparel ap)
+		{
+			var comp = ap.TryGetComp<CompApparelAdjustHediffs>();
+			if (comp != null)
+			{
+				comp.Notify_Removed();
+			}
+		}
+	}
+
 	[HarmonyPatch(typeof(JobGiver_OptimizeApparel), "ApparelScoreGain_NewTmp")]
 	public static class Patch_HasPartsToWear
 	{
 		private static bool Prefix(ref float __result, Pawn pawn, Apparel ap, List<float> wornScoresCache)
 		{
-			if (!AddHumanlikeOrders_Fix.CanWear(pawn, ap, out string tmp))
+			if (!AddHumanlikeOrders_Patch.CanWear(pawn, ap, out string tmp))
             {
 				__result = -1000f;
 				return false;
@@ -29,12 +57,12 @@ namespace HediffResourceFramework
 	}
 
 	[HarmonyPatch(typeof(FloatMenuMakerMap), "AddHumanlikeOrders")]
-	public static class AddHumanlikeOrders_Fix
+	public static class AddHumanlikeOrders_Patch
 	{
 		public static void Postfix(Vector3 clickPos, Pawn pawn, ref List<FloatMenuOption> opts)
 		{
 			IntVec3 c = IntVec3.FromVector3(clickPos);
-			foreach (var apparel in GridsUtility.GetThingList(c, pawn.Map).Where(x => x is Apparel).Cast<Apparel>())
+			foreach (var apparel in GridsUtility.GetThingList(c, pawn.Map).OfType<Apparel>())
 			{
 				TaggedString toCheck = "ForceWear".Translate(apparel.LabelCap, apparel);
 				FloatMenuOption floatMenuOption = opts.FirstOrDefault((FloatMenuOption x) => x.Label.Contains
@@ -42,7 +70,7 @@ namespace HediffResourceFramework
 				if (floatMenuOption != null && !CanWear(pawn, apparel, out string reason))
 				{
 					opts.Remove(floatMenuOption);
-					var newOption = new FloatMenuOption("CannotWear".Translate(apparel.LabelShort) + "(" + reason + ")", null, MenuOptionPriority.Default, null, null, 0f, null, null);
+					var newOption = new FloatMenuOption("HRF.CannotWear".Translate(apparel.def.label) + " (" + reason + ")", null, MenuOptionPriority.Default, null, null, 0f, null, null);
 					opts.Add(newOption);
 				}
 			}
@@ -79,7 +107,7 @@ namespace HediffResourceFramework
 					if (option.disallowEquipIfHediffMissing)
 					{
 						var hediff = pawn.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
-						if (hediff is null || hediff.ResourceAmount <= 0)
+						if (hediff is null)
 						{
 							reason = option.cannotEquipReason;
 							return false;

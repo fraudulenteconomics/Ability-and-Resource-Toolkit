@@ -56,5 +56,7 @@ namespace HediffResourceFramework
 		public bool showResourceBar;
 		public Color? backgroundBarColor;
 		public Color? progressBarColor;
+
+		public string fulfilsTranslationKey;
 	}
 }

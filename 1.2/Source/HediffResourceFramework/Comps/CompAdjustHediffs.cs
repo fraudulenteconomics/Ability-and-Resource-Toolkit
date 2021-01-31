@@ -83,6 +83,10 @@ namespace HediffResourceFramework
             gameComp.RegisterComp(this);
         }
 
+        public virtual void Notify_Removed()
+        {
+
+        }
         public virtual void ResourceTick()
         {
 
