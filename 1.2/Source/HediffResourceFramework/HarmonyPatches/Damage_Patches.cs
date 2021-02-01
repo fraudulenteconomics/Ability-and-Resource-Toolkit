@@ -167,7 +167,7 @@ namespace HediffResourceFramework
 						var hediffComp = apparel.GetComp<CompAdjustHediffs>();
 						if (hediffComp != null)
                         {
-							hediffComp.delayTicks = delayTicks;
+							hediffComp.delayTicks += delayTicks * hediffComp.Props.postDamageDelayMultiplier;
 						}
 					}
 				}
@@ -180,7 +180,7 @@ namespace HediffResourceFramework
 						var hediffComp = equipment.GetComp<CompAdjustHediffs>();
 						if (hediffComp != null)
 						{
-							hediffComp.delayTicks = delayTicks;
+							hediffComp.delayTicks += delayTicks * hediffComp.Props.postDamageDelayMultiplier;
 						}
 					}
 				}

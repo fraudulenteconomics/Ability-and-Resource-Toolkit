@@ -51,6 +51,10 @@
 			<cannotUseVerbType>Melee</cannotUseVerbType>
 			<shieldColor>(83, 108, 0)</shieldColor>
 		</shieldProperties>
+		<sendLetterWhenGained>true</sendLetterWhenGained>
+		<letterType>PositiveEvent</letterType>
+		<letterTitleKey>HRF.ManaHediffGainedTitle</letterTitleKey>
+		<letterMessageKey>HRF.ManaHediffGainedText</letterMessageKey>
 
 		<!-- <resourceGainPerDamages>
 			<SurgicalCut>5</SurgicalCut>

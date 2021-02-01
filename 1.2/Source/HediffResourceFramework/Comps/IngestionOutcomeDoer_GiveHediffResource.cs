@@ -15,23 +15,46 @@ namespace HediffResourceFramework
 		public float resourceAdjust = 0f;
 
 		public float resourcePercent = -1f;
-		protected override void DoIngestionOutcomeSpecial(Pawn pawn, Thing ingested)
-		{
-			HediffResource hediff = pawn.health.hediffSet.GetFirstHediffOfDef(hediffDef) as HediffResource;
-			if (hediff is null)
+
+		public List<HediffResourceDef> blacklistHediffsPreventAdd;
+		public HediffDef blacklistHediffPoison;
+		public string blacklistHediffPoisonMessage;
+		public string cannotDrinkReason;
+
+        protected override void DoIngestionOutcomeSpecial(Pawn pawn, Thing ingested)
+        {
+            if (blacklistHediffsPreventAdd != null)
             {
-				hediff = HediffMaker.MakeHediff(hediffDef, pawn) as HediffResource;
+                foreach (var blacklistHediff in blacklistHediffsPreventAdd)
+                {
+                    var hd = pawn.health.hediffSet.GetFirstHediffOfDef(blacklistHediff);
+                    if (hd != null)
+                    {
+                        if (blacklistHediffPoison != null)
+                        {
+                            var poison = HediffMaker.MakeHediff(blacklistHediffPoison, pawn);
+                            pawn.health.AddHediff(poison);
+                            Messages.Message(blacklistHediffPoisonMessage.Translate(pawn.Named("PAWN"), ingested.Named("INGESTED")), pawn, MessageTypeDefOf.NegativeHealthEvent);
+                        }
+                        return;
+                    }
+                }
             }
-			pawn.health.AddHediff(hediff);
-			if (resourceAdjust != 0f)
+            HediffResource hediff = pawn.health.hediffSet.GetFirstHediffOfDef(hediffDef) as HediffResource;
+            if (hediff is null)
             {
-				hediff.ResourceAmount += resourceAdjust;
+                hediff = HediffMaker.MakeHediff(hediffDef, pawn) as HediffResource;
             }
-			if (resourcePercent != -1f)
+            pawn.health.AddHediff(hediff);
+            if (resourceAdjust != 0f)
             {
-				hediff.ResourceAmount += hediff.ResourceCapacity * resourcePercent;
-			}
-		}
+                hediff.ResourceAmount += resourceAdjust;
+            }
+            if (resourcePercent != -1f)
+            {
+                hediff.ResourceAmount += hediff.ResourceCapacity * resourcePercent;
+            }
+        }
 
 		public override IEnumerable<StatDrawEntry> SpecialDisplayStats(ThingDef parentDef)
 		{

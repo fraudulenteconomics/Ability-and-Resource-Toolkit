@@ -8,10 +8,8 @@ using Verse;
 
 namespace HediffResourceFramework
 {
-    public class CompProperties_WeaponAdjustHediffs : CompProperties
+    public class CompProperties_WeaponAdjustHediffs : CompProperties_AdjustHediffs
     {
-        public List<HediffAdjust> hediffOptions;
-
         public string disableWeaponPostUse;
         public CompProperties_WeaponAdjustHediffs()
         {
@@ -104,16 +102,20 @@ namespace HediffResourceFramework
             {
                 if (CompEquippable.PrimaryVerb.CasterPawn.IsHashIntervalTick(60))
                 {
-                    foreach (var option in Props.hediffOptions)
+                    if (!this.postUseDelayTicks?.Values?.Select(x => x.delayTicks).Any(y => y > Find.TickManager.TicksGame) ?? true)
                     {
-                        float num = option.resourcePerTick;
-                        num *= 0.00333333341f;
-                        if (option.qualityScalesResourcePerTick && equipment.TryGetQuality(out QualityCategory qc))
+                        Log.Message(this + " - Should adjust resource");
+                        foreach (var option in Props.hediffOptions)
                         {
-                            num *= HediffResourceUtils.GetQualityMultiplier(qc);
+                            float num = option.resourcePerTick;
+                            num *= 0.00333333341f;
+                            if (option.qualityScalesResourcePerTick && equipment.TryGetQuality(out QualityCategory qc))
+                            {
+                                num *= HediffResourceUtils.GetQualityMultiplier(qc);
+                            }
+                            num /= 3.33f;
+                            HediffResourceUtils.AdjustResourceAmount(CompEquippable.PrimaryVerb.CasterPawn, option.hediff, num, option.addHediffIfMissing);
                         }
-                        num /= 3.33f;
-                        HediffResourceUtils.AdjustResourceAmount(CompEquippable.PrimaryVerb.CasterPawn, option.hediff, num, option.addHediffIfMissing);
                     }
                 }
             }

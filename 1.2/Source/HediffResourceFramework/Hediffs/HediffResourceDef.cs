@@ -58,5 +58,10 @@ namespace HediffResourceFramework
 		public Color? progressBarColor;
 
 		public string fulfilsTranslationKey;
+
+		public bool sendLetterWhenGained;
+		public LetterDef letterType;
+		public string letterTitleKey;
+		public string letterMessageKey;
 	}
 }

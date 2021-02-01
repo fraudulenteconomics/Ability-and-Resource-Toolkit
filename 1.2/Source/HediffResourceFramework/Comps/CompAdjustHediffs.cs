@@ -53,8 +53,24 @@ namespace HediffResourceFramework
             Scribe_Values.Look(ref disableReason, "disableReason");
         }
     }
+
+    public class CompProperties_AdjustHediffs : CompProperties
+    {
+        public List<HediffAdjust> hediffOptions;
+
+        public float postDamageDelayMultiplier;
+
+        public float postUseDelayMultipier;
+    }
     public class CompAdjustHediffs : ThingComp
     {
+        public CompProperties_AdjustHediffs Props
+        {
+            get
+            {
+                return (CompProperties_AdjustHediffs)this.props;
+            }
+        }
         public float delayTicks;
         public Dictionary<Verb, VerbDisable> postUseDelayTicks;
         public override void PostExposeData()

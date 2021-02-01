@@ -12,6 +12,96 @@ namespace HediffResourceFramework
 	[StaticConstructorOnStartup]
 	public static class HediffResourceUtils
 	{
+		public static bool CanDrink(Pawn pawn, Thing potion, out string reason)
+		{
+			var comp = potion.def?.ingestible?.outcomeDoers?.OfType<IngestionOutcomeDoer_GiveHediffResource>().FirstOrDefault();
+			if (comp?.blacklistHediffsPreventAdd != null)
+			{
+				foreach (var hediff in comp.blacklistHediffsPreventAdd)
+				{
+					if (pawn.health.hediffSet.GetFirstHediffOfDef(hediff) != null)
+					{
+						reason = comp.cannotDrinkReason;
+						return false;
+					}
+				}
+			}
+			reason = "";
+			return true;
+		}
+		public static bool CanWear(Pawn pawn, Apparel apparel, out string reason)
+		{
+			var hediffComp = apparel.GetComp<CompApparelAdjustHediffs>();
+			if (hediffComp?.Props.hediffOptions != null)
+			{
+				foreach (var option in hediffComp.Props.hediffOptions)
+				{
+					if (option.disallowEquipIfHediffMissing)
+					{
+						var hediff = pawn.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
+						if (hediff is null)
+						{
+							reason = option.cannotEquipReason;
+							return false;
+						}
+					}
+
+					if (option.blackListHediffsPreventEquipping != null)
+					{
+						foreach (var hediffDef in option.blackListHediffsPreventEquipping)
+						{
+							var hediff = pawn.health.hediffSet.GetFirstHediffOfDef(hediffDef);
+							if (hediff != null)
+							{
+								reason = option.cannotEquipReasonIncompatible + hediffDef.label;
+								return false;
+							}
+						}
+					}
+				}
+			}
+			reason = "";
+			return true;
+		}
+
+		public static bool CanEquip(Pawn pawn, ThingWithComps weapon, out string reason)
+		{
+			var hediffComp = weapon.GetComp<CompWeaponAdjustHediffs>();
+			if (hediffComp?.Props.hediffOptions != null)
+			{
+				foreach (var option in hediffComp.Props.hediffOptions)
+				{
+					if (option.disallowEquipIfHediffMissing)
+					{
+						var hediff = pawn.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
+						if (hediff is null || hediff.ResourceAmount <= 0)
+						{
+							reason = option.cannotEquipReason;
+							return false;
+						}
+					}
+
+					if (option.blackListHediffsPreventEquipping != null)
+					{
+						foreach (var hediffDef in option.blackListHediffsPreventEquipping)
+						{
+							var hediff = pawn.health.hediffSet.GetFirstHediffOfDef(hediffDef);
+							if (hediff != null)
+							{
+								reason = option.cannotEquipReasonIncompatible;
+								return false;
+							}
+						}
+					}
+				}
+			}
+			reason = "";
+			return true;
+		}
+		public static bool IsHediffUser(this Pawn pawn)
+        {
+			return pawn.health.hediffSet.hediffs.Any(x => x is HediffResource);
+        }
 		public static float GetHediffResourceCapacityGainFor(Pawn pawn, HediffResourceDef hdDef)
 		{
 			float result = 0;
@@ -123,18 +213,18 @@ namespace HediffResourceFramework
 		{
 			if (verb.CasterIsPawn && verb.EquipmentSource != null)
 			{
-				var compWeapon = verb.EquipmentSource.GetComp<CompWeaponAdjustHediffs>();
-				if (compWeapon?.postUseDelayTicks != null && compWeapon.postUseDelayTicks.TryGetValue(verb, out VerbDisable value) && value.delayTicks > Find.TickManager.TicksGame)
-				{
-					disableReason = value.disableReason;
-					return false;
-				}
-				var compApparel = verb.EquipmentSource.GetComp<CompApparelAdjustHediffs>();
-				if (compApparel?.postUseDelayTicks != null && compApparel.postUseDelayTicks.TryGetValue(verb, out VerbDisable value2) && value2.delayTicks > Find.TickManager.TicksGame)
-				{
-					disableReason = value2.disableReason;
-					return false;
-				}
+				//var compWeapon = verb.EquipmentSource.GetComp<CompWeaponAdjustHediffs>();
+				//if (compWeapon?.postUseDelayTicks != null && compWeapon.postUseDelayTicks.TryGetValue(verb, out VerbDisable value) && value.delayTicks > Find.TickManager.TicksGame)
+				//{
+				//	disableReason = value.disableReason;
+				//	return false;
+				//}
+				//var compApparel = verb.EquipmentSource.GetComp<CompApparelAdjustHediffs>();
+				//if (compApparel?.postUseDelayTicks != null && compApparel.postUseDelayTicks.TryGetValue(verb, out VerbDisable value2) && value2.delayTicks > Find.TickManager.TicksGame)
+				//{
+				//	disableReason = value2.disableReason;
+				//	return false;
+				//}
 				var hediffResources = verb.CasterPawn.health.hediffSet.hediffs.OfType<HediffResource>().ToHashSet();
 				foreach (var hediff in hediffResources)
                 {

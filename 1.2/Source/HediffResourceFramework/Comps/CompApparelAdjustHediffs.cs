@@ -8,10 +8,8 @@ using Verse;
 
 namespace HediffResourceFramework
 {
-    public class CompProperties_ApparelAdjustHediffs : CompProperties
+    public class CompProperties_ApparelAdjustHediffs : CompProperties_AdjustHediffs
     {
-        public List<HediffAdjust> hediffOptions;
-
         public CompProperties_ApparelAdjustHediffs()
         {
             this.compClass = typeof(CompApparelAdjustHediffs);
@@ -90,18 +88,22 @@ namespace HediffResourceFramework
             {
                 if (Apparel.Wearer.IsHashIntervalTick(60))
                 {
-                    foreach (var option in Props.hediffOptions)
+                    if (!this.postUseDelayTicks?.Values?.Select(x => x.delayTicks).Any(y => y > Find.TickManager.TicksGame) ?? true)
                     {
-                        Log.Message("Should adjust: " + this);
-                        float num = option.resourcePerTick;
-                        num *= 0.00333333341f;
-                        if (option.qualityScalesResourcePerTick && Apparel.TryGetQuality(out QualityCategory qc))
+                        Log.Message(this + " - Should adjust resource");
+                        foreach (var option in Props.hediffOptions)
                         {
-                            num *= HediffResourceUtils.GetQualityMultiplier(qc);
+                            float num = option.resourcePerTick;
+                            num *= 0.00333333341f;
+                            if (option.qualityScalesResourcePerTick && Apparel.TryGetQuality(out QualityCategory qc))
+                            {
+                                num *= HediffResourceUtils.GetQualityMultiplier(qc);
+                            }
+                            num /= 3.33f;
+                            HediffResourceUtils.AdjustResourceAmount(Apparel.Wearer, option.hediff, num, option.addHediffIfMissing);
                         }
-                        num /= 3.33f;
-                        HediffResourceUtils.AdjustResourceAmount(Apparel.Wearer, option.hediff, num, option.addHediffIfMissing);
                     }
+
                 }
             }
         }
