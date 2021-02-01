@@ -1,7 +1,8 @@
 <LanguageData>
 	<HRF.Fulfils>Fulfils {0} in 1 second</HRF.Fulfils>
 	<HRF.CannotWear>Cannot wear {0}</HRF.CannotWear>
-	<HRF.CannotDrink>Cannot drink {0}</HRF.CannotDrink>
+	<HRF.DrinkWarning>(will make pawn sick due to conflicting resource)</HRF.DrinkWarning>
+	
 	<HRF.ManaHediffGainedTitle>{PAWN_nameDef} gained {RESOURCE_label}</HRF.ManaHediffGainedTitle>
 	<HRF.ManaHediffGainedText>{PAWN_nameDef} gained {RESOURCE_label}</HRF.ManaHediffGainedText>
 	<HRF.ManaPotionHediffPoisonMessage>{PAWN_nameDef} drank {INGESTED_label}</HRF.ManaPotionHediffPoisonMessage>

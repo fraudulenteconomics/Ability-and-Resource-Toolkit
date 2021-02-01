@@ -57,7 +57,14 @@ namespace HediffResourceFramework
                     {
 						if (options.hediffResource == hediffOption.hediff)
                         {
-							val += hediffOption.maxResourceCapacityOffset;
+							if (hediffOption.qualityScalesCapacityOffset && thing.TryGetQuality(out QualityCategory qc))
+                            {
+								val += hediffOption.maxResourceCapacityOffset * HediffResourceUtils.GetQualityMultiplier(qc);
+							}
+							else
+                            {
+								val += hediffOption.maxResourceCapacityOffset;
+							}
 						}
                     }
                 }

@@ -54,21 +54,19 @@ namespace HediffResourceFramework
 				}
 			}
 
-			//for (int i = 0; i < thingList.Count; i++)
-			//{
-			//	var t = thingList[i];
-			//	if (t.def.ingestible != null && pawn.RaceProps.CanEverEat(t) && t.IngestibleNow)
-			//	{
-			//		string text = (!t.def.ingestible.ingestCommandString.NullOrEmpty()) ? string.Format(t.def.ingestible.ingestCommandString, t.LabelShort) : ((string)"ConsumeThing".Translate(t.LabelShort, t));
-			//		FloatMenuOption floatMenuOption = opts.FirstOrDefault((FloatMenuOption x) => x.Label.Contains(text));
-			//		if (floatMenuOption != null && !HediffResourceUtils.CanDrink(pawn, t, out string reason))
-			//		{
-			//			opts.Remove(floatMenuOption);
-			//			var newOption = new FloatMenuOption("HRF.CannotDrink".Translate(t.LabelShort) + " (" + reason + ")", null, MenuOptionPriority.Default, null, null, 0f, null, null);
-			//			opts.Add(newOption);
-			//		}
-			//	}
-			//}
+			for (int i = 0; i < thingList.Count; i++)
+			{
+				var t = thingList[i];
+				if (t.def.ingestible != null && pawn.RaceProps.CanEverEat(t) && t.IngestibleNow)
+				{
+					string text = (!t.def.ingestible.ingestCommandString.NullOrEmpty()) ? string.Format(t.def.ingestible.ingestCommandString, t.LabelShort) : ((string)"ConsumeThing".Translate(t.LabelShort, t));
+					FloatMenuOption floatMenuOption = opts.FirstOrDefault((FloatMenuOption x) => x.Label.Contains(text));
+					if (floatMenuOption != null && !HediffResourceUtils.CanDrink(pawn, t, out string reason))
+					{
+						floatMenuOption.Label += "HRF.DrinkWarning".Translate();
+					}
+				}
+			}
 		}
 	}
 }
