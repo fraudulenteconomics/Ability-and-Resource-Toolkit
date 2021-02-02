@@ -64,7 +64,7 @@ namespace HediffResourceFramework
                                 {
                                     comp.postUseDelayTicks = new Dictionary<Verb, VerbDisable>();
                                 }
-                                comp.postUseDelayTicks[__instance] = new VerbDisable(Find.TickManager.TicksGame + (int)(option.postUseDelay * comp.Props.postUseDelayMultipier), comp.Props.disableWeaponPostUse);
+                                comp.postUseDelayTicks[__instance] = new VerbDisable(Find.TickManager.TicksGame + (int)(option.postUseDelay * comp.Props.postUseDelayMultiplier), comp.Props.disableWeaponPostUse);
                                 Log.Message($"option.postUseDelay: comp: {comp} postUse: {option.postUseDelay}");
                             }
                         }

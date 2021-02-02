@@ -22,6 +22,7 @@ namespace HediffResourceFramework
     }
     public class CompChargeResource : CompAdjustHediffs
     {
+        public Dictionary<Projectile, float> projectilesWithChargedResource = new Dictionary<Projectile, float>();
         public CompProperties_ChargeResource Props
         {
             get

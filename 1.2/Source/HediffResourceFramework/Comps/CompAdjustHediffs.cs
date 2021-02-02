@@ -60,7 +60,7 @@ namespace HediffResourceFramework
 
         public float postDamageDelayMultiplier;
 
-        public float postUseDelayMultipier;
+        public float postUseDelayMultiplier = 1f;
     }
     public class CompAdjustHediffs : ThingComp
     {
