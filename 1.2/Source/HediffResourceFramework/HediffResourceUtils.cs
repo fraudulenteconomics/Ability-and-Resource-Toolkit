@@ -213,18 +213,6 @@ namespace HediffResourceFramework
 		{
 			if (verb.CasterIsPawn && verb.EquipmentSource != null)
 			{
-				//var compWeapon = verb.EquipmentSource.GetComp<CompWeaponAdjustHediffs>();
-				//if (compWeapon?.postUseDelayTicks != null && compWeapon.postUseDelayTicks.TryGetValue(verb, out VerbDisable value) && value.delayTicks > Find.TickManager.TicksGame)
-				//{
-				//	disableReason = value.disableReason;
-				//	return false;
-				//}
-				//var compApparel = verb.EquipmentSource.GetComp<CompApparelAdjustHediffs>();
-				//if (compApparel?.postUseDelayTicks != null && compApparel.postUseDelayTicks.TryGetValue(verb, out VerbDisable value2) && value2.delayTicks > Find.TickManager.TicksGame)
-				//{
-				//	disableReason = value2.disableReason;
-				//	return false;
-				//}
 				var hediffResources = verb.CasterPawn.health.hediffSet.hediffs.OfType<HediffResource>().ToHashSet();
 				foreach (var hediff in hediffResources)
                 {

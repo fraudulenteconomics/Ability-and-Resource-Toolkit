@@ -233,7 +233,7 @@ namespace HediffResourceFramework
             base.PostAdd(dinfo);
             this.resourceAmount = this.def.initialResourceAmount;
             this.duration = 0;
-            if (this.def.sendLetterWhenGained)
+            if (this.def.sendLetterWhenGained && this.pawn.Faction == Faction.OfPlayer)
             {
                 Find.LetterStack.ReceiveLetter(this.def.letterTitleKey.Translate(this.pawn.Named("PAWN"), this.def.Named("RESOURCE")),
                     this.def.letterMessageKey.Translate(this.pawn.Named("PAWN"), this.def.Named("RESOURCE")), this.def.letterType, this.pawn);
