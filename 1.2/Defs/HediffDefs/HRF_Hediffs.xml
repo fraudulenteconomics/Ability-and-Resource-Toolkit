@@ -37,7 +37,6 @@
 		</comps>
 		<maxResourceCapacity>10</maxResourceCapacity>
 		<keepWhenEmpty>true</keepWhenEmpty>
-		<lifetimeTicks>600</lifetimeTicks>
 		<fulfilsTranslationKey>HRF.Fulfils</fulfilsTranslationKey>
 		<showResourceBar>true</showResourceBar>
 		<backgroundBarColor>(3, 108, 0)</backgroundBarColor>

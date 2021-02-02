@@ -104,7 +104,6 @@ namespace HediffResourceFramework
                 {
                     if (!this.postUseDelayTicks?.Values?.Select(x => x.delayTicks).Any(y => y > Find.TickManager.TicksGame) ?? true)
                     {
-                        Log.Message(this + " - Should adjust resource");
                         foreach (var option in Props.hediffOptions)
                         {
                             float num = option.resourcePerTick;
