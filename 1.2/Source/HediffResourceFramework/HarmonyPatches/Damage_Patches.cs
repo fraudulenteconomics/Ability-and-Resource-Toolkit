@@ -13,6 +13,50 @@ using Verse.AI;
 
 namespace HediffResourceFramework
 {
+	[HarmonyPatch(typeof(Projectile), "Launch", new Type[]
+	{
+		typeof(Thing), typeof(Vector3), typeof(LocalTargetInfo), typeof(LocalTargetInfo), typeof(ProjectileHitFlags), typeof(Thing), typeof(ThingDef)
+	})]
+	public static class Patch_Projectile_Launch
+	{
+		public static void Postfix(Projectile __instance, Thing launcher, Vector3 origin, LocalTargetInfo usedTarget, LocalTargetInfo intendedTarget, ProjectileHitFlags hitFlags, Thing equipment = null, ThingDef targetCoverDef = null)
+		{
+			if (launcher is Pawn pawn && equipment is ThingWithComps eq && __instance.EquipmentDef == equipment.def)
+			{
+				var compCharge = eq.GetComp<CompChargeResource>();
+				if (compCharge != null)
+				{
+					var hediffResource = pawn.health.hediffSet.GetFirstHediffOfDef(compCharge.Props.hediffResource) as HediffResource;
+					if (hediffResource != null && compCharge.Props.damageScaling.HasValue)
+                    {
+						compCharge.projectilesWithChargedResource[__instance] = hediffResource.ResourceAmount;
+						hediffResource.ResourceAmount = 0f;
+					}
+				}
+			}
+		}
+	}
+
+	[HarmonyPatch(typeof(Projectile), "Impact")]
+	public static class Patch_Projectile_Impact
+	{
+		public static void Prefix(Projectile __instance)
+		{
+			if (__instance.Launcher is Pawn pawn)
+			{
+				var equipment = pawn.equipment?.Primary;
+				if (equipment != null)
+                {
+					var compCharge = equipment.GetComp<CompChargeResource>();
+					if (compCharge != null && compCharge.projectilesWithChargedResource.ContainsKey(__instance))
+					{
+						compCharge.projectilesWithChargedResource.Remove(__instance);
+					}
+				}
+			}
+		}
+	}
+
 	[HarmonyPatch(typeof(Projectile), "DamageAmount", MethodType.Getter)]
 	internal static class DamageAmount_Patch
 	{
@@ -24,47 +68,40 @@ namespace HediffResourceFramework
 				if (equipment != null && __instance.EquipmentDef == equipment.def)
 				{
 					var compCharge = equipment.GetComp<CompChargeResource>();
-					if (compCharge != null)
+					if (compCharge != null && compCharge.projectilesWithChargedResource.TryGetValue(__instance, out float resourceAmount))
 					{
-						var hediffResource = launcher.health.hediffSet.GetFirstHediffOfDef(compCharge.Props.hediffResource) as HediffResource;
-						Log.Message("1 instance - " + __instance + " - __result: " + __result + " - hediffResource: " + hediffResource + " - compCharge.Props.damageScaling.HasValue: " + compCharge.Props.damageScaling.HasValue);
-						if (hediffResource != null && compCharge.Props.damageScaling.HasValue)
+						Log.Message("1 instance - " + __instance + " - __result: " + __result + " - hediffResource: " + resourceAmount + " - compCharge.Props.damageScaling.HasValue: " + compCharge.Props.damageScaling.HasValue);
+						switch (compCharge.Props.damageScaling.Value)
 						{
-							switch (compCharge.Props.damageScaling.Value)
-							{
-								case DamageScalingMode.Flat: DoFlatDamage(ref __result, hediffResource, compCharge); break;
-								case DamageScalingMode.Scalar: DoScalarDamage(ref __result, hediffResource, compCharge); break;
-								case DamageScalingMode.Linear: DoLinearDamage(ref __result, hediffResource, compCharge); break;
-								default: break;
-							}
+							case DamageScalingMode.Flat: DoFlatDamage(ref __result, resourceAmount, compCharge); break;
+							case DamageScalingMode.Scalar: DoScalarDamage(ref __result, resourceAmount, compCharge); break;
+							case DamageScalingMode.Linear: DoLinearDamage(ref __result, resourceAmount, compCharge); break;
+							default: break;
 						}
-						Log.Message("2 instance - " + __instance + " - result: " + __result + " - hediffResource: " + hediffResource + " - compCharge.Props.damageScaling.HasValue: " + compCharge.Props.damageScaling.HasValue);
+						Log.Message("2 instance - " + __instance + " - result: " + __result + " - hediffResource: " + resourceAmount + " - compCharge.Props.damageScaling.HasValue: " + compCharge.Props.damageScaling.HasValue);
 					}
 				}
 			}
 		}
 
-		private static void DoFlatDamage(ref int __result, HediffResource hediffResource, CompChargeResource compCharge)
+		private static void DoFlatDamage(ref int __result, float resourceAmount, CompChargeResource compCharge)
 		{
 			var oldDamage = __result;
-			__result = (int)(__result + (compCharge.Props.damagePerCharge * (hediffResource.ResourceAmount - compCharge.Props.minimumResourcePerUse) / compCharge.Props.resourcePerCharge));
+			__result = (int)(__result + (compCharge.Props.damagePerCharge * (resourceAmount - compCharge.Props.minimumResourcePerUse) / compCharge.Props.resourcePerCharge));
 			Log.Message("Flat: old damage: " + oldDamage + " - new damage: " + __result);
-			hediffResource.ResourceAmount = 0;
 		}
-		private static void DoScalarDamage(ref int __result, HediffResource hediffResource, CompChargeResource compCharge)
+		private static void DoScalarDamage(ref int __result, float resourceAmount, CompChargeResource compCharge)
 		{
 			var oldDamage = __result;
-			__result = (int)(__result * Mathf.Pow((1 + compCharge.Props.damagePerCharge), (hediffResource.ResourceAmount - compCharge.Props.minimumResourcePerUse) / compCharge.Props.resourcePerCharge));
+			__result = (int)(__result * Mathf.Pow((1 + compCharge.Props.damagePerCharge), (resourceAmount - compCharge.Props.minimumResourcePerUse) / compCharge.Props.resourcePerCharge));
 			Log.Message("Scalar: old damage: " + oldDamage + " - new damage: " + __result);
-			hediffResource.ResourceAmount = 0;
 		}
 
-		private static void DoLinearDamage(ref int __result, HediffResource hediffResource, CompChargeResource compCharge)
+		private static void DoLinearDamage(ref int __result, float resourceAmount, CompChargeResource compCharge)
 		{
 			var oldDamage = __result;
-			__result = (int)(__result * (1 + (compCharge.Props.damagePerCharge * (hediffResource.ResourceAmount - compCharge.Props.minimumResourcePerUse) / compCharge.Props.resourcePerCharge)));
+			__result = (int)(__result * (1 + (compCharge.Props.damagePerCharge * (resourceAmount - compCharge.Props.minimumResourcePerUse) / compCharge.Props.resourcePerCharge)));
 			Log.Message("Linear: old damage: " + oldDamage + " - new damage: " + __result);
-			hediffResource.ResourceAmount = 0;
 		}
 	}
 

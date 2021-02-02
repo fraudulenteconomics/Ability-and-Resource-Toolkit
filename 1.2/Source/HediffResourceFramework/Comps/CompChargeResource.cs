@@ -30,5 +30,14 @@ namespace HediffResourceFramework
                 return (CompProperties_ChargeResource)this.props;
             }
         }
+
+        public override void PostExposeData()
+        {
+            base.PostExposeData();
+            Scribe_Collections.Look(ref projectilesWithChargedResource, "projectilesWithChargedResource", LookMode.Reference, LookMode.Value, ref projectileValues, ref projectileVlaues);
+        }
+
+        private List<Projectile> projectileValues;
+        private List<float> projectileVlaues;
     }
 }

@@ -42,6 +42,7 @@ namespace HediffResourceFramework
                 {
                     this.Severity = resourceAmount;
                 }
+                Log.Message(this + " - changing resource: " + resourceAmount);
             }
         }
 
