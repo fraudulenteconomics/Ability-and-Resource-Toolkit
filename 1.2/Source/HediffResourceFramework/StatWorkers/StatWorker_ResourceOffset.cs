@@ -58,7 +58,14 @@ namespace HediffResourceFramework
                     {
 						if (options.hediffResource == hediffOption.hediff)
                         {
-							val += hediffOption.resourcePerTick;
+							if (hediffOption.qualityScalesResourcePerTick && thing.TryGetQuality(out QualityCategory qc))
+							{
+								val += hediffOption.resourcePerTick * HediffResourceUtils.GetQualityMultiplier(qc);
+							}
+							else
+							{
+								val += hediffOption.resourcePerTick;
+							}
 						}
                     }
                 }
