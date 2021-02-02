@@ -9,30 +9,30 @@ using Verse;
 
 namespace HediffResourceFramework
 {
-	public class HediffCompProperties_ResourcePerDay : HediffCompProperties
+	public class HediffCompProperties_ResourcePerSecond : HediffCompProperties
 	{
-		public float resourcePerDay;
+		public float resourcePerSecond;
 
 		public bool showDaysToRecover;
 
 		public bool showHoursToRecover;
 
-		public HediffCompProperties_ResourcePerDay()
+		public HediffCompProperties_ResourcePerSecond()
 		{
-			compClass = typeof(HediffComp_ResourcePerDay);
+			compClass = typeof(HediffComp_ResourcePerSecond);
 		}
 	}
 
-	public class HediffComp_ResourcePerDay : HediffComp
+	public class HediffComp_ResourcePerSecond : HediffComp
 	{
-		private HediffCompProperties_ResourcePerDay Props => (HediffCompProperties_ResourcePerDay)props;
+		private HediffCompProperties_ResourcePerSecond Props => (HediffCompProperties_ResourcePerSecond)props;
 
 		public HediffResource HediffResource => parent as HediffResource;
 		public override string CompLabelInBracketsExtra
 		{
 			get
 			{
-				if (props is HediffCompProperties_ResourcePerDay && Props.showHoursToRecover && ResourceChangePerDay() < 0f)
+				if (props is HediffCompProperties_ResourcePerSecond && Props.showHoursToRecover && ResourceChangePerDay() < 0f)
 				{
 					return Mathf.RoundToInt(HediffResource.ResourceAmount / Mathf.Abs(ResourceChangePerDay()) * 24f) + (string)"LetterHour".Translate();
 				}
@@ -44,7 +44,7 @@ namespace HediffResourceFramework
 		{
 			get
 			{
-				if (props is HediffCompProperties_ResourcePerDay && Props.showDaysToRecover && ResourceChangePerDay() < 0f)
+				if (props is HediffCompProperties_ResourcePerSecond && Props.showDaysToRecover && ResourceChangePerDay() < 0f)
 				{
 					return "DaysToRecover".Translate((HediffResource.ResourceAmount / Mathf.Abs(ResourceChangePerDay())).ToString("0.0"));
 				}
@@ -66,7 +66,7 @@ namespace HediffResourceFramework
 
 		public float ResourceChangePerDay()
 		{
-			return Props.resourcePerDay;
+			return Props.resourcePerSecond;
 		}
 
 		public override string CompDebugString()

@@ -168,9 +168,9 @@ namespace HediffResourceFramework
                         {
                             if (option.hediff == def)
                             {
-                                var num2 = option.resourcePerTick;
+                                var num2 = option.resourcePerSecond;
                                 num2 *= 0.00333333341f;
-                                if (option.qualityScalesResourcePerTick && apparel.TryGetQuality(out QualityCategory qc))
+                                if (option.qualityScalesResourcePerSecond && apparel.TryGetQuality(out QualityCategory qc))
                                 {
                                     num2 *= HediffResourceUtils.GetQualityMultiplier(qc);
                                 }
@@ -193,9 +193,9 @@ namespace HediffResourceFramework
                         {
                             if (option.hediff == def)
                             {
-                                var num2 = option.resourcePerTick;
+                                var num2 = option.resourcePerSecond;
                                 num2 *= 0.00333333341f;
-                                if (option.qualityScalesResourcePerTick && equipment.TryGetQuality(out QualityCategory qc))
+                                if (option.qualityScalesResourcePerSecond && equipment.TryGetQuality(out QualityCategory qc))
                                 {
                                     num2 *= HediffResourceUtils.GetQualityMultiplier(qc);
                                 }
@@ -206,7 +206,7 @@ namespace HediffResourceFramework
                 }
             }
 
-            var hediffCompResourcePerDay = this.TryGetComp<HediffComp_ResourcePerDay>();
+            var hediffCompResourcePerDay = this.TryGetComp<HediffComp_ResourcePerSecond>();
             if (hediffCompResourcePerDay != null)
             {
                 float num2 = hediffCompResourcePerDay.ResourceChangePerDay();

@@ -58,13 +58,13 @@ namespace HediffResourceFramework
                     {
 						if (options.hediffResource == hediffOption.hediff)
                         {
-							if (hediffOption.qualityScalesResourcePerTick && thing.TryGetQuality(out QualityCategory qc))
+							if (hediffOption.qualityScalesResourcePerSecond && thing.TryGetQuality(out QualityCategory qc))
 							{
-								val += hediffOption.resourcePerTick * HediffResourceUtils.GetQualityMultiplier(qc);
+								val += hediffOption.resourcePerSecond * HediffResourceUtils.GetQualityMultiplier(qc);
 							}
 							else
 							{
-								val += hediffOption.resourcePerTick;
+								val += hediffOption.resourcePerSecond;
 							}
 						}
                     }
@@ -80,13 +80,13 @@ namespace HediffResourceFramework
 
 						if (options.hediffResource == hediffOption.hediff)
 						{
-							if (hediffOption.qualityScalesResourcePerTick && thing.TryGetQuality(out QualityCategory qc))
+							if (hediffOption.qualityScalesResourcePerSecond && thing.TryGetQuality(out QualityCategory qc))
 							{
-								val += hediffOption.resourcePerTick * HediffResourceUtils.GetQualityMultiplier(qc);
+								val += hediffOption.resourcePerSecond * HediffResourceUtils.GetQualityMultiplier(qc);
 							}
 							else
 							{
-								val += hediffOption.resourcePerTick;
+								val += hediffOption.resourcePerSecond;
 							}
 						}
 					}
