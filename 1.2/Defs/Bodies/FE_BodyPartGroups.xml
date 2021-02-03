@@ -1,0 +1,27 @@
+<Defs>
+
+  <BodyPartGroupDef>
+    <defName>FE_Core_Module</defName>
+    <label>core module</label>
+    <listOrder>201</listOrder>
+  </BodyPartGroupDef>
+  
+  <BodyPartGroupDef>
+    <defName>FE_Arm_Module</defName>
+    <label>arm module</label>
+    <listOrder>202</listOrder>
+  </BodyPartGroupDef>
+  
+  <BodyPartGroupDef>
+    <defName>FE_Leg_Module</defName>
+    <label>leg module</label>
+    <listOrder>203</listOrder>
+  </BodyPartGroupDef>
+  
+  <BodyPartGroupDef>
+    <defName>FE_Exo_Module</defName>
+    <label>exo module</label>
+    <listOrder>204</listOrder>
+  </BodyPartGroupDef>
+  
+</Defs>

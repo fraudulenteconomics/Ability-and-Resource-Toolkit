@@ -1,0 +1,291 @@
+<Defs>
+
+	  <ThingDef ParentName="BaseHumanMakeableGun">
+		<defName>FE_RepulsorRifle</defName>
+		<label>repulsor rifle</label>
+		<description>An advanced assault rifle that requires a fusion hardsuit linkup in order to be used. Each round fired charges an internal repulsor array capacitor, once it is fully charged, the capacitor can be discharged in a powerful repulsor burst, damaging all targets in a local area.</description>
+		<graphicData>
+		  <texPath>Things/Item/Equipment/WeaponRanged/SniperRifle</texPath>
+		  <graphicClass>Graphic_Single</graphicClass>
+		</graphicData>
+		<soundInteract>Interact_Rifle</soundInteract>
+		<recipeMaker>
+		  <researchPrerequisite>PrecisionRifling</researchPrerequisite>
+		  <skillRequirements>
+			<Crafting>7</Crafting>
+		  </skillRequirements>
+		</recipeMaker>
+		<statBases>
+		  <WorkToMake>55000</WorkToMake>
+		  <Mass>4</Mass>
+		  <AccuracyTouch>0.70</AccuracyTouch>
+		  <AccuracyShort>0.79</AccuracyShort>
+		  <AccuracyMedium>0.88</AccuracyMedium>
+		  <AccuracyLong>0.72</AccuracyLong>
+		  <RangedWeapon_Cooldown>1.2</RangedWeapon_Cooldown>
+		</statBases>
+		<costList>
+		  <Plasteel>60</Plasteel>
+		  <ComponentSpacer>3</ComponentSpacer>
+		</costList>
+		<tickerType>Normal</tickerType>
+		<verbs>
+		  <li>
+			<verbClass>Verb_Shoot</verbClass>
+			<label>FE_RepulsorNormal</label>
+			<hasStandardCommand>true</hasStandardCommand>
+			<defaultProjectile>FE_Bullet_RepulsorRifle</defaultProjectile>
+			<warmupTime>1.0</warmupTime>
+			<range>38.9</range>
+			<burstShotCount>5</burstShotCount>
+			<ticksBetweenBurstShots>7</ticksBetweenBurstShots>
+			<soundCast>Shot_AssaultRifle</soundCast>
+			<soundCastTail>GunTail_Medium</soundCastTail>
+			<muzzleFlashScale>9</muzzleFlashScale>
+		  </li>
+		  <li>
+			<verbClass>Verb_Shoot</verbClass>
+			<label>FE_RepulsorBurst</label>
+			<hasStandardCommand>true</hasStandardCommand>
+			<defaultProjectile>FE_Bullet_RepulsorBlast</defaultProjectile>
+			<warmupTime>2.0</warmupTime>
+			<range>49.9</range>
+			<burstShotCount>1</burstShotCount>
+			<soundCast>Shot_AssaultRifle</soundCast>
+			<soundCastTail>GunTail_Medium</soundCastTail>
+			<muzzleFlashScale>11</muzzleFlashScale>
+		  </li>
+		</verbs>
+		<tools>
+		  <li>
+			<label>stock</label>
+			<capacities>
+			  <li>Blunt</li>
+			</capacities>
+			<power>11</power>
+			<cooldownTime>2</cooldownTime>
+		  </li>
+		  <li>
+			<label>barrel</label>
+			<capacities>
+			  <li>Blunt</li>
+			  <li>Poke</li>
+			</capacities>
+			<power>11</power>
+			<cooldownTime>2</cooldownTime>
+		  </li>
+		</tools>
+		<weaponTags Inherit="False">
+		  <li>FE_FusionWeapon</li>
+		</weaponTags>
+		<comps>
+			<li Class="HediffResourceFramework.CompProperties_WeaponAdjustHediffs">
+				<hediffOptions>
+					<li>
+						<hediff>FE_FusionReactor</hediff>
+						<maxResourceCapacityOffset>-20</maxResourceCapacityOffset>
+						<qualityScalesCapacityOffset>false</qualityScalesCapacityOffset>
+						<disallowEquipIfHediffMissing>true</disallowEquipIfHediffMissing>
+						<cannotEquipReason>Not enough power</cannotEquipReason>
+						<dropIfHediffMissing>true</dropIfHediffMissing>
+						<cannotEquipReasonIncompatible>Not enough power</cannotEquipReasonIncompatible>
+					</li>
+					<li>
+						<hediff>FE_RepulsorRifle</hediff>
+						<resourcePerSecond>-60</resourcePerSecond>
+						<qualityScalesResourcePerSecond>false</qualityScalesResourcePerSecond>
+						<maxResourceCapacityOffset>100</maxResourceCapacityOffset>
+						<qualityScalesCapacityOffset>false</qualityScalesCapacityOffset>
+						<addHediffIfMissing>true</addHediffIfMissing>
+					</li>
+				</hediffOptions>
+			</li>
+		</comps>
+		<modExtensions>
+			<li Class="HediffResourceFramework.HediffAdjustOptions">
+				<hediffOptions>
+					<li>
+						<hediff>FE_RepulsorRifle</hediff>
+						<verbLabel>FE_RepulsorNormal</verbLabel>
+						<resourcePerUse>2</resourcePerUse>
+						<disableIfMissingHediff>true</disableIfMissingHediff>
+						<disableReason>Too much energy</disableReason>
+						<postUseDelay>1500</postUseDelay>
+						<disableAboveResource>99</disableAboveResource>
+					</li>
+					<li>
+						<hediff>FE_RepulsorRifle</hediff>
+						<verbLabel>FE_RepulsorBurst</verbLabel>
+						<resourcePerUse>-100</resourcePerUse>
+						<disableIfMissingHediff>true</disableIfMissingHediff>
+						<disableReason>Not enough energy</disableReason>
+						<postUseDelay>0</postUseDelay>
+						<minimumResourcePerUse>100</minimumResourcePerUse>
+					</li>
+					<li>
+						<hediff>FE_MarksmanOptics</hediff>
+						<verbIndex>0</verbIndex>
+						<resourcePerUse>1</resourcePerUse>
+						<disableIfMissingHediff>false</disableIfMissingHediff>
+						<minimumResourcePerUse>0</minimumResourcePerUse>
+						<postUseDelay>480</postUseDelay>
+					</li>
+				</hediffOptions>
+			</li>
+		</modExtensions>
+	  </ThingDef>
+	  
+	  <ThingDef ParentName="BaseBullet">
+		<defName>FE_Bullet_RepulsorRifle</defName>
+		<label>repulsor rifle bullet</label>
+		<graphicData>
+		  <texPath>Things/Projectile/Bullet_Small</texPath>
+		  <graphicClass>Graphic_Single</graphicClass>
+		</graphicData>
+		<projectile>
+		  <damageDef>Bullet</damageDef>
+		  <damageAmountBase>10</damageAmountBase>
+		  <speed>95</speed>
+		</projectile>
+	  </ThingDef>
+	  
+	  <ThingDef ParentName="BaseBullet">
+		<defName>FE_Bullet_RepulsorBlast</defName>
+		<label>repulsor blast</label>
+		<graphicData>
+		  <texPath>Things/Projectile/LauncherShot</texPath>
+		  <graphicClass>Graphic_Single</graphicClass>
+		  <shaderType>TransparentPostLight</shaderType>
+		  <color>(254,58,58)</color>
+		</graphicData>
+		<projectile>
+		  <speed>70</speed>
+		  <damageDef>Bomb</damageDef>
+		  <damageAmountBase>75</damageAmountBase>
+		  <explosionRadius>3.3</explosionRadius>
+		  <ai_IsIncendiary>true</ai_IsIncendiary>
+		  <arcHeightFactor>0.2</arcHeightFactor>
+		  <shadowSize>0.6</shadowSize>
+		</projectile>
+	  </ThingDef>
+	  
+	  <ThingDef ParentName="BaseHumanMakeableGun">
+		<defName>FE_PoweredLMG</defName>
+		<label>Powered LMG</label>
+		<description>An advanced light machinegun with an oboard production unit. The unit generates ammunition using trace metalic content around the array and it consumes available energy whenever used. Due to the advanced design, this model is far more accurate than a standard LMG, more deadly, but is restrited by available energy.</description>
+		<graphicData>
+		  <texPath>Things/Item/Equipment/WeaponRanged/LMG</texPath>
+		  <graphicClass>Graphic_Single</graphicClass>
+		</graphicData>
+		<soundInteract>Interact_Rifle</soundInteract>
+		<recipeMaker>
+		  <researchPrerequisite>GasOperation</researchPrerequisite>
+		  <skillRequirements>
+			<Crafting>6</Crafting>
+		  </skillRequirements>
+		</recipeMaker>
+		<statBases>
+		  <WorkToMake>64000</WorkToMake>
+		  <Mass>11.5</Mass>
+		  <AccuracyTouch>0.60</AccuracyTouch>
+		  <AccuracyShort>0.68</AccuracyShort>
+		  <AccuracyMedium>0.55</AccuracyMedium>
+		  <AccuracyLong>0.46</AccuracyLong>
+		  <RangedWeapon_Cooldown>0.5</RangedWeapon_Cooldown>
+		</statBases>
+		<costList>
+		  <Plasteel>75</Plasteel>
+		  <ComponentSpacer>5</ComponentSpacer>
+		</costList>
+		<tickerType>Normal</tickerType>
+		<verbs>
+		  <li>
+			<verbClass>Verb_Shoot</verbClass>
+			<hasStandardCommand>true</hasStandardCommand>
+			<defaultProjectile>FE_Bullet_PoweredLMG</defaultProjectile>
+			<warmupTime>1.0</warmupTime>
+			<range>32.9</range>
+			<ticksBetweenBurstShots>6</ticksBetweenBurstShots>
+			<burstShotCount>8</burstShotCount>
+			<soundCast>Shot_Minigun</soundCast>
+			<soundCastTail>GunTail_Medium</soundCastTail>
+			<muzzleFlashScale>9</muzzleFlashScale>
+		  </li>
+		</verbs>
+		<weaponTags>
+		  <li>FE_FusionWeapon</li>
+		</weaponTags>
+		<tools>
+		  <li>
+			<label>stock</label>
+			<capacities>
+			  <li>Blunt</li>
+			</capacities>
+			<power>11</power>
+			<cooldownTime>2</cooldownTime>
+		  </li>
+		  <li>
+			<label>barrel</label>
+			<capacities>
+			  <li>Blunt</li>
+			  <li>Poke</li>
+			</capacities>
+			<power>11</power>
+			<cooldownTime>2</cooldownTime>
+		  </li>
+		</tools>
+		<comps>
+			<li Class="HediffResourceFramework.CompProperties_WeaponAdjustHediffs">
+				<hediffOptions>
+					<li>
+						<hediff>FE_FusionReactor</hediff>
+						<maxResourceCapacityOffset>-10</maxResourceCapacityOffset>
+						<qualityScalesCapacityOffset>false</qualityScalesCapacityOffset>
+						<disallowEquipIfHediffMissing>true</disallowEquipIfHediffMissing>
+						<cannotEquipReason>Not enough power</cannotEquipReason>
+						<dropIfHediffMissing>true</dropIfHediffMissing>
+						<cannotEquipReasonIncompatible>Not enough power</cannotEquipReasonIncompatible>
+					</li>
+				</hediffOptions>
+			</li>
+		</comps>
+		<modExtensions>
+			<li Class="HediffResourceFramework.HediffAdjustOptions">
+				<hediffOptions>
+					<li>
+						<hediff>FE_FusionReactor</hediff>
+						<verbIndex>0</verbIndex>
+						<resourcePerUse>-0.5</resourcePerUse>
+						<disableIfMissingHediff>false</disableIfMissingHediff>
+						<disableReason>Invalid</disableReason>
+						<minimumResourcePerUse>0.5</minimumResourcePerUse>
+					</li>
+					<li>
+						<hediff>FE_MarksmanOptics</hediff>
+						<verbIndex>0</verbIndex>
+						<resourcePerUse>1</resourcePerUse>
+						<disableIfMissingHediff>false</disableIfMissingHediff>
+						<minimumResourcePerUse>0</minimumResourcePerUse>
+						<postUseDelay>480</postUseDelay>
+					</li>
+				</hediffOptions>
+			</li>
+		</modExtensions>
+	  </ThingDef>
+	  
+	  <ThingDef ParentName="BaseBullet">
+		<defName>FE_Bullet_PoweredLMG</defName>
+		<label>Powered LMG bullet</label>
+		<graphicData>
+		  <texPath>Things/Projectile/Bullet_Small</texPath>
+		  <graphicClass>Graphic_Single</graphicClass>
+		</graphicData>
+		<projectile>
+		  <damageDef>Bullet</damageDef>
+		  <damageAmountBase>8</damageAmountBase>
+		  <stoppingPower>1.5</stoppingPower>
+		  <speed>86</speed>
+		</projectile>
+	  </ThingDef>
+	
+</Defs>
