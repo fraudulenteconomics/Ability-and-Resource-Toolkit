@@ -235,7 +235,7 @@
 		  </li>
 		</tools>
 		<comps>
-			<li Class="HediffResourceFramework.CompProperties_WeaponAdjustHediffs">
+			<li Class="HediffResourceFramework.CompProperties_WeaponAdjustHediffs"> 
 				<hediffOptions>
 					<li>
 						<hediff>FE_FusionReactor</hediff>

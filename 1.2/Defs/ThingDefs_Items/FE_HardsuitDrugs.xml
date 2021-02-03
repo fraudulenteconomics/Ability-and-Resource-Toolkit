@@ -1,7 +1,7 @@
 <Defs>
 
 	<ThingDef ParentName="DrugPillBase">
-		<defName>FE_ShieldInjector</defName>
+		<defName>FE_ShieldInjector</defName> 
 		<label>limited shield injector</label>
 		<description>A single use mechanite shield injector that provides a limited shield around the user. The shield lasts for about a day before the mechanites lose their cohesion. This shield does not regenerate on its own and once depleted, vanishes.</description>
 		<graphicData>
@@ -20,7 +20,7 @@
 				<li Class="HediffResourceFramework.IngestionOutcomeDoer_GiveHediffResource">
 					<hediffDef>FE_ShieldInjector</hediffDef>
 					<resourceAdjust>0</resourceAdjust>
-					<resourcePercent>1</resourcePercent>
+					<resourcePercent>1</resourcePercent> 
 				</li>
 			</outcomeDoers>
 		</ingestible>

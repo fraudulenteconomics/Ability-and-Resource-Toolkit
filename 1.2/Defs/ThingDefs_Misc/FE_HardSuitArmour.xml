@@ -1,131 +1,46 @@
 <Defs>
 
-	  <ThingDef ParentName="ArmorMachineableBase">
+	<ThingDef ParentName="ApparelArmorPowerBase">
 		<defName>FE_FusionHardsuit</defName>
+		<label>fusion hardsuit</label>
 		<description>An advanced suit of powered armor with an onboard fusion reactor. Myriad devices and tools can be powered by being in proximity to this reactor, allowing for varied, task-specific loadouts.</description>
-		<techLevel>Spacer</techLevel>
-		<recipeMaker>
-		  <unfinishedThingDef>UnfinishedTechArmor</unfinishedThingDef>
-		  <researchPrerequisite>PoweredArmor</researchPrerequisite>
-		  <skillRequirements>
-			<Crafting>7</Crafting>
-		  </skillRequirements>
-		  <recipeUsers Inherit="False">
-			<li>FabricationBench</li>
-		  </recipeUsers>
-		</recipeMaker>
-		<graphicData>
-		  <texPath>Things/Pawn/Humanlike/Apparel/PowerArmor/PowerArmor</texPath>
-		  <graphicClass>Graphic_Single</graphicClass>
-		</graphicData>
-		<generateCommonality>2</generateCommonality>
-		<statBases>
-		  <WorkToMake>60000</WorkToMake>
-		  <MaxHitPoints>340</MaxHitPoints>
-		  <Mass>12</Mass>
-		  <Flammability>0.4</Flammability>
-		  <ArmorRating_Sharp>1.06</ArmorRating_Sharp>
-		  <ArmorRating_Blunt>0.45</ArmorRating_Blunt>
-		  <ArmorRating_Heat>0.54</ArmorRating_Heat>
-		  <Insulation_Cold>34</Insulation_Cold>
-		  <Insulation_Heat>10</Insulation_Heat>
-		  <EquipDelay>14</EquipDelay>
-		</statBases>
-		<equippedStatOffsets>
-		  <MoveSpeed>-0.4</MoveSpeed>
-		</equippedStatOffsets>
-		<thingCategories>
-		  <li>ApparelArmor</li>
-		</thingCategories>
-		<tradeTags>
-		  <li>HiTechArmor</li>
-		</tradeTags>
-		<costList>
-		  <ComponentSpacer>6</ComponentSpacer>
-		  <Plasteel>120</Plasteel>
-		  <Uranium>50</Uranium>
-		</costList>
 		<apparel>
-		  <bodyPartGroups>
-			<li>Torso</li>
-			<li>Neck</li>
-			<li>Shoulders</li>
-			<li>Arms</li>
-			<li>Legs</li>
-		  </bodyPartGroups>
-		  <wornGraphicPath>Things/Pawn/Humanlike/Apparel/PowerArmor/PowerArmor</wornGraphicPath>
-		  <layers>
-			<li>Belt</li>
-			<li>Middle</li>
-			<li>Shell</li>
-		  </layers>
-		  <defaultOutfitTags>
-			<li>PoweredSoldier</li>
-		  </defaultOutfitTags>
-		  <tickerType>Normal</tickerType>
-		  <useDeflectMetalEffect>true</useDeflectMetalEffect>
+		  <tags>
+			<li>SpacerMilitary</li>
+		  </tags>
 		</apparel>
-		<colorGenerator Class="ColorGenerator_Options">
-		  <options>
-			<li>
-			  <weight>10</weight>
-			  <only>(0.9,0.9,0.9)</only>
-			</li>
-			<li>
-			  <weight>10</weight>
-			  <only>(0.33,0.33,0.33)</only>
-			</li>
-			<li>
-			  <weight>10</weight>
-			  <only>(0.65,0.65,0.65)</only>
-			</li>
-			<li>
-			  <weight>6</weight>
-			  <min>(0.3,0.3,0.3)</min>
-			  <max>(0.5,0.5,0.5)</max>
-			</li>
-		  </options>
-		</colorGenerator>
-		<thingSetMakerTags>
-		  <li>RewardStandardHighFreq</li>
-		</thingSetMakerTags>
+		<tickerType>Normal</tickerType>
 		<comps>
-		  <li Class="CompProperties_BiocodableApparel"/>
-		  <li Class="HediffResourceFramework.CompProperties_ApparelAdjustHediffs">
+			<li Class="HediffResourceFramework.CompProperties_ApparelAdjustHediffs">
 				<hediffOptions>
 					<li>
 						<hediff>FE_FusionReactor</hediff>
 						<resourcePerSecond>450</resourcePerSecond>
 						<qualityScalesResourcePerSecond>true</qualityScalesResourcePerSecond>
 						<addHediffIfMissing>true</addHediffIfMissing>
-						<!-- default is false -->
 						<maxResourceCapacityOffset>100</maxResourceCapacityOffset>
 						<qualityScalesCapacityOffset>true</qualityScalesCapacityOffset>
 						<disallowEquipIfHediffMissing>false</disallowEquipIfHediffMissing>
 						<dropIfHediffMissing>false</dropIfHediffMissing>
-						<blackListHediffsPreventEquipping>
-						</blackListHediffsPreventEquipping>
-						<dropWeaponOrApparelIfBlacklistHediff>
-						</dropWeaponOrApparelIfBlacklistHediff>
 					</li>
 				</hediffOptions>
 			</li>
 		</comps>
-	  </ThingDef>
-	  
-	  <ThingDef Name="FE_ModuleBase" ParentName="ArmorMachineableBase" Abstract="True">
+	</ThingDef>
+
+	<ThingDef Name="FE_ModuleBase" ParentName="ArmorMachineableBase" Abstract="True">
 		<techLevel>Spacer</techLevel>
 		<tradeability>Sellable</tradeability>
-        <generateCommonality>0.01</generateCommonality>
+		<generateCommonality>0.01</generateCommonality>
 		<tickerType>Normal</tickerType>
-		<statBases>
+		<statBases> 
 			<MaxHitPoints>100</MaxHitPoints>
 			<WorkToMake>16000</WorkToMake>
 			<Mass>0.25</Mass>
 			<EquipDelay>10.0</EquipDelay>
 		</statBases>
-    </ThingDef>
-	
+	</ThingDef>
+
 	<ThingDef ParentName="FE_ModuleBase">
 		<defName>FE_ExpandedReactor</defName>
 		<label>expanded reactor module</label>
@@ -145,13 +60,13 @@
 				<li>PoweredArmor</li>
 			</tags>
 			<defaultOutfitTags>
-				<li>PoweredSoldier</li>
-            </defaultOutfitTags>
+				<li>Soldier</li>
+			</defaultOutfitTags>
 		</apparel>
 		<costList>
-		  <ComponentSpacer>2</ComponentSpacer>
-		  <Plasteel>50</Plasteel>
-		  <Uranium>20</Uranium>
+			<ComponentSpacer>2</ComponentSpacer>
+			<Plasteel>50</Plasteel>
+			<Uranium>20</Uranium>
 		</costList>
 		<comps>
 			<li Class="HediffResourceFramework.CompProperties_ApparelAdjustHediffs">
@@ -161,7 +76,6 @@
 						<resourcePerSecond>0</resourcePerSecond>
 						<qualityScalesResourcePerSecond>false</qualityScalesResourcePerSecond>
 						<addHediffIfMissing>false</addHediffIfMissing>
-						<!-- default is false -->
 						<maxResourceCapacityOffset>50</maxResourceCapacityOffset>
 						<qualityScalesCapacityOffset>true</qualityScalesCapacityOffset>
 						<disallowEquipIfHediffMissing>true</disallowEquipIfHediffMissing>
@@ -195,13 +109,13 @@
 				<li>PoweredArmor</li>
 			</tags>
 			<defaultOutfitTags>
-				<li>PoweredSoldier</li>
-            </defaultOutfitTags>
+				<li>Soldier</li>
+			</defaultOutfitTags>
 		</apparel>
 		<costList>
-		  <ComponentSpacer>2</ComponentSpacer>
-		  <Plasteel>50</Plasteel>
-		  <Uranium>20</Uranium>
+			<ComponentSpacer>2</ComponentSpacer>
+			<Plasteel>50</Plasteel>
+			<Uranium>20</Uranium>
 		</costList>
 		<comps>
 			<li Class="HediffResourceFramework.CompProperties_ApparelAdjustHediffs">
@@ -211,7 +125,6 @@
 						<resourcePerSecond>150</resourcePerSecond>
 						<qualityScalesResourcePerSecond>true</qualityScalesResourcePerSecond>
 						<addHediffIfMissing>false</addHediffIfMissing>
-						<!-- default is false -->
 						<maxResourceCapacityOffset>0</maxResourceCapacityOffset>
 						<qualityScalesCapacityOffset>false</qualityScalesCapacityOffset>
 						<disallowEquipIfHediffMissing>true</disallowEquipIfHediffMissing>
@@ -220,12 +133,12 @@
 						</blackListHediffsPreventEquipping>
 						<dropWeaponOrApparelIfBlacklistHediff>
 						</dropWeaponOrApparelIfBlacklistHediff>
-						<postUseDelayMultiplier>0.75</postUseDelayMultiplier>
+						<!--<postUseDelayMultiplier>0.75</postUseDelayMultiplier> -->
 					</li>
-					<li>
+					<!--<li>
 						<hediff>FE_AbsorptionBarrier</hediff>
 						<postDamageDelayMultiplier>0.75</postDamageDelayMultiplier>
-					</li>
+					</li>-->
 				</hediffOptions>
 			</li>
 		</comps>
@@ -250,20 +163,17 @@
 				<li>PoweredArmor</li>
 			</tags>
 			<defaultOutfitTags>
-				<li>PoweredSoldier</li>
-            </defaultOutfitTags>
+				<li>Soldier</li>
+			</defaultOutfitTags>
 		</apparel>
 		<equippedStatOffsets>
-		  <MoveSpeed>0.8</MoveSpeed>
-		  <MeleeDodgeChance>10</MeleeDodgeChance>
+			<MoveSpeed>0.8</MoveSpeed>
+			<MeleeDodgeChance>10</MeleeDodgeChance>
 		</equippedStatOffsets>
-		<equippedStatFactors>
-          <PawnTrapSpringChance>0.1</PawnTrapSpringChance>
-        </equippedStatFactors>
 		<costList>
-		  <ComponentSpacer>2</ComponentSpacer>
-		  <Plasteel>50</Plasteel>
-		  <Uranium>20</Uranium>
+			<ComponentSpacer>2</ComponentSpacer>
+			<Plasteel>50</Plasteel>
+			<Uranium>20</Uranium>
 		</costList>
 		<comps>
 			<li Class="HediffResourceFramework.CompProperties_ApparelAdjustHediffs">
@@ -273,7 +183,6 @@
 						<resourcePerSecond>0</resourcePerSecond>
 						<qualityScalesResourcePerSecond>false</qualityScalesResourcePerSecond>
 						<addHediffIfMissing>false</addHediffIfMissing>
-						<!-- default is false -->
 						<maxResourceCapacityOffset>-10</maxResourceCapacityOffset>
 						<qualityScalesCapacityOffset>false</qualityScalesCapacityOffset>
 						<disallowEquipIfHediffMissing>true</disallowEquipIfHediffMissing>
@@ -287,7 +196,7 @@
 			</li>
 		</comps>
 	</ThingDef>
-	
+
 	<ThingDef ParentName="FE_ModuleBase">
 		<defName>FE_JumpModule</defName>
 		<label>powered jump module</label>
@@ -307,41 +216,39 @@
 				<li>PoweredArmor</li>
 			</tags>
 			<defaultOutfitTags>
-				<li>PoweredSoldier</li>
-            </defaultOutfitTags>
+				<li>Soldier</li>
+			</defaultOutfitTags>
 		</apparel>
 		<costList>
-		  <ComponentSpacer>2</ComponentSpacer>
-		  <Plasteel>50</Plasteel>
-		  <Uranium>20</Uranium>
+			<ComponentSpacer>2</ComponentSpacer>
+			<Plasteel>50</Plasteel>
+			<Uranium>20</Uranium>
 		</costList>
 		<verbs>
-		  <li>
-			<verbClass>MVCF.Verb_Jump</verbClass>
-			<label>jump</label>
-			<range>13.9</range>
-			<violent>false</violent>
-			<hasStandardCommand>true</hasStandardCommand>
-			<onlyManualCast>True</onlyManualCast>
-			<forceNormalTimeSpeed>false</forceNormalTimeSpeed>
-			<warmupTime>0.5</warmupTime>
-			<warmupEffecter>JumpWarmupEffect</warmupEffecter>
-			<requireLineOfSight>true</requireLineOfSight>
-			<targetParams>
-			  <canTargetLocations>true</canTargetLocations>
-			  <canTargetPawns>false</canTargetPawns>
-			  <canTargetBuildings>false</canTargetBuildings>
-			</targetParams>
-		  </li>
+			<li>
+				<verbClass>MVCF.Verbs.Verb_Jump</verbClass>
+				<label>jump</label>
+				<range>13.9</range>
+				<violent>false</violent>
+				<hasStandardCommand>true</hasStandardCommand>
+				<onlyManualCast>True</onlyManualCast>
+				<forceNormalTimeSpeed>false</forceNormalTimeSpeed>
+				<warmupTime>0.5</warmupTime>
+				<warmupEffecter>JumpWarmupEffect</warmupEffecter>
+				<requireLineOfSight>true</requireLineOfSight>
+				<targetParams>
+					<canTargetLocations>true</canTargetLocations>
+					<canTargetPawns>false</canTargetPawns>
+					<canTargetBuildings>false</canTargetBuildings>
+				</targetParams>
+			</li>
 		</verbs>
 		<comps>
 			<li Class="MVCF.Comps.CompProperties_VerbGiver">
 				<verbProps>
 					<li>
 						<label>jump</label>
-						<canBeToggled>false</canBeToggled>
-						<toggleDescription>true</toggleDescription>
-                        <description>Integrated jump jets used for limited bursts of accellerated movement.</description>
+						<description>Integrated jump jets used for limited bursts of accellerated movement.</description>
 					</li>
 				</verbProps>
 			</li>
@@ -352,7 +259,6 @@
 						<resourcePerSecond>0</resourcePerSecond>
 						<qualityScalesResourcePerSecond>false</qualityScalesResourcePerSecond>
 						<addHediffIfMissing>false</addHediffIfMissing>
-						<!-- default is false -->
 						<maxResourceCapacityOffset>0</maxResourceCapacityOffset>
 						<qualityScalesCapacityOffset>false</qualityScalesCapacityOffset>
 						<disallowEquipIfHediffMissing>true</disallowEquipIfHediffMissing>
@@ -381,7 +287,7 @@
 			</li>
 		</modExtensions>
 	</ThingDef>
-	
+
 	<ThingDef ParentName="FE_ModuleBase">
 		<defName>FE_StimInjector</defName>
 		<label>stim injector module</label>
@@ -401,46 +307,44 @@
 				<li>PoweredArmor</li>
 			</tags>
 			<defaultOutfitTags>
-				<li>PoweredSoldier</li>
-            </defaultOutfitTags>
+				<li>Soldier</li>
+			</defaultOutfitTags>
 		</apparel>
 		<costList>
-		  <ComponentSpacer>2</ComponentSpacer>
-		  <Plasteel>50</Plasteel>
-		  <Uranium>20</Uranium>
+			<ComponentSpacer>2</ComponentSpacer>
+			<Plasteel>50</Plasteel>
+			<Uranium>20</Uranium>
 		</costList>
 		<verbs>
 			<li>
-			<verbClass>Verb_Shoot</verbClass>
-			<label>stim injector</label>
-			<hasStandardCommand>true</hasStandardCommand>
-			<defaultProjectile>FE_StimInjectorBullet</defaultProjectile>
-			<warmupTime>0.8</warmupTime>
-			<range>14.9</range>
-			<burstShotCount>1</burstShotCount>
-			<soundCast>Shot_IncendiaryLauncher</soundCast>
-			<soundCastTail>GunTail_Medium</soundCastTail>
-			<muzzleFlashScale>14</muzzleFlashScale>
-			<accuracyTouch>9</accuracyTouch>
-			<accuracyShort>9</accuracyShort>
-			<accuracyMedium>9</accuracyMedium>
-			<accuracyLong>9</accuracyLong>
-			<targetParams>
-			  <canTargetPawns>true</canTargetPawns>
-			  <canTargetBuildings>false</canTargetBuildings>
-			  <canTargetLocations>false</canTargetLocations>
-			</targetParams>
-			<defaultCooldownTime>1.2</defaultCooldownTime>
-		  </li>
+				<verbClass>Verb_Shoot</verbClass>
+				<label>stim injector</label>
+				<hasStandardCommand>true</hasStandardCommand>
+				<defaultProjectile>FE_StimInjectorBullet</defaultProjectile>
+				<warmupTime>0.8</warmupTime>
+				<range>14.9</range>
+				<burstShotCount>1</burstShotCount>
+				<soundCast>Shot_IncendiaryLauncher</soundCast>
+				<soundCastTail>GunTail_Medium</soundCastTail>
+				<muzzleFlashScale>14</muzzleFlashScale>
+				<accuracyTouch>9</accuracyTouch>
+				<accuracyShort>9</accuracyShort>
+				<accuracyMedium>9</accuracyMedium>
+				<accuracyLong>9</accuracyLong>
+				<targetParams>
+					<canTargetPawns>true</canTargetPawns>
+					<canTargetBuildings>false</canTargetBuildings>
+					<canTargetLocations>false</canTargetLocations>
+				</targetParams>
+				<defaultCooldownTime>1.2</defaultCooldownTime>
+			</li>
 		</verbs>
 		<comps>
 			<li Class="MVCF.Comps.CompProperties_VerbGiver">
 				<verbProps>
 					<li>
 						<label>stim injector</label>
-						<canBeToggled>false</canBeToggled>
-						<toggleDescription>true</toggleDescription>
-                        <description>Injects the target with a stim that increases their combat potential substantially for a short duration.</description>
+						<description>Injects the target with a stim that increases their combat potential substantially for a short duration.</description>
 					</li>
 				</verbProps>
 			</li>
@@ -451,7 +355,6 @@
 						<resourcePerSecond>0</resourcePerSecond>
 						<qualityScalesResourcePerSecond>false</qualityScalesResourcePerSecond>
 						<addHediffIfMissing>false</addHediffIfMissing>
-						<!-- default is false -->
 						<maxResourceCapacityOffset>0</maxResourceCapacityOffset>
 						<qualityScalesCapacityOffset>false</qualityScalesCapacityOffset>
 						<disallowEquipIfHediffMissing>true</disallowEquipIfHediffMissing>
@@ -480,22 +383,22 @@
 			</li>
 		</modExtensions>
 	</ThingDef>
-	
+
 	<ThingDef ParentName="BaseBullet">
 		<defName>FE_StimInjectorBullet</defName>
 		<label>combat stim bullet</label>
 		<projectile>
-		  <damageDef>FE_StimInjectorDamageDef</damageDef>
-		  <damageAmountBase>0</damageAmountBase>
-		  <stoppingPower>0</stoppingPower>
-		  <speed>80</speed>
+			<damageDef>FE_StimInjectorDamageDef</damageDef>
+			<damageAmountBase>0</damageAmountBase>
+			<stoppingPower>0</stoppingPower>
+			<speed>80</speed>
 		</projectile>
 		<graphicData>
-		  <texPath>Things/Projectile/Bullet_small</texPath>
-		  <graphicClass>Graphic_Single</graphicClass>
+			<texPath>Things/Projectile/Bullet_small</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
 		</graphicData>
 	</ThingDef>
-	  
+
 	<DamageDef>
 		<defName>FE_StimInjectorDamageDef</defName>
 		<label>stim effect</label>
@@ -506,7 +409,7 @@
 		<soundExplosion>Explosion_Smoke</soundExplosion>
 		<combatLogRules>Damage_Smoke</combatLogRules>
 	</DamageDef>
-	
+
 	<ThingDef ParentName="FE_ModuleBase">
 		<defName>FE_ChargeBurst</defName>
 		<label>charge burst module</label>
@@ -526,46 +429,44 @@
 				<li>PoweredArmor</li>
 			</tags>
 			<defaultOutfitTags>
-				<li>PoweredSoldier</li>
-            </defaultOutfitTags>
+				<li>Soldier</li>
+			</defaultOutfitTags>
 		</apparel>
 		<costList>
-		  <ComponentSpacer>2</ComponentSpacer>
-		  <Plasteel>50</Plasteel>
-		  <Uranium>20</Uranium>
+			<ComponentSpacer>2</ComponentSpacer>
+			<Plasteel>50</Plasteel>
+			<Uranium>20</Uranium>
 		</costList>
 		<verbs>
 			<li>
-			<verbClass>Verb_Shoot</verbClass>
-			<label>charge blast</label>
-			<hasStandardCommand>true</hasStandardCommand>
-			<defaultProjectile>FE_ChargeBurstBullet</defaultProjectile>
-			<warmupTime>2.0</warmupTime>
-			<range>40.9</range>
-			<burstShotCount>1</burstShotCount>
-			<soundCast>Shot_Shotgun</soundCast>
-			<soundCastTail>GunTail_Heavy</soundCastTail>
-			<muzzleFlashScale>14</muzzleFlashScale>
-			<accuracyTouch>0.7</accuracyTouch>
-			<accuracyShort>0.8</accuracyShort>
-			<accuracyMedium>0.95</accuracyMedium>
-			<accuracyLong>0.85</accuracyLong>
-			<targetParams>
-			  <canTargetPawns>true</canTargetPawns>
-			  <canTargetBuildings>true</canTargetBuildings>
-			  <canTargetLocations>false</canTargetLocations>
-			</targetParams>
-			<defaultCooldownTime>1.5</defaultCooldownTime>
-		  </li>
+				<verbClass>Verb_Shoot</verbClass>
+				<label>charge blast</label>
+				<hasStandardCommand>true</hasStandardCommand>
+				<defaultProjectile>FE_ChargeBurstBullet</defaultProjectile>
+				<warmupTime>2.0</warmupTime>
+				<range>40.9</range>
+				<burstShotCount>1</burstShotCount>
+				<soundCast>Shot_Shotgun</soundCast>
+				<soundCastTail>GunTail_Heavy</soundCastTail>
+				<muzzleFlashScale>14</muzzleFlashScale>
+				<accuracyTouch>0.7</accuracyTouch>
+				<accuracyShort>0.8</accuracyShort>
+				<accuracyMedium>0.95</accuracyMedium>
+				<accuracyLong>0.85</accuracyLong>
+				<targetParams>
+					<canTargetPawns>true</canTargetPawns>
+					<canTargetBuildings>true</canTargetBuildings>
+					<canTargetLocations>false</canTargetLocations>
+				</targetParams>
+				<defaultCooldownTime>1.5</defaultCooldownTime>
+			</li>
 		</verbs>
 		<comps>
 			<li Class="MVCF.Comps.CompProperties_VerbGiver">
 				<verbProps>
 					<li>
 						<label>charge blast</label>
-						<canBeToggled>true</canBeToggled>
-						<toggleDescription>true</toggleDescription>
-                        <description>Shoots a concentrated burst of energy at the target. Damage increases the longer the weapon goes without firing.</description>
+						<description>Shoots a concentrated burst of energy at the target. Damage increases the longer the weapon goes without firing.</description>
 					</li>
 				</verbProps>
 			</li>
@@ -576,7 +477,6 @@
 						<resourcePerSecond>-90</resourcePerSecond>
 						<qualityScalesResourcePerSecond>false</qualityScalesResourcePerSecond>
 						<addHediffIfMissing>false</addHediffIfMissing>
-						<!-- default is false -->
 						<maxResourceCapacityOffset>0</maxResourceCapacityOffset>
 						<qualityScalesCapacityOffset>false</qualityScalesCapacityOffset>
 						<disallowEquipIfHediffMissing>true</disallowEquipIfHediffMissing>
@@ -619,23 +519,23 @@
 			</li>
 		</modExtensions>
 	</ThingDef>
-	
+
 	<ThingDef ParentName="BaseBullet">
 		<defName>FE_ChargeBurstBullet</defName>
 		<label>charge burst bullet</label>
 		<graphicData>
-		  <texPath>Things/Projectile/Bullet_Shotgun</texPath>
-		  <graphicClass>Graphic_Single</graphicClass>
+			<texPath>Things/Projectile/Bullet_Shotgun</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
 		</graphicData>
 		<projectile>
-		  <damageDef>Bullet</damageDef>
-		  <damageAmountBase>20</damageAmountBase>
-		  <stoppingPower>3</stoppingPower>
-		  <armorPenetrationBase>0.54</armorPenetrationBase>
-		  <speed>85</speed>
+			<damageDef>Bullet</damageDef>
+			<damageAmountBase>20</damageAmountBase>
+			<stoppingPower>3</stoppingPower>
+			<armorPenetrationBase>0.54</armorPenetrationBase>
+			<speed>85</speed>
 		</projectile>
 	</ThingDef>
-	
+
 	<ThingDef ParentName="FE_ModuleBase">
 		<defName>FE_ShieldModule</defName>
 		<label>absorption shield module</label>
@@ -655,13 +555,13 @@
 				<li>PoweredArmor</li>
 			</tags>
 			<defaultOutfitTags>
-				<li>PoweredSoldier</li>
-            </defaultOutfitTags>
+				<li>Soldier</li>
+			</defaultOutfitTags>
 		</apparel>
 		<costList>
-		  <ComponentSpacer>2</ComponentSpacer>
-		  <Plasteel>50</Plasteel>
-		  <Uranium>20</Uranium>
+			<ComponentSpacer>2</ComponentSpacer>
+			<Plasteel>50</Plasteel>
+			<Uranium>20</Uranium>
 		</costList>
 		<comps>
 			<li Class="HediffResourceFramework.CompProperties_ApparelAdjustHediffs">
@@ -671,7 +571,6 @@
 						<resourcePerSecond>-60</resourcePerSecond>
 						<qualityScalesResourcePerSecond>false</qualityScalesResourcePerSecond>
 						<addHediffIfMissing>false</addHediffIfMissing>
-						<!-- default is false -->
 						<maxResourceCapacityOffset>-25</maxResourceCapacityOffset>
 						<qualityScalesCapacityOffset>false</qualityScalesCapacityOffset>
 						<disallowEquipIfHediffMissing>true</disallowEquipIfHediffMissing>
@@ -693,7 +592,7 @@
 			</li>
 		</comps>
 	</ThingDef>
-	
+
 	<ThingDef ParentName="FE_ModuleBase">
 		<defName>FE_ReactivePlating</defName>
 		<label>reactive plating module</label>
@@ -713,13 +612,13 @@
 				<li>PoweredArmor</li>
 			</tags>
 			<defaultOutfitTags>
-				<li>PoweredSoldier</li>
-            </defaultOutfitTags>
+				<li>Soldier</li>
+			</defaultOutfitTags>
 		</apparel>
 		<costList>
-		  <ComponentSpacer>2</ComponentSpacer>
-		  <Plasteel>50</Plasteel>
-		  <Uranium>20</Uranium>
+			<ComponentSpacer>2</ComponentSpacer>
+			<Plasteel>50</Plasteel>
+			<Uranium>20</Uranium>
 		</costList>
 		<comps>
 			<li Class="HediffResourceFramework.CompProperties_ApparelAdjustHediffs">
@@ -729,7 +628,6 @@
 						<resourcePerSecond>0</resourcePerSecond>
 						<qualityScalesResourcePerSecond>false</qualityScalesResourcePerSecond>
 						<addHediffIfMissing>false</addHediffIfMissing>
-						<!-- default is false -->
 						<maxResourceCapacityOffset>0</maxResourceCapacityOffset>
 						<qualityScalesCapacityOffset>false</qualityScalesCapacityOffset>
 						<disallowEquipIfHediffMissing>true</disallowEquipIfHediffMissing>
@@ -751,40 +649,40 @@
 			</li>
 		</comps>
 	</ThingDef>
-	
+
 	<ThingDef ParentName="ApparelArmorHelmetPowerBase">
 		<defName>FE_ProtectiveVisage</defName>
 		<label>protective visage</label>
 		<description>An advanced powered helmet that requires a linkup with a fusion reactor to energize it. It is well armored and also has an onboard head vulcan, capable of firing short range rounds at the cost of a bit of energy.</description>
 		<apparel>
-		  <tags>
-			<li>SpacerMilitary</li>
-		  </tags>
+			<tags>
+				<li>SpacerMilitary</li>
+			</tags>
 		</apparel>
 		<verbs>
 			<li>
-			<verbClass>Verb_Shoot</verbClass>
-			<label>head vulcan</label>
-			<hasStandardCommand>true</hasStandardCommand>
-			<defaultProjectile>FE_HeadVulcanBullet</defaultProjectile>
-			<warmupTime>0.5</warmupTime>
-			<range>11.9</range>
-			<burstShotCount>6</burstShotCount>
-			<ticksBetweenBurstShots>4</ticksBetweenBurstShots>
-			<soundCast>Shot_MachinePistol</soundCast>
-			<soundCastTail>GunTail_Light</soundCastTail>
-			<muzzleFlashScale>7</muzzleFlashScale>
-			<accuracyTouch>0.6</accuracyTouch>
-			<accuracyShort>0.3</accuracyShort>
-			<accuracyMedium>0.2</accuracyMedium>
-			<accuracyLong>0.1</accuracyLong>
-			<targetParams>
-			  <canTargetPawns>true</canTargetPawns>
-			  <canTargetBuildings>true</canTargetBuildings>
-			  <canTargetLocations>false</canTargetLocations>
-			</targetParams>
-			<defaultCooldownTime>1.0</defaultCooldownTime>
-		  </li>
+				<verbClass>Verb_Shoot</verbClass>
+				<label>head vulcan</label>
+				<hasStandardCommand>true</hasStandardCommand>
+				<defaultProjectile>FE_HeadVulcanBullet</defaultProjectile>
+				<warmupTime>0.5</warmupTime>
+				<range>11.9</range>
+				<burstShotCount>6</burstShotCount>
+				<ticksBetweenBurstShots>4</ticksBetweenBurstShots>
+				<soundCast>Shot_MachinePistol</soundCast>
+				<soundCastTail>GunTail_Light</soundCastTail>
+				<muzzleFlashScale>7</muzzleFlashScale>
+				<accuracyTouch>0.6</accuracyTouch>
+				<accuracyShort>0.3</accuracyShort>
+				<accuracyMedium>0.2</accuracyMedium>
+				<accuracyLong>0.1</accuracyLong>
+				<targetParams>
+					<canTargetPawns>true</canTargetPawns>
+					<canTargetBuildings>true</canTargetBuildings>
+					<canTargetLocations>false</canTargetLocations>
+				</targetParams>
+				<defaultCooldownTime>1.0</defaultCooldownTime>
+			</li>
 		</verbs>
 		<tickerType>Normal</tickerType>
 		<comps>
@@ -792,9 +690,7 @@
 				<verbProps>
 					<li>
 						<label>head vulcan</label>
-						<canBeToggled>true</canBeToggled>
-						<toggleDescription>true</toggleDescription>
-                        <description>Fires short range head vulcan rounds. Highly inaccurate but effective up close.</description>
+						<description>Fires short range head vulcan rounds. Highly inaccurate but effective up close.</description>
 					</li>
 				</verbProps>
 			</li>
@@ -805,7 +701,6 @@
 						<resourcePerSecond>0</resourcePerSecond>
 						<qualityScalesResourcePerSecond>false</qualityScalesResourcePerSecond>
 						<addHediffIfMissing>false</addHediffIfMissing>
-						<!-- default is false -->
 						<maxResourceCapacityOffset>0</maxResourceCapacityOffset>
 						<qualityScalesCapacityOffset>false</qualityScalesCapacityOffset>
 						<disallowEquipIfHediffMissing>true</disallowEquipIfHediffMissing>
@@ -834,64 +729,63 @@
 			</li>
 		</modExtensions>
 	</ThingDef>
-	
+
 	<ThingDef ParentName="BaseBullet">
 		<defName>FE_HeadVulcanBullet</defName>
 		<label>head vulcan bullet</label>
 		<graphicData>
-		  <texPath>Things/Projectile/Bullet_Small</texPath>
-		  <graphicClass>Graphic_Single</graphicClass>
+			<texPath>Things/Projectile/Bullet_Small</texPath> 
+			<graphicClass>Graphic_Single</graphicClass>
 		</graphicData>
 		<projectile>
-		  <damageDef>Bullet</damageDef>
-		  <damageAmountBase>6</damageAmountBase>
-		  <stoppingPower>0</stoppingPower>
-		  <armorPenetrationBase>0.04</armorPenetrationBase>
-		  <speed>105</speed>
+			<damageDef>Bullet</damageDef>
+			<damageAmountBase>6</damageAmountBase>
+			<stoppingPower>0.5</stoppingPower>
+			<armorPenetrationBase>0.04</armorPenetrationBase>
+			<speed>105</speed>
 		</projectile>
 	</ThingDef>
-	
+
 	<ThingDef ParentName="ApparelArmorHelmetReconBase">
-    <defName>FE_MarksmanOptics</defName>
-    <label>marksman optics</label>
-    <description>A series of single-purpose microprocessors that rapidly adjust the aim of the wearer after each shot with a powered primary weapon. It is less protective than a normal powered helmet and slightly lowers maximum energy to power the microprocessors.</description>
-    <apparel>
-      <tags>
-        <li>SpacerMilitary</li>
-      </tags>
-    </apparel>
-	<tickerType>Normal</tickerType>
-	<comps>
-		<li Class="HediffResourceFramework.CompProperties_ApparelAdjustHediffs">
-			<hediffOptions>
-				<li>
-					<hediff>FE_FusionReactor</hediff>
-					<resourcePerSecond>0</resourcePerSecond>
-					<qualityScalesResourcePerSecond>false</qualityScalesResourcePerSecond>
-					<addHediffIfMissing>false</addHediffIfMissing>
-					<!-- default is false -->
-					<maxResourceCapacityOffset>-15</maxResourceCapacityOffset>
-					<qualityScalesCapacityOffset>false</qualityScalesCapacityOffset>
-					<disallowEquipIfHediffMissing>true</disallowEquipIfHediffMissing>
-					<dropIfHediffMissing>true</dropIfHediffMissing>
-					<blackListHediffsPreventEquipping>
-					</blackListHediffsPreventEquipping>
-					<dropWeaponOrApparelIfBlacklistHediff>
-					</dropWeaponOrApparelIfBlacklistHediff>
-				</li>
-				<li>
-					<hediff>FE_MarksmanOptics</hediff>
-					<resourcePerSecond>-300</resourcePerSecond>
-					<qualityScalesResourcePerSecond>false</qualityScalesResourcePerSecond>
-					<addHediffIfMissing>true</addHediffIfMissing>
-					<maxResourceCapacityOffset>100</maxResourceCapacityOffset>
-					<qualityScalesCapacityOffset>false</qualityScalesCapacityOffset>
-					<disallowEquipIfHediffMissing>false</disallowEquipIfHediffMissing>
-					<dropIfHediffMissing>false</dropIfHediffMissing>
-				</li>
-			</hediffOptions>
-		</li>
-	</comps>
-  </ThingDef>
+		<defName>FE_MarksmanOptics</defName>
+		<label>marksman optics</label>
+		<description>A series of single-purpose microprocessors that rapidly adjust the aim of the wearer after each shot with a powered primary weapon. It is less protective than a normal powered helmet and slightly lowers maximum energy to power the microprocessors.</description>
+		<apparel>
+			<tags>
+				<li>SpacerMilitary</li>
+			</tags>
+		</apparel>
+		<tickerType>Normal</tickerType>
+		<comps>
+			<li Class="HediffResourceFramework.CompProperties_ApparelAdjustHediffs">
+				<hediffOptions>
+					<li>
+						<hediff>FE_FusionReactor</hediff>
+						<resourcePerSecond>0</resourcePerSecond>
+						<qualityScalesResourcePerSecond>false</qualityScalesResourcePerSecond>
+						<addHediffIfMissing>false</addHediffIfMissing>
+						<maxResourceCapacityOffset>-15</maxResourceCapacityOffset>
+						<qualityScalesCapacityOffset>false</qualityScalesCapacityOffset>
+						<disallowEquipIfHediffMissing>true</disallowEquipIfHediffMissing>
+						<dropIfHediffMissing>true</dropIfHediffMissing>
+						<blackListHediffsPreventEquipping>
+						</blackListHediffsPreventEquipping>
+						<dropWeaponOrApparelIfBlacklistHediff>
+						</dropWeaponOrApparelIfBlacklistHediff>
+					</li>
+					<li>
+						<hediff>FE_MarksmanOptics</hediff>
+						<resourcePerSecond>-300</resourcePerSecond>
+						<qualityScalesResourcePerSecond>false</qualityScalesResourcePerSecond>
+						<addHediffIfMissing>true</addHediffIfMissing>
+						<maxResourceCapacityOffset>100</maxResourceCapacityOffset>
+						<qualityScalesCapacityOffset>false</qualityScalesCapacityOffset>
+						<disallowEquipIfHediffMissing>false</disallowEquipIfHediffMissing>
+						<dropIfHediffMissing>false</dropIfHediffMissing>
+					</li>
+				</hediffOptions>
+			</li>
+		</comps>
+	</ThingDef>
 
 </Defs>

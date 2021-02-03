@@ -9,7 +9,7 @@
 
 	<StatDef>
 		<defName>FE_FusionReactorPerSecond</defName>
-		<workerClass>HediffResourceFramework.StatWorker_ResourceOffset</workerClass>
+		<workerClass>HediffResourceFramework.StatWorker_ResourceOffset</workerClass> 
 		<label>energy per second</label>
 		<description>Amount of energy generated per second.</description>
 		<category>FE_ResourceLabel</category>

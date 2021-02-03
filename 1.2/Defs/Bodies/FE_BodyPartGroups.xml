@@ -21,7 +21,7 @@
   <BodyPartGroupDef>
     <defName>FE_Exo_Module</defName>
     <label>exo module</label>
-    <listOrder>204</listOrder>
+    <listOrder>204</listOrder> 
   </BodyPartGroupDef>
   
 </Defs>
