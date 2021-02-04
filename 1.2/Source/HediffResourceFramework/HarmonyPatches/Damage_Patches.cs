@@ -128,6 +128,31 @@ namespace HediffResourceFramework
 		private static void Prefix(Pawn __instance, ref DamageInfo dinfo, out bool absorbed)
 		{
 			absorbed = false;
+
+			var effectOnImpactOptions = dinfo.Def.GetModExtension<EffectOnImpact>();
+			if (effectOnImpactOptions != null && __instance.health?.hediffSet != null)
+            {
+				foreach (var resourceEffect in effectOnImpactOptions.resourceEffects)
+                {
+					if (resourceEffect.removeTargetResource)
+                    {
+						var hediffToRemove = __instance.health.hediffSet.GetFirstHediffOfDef(resourceEffect.hediffDef);
+						if (hediffToRemove != null)
+                        {
+							__instance.health.RemoveHediff(hediffToRemove);
+                        }
+                    }
+					else
+                    {
+						var hediffResource = HediffResourceUtils.AdjustResourceAmount(__instance, resourceEffect.hediffDef, resourceEffect.adjustTargetResource, true);
+						if (resourceEffect.delayTargetOnDamage != IntRange.zero)
+                        {
+							hediffResource.delayTicks = Find.TickManager.TicksGame + resourceEffect.delayTargetOnDamage.RandomInRange;
+						}
+                    }
+                }
+            }
+
 			foreach (var hediff in __instance?.health?.hediffSet?.hediffs?.OfType<HediffResource>())
 			{
 				if (dinfo.Amount > 0 && hediff.def.shieldProperties != null)

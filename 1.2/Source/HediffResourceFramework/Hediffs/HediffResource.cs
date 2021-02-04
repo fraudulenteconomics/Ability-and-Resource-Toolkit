@@ -15,6 +15,7 @@ namespace HediffResourceFramework
         public new HediffResourceDef def => base.def as HediffResourceDef;
         private float resourceAmount;
         public int duration;
+        public int delayTicks;
         public float ResourceAmount
         {
             get
@@ -23,24 +24,27 @@ namespace HediffResourceFramework
             }
             set
             {
-                resourceAmount = value;
-                if (resourceAmount > ResourceCapacity)
+                if (Find.TickManager.TicksGame > delayTicks)
                 {
-                    resourceAmount = ResourceCapacity;
-                }
+                    resourceAmount = value;
+                    if (resourceAmount > ResourceCapacity)
+                    {
+                        resourceAmount = ResourceCapacity;
+                    }
 
-                if (resourceAmount < 0)
-                {
-                    resourceAmount = 0;
-                }
+                    if (resourceAmount < 0)
+                    {
+                        resourceAmount = 0;
+                    }
 
-                if (resourceAmount <= 0 && !this.def.keepWhenEmpty)
-                {
-                    this.pawn.health.RemoveHediff(this);
-                }
-                else
-                {
-                    this.Severity = resourceAmount;
+                    if (resourceAmount <= 0 && !this.def.keepWhenEmpty)
+                    {
+                        this.pawn.health.RemoveHediff(this);
+                    }
+                    else
+                    {
+                        this.Severity = resourceAmount;
+                    }
                 }
             }
         }
@@ -303,6 +307,7 @@ namespace HediffResourceFramework
             base.ExposeData();
             Scribe_Values.Look(ref resourceAmount, "resourceAmount");
             Scribe_Values.Look(ref duration, "duration");
+            Scribe_Values.Look(ref delayTicks, "delayTicks");
         }
     }
 }

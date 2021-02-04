@@ -63,6 +63,7 @@
     <Compile Include="HediffResourceUtils.cs" />
     <Compile Include="Hediffs\HediffResource.cs" />
     <Compile Include="Hediffs\HediffResourceDef.cs" />
+    <Compile Include="ModExtensions\EffectOnImpact.cs" />
     <Compile Include="ModExtensions\StatWorkerExtender.cs" />
     <Compile Include="ModExtensions\HediffAdjustOptions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

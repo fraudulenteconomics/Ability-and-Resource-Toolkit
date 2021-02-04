@@ -40,18 +40,6 @@ namespace HediffResourceFramework
 			}
 		}
 
-		public override string CompTipStringExtra
-		{
-			get
-			{
-				if (props is HediffCompProperties_ResourcePerSecond && Props.showDaysToRecover && ResourceChangePerDay() < 0f)
-				{
-					return "DaysToRecover".Translate((HediffResource.ResourceAmount / Mathf.Abs(ResourceChangePerDay())).ToString("0.0"));
-				}
-				return null;
-			}
-		}
-
 		public override void CompPostTick(ref float severityAdjustment)
 		{
 			base.CompPostTick(ref severityAdjustment);
