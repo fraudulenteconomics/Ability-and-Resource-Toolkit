@@ -32,46 +32,46 @@ namespace HediffResourceFramework
             base.Notify_Removed();
             List<HediffResourceDef> hediffResourcesToRemove = Apparel.Wearer.health.hediffSet.hediffs.OfType<HediffResource>()
                     .Select(x => x.def).Where(x => Props.hediffOptions.Any(y => y.hediff == x)).ToList();
-            //var apparels = Apparel.Wearer.apparel.WornApparel;
-            //if (apparels != null)
-            //{
-            //    foreach (var ap in apparels)
-            //    {
-            //        if (ap != Apparel)
-            //        {
-            //            var comp = ap.TryGetComp<CompApparelAdjustHediffs>();
-            //            if (comp?.Props?.hediffOptions != null)
-            //            {
-            //                foreach (var hediffOption in comp.Props.hediffOptions)
-            //                {
-            //                    if (hediffResourcesToRemove.Contains(hediffOption.hediff))
-            //                    {
-            //                        hediffResourcesToRemove.Remove(hediffOption.hediff);
-            //                    }
-            //                }
-            //            }
-            //        }
-            //    }
-            //}
-            //
-            //var equipments = Apparel.Wearer.equipment.AllEquipmentListForReading;
-            //if (equipments != null)
-            //{
-            //    foreach (var eq in equipments)
-            //    {
-            //        var comp = eq.TryGetComp<CompWeaponAdjustHediffs>();
-            //        if (comp?.Props?.hediffOptions != null)
-            //        {
-            //            foreach (var hediffOption in comp.Props.hediffOptions)
-            //            {
-            //                if (hediffResourcesToRemove.Contains(hediffOption.hediff))
-            //                {
-            //                    hediffResourcesToRemove.Remove(hediffOption.hediff);
-            //                }
-            //            }
-            //        }
-            //    }
-            //}
+            var apparels = Apparel.Wearer.apparel.WornApparel;
+            if (apparels != null)
+            {
+                foreach (var ap in apparels)
+                {
+                    if (ap != Apparel)
+                    {
+                        var comp = ap.TryGetComp<CompApparelAdjustHediffs>();
+                        if (comp?.Props?.hediffOptions != null)
+                        {
+                            foreach (var hediffOption in comp.Props.hediffOptions)
+                            {
+                                if (hediffResourcesToRemove.Contains(hediffOption.hediff))
+                                {
+                                    hediffResourcesToRemove.Remove(hediffOption.hediff);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            
+            var equipments = Apparel.Wearer.equipment.AllEquipmentListForReading;
+            if (equipments != null)
+            {
+                foreach (var eq in equipments)
+                {
+                    var comp = eq.TryGetComp<CompWeaponAdjustHediffs>();
+                    if (comp?.Props?.hediffOptions != null)
+                    {
+                        foreach (var hediffOption in comp.Props.hediffOptions)
+                        {
+                            if (hediffResourcesToRemove.Contains(hediffOption.hediff))
+                            {
+                                hediffResourcesToRemove.Remove(hediffOption.hediff);
+                            }
+                        }
+                    }
+                }
+            }
 
             foreach (var hediffDef in hediffResourcesToRemove)
             {
@@ -91,7 +91,6 @@ namespace HediffResourceFramework
         public override void ResourceTick()
         {
             base.ResourceTick();
-            Log.Message(" - Resource - if (Apparel.Wearer != null) - 2", true);
             if (Apparel.Wearer != null)
             {
                 if (Apparel.Wearer.IsHashIntervalTick(60))

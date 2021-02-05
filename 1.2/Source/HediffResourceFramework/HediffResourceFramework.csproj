@@ -51,7 +51,6 @@
     <Compile Include="Comps\IngestionOutcomeDoer_GiveHediffResource.cs" />
     <Compile Include="Comps\CompWeaponAdjustHediffs.cs" />
     <Compile Include="Comps\CompApparelAdjustHediffs.cs" />
-    <Compile Include="HarmonyPatches\Food_Patches.cs" />
     <Compile Include="HarmonyPatches\Hediff_Patches.cs" />
     <Compile Include="HarmonyPatches\Harmony_Init.cs" />
     <Compile Include="HarmonyPatches\Damage_Patches.cs" />

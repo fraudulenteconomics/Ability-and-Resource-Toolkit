@@ -46,6 +46,10 @@ namespace HediffResourceFramework
                         this.Severity = resourceAmount;
                     }
                 }
+                else
+                {
+                    Log.Message($"Can't change resource {this}: delayed");
+                }
             }
         }
 
