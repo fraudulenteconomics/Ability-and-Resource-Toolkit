@@ -414,7 +414,7 @@
 					<li>
 						<hediffDef>FE_ReactivePlating</hediffDef>
 						<additionalHediffs>
-							<li>FE_AbsorptionBarrier</li>
+							<li>FE_ShieldInjector</li>
 						</additionalHediffs>
 						<severityPerDamage>1</severityPerDamage>
 						<adjustTargetResource>1</adjustTargetResource>
