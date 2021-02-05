@@ -38,26 +38,6 @@ namespace HediffResourceFramework
 		}
 	}
 
-	//[HarmonyPatch(typeof(Projectile), "Impact")]
-	//public static class Patch_Projectile_Impact
-	//{
-	//	public static void Prefix(Projectile __instance)
-	//	{
-	//		if (__instance.Launcher is Pawn pawn)
-	//		{
-	//			var equipment = pawn.equipment?.Primary;
-	//			if (equipment != null)
-    //            {
-	//				var compCharge = equipment.GetComp<CompChargeResource>();
-	//				if (compCharge != null && compCharge.projectilesWithChargedResource.ContainsKey(__instance))
-	//				{
-	//					compCharge.projectilesWithChargedResource.Remove(__instance);
-	//				}
-	//			}
-	//		}
-	//	}
-	//}
-
 	[HarmonyPatch(typeof(Projectile), "DamageAmount", MethodType.Getter)]
 	internal static class DamageAmount_Patch
 	{

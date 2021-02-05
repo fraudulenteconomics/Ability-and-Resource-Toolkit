@@ -54,8 +54,6 @@ namespace HediffResourceFramework
 	{
 		public HediffResource hediffResource;
 
-		//private static readonly Texture2D FullShieldBarTex = SolidColorMaterials.NewSolidColorTexture(new Color(0.2f, 0.2f, 0.24f));
-		//
 		private static readonly Texture2D EmptyShieldBarTex = SolidColorMaterials.NewSolidColorTexture(Color.clear);
 		public Gizmo_ResourceStatus()
 		{

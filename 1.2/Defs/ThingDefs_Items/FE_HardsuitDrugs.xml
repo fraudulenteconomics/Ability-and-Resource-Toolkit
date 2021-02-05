@@ -20,7 +20,6 @@
 				<li Class="HediffResourceFramework.IngestionOutcomeDoer_GiveHediffResource">
 					<hediffDef>FE_ShieldInjector</hediffDef>
 					<resourceAdjust>100</resourceAdjust>
-					<resourcePercent>0</resourcePercent>
 					<blacklistHediffsPreventAdd>
 					</blacklistHediffsPreventAdd>
 					<blacklistHediffPoison>

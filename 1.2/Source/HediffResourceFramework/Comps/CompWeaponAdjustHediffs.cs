@@ -46,46 +46,46 @@ namespace HediffResourceFramework
             List<HediffResourceDef> hediffResourcesToRemove = Equipment.PrimaryVerb.CasterPawn.health.hediffSet.hediffs.OfType<HediffResource>()
                 .Select(x => x.def).Where(x => Props.hediffOptions.Any(y => y.hediff == x)).ToList();
             
-            //var equipments = Equipment.PrimaryVerb.CasterPawn.equipment.AllEquipmentListForReading;
-            //if (equipments != null)
-            //{
-            //    foreach (var eq in equipments)
-            //    {
-            //        if (eq != Equipment.parent)
-            //        {
-            //            var comp = eq.TryGetComp<CompWeaponAdjustHediffs>();
-            //            if (comp?.Props?.hediffOptions != null)
-            //            {
-            //                foreach (var hediffOption in comp.Props.hediffOptions)
-            //                {
-            //                    if (hediffResourcesToRemove.Contains(hediffOption.hediff))
-            //                    {
-            //                        hediffResourcesToRemove.Remove(hediffOption.hediff);
-            //                    }
-            //                }
-            //            }
-            //        }
-            //    }
-            //}
-            //
-            //var apparels = Equipment.PrimaryVerb.CasterPawn.apparel.WornApparel;
-            //if (apparels != null)
-            //{
-            //    foreach (var ap in apparels)
-            //    {
-            //        var comp = ap.TryGetComp<CompApparelAdjustHediffs>();
-            //        if (comp?.Props?.hediffOptions != null)
-            //        {
-            //            foreach (var hediffOption in comp.Props.hediffOptions)
-            //            {
-            //                if (hediffResourcesToRemove.Contains(hediffOption.hediff))
-            //                {
-            //                    hediffResourcesToRemove.Remove(hediffOption.hediff);
-            //                }
-            //            }
-            //        }
-            //    }
-            //}
+            var equipments = Equipment.PrimaryVerb.CasterPawn.equipment.AllEquipmentListForReading;
+            if (equipments != null)
+            {
+                foreach (var eq in equipments)
+                {
+                    if (eq != Equipment.parent)
+                    {
+                        var comp = eq.TryGetComp<CompWeaponAdjustHediffs>();
+                        if (comp?.Props?.hediffOptions != null)
+                        {
+                            foreach (var hediffOption in comp.Props.hediffOptions)
+                            {
+                                if (hediffResourcesToRemove.Contains(hediffOption.hediff))
+                                {
+                                    hediffResourcesToRemove.Remove(hediffOption.hediff);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            
+            var apparels = Equipment.PrimaryVerb.CasterPawn.apparel.WornApparel;
+            if (apparels != null)
+            {
+                foreach (var ap in apparels)
+                {
+                    var comp = ap.TryGetComp<CompApparelAdjustHediffs>();
+                    if (comp?.Props?.hediffOptions != null)
+                    {
+                        foreach (var hediffOption in comp.Props.hediffOptions)
+                        {
+                            if (hediffResourcesToRemove.Contains(hediffOption.hediff))
+                            {
+                                hediffResourcesToRemove.Remove(hediffOption.hediff);
+                            }
+                        }
+                    }
+                }
+            }
 
             foreach (var hediffDef in hediffResourcesToRemove)
             {
