@@ -107,45 +107,60 @@ namespace HediffResourceFramework
 	{
 		private static void Prefix(Pawn __instance, ref DamageInfo dinfo, out bool absorbed)
 		{
+			Log.Message("Patch_PreApplyDamage - Prefix - absorbed = false; - 1", true);
 			absorbed = false;
 
 			var effectOnImpactOptions = dinfo.Def.GetModExtension<EffectOnImpact>();
+			Log.Message("Patch_PreApplyDamage - Prefix - if (effectOnImpactOptions != null && __instance.health?.hediffSet != null) - 3", true);
 			if (effectOnImpactOptions != null && __instance.health?.hediffSet != null)
-            {
+			{
+				Log.Message("Patch_PreApplyDamage - Prefix - foreach (var resourceEffect in effectOnImpactOptions.resourceEffects) - 4", true);
 				foreach (var resourceEffect in effectOnImpactOptions.resourceEffects)
-                {
+				{
+					Log.Message("Patch_PreApplyDamage - Prefix - if (resourceEffect.removeTargetResource) - 5", true);
 					if (resourceEffect.removeTargetResource)
-                    {
+					{
+						Log.Message("Patch_PreApplyDamage - Prefix - var hediffToRemove = __instance.health.hediffSet.GetFirstHediffOfDef(resourceEffect.hediffDef); - 6", true);
 						var hediffToRemove = __instance.health.hediffSet.GetFirstHediffOfDef(resourceEffect.hediffDef);
+						Log.Message("Patch_PreApplyDamage - Prefix - if (hediffToRemove != null) - 7", true);
 						if (hediffToRemove != null)
-                        {
+						{
+							Log.Message("Patch_PreApplyDamage - Prefix - __instance.health.RemoveHediff(hediffToRemove); - 8", true);
 							__instance.health.RemoveHediff(hediffToRemove);
-                        }
-                    }
+						}
+					}
 					else
-                    {
+					{
+						Log.Message("Patch_PreApplyDamage - Prefix - var hediffResource = HediffResourceUtils.AdjustResourceAmount(__instance, resourceEffect.hediffDef, resourceEffect.adjustTargetResource, true); - 9", true);
 						var hediffResource = HediffResourceUtils.AdjustResourceAmount(__instance, resourceEffect.hediffDef, resourceEffect.adjustTargetResource, true);
+						Log.Message("Patch_PreApplyDamage - Prefix - if (resourceEffect.additionalHediffs != null) - 10", true);
 						if (resourceEffect.additionalHediffs != null)
-                        {
+						{
+							Log.Message("Patch_PreApplyDamage - Prefix - foreach (var additionalHediff in resourceEffect.additionalHediffs) - 11", true);
 							foreach (var additionalHediff in resourceEffect.additionalHediffs)
-                            {
+							{
+								Log.Message("Patch_PreApplyDamage - Prefix - if (additionalHediff is HediffResourceDef) - 12", true);
 								if (additionalHediff is HediffResourceDef)
-                                {
+								{
+									Log.Message("Patch_PreApplyDamage - Prefix - HediffResourceUtils.AdjustResourceAmount(__instance, resourceEffect.hediffDef, dinfo.Amount * resourceEffect.severityPerDamage, true); - 13", true);
 									HediffResourceUtils.AdjustResourceAmount(__instance, resourceEffect.hediffDef, dinfo.Amount * resourceEffect.severityPerDamage, true);
 								}
 								else
-                                {
+								{
+									Log.Message("Patch_PreApplyDamage - Prefix - HealthUtility.AdjustSeverity(__instance, additionalHediff, dinfo.Amount * resourceEffect.severityPerDamage); - 14", true);
 									HealthUtility.AdjustSeverity(__instance, additionalHediff, dinfo.Amount * resourceEffect.severityPerDamage);
-                                }
+								}
 							}
-                        }
+						}
+						Log.Message("Patch_PreApplyDamage - Prefix - if (resourceEffect.delayTargetOnDamage != IntRange.zero) - 15", true);
 						if (resourceEffect.delayTargetOnDamage != IntRange.zero)
-                        {
+						{
 							hediffResource.delayTicks = Find.TickManager.TicksGame + resourceEffect.delayTargetOnDamage.RandomInRange;
 						}
-                    }
-                }
-            }
+					}
+				}
+			}
+
 			var hediffResources = __instance?.health?.hediffSet?.hediffs?.OfType<HediffResource>().ToList();
 			if (hediffResources != null)
             {

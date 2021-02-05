@@ -116,7 +116,7 @@ namespace HediffResourceFramework
 	{
 		public static void Postfix(ref IEnumerable<Gizmo> __result, Pawn __instance)
 		{
-			if (__instance.Faction == Faction.OfPlayer)
+			if (__instance.Faction == Faction.OfPlayer && __result != null)
 			{
 				List<Gizmo> list = __result.ToList<Gizmo>();
 				var hediffResources = __instance.health?.hediffSet?.hediffs.OfType<HediffResource>();
