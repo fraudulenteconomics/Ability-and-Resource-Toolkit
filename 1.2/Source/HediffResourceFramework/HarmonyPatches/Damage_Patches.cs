@@ -131,11 +131,11 @@ namespace HediffResourceFramework
                             {
 								if (additionalHediff is HediffResourceDef)
                                 {
-									HediffResourceUtils.AdjustResourceAmount(__instance, resourceEffect.hediffDef, resourceEffect.adjustTargetResource, true);
+									HediffResourceUtils.AdjustResourceAmount(__instance, resourceEffect.hediffDef, dinfo.Amount * resourceEffect.severityPerDamage, true);
 								}
 								else
                                 {
-									HealthUtility.AdjustSeverity(__instance, additionalHediff, additionalHediff.maxSeverity);
+									HealthUtility.AdjustSeverity(__instance, additionalHediff, dinfo.Amount * resourceEffect.severityPerDamage);
                                 }
 							}
                         }

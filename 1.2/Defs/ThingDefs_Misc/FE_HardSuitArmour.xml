@@ -416,6 +416,7 @@
 						<additionalHediffs>
 							<li>Toxic_Scratch</li>
 						</additionalHediffs>
+						<severityPerDamage>1</severityPerDamage>
 						<adjustTargetResource>1</adjustTargetResource>
 						<removeTargetResource>false</removeTargetResource> <!-- default is false -->
 						<delayTargetOnDamage>100~100</delayTargetOnDamage> <!-- you can make it a random range, ie 100~10000 -->
