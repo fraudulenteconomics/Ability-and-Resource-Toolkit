@@ -157,6 +157,7 @@
 			<postDamageDelay>0</postDamageDelay>
 		</shieldProperties>
 		<showResourceBar>true</showResourceBar>
+		<maxResourceCapacity>100</maxResourceCapacity>
 		<lifetimeTicks>10000</lifetimeTicks>
 	</HediffResourceFramework.HediffResourceDef>
 	
