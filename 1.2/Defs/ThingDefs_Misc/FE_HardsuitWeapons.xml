@@ -108,19 +108,19 @@
 						<hediff>FE_RepulsorRifle</hediff>
 						<verbLabel>FE_RepulsorNormal</verbLabel>
 						<resourcePerUse>2</resourcePerUse>
-						<disableIfMissingHediff>true</disableIfMissingHediff>
+						<disableIfMissingHediff>false</disableIfMissingHediff>
 						<disableReason>Too much energy</disableReason>
 						<postUseDelay>1500</postUseDelay>
-						<disableAboveResource>99</disableAboveResource>
+						<minimumResourcePerUse>0</minimumResourcePerUse>
 					</li>
 					<li>
 						<hediff>FE_RepulsorRifle</hediff>
 						<verbLabel>FE_RepulsorBurst</verbLabel>
-						<resourcePerUse>-100</resourcePerUse>
-						<disableIfMissingHediff>true</disableIfMissingHediff>
+						<resourcePerUse>-20</resourcePerUse>
+						<disableIfMissingHediff>false</disableIfMissingHediff>
 						<disableReason>Not enough energy</disableReason>
 						<postUseDelay>0</postUseDelay>
-						<minimumResourcePerUse>100</minimumResourcePerUse>
+						<minimumResourcePerUse>20</minimumResourcePerUse>
 					</li>
 					<li>
 						<hediff>FE_MarksmanOptics</hediff>
