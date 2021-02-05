@@ -91,7 +91,7 @@ namespace HediffResourceFramework
         public override void ResourceTick()
         {
             base.ResourceTick();
-            if (Find.TickManager.TicksGame >= this.delayTicks && Apparel.Wearer != null)
+            if (Apparel.Wearer != null)
             {
                 if (Apparel.Wearer.IsHashIntervalTick(60))
                 {
@@ -99,17 +99,21 @@ namespace HediffResourceFramework
                     {
                         foreach (var option in Props.hediffOptions)
                         {
-                            float num = option.resourcePerSecond;
-                            num *= 0.00333333341f;
-                            if (option.qualityScalesResourcePerSecond && Apparel.TryGetQuality(out QualityCategory qc))
+                            var hediffResource = Apparel.Wearer.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
+                            if (hediffResource != null && Find.TickManager.TicksGame > hediffResource.delayTicks)
                             {
-                                num *= HediffResourceUtils.GetQualityMultiplier(qc);
+
+                                float num = option.resourcePerSecond;
+                                num *= 0.00333333341f;
+                                if (option.qualityScalesResourcePerSecond && Apparel.TryGetQuality(out QualityCategory qc))
+                                {
+                                    num *= HediffResourceUtils.GetQualityMultiplier(qc);
+                                }
+                                num /= 3.33f;
+                                HediffResourceUtils.AdjustResourceAmount(Apparel.Wearer, option.hediff, num, option.addHediffIfMissing);
                             }
-                            num /= 3.33f;
-                            HediffResourceUtils.AdjustResourceAmount(Apparel.Wearer, option.hediff, num, option.addHediffIfMissing);
                         }
                     }
-
                 }
             }
         }

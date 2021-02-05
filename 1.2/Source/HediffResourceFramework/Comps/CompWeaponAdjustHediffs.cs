@@ -105,7 +105,7 @@ namespace HediffResourceFramework
         public override void ResourceTick()
         {
             base.ResourceTick();
-            if (Find.TickManager.TicksGame >= this.delayTicks && this.parent is ThingWithComps equipment && CompEquippable.PrimaryVerb.CasterPawn != null)
+            if (this.parent is ThingWithComps equipment && CompEquippable.PrimaryVerb.CasterPawn != null)
             {
                 if (CompEquippable.PrimaryVerb.CasterPawn.IsHashIntervalTick(60))
                 {
@@ -113,14 +113,19 @@ namespace HediffResourceFramework
                     {
                         foreach (var option in Props.hediffOptions)
                         {
-                            float num = option.resourcePerSecond;
-                            num *= 0.00333333341f;
-                            if (option.qualityScalesResourcePerSecond && equipment.TryGetQuality(out QualityCategory qc))
+                            var hediffResource = CompEquippable.PrimaryVerb.CasterPawn.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
+                            if (hediffResource != null && Find.TickManager.TicksGame > hediffResource.delayTicks)
                             {
-                                num *= HediffResourceUtils.GetQualityMultiplier(qc);
+                                float num = option.resourcePerSecond;
+                                num *= 0.00333333341f;
+                                if (option.qualityScalesResourcePerSecond && equipment.TryGetQuality(out QualityCategory qc))
+                                {
+                                    num *= HediffResourceUtils.GetQualityMultiplier(qc);
+                                }
+                                num /= 3.33f;
+                                HediffResourceUtils.AdjustResourceAmount(CompEquippable.PrimaryVerb.CasterPawn, option.hediff, num, option.addHediffIfMissing);
                             }
-                            num /= 3.33f;
-                            HediffResourceUtils.AdjustResourceAmount(CompEquippable.PrimaryVerb.CasterPawn, option.hediff, num, option.addHediffIfMissing);
+
                         }
                     }
                 }

@@ -228,9 +228,17 @@ namespace HediffResourceFramework
 					foreach (var apparel in apparels)
 					{
 						var hediffComp = apparel.GetComp<CompAdjustHediffs>();
-						if (hediffComp != null)
+						if (hediffComp != null && hediffComp.Props.hediffOptions != null)
                         {
-							hediffComp.delayTicks += delayTicks * hediffComp.Props.postDamageDelayMultiplier;
+							var newDelayTicks = (int)(delayTicks * hediffComp.Props.postDamageDelayMultiplier);
+							foreach (var hediffOption in hediffComp.Props.hediffOptions)
+                            {
+								var hediffResource = pawn.health.hediffSet.GetFirstHediffOfDef(hediffOption.hediff) as HediffResource;
+								if (hediffResource != null && hediffResource.CanHaveDelay(newDelayTicks))
+                                {
+									hediffResource.AddDelay(newDelayTicks);
+                                }
+                            }
 						}
 					}
 				}
@@ -241,9 +249,17 @@ namespace HediffResourceFramework
 					foreach (var equipment in equipments)
 					{
 						var hediffComp = equipment.GetComp<CompAdjustHediffs>();
-						if (hediffComp != null)
+						if (hediffComp != null && hediffComp.Props.hediffOptions != null)
 						{
-							hediffComp.delayTicks += delayTicks * hediffComp.Props.postDamageDelayMultiplier;
+							var newDelayTicks = (int)(delayTicks * hediffComp.Props.postDamageDelayMultiplier);
+							foreach (var hediffOption in hediffComp.Props.hediffOptions)
+							{
+								var hediffResource = pawn.health.hediffSet.GetFirstHediffOfDef(hediffOption.hediff) as HediffResource;
+								if (hediffResource != null && hediffResource.CanHaveDelay(newDelayTicks))
+								{
+									hediffResource.AddDelay(newDelayTicks);
+								}
+							}
 						}
 					}
 				}

@@ -49,6 +49,24 @@ namespace HediffResourceFramework
             }
         }
 
+        public void AddDelay(int newDelayTicks)
+        {
+            this.delayTicks = Find.TickManager.TicksGame + newDelayTicks;
+        }
+        public bool CanHaveDelay(int newDelayTicks)
+        {
+            if (newDelayTicks > Find.TickManager.TicksGame - delayTicks)
+            {
+                Log.Message($"{this} can have new delay ticks {newDelayTicks}");
+                return true;
+            }
+            else
+            {
+                Log.Message($"{this} can't have new delay ticks {newDelayTicks}, cur delay ticks: {Find.TickManager.TicksGame - delayTicks}");
+                return false;
+            }
+        }
+
         public float ResourceCapacity
         {
             get

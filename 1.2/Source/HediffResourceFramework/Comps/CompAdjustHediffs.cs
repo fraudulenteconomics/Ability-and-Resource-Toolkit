@@ -71,12 +71,10 @@ namespace HediffResourceFramework
                 return (CompProperties_AdjustHediffs)this.props;
             }
         }
-        public float delayTicks;
         public Dictionary<Verb, VerbDisable> postUseDelayTicks;
         public override void PostExposeData()
         {
             base.PostExposeData();
-            Scribe_Values.Look(ref delayTicks, "delayTicks", 0);
             Scribe_Collections.Look(ref postUseDelayTicks, "postUseDelayTicks", LookMode.Reference, LookMode.Deep, ref verbKeys, ref verbDisablesValues);
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
