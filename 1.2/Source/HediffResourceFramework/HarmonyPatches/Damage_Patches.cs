@@ -125,6 +125,20 @@ namespace HediffResourceFramework
 					else
                     {
 						var hediffResource = HediffResourceUtils.AdjustResourceAmount(__instance, resourceEffect.hediffDef, resourceEffect.adjustTargetResource, true);
+						if (resourceEffect.additionalHediffs != null)
+                        {
+							foreach (var additionalHediff in resourceEffect.additionalHediffs)
+                            {
+								if (additionalHediff is HediffResourceDef)
+                                {
+									HediffResourceUtils.AdjustResourceAmount(__instance, resourceEffect.hediffDef, resourceEffect.adjustTargetResource, true);
+								}
+								else
+                                {
+									HealthUtility.AdjustSeverity(__instance, additionalHediff, additionalHediff.maxSeverity);
+                                }
+							}
+                        }
 						if (resourceEffect.delayTargetOnDamage != IntRange.zero)
                         {
 							hediffResource.delayTicks = Find.TickManager.TicksGame + resourceEffect.delayTargetOnDamage.RandomInRange;
