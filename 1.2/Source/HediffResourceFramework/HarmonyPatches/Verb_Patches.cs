@@ -25,7 +25,7 @@ namespace HediffResourceFramework
 			}
 		}
 	}
-
+    
 	[HarmonyPatch(typeof(Verb), "Available")]
 	public static class Patch_Available
 	{
@@ -34,8 +34,8 @@ namespace HediffResourceFramework
 			if (__result)
 			{
 				__result = HediffResourceUtils.IsUsableBy(__instance, out string disableReason);
-			}
-		}
+            }
+        }
 	}
 
 	[HarmonyPatch(typeof(Verb), "TryCastNextBurstShot")]

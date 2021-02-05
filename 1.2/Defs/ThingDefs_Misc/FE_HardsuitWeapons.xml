@@ -263,7 +263,7 @@
 					<li>
 						<hediff>FE_MarksmanOptics</hediff>
 						<verbIndex>0</verbIndex>
-						<resourcePerUse>1</resourcePerUse>
+						<resourcePerUse>0</resourcePerUse>
 						<disableIfMissingHediff>false</disableIfMissingHediff>
 						<minimumResourcePerUse>0</minimumResourcePerUse>
 						<postUseDelay>480</postUseDelay>

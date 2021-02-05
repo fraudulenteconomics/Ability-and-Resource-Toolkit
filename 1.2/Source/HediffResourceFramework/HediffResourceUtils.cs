@@ -224,30 +224,38 @@ namespace HediffResourceFramework
 			{
 				var hediffResources = verb.CasterPawn.health.hediffSet.hediffs.OfType<HediffResource>().ToHashSet();
 				foreach (var hediff in hediffResources)
-                {
+				{
 					if (hediff.def.shieldProperties?.cannotUseVerbType != null)
-                    {
+					{
+						Log.Message(" - IsUsableBy - if (hediff.def.shieldProperties.cannotUseVerbType == VerbType.Both) - 5", true);
 						if (hediff.def.shieldProperties.cannotUseVerbType == VerbType.Both)
-                        {
+						{
+							Log.Message(" - IsUsableBy - disableReason = \"HRF.ShieldPreventAllAttack\".Translate(); - 6", true);
 							disableReason = "HRF.ShieldPreventAllAttack".Translate();
+							Log.Message(" - IsUsableBy - return false; - 7", true);
 							return false;
 						}
 						else if (hediff.def.shieldProperties.cannotUseVerbType == VerbType.None)
 						{
+							Log.Message(" - IsUsableBy - continue; - 9", true);
 							continue;
 						}
 						else if (verb.IsMeleeAttack && hediff.def.shieldProperties.cannotUseVerbType == VerbType.Melee)
-                        {
+						{
+							Log.Message(" - IsUsableBy - disableReason = \"HRF.ShieldPreventMeleeAttack\".Translate(); - 11", true);
 							disableReason = "HRF.ShieldPreventMeleeAttack".Translate();
+							Log.Message(" - IsUsableBy - return false; - 12", true);
 							return false;
-                        }
+						}
 						else if (hediff.def.shieldProperties.cannotUseVerbType == VerbType.Range)
-                        {
+						{
+							Log.Message(" - IsUsableBy - disableReason = \"HRF.ShieldPreventRangeAttack\".Translate(); - 14", true);
 							disableReason = "HRF.ShieldPreventRangeAttack".Translate();
+							Log.Message(" - IsUsableBy - return false; - 15", true);
 							return false;
 						}
 					}
-                }
+				}
 				var options = verb.EquipmentSource.def.GetModExtension<HediffAdjustOptions>();
 				if (options != null)
 				{
@@ -258,10 +266,14 @@ namespace HediffResourceFramework
 							var resourceHediff = verb.CasterPawn.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
 							if (option.disableIfMissingHediff)
 							{
+								Log.Message(" - IsUsableBy - bool manaIsEmptyOrNull = resourceHediff != null ? resourceHediff.ResourceAmount <= 0 : true; - 22", true);
 								bool manaIsEmptyOrNull = resourceHediff != null ? resourceHediff.ResourceAmount <= 0 : true;
+								Log.Message(" - IsUsableBy - if (manaIsEmptyOrNull) - 23", true);
 								if (manaIsEmptyOrNull)
 								{
+									Log.Message(" - IsUsableBy - disableReason = option.disableReason; - 24", true);
 									disableReason = option.disableReason;
+									Log.Message(" - IsUsableBy - return false; - 25", true);
 									return false;
 								}
 							}
@@ -270,23 +282,30 @@ namespace HediffResourceFramework
 							{
 								if (resourceHediff != null && resourceHediff.ResourceAmount < option.minimumResourcePerUse)
 								{
+									Log.Message(" - IsUsableBy - disableReason = option.disableReason; - 28", true);
 									disableReason = option.disableReason;
+									Log.Message(" - IsUsableBy - return false; - 29", true);
 									return false;
 								}
 							}
 							if (option.disableAboveResource != -1f)
-                            {
+							{
+								Log.Message(" - IsUsableBy - if (resourceHediff != null && resourceHediff.ResourceAmount > option.disableAboveResource) - 31", true);
 								if (resourceHediff != null && resourceHediff.ResourceAmount > option.disableAboveResource)
 								{
+									Log.Message(" - IsUsableBy - disableReason = option.disableReason; - 32", true);
 									disableReason = option.disableReason;
+									Log.Message(" - IsUsableBy - return false; - 33", true);
 									return false;
 								}
 							}
+
 							if (option.resourcePerUse != 0f)
 							{
 								if (resourceHediff != null)
-                                {
+								{
 									var num = resourceHediff.ResourceAmount - option.resourcePerUse;
+									Log.Message(option + " - " + resourceHediff.ResourceAmount + " - " + option.resourcePerUse);
 									if (num < 0)
 									{
 										disableReason = option.disableReason;

@@ -410,10 +410,12 @@
 		<combatLogRules>Damage_Smoke</combatLogRules>
 		<modExtensions>
 			<li Class="HediffResourceFramework.EffectOnImpact">
+				<li>
 				<applyHediffToTarget>FE_ReactivePlating</applyHediffToTarget>
 				<adjustTargetResource>1</adjustTargetResource>
 				<removeTargetResource>false</removeTargetResource> <!-- default ifs false -->
 				<delayTargetOnDamage>100~100</delayTargetOnDamage> <!-- you can make it a random range, ie 100~10000 -->
+				</li>
 			</li>
 		</modExtensions>
 	</DamageDef>
