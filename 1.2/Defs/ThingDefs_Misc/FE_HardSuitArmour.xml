@@ -5,9 +5,9 @@
 		<label>fusion hardsuit</label>
 		<description>An advanced suit of powered armor with an onboard fusion reactor. Myriad devices and tools can be powered by being in proximity to this reactor, allowing for varied, task-specific loadouts.</description>
 		<apparel>
-		  <tags>
-			<li>SpacerMilitary</li>
-		  </tags>
+			<tags>
+				<li>SpacerMilitary</li>
+			</tags>
 		</apparel>
 		<tickerType>Normal</tickerType>
 		<comps>
@@ -410,12 +410,15 @@
 		<combatLogRules>Damage_Smoke</combatLogRules>
 		<modExtensions>
 			<li Class="HediffResourceFramework.EffectOnImpact">
-				<li>
-				<applyHediffToTarget>FE_ReactivePlating</applyHediffToTarget>
-				<adjustTargetResource>1</adjustTargetResource>
-				<removeTargetResource>false</removeTargetResource> <!-- default ifs false -->
-				<delayTargetOnDamage>100~100</delayTargetOnDamage> <!-- you can make it a random range, ie 100~10000 -->
-				</li>
+				<resourceEffects>
+					<li>
+						<applyHediffToTarget>FE_ReactivePlating</applyHediffToTarget>
+						<adjustTargetResource>1</adjustTargetResource>
+						<removeTargetResource>false</removeTargetResource> <!-- default is false -->
+						<delayTargetOnDamage>100~100</delayTargetOnDamage> <!-- you can make it a random range, ie 100~10000 -->
+					</li>
+				</resourceEffects>
+
 			</li>
 		</modExtensions>
 	</DamageDef>

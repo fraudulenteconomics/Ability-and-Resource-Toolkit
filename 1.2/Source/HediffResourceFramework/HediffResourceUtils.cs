@@ -300,7 +300,7 @@ namespace HediffResourceFramework
 								}
 							}
 
-							if (option.resourcePerUse != 0f)
+							if (option.resourcePerUse < 0)
 							{
 								if (resourceHediff != null)
 								{
