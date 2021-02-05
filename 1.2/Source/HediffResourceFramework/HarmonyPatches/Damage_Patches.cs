@@ -152,28 +152,33 @@ namespace HediffResourceFramework
                     }
                 }
             }
-
-			foreach (var hediff in __instance?.health?.hediffSet?.hediffs?.OfType<HediffResource>())
-			{
-				if (dinfo.Amount > 0 && hediff.def.shieldProperties != null)
-				{
-					var shieldProps = hediff.def.shieldProperties;
-					if (shieldProps.absorbRangeDamage && (dinfo.Weapon?.IsRangedWeapon ?? false))
+			var hediffResources = __instance?.health?.hediffSet?.hediffs?.OfType<HediffResource>().ToList();
+			if (hediffResources != null)
+            {
+				for (int num = hediffResources.Count - 1; num >= 0; num--)
+                {
+					var hediff = hediffResources[num];
+					if (dinfo.Amount > 0 && hediff.def.shieldProperties != null)
 					{
-						ProcessDamage(__instance, ref dinfo, hediff, shieldProps);
+						var shieldProps = hediff.def.shieldProperties;
+						if (shieldProps.absorbRangeDamage && (dinfo.Weapon?.IsRangedWeapon ?? false))
+						{
+							ProcessDamage(__instance, ref dinfo, hediff, shieldProps);
+						}
+						else if (shieldProps.absorbMeleeDamage && (dinfo.Weapon is null || dinfo.Weapon.IsMeleeWeapon))
+						{
+							ProcessDamage(__instance, ref dinfo, hediff, shieldProps);
+						}
+						if (dinfo.Amount <= 0)
+						{
+							Log.Message(" - Prefix - absorbed = true; - 10", true);
+							absorbed = true;
+						}
+						hediff.AbsorbedDamage(dinfo);
 					}
-					else if (shieldProps.absorbMeleeDamage && (dinfo.Weapon is null || dinfo.Weapon.IsMeleeWeapon))
-					{
-						ProcessDamage(__instance, ref dinfo, hediff, shieldProps);
-					}
-					if (dinfo.Amount <= 0)
-					{
-						Log.Message(" - Prefix - absorbed = true; - 10", true);
-						absorbed = true;
-					}
-					hediff.AbsorbedDamage(dinfo);
 				}
 			}
+
 		}
 
 		private static void ProcessDamage(Pawn pawn, ref DamageInfo dinfo, HediffResource hediff, ShieldProperties shieldProps)

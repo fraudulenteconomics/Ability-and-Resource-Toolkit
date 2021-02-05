@@ -91,6 +91,7 @@ namespace HediffResourceFramework
         public override void ResourceTick()
         {
             base.ResourceTick();
+            Log.Message(" - Resource - if (Apparel.Wearer != null) - 2", true);
             if (Apparel.Wearer != null)
             {
                 if (Apparel.Wearer.IsHashIntervalTick(60))
@@ -100,9 +101,12 @@ namespace HediffResourceFramework
                         foreach (var option in Props.hediffOptions)
                         {
                             var hediffResource = Apparel.Wearer.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
-                            if (hediffResource != null && Find.TickManager.TicksGame > hediffResource.delayTicks)
+                            if (hediffResource != null && Find.TickManager.TicksGame < hediffResource.delayTicks)
                             {
-
+                                continue;
+                            }
+                            else
+                            {
                                 float num = option.resourcePerSecond;
                                 num *= 0.00333333341f;
                                 if (option.qualityScalesResourcePerSecond && Apparel.TryGetQuality(out QualityCategory qc))
@@ -118,5 +122,4 @@ namespace HediffResourceFramework
             }
         }
     }
-
 }
