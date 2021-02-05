@@ -412,7 +412,7 @@
 			<li Class="HediffResourceFramework.EffectOnImpact">
 				<resourceEffects>
 					<li>
-						<applyHediffToTarget>FE_ReactivePlating</applyHediffToTarget>
+						<hediffDef>FE_ReactivePlating</hediffDef>
 						<adjustTargetResource>1</adjustTargetResource>
 						<removeTargetResource>false</removeTargetResource> <!-- default is false -->
 						<delayTargetOnDamage>100~100</delayTargetOnDamage> <!-- you can make it a random range, ie 100~10000 -->
