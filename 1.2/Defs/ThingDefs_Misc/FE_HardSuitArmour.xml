@@ -289,6 +289,188 @@
 	</ThingDef>
 
 	<ThingDef ParentName="FE_ModuleBase">
+		<defName>FE_DeployableTurret</defName>
+		<label>deployable turret module</label>
+		<description>Composed of a complex system of micro-constructor mechanites, this apparatus allows a temporary micro turret to be deployed at the target location. This uses an extremely high amount of energy and requires the fusion reactor to essentially reprime itself before being used again.</description>
+		<graphicData>
+			<texPath>Things/Item/Health/HealthItem</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+		</graphicData>
+		<apparel>
+			<bodyPartGroups>
+				<li>FE_Back_Module</li>
+			</bodyPartGroups>
+			<layers>
+				<li>Middle</li>
+			</layers>
+			<tags>
+				<li>PoweredArmor</li>
+			</tags>
+			<defaultOutfitTags>
+				<li>Soldier</li>
+			</defaultOutfitTags>
+		</apparel>
+		<costList>
+			<ComponentSpacer>2</ComponentSpacer>
+			<Plasteel>50</Plasteel>
+			<Uranium>20</Uranium>
+		</costList>
+		<verbs>
+			<li>
+				<verbClass>Verb_Spawn</verbClass>
+				<label>Deploy Turret</label>
+				<hasStandardCommand>true</hasStandardCommand>
+				<warmupTime>2</warmupTime>
+				<defaultCooldownTime>4</defaultCooldownTime>
+				<ai_AvoidFriendlyFireRadius>10</ai_AvoidFriendlyFireRadius>
+				<spawnDef>FE_MicroTurret</spawnDef>
+				<range>14.9</range>
+				<burstShotCount>1</burstShotCount>
+				<soundAiming>OrbitalTargeter_Aiming</soundAiming>
+				<soundCast>OrbitalTargeter_Fire</soundCast>
+				<onlyManualCast>true</onlyManualCast>
+				<targetParams>
+					<canTargetLocations>true</canTargetLocations>
+				</targetParams>
+			</li>
+		</verbs>
+		<comps>
+			<li Class="MVCF.Comps.CompProperties_VerbGiver">
+				<verbProps>
+					<li>
+						<label>Deploy Turret</label>
+						<description>Deploys a temporary autonomous turret.</description>
+					</li>
+				</verbProps>
+			</li>
+			<li Class="HediffResourceFramework.CompProperties_ApparelAdjustHediffs">
+				<hediffOptions>
+					<li>
+						<hediff>FE_FusionReactor</hediff>
+						<resourcePerSecond>0</resourcePerSecond>
+						<qualityScalesResourcePerSecond>false</qualityScalesResourcePerSecond>
+						<addHediffIfMissing>false</addHediffIfMissing>
+						<maxResourceCapacityOffset>0</maxResourceCapacityOffset>
+						<qualityScalesCapacityOffset>false</qualityScalesCapacityOffset>
+						<disallowEquipIfHediffMissing>true</disallowEquipIfHediffMissing>
+						<dropIfHediffMissing>true</dropIfHediffMissing>
+						<blackListHediffsPreventEquipping>
+						</blackListHediffsPreventEquipping>
+						<dropWeaponOrApparelIfBlacklistHediff>
+						</dropWeaponOrApparelIfBlacklistHediff>
+					</li>
+				</hediffOptions>
+			</li>
+		</comps>
+		<modExtensions>
+			<li Class="HediffResourceFramework.HediffAdjustOptions">
+				<hediffOptions>
+					<li>
+						<hediff>FE_FusionReactor</hediff>
+						<verbIndex>0</verbIndex>
+						<resourcePerUse>-50</resourcePerUse>
+						<disableIfMissingHediff>false</disableIfMissingHediff>
+						<disableReason>Insufficient energy.</disableReason>
+						<minimumResourcePerUse>50</minimumResourcePerUse>
+						<postUseDelay>300</postUseDelay>
+					</li>
+				</hediffOptions>
+			</li>
+		</modExtensions>
+	</ThingDef>
+
+	<ThingDef ParentName="BuildingBase">
+		<defName>FE_MicroTurret</defName>
+		<label>micro-turret</label>
+		<description>A portable automatic turret. Requires steel to refurbish its barrel after heavy use. May explode when damaged. Its dumb AI brain can't be directly controlled, so beware of friendly fire.</description>
+		<thingClass>Building_TurretGun</thingClass>
+		<graphicData>
+			<texPath>Things/Building/Security/TurretMini_Base</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<drawSize>(3,3)</drawSize>
+			<damageData>
+				<rect>(0.2,0.2,0.6,0.6)</rect>
+			</damageData>
+			<shadowData>
+				<volume>(0.27,0.25,0.27)</volume>
+				<offset>(0,0,0)</offset>
+			</shadowData>
+		</graphicData>
+		<uiIconPath>Things/Building/Security/TurretMini_MenuIcon</uiIconPath>
+		<uiIconScale>0.90</uiIconScale>
+		<minifiedDef>MinifiedThing</minifiedDef>
+		<altitudeLayer>Building</altitudeLayer>
+		<stealable>false</stealable>
+		<rotatable>false</rotatable>
+		<thingCategories>
+			<li>BuildingsSecurity</li>
+		</thingCategories>
+		<statBases>
+			<MaxHitPoints>100</MaxHitPoints>
+			<Flammability>0.7</Flammability>
+			<WorkToBuild>1800</WorkToBuild>
+			<Mass>8</Mass>
+			<Beauty>-20</Beauty>
+			<ShootingAccuracyTurret>0.96</ShootingAccuracyTurret>
+		</statBases>
+		<tickerType>Normal</tickerType>
+		<comps>
+			<li Class="CompProperties_Explosive">
+				<wickTicks>240</wickTicks>
+				<explosiveRadius>3.9</explosiveRadius>
+				<explosiveDamageType>Bomb</explosiveDamageType>
+				<chanceNeverExplodeFromDamage>0.5</chanceNeverExplodeFromDamage>
+			</li>
+			<li Class="CompProperties_Refuelable">
+				<fuelLabel>Shots until barrel change</fuelLabel>
+				<fuelGizmoLabel>Barrel durability</fuelGizmoLabel>
+				<outOfFuelMessage>Cannot shoot: Needs new barrel</outOfFuelMessage>
+				<fuelFilter>
+					<thingDefs>
+						<li>Steel</li>
+					</thingDefs>
+				</fuelFilter>
+				<fuelCapacity>60</fuelCapacity>
+				<!-- 30 bursts -->
+				<fuelMultiplier>0.75</fuelMultiplier>
+				<!-- 1.333 steel per burst, 80 per full rearm -->
+				<initialFuelPercent>1</initialFuelPercent>
+				<autoRefuelPercent>0.1</autoRefuelPercent>
+				<showFuelGizmo>true</showFuelGizmo>
+				<minimumFueledThreshold>1</minimumFueledThreshold>
+				<factorByDifficulty>true</factorByDifficulty>
+				<consumeFuelOnlyWhenUsed>true</consumeFuelOnlyWhenUsed>
+				<fuelIconPath>UI/Overlays/Barrel</fuelIconPath>
+			</li>
+			<li Class="CompProperties_Lifespan">
+				<lifespanTicks>3000</lifespanTicks>
+			  </li>
+		</comps>
+		<passability>PassThroughOnly</passability>
+		<pathCost>50</pathCost>
+		<fillPercent>0.4</fillPercent>
+		<hasTooltip>true</hasTooltip>
+		<costStuffCount>30</costStuffCount>
+		<terrainAffordanceNeeded>Light</terrainAffordanceNeeded>
+		<designationCategory>Security</designationCategory>
+		<building>
+			<combatPower>45</combatPower>
+			<!-- same as a scavenger -->
+			<ai_combatDangerous>true</ai_combatDangerous>
+			<turretGunDef>Gun_MiniTurret</turretGunDef>
+			<turretBurstCooldownTime>4.8</turretBurstCooldownTime>
+		</building>
+		<placeWorkers>
+			<li>PlaceWorker_TurretTop</li>
+			<li>PlaceWorker_ShowTurretRadius</li>
+		</placeWorkers>
+		<designationHotKey>Misc2</designationHotKey>
+		<researchPrerequisites>
+			<li>GunTurrets</li>
+		</researchPrerequisites>
+	</ThingDef>
+
+	<ThingDef ParentName="FE_ModuleBase">
 		<defName>FE_StimInjector</defName>
 		<label>stim injector module</label>
 		<description>Injects a potent temporary combat stim into a nearby target, vastly increasing their combat potential for a short duration. Unlike most other combat enhancements, this one does not inflict any withdrawl symptoms upon the target after the effect fades due to the efficacy of the mechanite injectors.</description>
@@ -418,8 +600,10 @@
 						</additionalHediffs>
 						<severityPerDamage>1</severityPerDamage>
 						<adjustTargetResource>1</adjustTargetResource>
-						<removeTargetResource>false</removeTargetResource> <!-- default is false -->
-						<delayTargetOnDamage>100~100</delayTargetOnDamage> <!-- you can make it a random range, ie 100~10000 -->
+						<removeTargetResource>false</removeTargetResource>
+						<!-- default is false -->
+						<delayTargetOnDamage>100~100</delayTargetOnDamage>
+						<!-- you can make it a random range, ie 100~10000 -->
 					</li>
 				</resourceEffects>
 

@@ -24,4 +24,10 @@
     <listOrder>204</listOrder> 
   </BodyPartGroupDef>
   
+  <BodyPartGroupDef>
+    <defName>FE_Back_Module</defName>
+    <label>back module</label>
+    <listOrder>205</listOrder> 
+  </BodyPartGroupDef>
+  
 </Defs>
