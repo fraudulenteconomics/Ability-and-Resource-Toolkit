@@ -527,6 +527,7 @@
 					<li>
 						<label>stim injector</label>
 						<description>Injects the target with a stim that increases their combat potential substantially for a short duration.</description>
+						<canBeToggled>true</canBeToggled>
 					</li>
 				</verbProps>
 			</li>
@@ -556,7 +557,7 @@
 						<hediff>FE_FusionReactor</hediff>
 						<verbIndex>0</verbIndex>
 						<resourcePerUse>-20</resourcePerUse>
-						<disableIfMissingHediff>false</disableIfMissingHediff>
+						<disableIfMissingHediff>true</disableIfMissingHediff>
 						<disableReason>Insufficient energy.</disableReason>
 						<minimumResourcePerUse>20</minimumResourcePerUse>
 						<postUseDelay>180</postUseDelay>
