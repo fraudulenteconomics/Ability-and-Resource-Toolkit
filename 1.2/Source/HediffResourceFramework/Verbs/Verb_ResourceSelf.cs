@@ -16,8 +16,15 @@ namespace HediffResourceFramework
             var result = base.TryCastShot();
             if (result && this.CasterPawn != null)
             {
-                Log.Message("Giving: " + this.CasterPawn + " - " + verbProps.hediffDefResource + " - " + verbProps.resourceAmount);
-                HediffResourceUtils.AdjustResourceAmount(this.CasterPawn, verbProps.hediffDefResource, verbProps.resourceAmount, verbProps.addHediffIfMissing);
+                if (verbProps.hediffDefResource != null)
+                {
+                    Log.Message("Giving: " + this.CasterPawn + " - " + verbProps.hediffDefResource + " - " + verbProps.resourceAmount);
+                    HediffResourceUtils.AdjustResourceAmount(this.CasterPawn, verbProps.hediffDefResource, verbProps.resourceAmount, verbProps.addHediffIfMissing);
+                }
+                else if (verbProps.hediffDef != null)
+                {
+                    HealthUtility.AdjustSeverity(this.CasterPawn, verbProps.hediffDef, verbProps.resourceAmount);
+                }
             }
             return result;
         }

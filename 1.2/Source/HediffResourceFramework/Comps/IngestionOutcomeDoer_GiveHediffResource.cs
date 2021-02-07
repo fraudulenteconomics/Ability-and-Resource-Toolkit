@@ -20,6 +20,7 @@ namespace HediffResourceFramework
         public HediffDef blacklistHediffPoison;
         public string blacklistHediffPoisonMessage;
         public string cannotDrinkReason;
+        public bool addHediffIfMissing;
 
         protected override void DoIngestionOutcomeSpecial(Pawn pawn, Thing ingested)
         {
@@ -47,18 +48,21 @@ namespace HediffResourceFramework
                 }
             }
             HediffResource hediff = pawn.health.hediffSet.GetFirstHediffOfDef(hediffDef) as HediffResource;
-            if (hediff is null)
+            if (hediff is null && addHediffIfMissing)
             {
                 hediff = HediffMaker.MakeHediff(hediffDef, pawn) as HediffResource;
                 pawn.health.AddHediff(hediff);
             }
-            if (resourceAdjust != 0f)
+            if (hediff != null)
             {
-                hediff.ResourceAmount += resourceAdjust;
-            }
-            if (resourcePercent != -1f)
-            {
-                hediff.ResourceAmount += hediff.ResourceCapacity * resourcePercent;
+                if (resourceAdjust != 0f)
+                {
+                    hediff.ResourceAmount += resourceAdjust;
+                }
+                if (resourcePercent != -1f)
+                {
+                    hediff.ResourceAmount += hediff.ResourceCapacity * resourcePercent;
+                }
             }
         }
 

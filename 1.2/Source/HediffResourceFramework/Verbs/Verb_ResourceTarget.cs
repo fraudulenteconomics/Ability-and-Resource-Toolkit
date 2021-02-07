@@ -11,6 +11,7 @@ namespace HediffResourceFramework
     public class VerbResourceProps : VerbProperties
     {
         public HediffResourceDef hediffDefResource;
+        public HediffDef hediffDef;
         public float resourceAmount;
         public bool addHediffIfMissing;
     }
@@ -22,8 +23,15 @@ namespace HediffResourceFramework
             var result = base.TryCastShot();
             if (result && this.currentTarget.Thing is Pawn target)
             {
-                Log.Message("Giving: " + target + " - " + verbProps.hediffDefResource + " - " + verbProps.resourceAmount);
-                HediffResourceUtils.AdjustResourceAmount(target, verbProps.hediffDefResource, verbProps.resourceAmount, verbProps.addHediffIfMissing);
+                if (verbProps.hediffDefResource != null)
+                {
+                    Log.Message("Giving: " + target + " - " + verbProps.hediffDefResource + " - " + verbProps.resourceAmount);
+                    HediffResourceUtils.AdjustResourceAmount(target, verbProps.hediffDefResource, verbProps.resourceAmount, verbProps.addHediffIfMissing);
+                }
+                else if (verbProps.hediffDef != null)
+                {
+                    HealthUtility.AdjustSeverity(target, verbProps.hediffDef, verbProps.resourceAmount);
+                }
             }
             return result;
         }

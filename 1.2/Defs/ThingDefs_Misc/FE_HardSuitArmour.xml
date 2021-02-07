@@ -497,11 +497,8 @@
 			<Uranium>20</Uranium>
 		</costList>
 		<verbs>
-			<li Class="HediffResourceFramework.VerbResourceProps">
-				<hediffDefResource>FE_FusionReactor</hediffDefResource>
-				<resourceAmount>100</resourceAmount>
-				<addHediffIfMissing>true</addHediffIfMissing>
-				<verbClass>HediffResourceFramework.Verb_ResourceTarget</verbClass>
+			<li>
+				<verbClass>Verb_Shoot</verbClass>
 				<label>stim injector</label>
 				<hasStandardCommand>true</hasStandardCommand>
 				<defaultProjectile>FE_StimInjectorBullet</defaultProjectile>
@@ -569,21 +566,20 @@
 		</modExtensions>
 	</ThingDef>
 
-	<ThingDef ParentName="BaseBullet">
-		<defName>FE_StimInjectorBullet</defName>
+  <ThingDef ParentName="BaseBullet">
+    <defName>FE_StimInjectorBullet</defName>
 		<label>combat stim bullet</label>
-		<projectile>
-			<damageDef>FE_StimInjectorDamageDef</damageDef>
-			<damageAmountBase>10</damageAmountBase>
-			<stoppingPower>0</stoppingPower>
-			<speed>80</speed>
-		</projectile>
 		<graphicData>
 			<texPath>Things/Projectile/Bullet_small</texPath>
 			<graphicClass>Graphic_Single</graphicClass>
 		</graphicData>
-	</ThingDef>
-
+    <projectile>
+      <damageDef>Bullet</damageDef>
+      <damageAmountBase>10</damageAmountBase>
+      <speed>55</speed>
+    </projectile>
+  </ThingDef>
+  
 	<DamageDef>
 		<defName>FE_StimInjectorDamageDef</defName>
 		<label>stim effect</label>
