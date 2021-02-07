@@ -183,6 +183,7 @@ namespace HediffResourceFramework
 			}
 			return null;
 		}
+
 		public static float GetQualityMultiplier(QualityCategory qualityCategory)
 		{
 			switch (qualityCategory)

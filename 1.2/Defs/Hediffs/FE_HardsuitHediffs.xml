@@ -15,6 +15,7 @@
 		<letterType>PositiveEvent</letterType>
 		<letterTitleKey>FE.FusionReactorGainedTitle</letterTitleKey>
 		<letterMessageKey>FE.FusionReactorGainedMessage</letterMessageKey>
+		<maxResourceCapacity>100</maxResourceCapacity>
 	</HediffResourceFramework.HediffResourceDef>	
 	
 	<HediffResourceFramework.HediffResourceDef>
@@ -72,6 +73,8 @@
 		<makesSickThought>false</makesSickThought>
 		<defaultLabelColor>(0.8,0.2,0.2)</defaultLabelColor>
 		<initialResourceAmount>1</initialResourceAmount>
+		<maxResourceCapacity>100</maxResourceCapacity>
+		<initialSeverity>1</initialSeverity>
 		<showResourceBar>true</showResourceBar>
 		<resourceGainPerAllDamages>5</resourceGainPerAllDamages>
 		<stages>

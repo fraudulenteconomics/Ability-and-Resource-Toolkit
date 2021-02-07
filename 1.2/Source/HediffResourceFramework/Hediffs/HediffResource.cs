@@ -29,6 +29,7 @@ namespace HediffResourceFramework
                     resourceAmount = value;
                     if (resourceAmount > ResourceCapacity)
                     {
+                        Log.Message($"{this} Resource amount ({resourceAmount}) is bigger than ResourceCapacity, setting it to {ResourceCapacity}");
                         resourceAmount = ResourceCapacity;
                     }
 
@@ -39,11 +40,13 @@ namespace HediffResourceFramework
 
                     if (resourceAmount <= 0 && !this.def.keepWhenEmpty)
                     {
+                        Log.Message($"Removing hediffResource: " + this);
                         this.pawn.health.RemoveHediff(this);
                     }
                     else
                     {
                         this.Severity = resourceAmount;
+                        Log.Message($"Adjusting severity ({this.Severity}): " + this);
                     }
                 }
                 else
@@ -114,7 +117,7 @@ namespace HediffResourceFramework
                 var value = base.ShouldRemove;
                 if (value)
                 {
-                    Log.Message("Removing: " + this + " this.ResourceAmount: " + this.ResourceAmount);
+                    Log.Message("Removing: " + this + " this.ResourceAmount: " + this.ResourceAmount + " - this.Severity: " + this.Severity);
                 }
                 return value;
             }

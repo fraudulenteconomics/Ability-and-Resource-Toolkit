@@ -96,8 +96,13 @@ namespace HediffResourceFramework
 			Widgets.FillableBar(rect4, fillPercent, fullShieldBarTex, EmptyShieldBarTex, doBorder: false);
 			Text.Font = GameFont.Small;
 			Text.Anchor = TextAnchor.MiddleCenter;
+			if (hediffResource.def.resourceBarTextColor.HasValue)
+            {
+				GUI.color = hediffResource.def.resourceBarTextColor.Value;
+			}
 			Widgets.Label(rect4, (hediffResource.ResourceAmount).ToString("F0") + " / " + (hediffResource.ResourceCapacity).ToString("F0"));
 			Text.Anchor = TextAnchor.UpperLeft;
+			GUI.color = Color.white;
 			return new GizmoResult(GizmoState.Clear);
 		}
 

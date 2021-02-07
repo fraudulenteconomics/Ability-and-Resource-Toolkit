@@ -497,8 +497,11 @@
 			<Uranium>20</Uranium>
 		</costList>
 		<verbs>
-			<li>
-				<verbClass>Verb_Shoot</verbClass>
+			<li Class="HediffResourceFramework.VerbResourceProps">
+				<hediffDefResource>FE_FusionReactor</hediffDefResource>
+				<resourceAmount>100</resourceAmount>
+				<addHediffIfMissing>true</addHediffIfMissing>
+				<verbClass>HediffResourceFramework.Verb_ResourceTarget</verbClass>
 				<label>stim injector</label>
 				<hasStandardCommand>true</hasStandardCommand>
 				<defaultProjectile>FE_StimInjectorBullet</defaultProjectile>

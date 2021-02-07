@@ -13,7 +13,6 @@ namespace HediffResourceFramework
         public float adjustTargetResource;
         public bool removeTargetResource;
         public IntRange delayTargetOnDamage = IntRange.zero;
-        public List<HediffDef> additionalHediffs;
         public float severityPerDamage;
     }
     public class EffectOnImpact : DefModExtension
