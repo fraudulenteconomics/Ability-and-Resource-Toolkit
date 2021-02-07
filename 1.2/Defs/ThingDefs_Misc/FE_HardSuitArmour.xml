@@ -276,7 +276,7 @@
 				<hediffOptions>
 					<li>
 						<hediff>FE_FusionReactor</hediff>
-						<verbIndex>0</verbIndex>
+						<verbLabel>jump</verbLabel>
 						<resourcePerUse>-30</resourcePerUse>
 						<disableIfMissingHediff>false</disableIfMissingHediff>
 						<disableReason>Insufficient energy.</disableReason>
@@ -288,6 +288,8 @@
 		</modExtensions>
 	</ThingDef>
 
+	<!-- Still In Development
+	
 	<ThingDef ParentName="FE_ModuleBase">
 		<defName>FE_DeployableTurret</defName>
 		<label>deployable turret module</label>
@@ -367,7 +369,7 @@
 				<hediffOptions>
 					<li>
 						<hediff>FE_FusionReactor</hediff>
-						<verbIndex>0</verbIndex>
+						<verbLabel>Deploy Turret</verbLabel>
 						<resourcePerUse>-50</resourcePerUse>
 						<disableIfMissingHediff>false</disableIfMissingHediff>
 						<disableReason>Insufficient energy.</disableReason>
@@ -431,9 +433,7 @@
 					</thingDefs>
 				</fuelFilter>
 				<fuelCapacity>60</fuelCapacity>
-				<!-- 30 bursts -->
 				<fuelMultiplier>0.75</fuelMultiplier>
-				<!-- 1.333 steel per burst, 80 per full rearm -->
 				<initialFuelPercent>1</initialFuelPercent>
 				<autoRefuelPercent>0.1</autoRefuelPercent>
 				<showFuelGizmo>true</showFuelGizmo>
@@ -455,7 +455,6 @@
 		<designationCategory>Security</designationCategory>
 		<building>
 			<combatPower>45</combatPower>
-			<!-- same as a scavenger -->
 			<ai_combatDangerous>true</ai_combatDangerous>
 			<turretGunDef>Gun_MiniTurret</turretGunDef>
 			<turretBurstCooldownTime>4.8</turretBurstCooldownTime>
@@ -468,7 +467,7 @@
 		<researchPrerequisites>
 			<li>GunTurrets</li>
 		</researchPrerequisites>
-	</ThingDef>
+	</ThingDef> -->
 
 	<ThingDef ParentName="FE_ModuleBase">
 		<defName>FE_StimInjector</defName>
@@ -527,7 +526,7 @@
 					<li>
 						<label>stim injector</label>
 						<description>Injects the target with a stim that increases their combat potential substantially for a short duration.</description>
-						<canBeToggled>true</canBeToggled>
+						<canBeToggled>false</canBeToggled>
 					</li>
 				</verbProps>
 			</li>
@@ -555,7 +554,7 @@
 				<hediffOptions>
 					<li>
 						<hediff>FE_FusionReactor</hediff>
-						<verbIndex>0</verbIndex>
+						<verbLabel>stim injector</verbLabel>
 						<resourcePerUse>-20</resourcePerUse>
 						<disableIfMissingHediff>true</disableIfMissingHediff>
 						<disableReason>Insufficient energy.</disableReason>
@@ -665,6 +664,7 @@
 					<li>
 						<label>charge blast</label>
 						<description>Shoots a concentrated burst of energy at the target. Damage increases the longer the weapon goes without firing.</description>
+						<canBeToggled>true</canBeToggled>
 					</li>
 				</verbProps>
 			</li>
@@ -889,6 +889,7 @@
 					<li>
 						<label>head vulcan</label>
 						<description>Fires short range head vulcan rounds. Highly inaccurate but effective up close.</description>
+						<canBeToggled>true</canBeToggled>
 					</li>
 				</verbProps>
 			</li>
@@ -916,11 +917,11 @@
 				<hediffOptions>
 					<li>
 						<hediff>FE_FusionReactor</hediff>
-						<verbIndex>0</verbIndex>
-						<resourcePerUse>-0.4</resourcePerUse>
+						<verbLabel>head vulcan</verbLabel>
+						<resourcePerUse>-0.8</resourcePerUse>
 						<disableIfMissingHediff>false</disableIfMissingHediff>
 						<disableReason>Not enough energy.</disableReason>
-						<minimumResourcePerUse>1</minimumResourcePerUse>
+						<minimumResourcePerUse>2</minimumResourcePerUse>
 						<postUseDelay>120</postUseDelay>
 					</li>
 				</hediffOptions>
@@ -937,7 +938,7 @@
 		</graphicData>
 		<projectile>
 			<damageDef>Bullet</damageDef>
-			<damageAmountBase>6</damageAmountBase>
+			<damageAmountBase>4</damageAmountBase>
 			<stoppingPower>0.5</stoppingPower>
 			<armorPenetrationBase>0.04</armorPenetrationBase>
 			<speed>105</speed>

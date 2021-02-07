@@ -124,7 +124,7 @@
 					</li>
 					<li>
 						<hediff>FE_MarksmanOptics</hediff>
-						<verbIndex>0</verbIndex>
+						<verbLabel>FE_RepulsorNormal</verbLabel>
 						<resourcePerUse>1</resourcePerUse>
 						<disableIfMissingHediff>false</disableIfMissingHediff>
 						<minimumResourcePerUse>0</minimumResourcePerUse>
@@ -161,7 +161,7 @@
 		<projectile>
 		  <speed>70</speed>
 		  <damageDef>Bomb</damageDef>
-		  <damageAmountBase>75</damageAmountBase>
+		  <damageAmountBase>35</damageAmountBase>
 		  <explosionRadius>3.3</explosionRadius>
 		  <ai_IsIncendiary>true</ai_IsIncendiary>
 		  <arcHeightFactor>0.2</arcHeightFactor>
@@ -201,6 +201,7 @@
 		<verbs>
 		  <li>
 			<verbClass>Verb_Shoot</verbClass>
+			<label>powered lmg</label>
 			<hasStandardCommand>true</hasStandardCommand>
 			<defaultProjectile>FE_Bullet_PoweredLMG</defaultProjectile>
 			<warmupTime>1.0</warmupTime>
@@ -254,7 +255,7 @@
 				<hediffOptions>
 					<li>
 						<hediff>FE_FusionReactor</hediff>
-						<verbIndex>0</verbIndex>
+						<verbLabel>powered lmg</verbLabel>
 						<resourcePerUse>-0.5</resourcePerUse>
 						<disableIfMissingHediff>false</disableIfMissingHediff>
 						<disableReason>Invalid</disableReason>
@@ -262,7 +263,7 @@
 					</li>
 					<li>
 						<hediff>FE_MarksmanOptics</hediff>
-						<verbIndex>0</verbIndex>
+						<verbLabel>powered lmg</verbLabel>
 						<resourcePerUse>1</resourcePerUse>
 						<disableIfMissingHediff>false</disableIfMissingHediff>
 						<minimumResourcePerUse>0</minimumResourcePerUse>
