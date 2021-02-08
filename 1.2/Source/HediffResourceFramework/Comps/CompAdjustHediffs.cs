@@ -56,7 +56,7 @@ namespace HediffResourceFramework
 
     public class CompProperties_AdjustHediffs : CompProperties
     {
-        public List<HediffAdjust> hediffOptions;
+        public List<HediffAdjust> resourceSettings;
 
         public float postDamageDelayMultiplier = 1f;
 

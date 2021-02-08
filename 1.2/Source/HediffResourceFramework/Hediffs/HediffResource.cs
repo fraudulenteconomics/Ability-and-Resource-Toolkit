@@ -194,9 +194,9 @@ namespace HediffResourceFramework
                 foreach (var apparel in apparels)
                 {
                     var hediffComp = apparel.GetComp<CompApparelAdjustHediffs>();
-                    if (hediffComp?.Props.hediffOptions != null)
+                    if (hediffComp?.Props.resourceSettings != null)
                     {
-                        foreach (var option in hediffComp.Props.hediffOptions)
+                        foreach (var option in hediffComp.Props.resourceSettings)
                         {
                             if (option.hediff == def)
                             {
@@ -219,9 +219,9 @@ namespace HediffResourceFramework
                 foreach (var equipment in equipments)
                 {
                     var hediffComp = equipment.GetComp<CompWeaponAdjustHediffs>();
-                    if (hediffComp?.Props.hediffOptions != null)
+                    if (hediffComp?.Props.resourceSettings != null)
                     {
-                        foreach (var option in hediffComp.Props.hediffOptions)
+                        foreach (var option in hediffComp.Props.resourceSettings)
                         {
                             if (option.hediff == def)
                             {
@@ -282,9 +282,9 @@ namespace HediffResourceFramework
                 {
                     var apparel = apparels[num];
                     var hediffComp = apparel.GetComp<CompApparelAdjustHediffs>();
-                    if (hediffComp?.Props.hediffOptions != null)
+                    if (hediffComp?.Props.resourceSettings != null)
                     {
-                        foreach (var option in hediffComp.Props.hediffOptions)
+                        foreach (var option in hediffComp.Props.resourceSettings)
                         {
                             if (option.dropIfHediffMissing && option.hediff == def)
                             {
@@ -309,9 +309,9 @@ namespace HediffResourceFramework
                 {
                     var equipment = equipments[num];
                     var hediffComp = equipment.GetComp<CompWeaponAdjustHediffs>();
-                    if (hediffComp?.Props.hediffOptions != null)
+                    if (hediffComp?.Props.resourceSettings != null)
                     {
-                        foreach (var option in hediffComp.Props.hediffOptions)
+                        foreach (var option in hediffComp.Props.resourceSettings)
                         {
                             if (option.dropIfHediffMissing && option.hediff == def)
                             {

@@ -200,10 +200,10 @@ namespace HediffResourceFramework
 					foreach (var apparel in apparels)
 					{
 						var hediffComp = apparel.GetComp<CompAdjustHediffs>();
-						if (hediffComp != null && hediffComp.Props.hediffOptions != null)
+						if (hediffComp != null && hediffComp.Props.resourceSettings != null)
 						{
 							var newDelayTicks = (int)(shieldProps.postDamageDelay.Value * hediffComp.Props.postDamageDelayMultiplier);
-							foreach (var hediffOption in hediffComp.Props.hediffOptions)
+							foreach (var hediffOption in hediffComp.Props.resourceSettings)
 							{
 								var hediffResource = pawn.health.hediffSet.GetFirstHediffOfDef(hediffOption.hediff) as HediffResource;
 								Log.Message(apparel + " - hediffResource: " + hediffResource);
@@ -226,11 +226,11 @@ namespace HediffResourceFramework
 						Log.Message(" - ProcessDamage - var hediffComp = equipment.GetComp<CompAdjustHediffs>(); - 37", true);
 						var hediffComp = equipment.GetComp<CompAdjustHediffs>();
 						Log.Message(" - ProcessDamage - if (hediffComp != null && hediffComp.Props.hediffOptions != null) - 38", true);
-						if (hediffComp != null && hediffComp.Props.hediffOptions != null)
+						if (hediffComp != null && hediffComp.Props.resourceSettings != null)
 						{
 							var newDelayTicks = (int)(shieldProps.postDamageDelay.Value * hediffComp.Props.postDamageDelayMultiplier);
 							Log.Message(" - ProcessDamage - foreach (var hediffOption in hediffComp.Props.hediffOptions) - 40", true);
-							foreach (var hediffOption in hediffComp.Props.hediffOptions)
+							foreach (var hediffOption in hediffComp.Props.resourceSettings)
 							{
 								Log.Message(" - ProcessDamage - var hediffResource = pawn.health.hediffSet.GetFirstHediffOfDef(hediffOption.hediff) as HediffResource; - 41", true);
 								var hediffResource = pawn.health.hediffSet.GetFirstHediffOfDef(hediffOption.hediff) as HediffResource;

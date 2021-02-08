@@ -44,7 +44,7 @@ namespace HediffResourceFramework
         {
             base.Notify_Removed();
             List<HediffResourceDef> hediffResourcesToRemove = Equipment.PrimaryVerb.CasterPawn.health.hediffSet.hediffs.OfType<HediffResource>()
-                .Select(x => x.def).Where(x => Props.hediffOptions.Any(y => y.hediff == x)).ToList();
+                .Select(x => x.def).Where(x => Props.resourceSettings.Any(y => y.hediff == x)).ToList();
             
             var equipments = Equipment.PrimaryVerb.CasterPawn.equipment.AllEquipmentListForReading;
             if (equipments != null)
@@ -54,9 +54,9 @@ namespace HediffResourceFramework
                     if (eq != Equipment.parent)
                     {
                         var comp = eq.TryGetComp<CompWeaponAdjustHediffs>();
-                        if (comp?.Props?.hediffOptions != null)
+                        if (comp?.Props?.resourceSettings != null)
                         {
-                            foreach (var hediffOption in comp.Props.hediffOptions)
+                            foreach (var hediffOption in comp.Props.resourceSettings)
                             {
                                 if (hediffResourcesToRemove.Contains(hediffOption.hediff))
                                 {
@@ -74,9 +74,9 @@ namespace HediffResourceFramework
                 foreach (var ap in apparels)
                 {
                     var comp = ap.TryGetComp<CompApparelAdjustHediffs>();
-                    if (comp?.Props?.hediffOptions != null)
+                    if (comp?.Props?.resourceSettings != null)
                     {
-                        foreach (var hediffOption in comp.Props.hediffOptions)
+                        foreach (var hediffOption in comp.Props.resourceSettings)
                         {
                             if (hediffResourcesToRemove.Contains(hediffOption.hediff))
                             {
@@ -111,7 +111,7 @@ namespace HediffResourceFramework
                 {
                     if (!this.postUseDelayTicks?.Values?.Select(x => x.delayTicks).Any(y => y > Find.TickManager.TicksGame) ?? true)
                     {
-                        foreach (var option in Props.hediffOptions)
+                        foreach (var option in Props.resourceSettings)
                         {
                             var hediffResource = CompEquippable.PrimaryVerb.CasterPawn.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
                             if (hediffResource != null && !hediffResource.CanGainResource)
