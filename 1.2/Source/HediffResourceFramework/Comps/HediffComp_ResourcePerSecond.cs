@@ -43,7 +43,7 @@ namespace HediffResourceFramework
 		public override void CompPostTick(ref float severityAdjustment)
 		{
 			base.CompPostTick(ref severityAdjustment);
-			if (base.Pawn.IsHashIntervalTick(60))
+			if (base.Pawn.IsHashIntervalTick(60) && HediffResource.CanGainResource)
 			{
 				float num = ResourceChangePerDay();
 				num *= 0.00333333341f;

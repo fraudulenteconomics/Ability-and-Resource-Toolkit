@@ -114,7 +114,7 @@ namespace HediffResourceFramework
                         foreach (var option in Props.hediffOptions)
                         {
                             var hediffResource = CompEquippable.PrimaryVerb.CasterPawn.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
-                            if (hediffResource != null && !hediffResource.CanGainResource())
+                            if (hediffResource != null && !hediffResource.CanGainResource)
                             {
                                 continue;
                             }

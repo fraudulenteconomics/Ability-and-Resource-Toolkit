@@ -52,10 +52,7 @@ namespace HediffResourceFramework
             }
         }
 
-        public bool CanGainResource()
-        {
-            return Find.TickManager.TicksGame > this.delayTicks;
-        }
+        public bool CanGainResource => Find.TickManager.TicksGame > this.delayTicks;
         public void AddDelay(int newDelayTicks)
         {
             this.delayTicks = Find.TickManager.TicksGame + newDelayTicks;
