@@ -21,6 +21,7 @@
 					<hediffDef>FE_ShieldInjector</hediffDef>
 					<resourcePercent>1</resourcePercent>
 					<resourceAdjust>100</resourceAdjust>
+					<addHediffIfMissing>true</addHediffIfMissing>
 					<blacklistHediffsPreventAdd>
 					</blacklistHediffsPreventAdd>
 					<blacklistHediffPoison>

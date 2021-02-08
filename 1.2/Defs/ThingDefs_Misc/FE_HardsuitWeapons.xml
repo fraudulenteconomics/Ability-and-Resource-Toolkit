@@ -168,13 +168,13 @@
 					<li>
 						<hediffDef>FE_AbsorptionBarrier</hediffDef>
 						<adjustTargetResource>-10</adjustTargetResource>
-						<removeTargetResource>true</removeTargetResource>
+						<removeTargetResource>false</removeTargetResource>
 						<delayTargetOnDamage>2400</delayTargetOnDamage>
 					</li>
 					<li>
 						<hediffDef>FE_ShieldInjector</hediffDef>
 						<adjustTargetResource>-10</adjustTargetResource>
-						<removeTargetResource>true</removeTargetResource>
+						<removeTargetResource>false</removeTargetResource>
 						<delayTargetOnDamage>2400</delayTargetOnDamage>
 					</li>
 				</resourceEffects>
