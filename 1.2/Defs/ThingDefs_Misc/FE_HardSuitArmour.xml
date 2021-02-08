@@ -506,6 +506,7 @@
 				<hasStandardCommand>true</hasStandardCommand>
 				<defaultProjectile>FE_StimInjectorBullet</defaultProjectile>
 				<warmupTime>0.8</warmupTime>
+				<violent>false</violent>
 				<range>14.9</range>
 				<burstShotCount>1</burstShotCount>
 				<soundCast>Shot_IncendiaryLauncher</soundCast>
