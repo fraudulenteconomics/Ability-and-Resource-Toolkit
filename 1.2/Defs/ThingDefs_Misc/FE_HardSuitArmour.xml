@@ -240,7 +240,6 @@
 				<resourceSettings>
 					<li>
 						<hediff>FE_FusionReactor</hediff>
-						<verbLabel>jump</verbLabel>
 						<resourcePerUse>-30</resourcePerUse>
 						<disableIfMissingHediff>false</disableIfMissingHediff>
 						<disableReason>Insufficient energy.</disableReason>
@@ -329,7 +328,6 @@
 				<resourceSettings>
 					<li>
 						<hediff>FE_FusionReactor</hediff>
-						<verbLabel>Deploy Turret</verbLabel>
 						<resourcePerUse>-50</resourcePerUse>
 						<disableIfMissingHediff>false</disableIfMissingHediff>
 						<disableReason>Insufficient energy.</disableReason>
@@ -666,7 +664,6 @@
 				<resourceSettings>
 					<li>
 						<hediff>FE_ChargeBurstModule</hediff>
-						<verbIndex>0</verbIndex>
 						<resourcePerUse>-2</resourcePerUse>
 						<disableIfMissingHediff>false</disableIfMissingHediff>
 						<disableReason>Insufficient charge.</disableReason>
@@ -885,7 +882,6 @@
 				<resourceSettings>
 					<li>
 						<hediff>FE_FusionReactor</hediff>
-						<verbLabel>head vulcan</verbLabel>
 						<resourcePerUse>-0.8</resourcePerUse>
 						<disableIfMissingHediff>false</disableIfMissingHediff>
 						<disableReason>Not enough energy.</disableReason>
