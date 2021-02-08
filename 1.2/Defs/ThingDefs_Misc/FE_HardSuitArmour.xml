@@ -608,8 +608,8 @@
 		</modExtensions>
 	</ThingDef>
 
-	<ThingDef ParentName="BaseBullet">
-		<defName>FE_StimInjectorBullet</defName>
+  <ThingDef ParentName="BaseBullet">
+    <defName>FE_StimInjectorBullet</defName>
 		<label>combat stim bullet</label>
 		<projectile>
 			<damageDef>FE_StimInjectorDamageDef</damageDef>
@@ -623,8 +623,8 @@
 			<shaderType>TransparentPostLight</shaderType>
 			<color>(68,150,215)</color>
 		</graphicData>
-	</ThingDef>
-
+  </ThingDef>
+  
 	<DamageDef>
 		<defName>FE_StimInjectorDamageDef</defName>
 		<label>stim effect</label>
@@ -983,7 +983,7 @@
 				<li>SpacerMilitary</li>
 			</tags>
 		</apparel>
-		<tickerType>Normal</tickerType>
+		<tickerType>Normal</tickerType> 
 		<comps>
 			<li Class="HediffResourceFramework.CompProperties_ApparelAdjustHediffs">
 				<hediffOptions>

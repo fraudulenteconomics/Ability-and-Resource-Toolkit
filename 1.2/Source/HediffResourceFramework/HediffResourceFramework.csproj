@@ -34,6 +34,7 @@
     <Reference Include="MVCF, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\VanillaExpandedFramework\1.2\Assemblies\MVCF.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -51,13 +52,13 @@
     <Compile Include="Comps\IngestionOutcomeDoer_GiveHediffResource.cs" />
     <Compile Include="Comps\CompWeaponAdjustHediffs.cs" />
     <Compile Include="Comps\CompApparelAdjustHediffs.cs" />
-    <Compile Include="HarmonyPatches\Hediff_Patches.cs" />
-    <Compile Include="HarmonyPatches\Harmony_Init.cs" />
     <Compile Include="HarmonyPatches\Damage_Patches.cs" />
-    <Compile Include="HarmonyPatches\Gizmo_Patches.cs" />
-    <Compile Include="HarmonyPatches\FloatMenu_Patches.cs" />
-    <Compile Include="HarmonyPatches\Verb_Patches.cs" />
     <Compile Include="HarmonyPatches\Equipment_Apparel_Patches.cs" />
+    <Compile Include="HarmonyPatches\FloatMenu_Patches.cs" />
+    <Compile Include="HarmonyPatches\Gizmo_Patches.cs" />
+    <Compile Include="HarmonyPatches\Harmony_Init.cs" />
+    <Compile Include="HarmonyPatches\Hediff_Patches.cs" />
+    <Compile Include="HarmonyPatches\Verb_Patches.cs" />
     <Compile Include="HediffResourceManager.cs" />
     <Compile Include="HediffResourceUtils.cs" />
     <Compile Include="Hediffs\HediffResource.cs" />
@@ -79,5 +80,6 @@
       <Version>2.0.4</Version>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
