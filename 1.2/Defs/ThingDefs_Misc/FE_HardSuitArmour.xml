@@ -12,7 +12,7 @@
 		<tickerType>Normal</tickerType>
 		<comps>
 			<li Class="HediffResourceFramework.CompProperties_ApparelAdjustHediffs">
-				<hediffOptions>
+				<resourceSettings>
 					<li>
 						<hediff>FE_FusionReactor</hediff>
 						<resourcePerSecond>450</resourcePerSecond>
@@ -23,7 +23,7 @@
 						<disallowEquipIfHediffMissing>false</disallowEquipIfHediffMissing>
 						<dropIfHediffMissing>false</dropIfHediffMissing>
 					</li>
-				</hediffOptions>
+				</resourceSettings>
 			</li>
 		</comps>
 	</ThingDef>
@@ -70,7 +70,7 @@
 		</costList>
 		<comps>
 			<li Class="HediffResourceFramework.CompProperties_ApparelAdjustHediffs">
-				<hediffOptions>
+				<resourceSettings>
 					<li>
 						<hediff>FE_FusionReactor</hediff>
 						<resourcePerSecond>0</resourcePerSecond>
@@ -85,7 +85,7 @@
 						<dropWeaponOrApparelIfBlacklistHediff>
 						</dropWeaponOrApparelIfBlacklistHediff>
 					</li>
-				</hediffOptions>
+				</resourceSettings>
 			</li>
 		</comps>
 	</ThingDef>
@@ -119,7 +119,7 @@
 		</costList>
 		<comps>
 			<li Class="HediffResourceFramework.CompProperties_ApparelAdjustHediffs">
-				<hediffOptions>
+				<resourceSettings>
 					<li>
 						<hediff>FE_FusionReactor</hediff>
 						<resourcePerSecond>150</resourcePerSecond>
@@ -150,7 +150,7 @@
 						</dropWeaponOrApparelIfBlacklistHediff>
 						<postDamageDelayMultiplier>0.75</postDamageDelayMultiplier>
 					</li>
-				</hediffOptions>
+				</resourceSettings>
 			</li>
 		</comps>
 	</ThingDef>
@@ -188,7 +188,7 @@
 		</costList>
 		<comps>
 			<li Class="HediffResourceFramework.CompProperties_ApparelAdjustHediffs">
-				<hediffOptions>
+				<resourceSettings>
 					<li>
 						<hediff>FE_FusionReactor</hediff>
 						<resourcePerSecond>0</resourcePerSecond>
@@ -203,7 +203,7 @@
 						<dropWeaponOrApparelIfBlacklistHediff>
 						</dropWeaponOrApparelIfBlacklistHediff>
 					</li>
-				</hediffOptions>
+				</resourceSettings>
 			</li>
 		</comps>
 	</ThingDef>
@@ -236,8 +236,8 @@
 			<Uranium>20</Uranium>
 		</costList>
 		<verbs>
-			<li>
-				<hediffOptions>
+			<li Class="HediffResourceFramework.VerbResourceProps">
+				<resourceSettings>
 					<li>
 						<hediff>FE_FusionReactor</hediff>
 						<verbLabel>jump</verbLabel>
@@ -247,7 +247,7 @@
 						<minimumResourcePerUse>30</minimumResourcePerUse>
 						<postUseDelay>300</postUseDelay>
 					</li>
-				</hediffOptions>
+				</resourceSettings>
 				<verbClass>MVCF.Verbs.Verb_Jump</verbClass>
 				<label>jump</label>
 				<range>13.9</range>
@@ -275,7 +275,7 @@
 				</verbProps>
 			</li>
 			<li Class="HediffResourceFramework.CompProperties_ApparelAdjustHediffs">
-				<hediffOptions>
+				<resourceSettings>
 					<li>
 						<hediff>FE_FusionReactor</hediff>
 						<resourcePerSecond>0</resourcePerSecond>
@@ -290,7 +290,7 @@
 						<dropWeaponOrApparelIfBlacklistHediff>
 						</dropWeaponOrApparelIfBlacklistHediff>
 					</li>
-				</hediffOptions>
+				</resourceSettings>
 			</li>
 		</comps>
 	</ThingDef>
@@ -325,8 +325,8 @@
 			<Uranium>20</Uranium>
 		</costList>
 		<verbs>
-			<li>
-				<hediffOptions>
+			<li Class="HediffResourceFramework.VerbResourceProps">
+				<resourceSettings>
 					<li>
 						<hediff>FE_FusionReactor</hediff>
 						<verbLabel>Deploy Turret</verbLabel>
@@ -336,7 +336,7 @@
 						<minimumResourcePerUse>50</minimumResourcePerUse>
 						<postUseDelay>300</postUseDelay>
 					</li>
-				</hediffOptions>
+				</resourceSettings>
 				<verbClass>Verb_Spawn</verbClass>
 				<label>Deploy Turret</label>
 				<hasStandardCommand>true</hasStandardCommand>
@@ -364,7 +364,7 @@
 				</verbProps>
 			</li>
 			<li Class="HediffResourceFramework.CompProperties_ApparelAdjustHediffs">
-				<hediffOptions>
+				<resourceSettings>
 					<li>
 						<hediff>FE_FusionReactor</hediff>
 						<resourcePerSecond>0</resourcePerSecond>
@@ -379,7 +379,7 @@
 						<dropWeaponOrApparelIfBlacklistHediff>
 						</dropWeaponOrApparelIfBlacklistHediff>
 					</li>
-				</hediffOptions>
+				</resourceSettings>
 			</li>
 		</comps>
 	</ThingDef>
@@ -501,7 +501,7 @@
 		</costList>
 		<verbs>
 			<li Class="HediffResourceFramework.VerbResourceProps">
-				<hediffOptions>
+				<resourceSettings>
 					<li>
 						<hediff>FE_FusionReactor</hediff>
 						<resourcePerUse>-20</resourcePerUse>
@@ -510,10 +510,14 @@
 						<minimumResourcePerUse>20</minimumResourcePerUse>
 						<postUseDelay>180</postUseDelay>
 					</li>
-				</hediffOptions>
-				<hediffDefResource>FE_StimHediff</hediffDefResource>
-				<resourceAmount>1</resourceAmount>
-				<addHediffIfMissing>true</addHediffIfMissing>
+				</resourceSettings>
+				<targetResourceSettings>
+					<li>
+						<hediff>FE_StimHediff</hediff>
+						<resourcePerUse>1</resourcePerUse>
+						<addHediffIfMissing>true</addHediffIfMissing>
+					</li>
+				</targetResourceSettings>
 				<verbClass>HediffResourceFramework.Verb_ResourceTarget</verbClass>
 				<label>stim injector</label>
 				<hasStandardCommand>true</hasStandardCommand>
@@ -537,7 +541,7 @@
 				<defaultCooldownTime>1.2</defaultCooldownTime>
 			</li>
 			<li Class="HediffResourceFramework.VerbResourceProps">
-				<hediffOptions>
+				<resourceSettings>
 					<li>
 						<hediff>FE_FusionReactor</hediff>
 						<resourcePerUse>-10</resourcePerUse>
@@ -546,10 +550,14 @@
 						<minimumResourcePerUse>10</minimumResourcePerUse>
 						<postUseDelay>180</postUseDelay>
 					</li>
-				</hediffOptions>
-				<hediffDefResource>FE_StimHediff</hediffDefResource>
-				<resourceAmount>1</resourceAmount>
-				<addHediffIfMissing>true</addHediffIfMissing>
+				</resourceSettings>
+				<targetResourceSettings>
+					<li>
+						<hediff>FE_StimHediff</hediff>
+						<resourcePerUse>1</resourcePerUse>
+						<addHediffIfMissing>true</addHediffIfMissing>
+					</li>
+				</targetResourceSettings>
 				<verbClass>HediffResourceFramework.Verb_ResourceSelf</verbClass>
 				<label>self-stim injector</label>
 				<hasStandardCommand>true</hasStandardCommand>
@@ -578,7 +586,7 @@
 				</verbProps>
 			</li>
 			<li Class="HediffResourceFramework.CompProperties_ApparelAdjustHediffs">
-				<hediffOptions>
+				<resourceSettings>
 					<li>
 						<hediff>FE_FusionReactor</hediff>
 						<resourcePerSecond>0</resourcePerSecond>
@@ -593,7 +601,7 @@
 						<dropWeaponOrApparelIfBlacklistHediff>
 						</dropWeaponOrApparelIfBlacklistHediff>
 					</li>
-				</hediffOptions>
+				</resourceSettings>
 			</li>
 		</comps>
 	</ThingDef>
@@ -654,8 +662,8 @@
 			<Uranium>20</Uranium>
 		</costList>
 		<verbs>
-			<li>
-				<hediffOptions>
+			<li Class="HediffResourceFramework.VerbResourceProps">
+				<resourceSettings>
 					<li>
 						<hediff>FE_ChargeBurstModule</hediff>
 						<verbIndex>0</verbIndex>
@@ -665,7 +673,7 @@
 						<minimumResourcePerUse>2</minimumResourcePerUse>
 						<postUseDelay>600</postUseDelay>
 					</li>
-				</hediffOptions>
+				</resourceSettings>
 				<verbClass>Verb_Shoot</verbClass>
 				<label>charge blast</label>
 				<hasStandardCommand>true</hasStandardCommand>
@@ -699,7 +707,7 @@
 				</verbProps>
 			</li>
 			<li Class="HediffResourceFramework.CompProperties_ApparelAdjustHediffs">
-				<hediffOptions>
+				<resourceSettings>
 					<li>
 						<hediff>FE_FusionReactor</hediff>
 						<resourcePerSecond>-90</resourcePerSecond>
@@ -721,7 +729,7 @@
 						<addHediffIfMissing>true</addHediffIfMissing>
 						<maxResourceCapacityOffset>10</maxResourceCapacityOffset>
 					</li>
-				</hediffOptions>
+				</resourceSettings>
 			</li>
 			<li Class="HediffResourceFramework.CompProperties_ChargeResource">
 				<hediffResource>FE_ChargeBurstModule</hediffResource>
@@ -778,7 +786,7 @@
 		</costList>
 		<comps>
 			<li Class="HediffResourceFramework.CompProperties_ApparelAdjustHediffs">
-				<hediffOptions>
+				<resourceSettings>
 					<li>
 						<hediff>FE_FusionReactor</hediff>
 						<resourcePerSecond>-60</resourcePerSecond>
@@ -801,7 +809,7 @@
 						<maxResourceCapacityOffset>100</maxResourceCapacityOffset>
 						<qualityScalesCapacityOffset>true</qualityScalesCapacityOffset>
 					</li>
-				</hediffOptions>
+				</resourceSettings>
 			</li>
 		</comps>
 	</ThingDef>
@@ -835,7 +843,7 @@
 		</costList>
 		<comps>
 			<li Class="HediffResourceFramework.CompProperties_ApparelAdjustHediffs">
-				<hediffOptions>
+				<resourceSettings>
 					<li>
 						<hediff>FE_FusionReactor</hediff>
 						<resourcePerSecond>0</resourcePerSecond>
@@ -858,7 +866,7 @@
 						<maxResourceCapacityOffset>100</maxResourceCapacityOffset>
 						<qualityScalesCapacityOffset>false</qualityScalesCapacityOffset>
 					</li>
-				</hediffOptions>
+				</resourceSettings>
 			</li>
 		</comps>
 	</ThingDef>
@@ -873,8 +881,8 @@
 			</tags>
 		</apparel>
 		<verbs>
-			<li>
-				<hediffOptions>
+			<li Class="HediffResourceFramework.VerbResourceProps">
+				<resourceSettings>
 					<li>
 						<hediff>FE_FusionReactor</hediff>
 						<verbLabel>head vulcan</verbLabel>
@@ -884,7 +892,7 @@
 						<minimumResourcePerUse>2</minimumResourcePerUse>
 						<postUseDelay>120</postUseDelay>
 					</li>
-				</hediffOptions>
+				</resourceSettings>
 				<verbClass>Verb_Shoot</verbClass>
 				<label>head vulcan</label>
 				<hasStandardCommand>true</hasStandardCommand>
@@ -920,7 +928,7 @@
 				</verbProps>
 			</li>
 			<li Class="HediffResourceFramework.CompProperties_ApparelAdjustHediffs">
-				<hediffOptions>
+				<resourceSettings>
 					<li>
 						<hediff>FE_FusionReactor</hediff>
 						<resourcePerSecond>0</resourcePerSecond>
@@ -935,7 +943,7 @@
 						<dropWeaponOrApparelIfBlacklistHediff>
 						</dropWeaponOrApparelIfBlacklistHediff>
 					</li>
-				</hediffOptions>
+				</resourceSettings>
 			</li>
 		</comps>
 	</ThingDef>
@@ -968,7 +976,7 @@
 		<tickerType>Normal</tickerType> 
 		<comps>
 			<li Class="HediffResourceFramework.CompProperties_ApparelAdjustHediffs">
-				<hediffOptions>
+				<resourceSettings>
 					<li>
 						<hediff>FE_FusionReactor</hediff>
 						<resourcePerSecond>0</resourcePerSecond>
@@ -993,7 +1001,7 @@
 						<disallowEquipIfHediffMissing>false</disallowEquipIfHediffMissing>
 						<dropIfHediffMissing>false</dropIfHediffMissing>
 					</li>
-				</hediffOptions>
+				</resourceSettings>
 			</li>
 		</comps>
 	</ThingDef>

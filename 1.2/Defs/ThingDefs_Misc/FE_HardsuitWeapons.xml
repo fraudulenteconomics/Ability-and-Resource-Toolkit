@@ -31,7 +31,7 @@
 		<tickerType>Normal</tickerType>
 		<verbs>
 			<li>
-				<hediffOptions>
+				<resourceSettings>
 					<li>
 						<hediff>FE_RepulsorRifle</hediff>
 						<verbLabel>FE_RepulsorNormal</verbLabel>
@@ -49,7 +49,7 @@
 						<qualityScalesCapacityOffset>false</qualityScalesCapacityOffset>
 						<addHediffIfMissing>true</addHediffIfMissing>
 					</li>
-				</hediffOptions>
+				</resourceSettings>
 				<verbClass>Verb_Shoot</verbClass>
 				<label>FE_RepulsorNormal</label>
 				<hasStandardCommand>true</hasStandardCommand>
@@ -63,7 +63,7 @@
 				<muzzleFlashScale>9</muzzleFlashScale>
 			</li>
 			<li>
-				<hediffOptions>
+				<resourceSettings>
 					<li>
 						<hediff>FE_RepulsorRifle</hediff>
 						<verbLabel>FE_RepulsorBurst</verbLabel>
@@ -73,7 +73,7 @@
 						<postUseDelay>0</postUseDelay>
 						<minimumResourcePerUse>20</minimumResourcePerUse>
 					</li>
-				</hediffOptions>
+				</resourceSettings>
 				<verbClass>Verb_Shoot</verbClass>
 				<label>FE_RepulsorBurst</label>
 				<hasStandardCommand>true</hasStandardCommand>
@@ -110,7 +110,7 @@
 		</weaponTags>
 		<comps>
 			<li Class="HediffResourceFramework.CompProperties_WeaponAdjustHediffs">
-				<hediffOptions>
+				<resourceSettings>
 					<li>
 						<hediff>FE_FusionReactor</hediff>
 						<maxResourceCapacityOffset>-20</maxResourceCapacityOffset>
@@ -121,7 +121,7 @@
 						<cannotEquipReasonIncompatible>Not enough power</cannotEquipReasonIncompatible>
 					</li>
 					
-				</hediffOptions>
+				</resourceSettings>
 			</li>
 		</comps>
 	</ThingDef>
@@ -225,7 +225,7 @@
 		<tickerType>Normal</tickerType>
 		<verbs>
 			<li>
-				<hediffOptions>
+				<resourceSettings>
 					<li>
 						<hediff>FE_FusionReactor</hediff>
 						<verbLabel>powered lmg</verbLabel>
@@ -242,7 +242,7 @@
 						<minimumResourcePerUse>0</minimumResourcePerUse>
 						<postUseDelay>480</postUseDelay>
 					</li>
-				</hediffOptions>
+				</resourceSettings>
 				<verbClass>Verb_Shoot</verbClass>
 				<label>powered lmg</label>
 				<hasStandardCommand>true</hasStandardCommand>
@@ -280,7 +280,7 @@
 		</tools>
 		<comps>
 			<li Class="HediffResourceFramework.CompProperties_WeaponAdjustHediffs"> 
-				<hediffOptions>
+				<resourceSettings>
 					<li>
 						<hediff>FE_FusionReactor</hediff>
 						<maxResourceCapacityOffset>-10</maxResourceCapacityOffset>
@@ -290,7 +290,7 @@
 						<dropIfHediffMissing>true</dropIfHediffMissing>
 						<cannotEquipReasonIncompatible>Not enough power</cannotEquipReasonIncompatible>
 					</li>
-				</hediffOptions>
+				</resourceSettings>
 			</li>
 		</comps>
 	</ThingDef>
