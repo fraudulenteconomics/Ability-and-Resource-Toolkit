@@ -13,9 +13,9 @@ namespace HediffResourceFramework
         public new VerbResourceProps verbProps => base.verbProps as VerbResourceProps;
         public override bool Available()
         {
-            if (verbProps.hediffOptions != null)
+            if (verbProps.targetResourceSettings != null)
             {
-                foreach (var hediffOption in verbProps.hediffOptions)
+                foreach (var hediffOption in verbProps.targetResourceSettings)
                 {
                     var hediffResource = this.CasterPawn.health.hediffSet.GetFirstHediffOfDef(hediffOption.hediff) as HediffResource;
                     if (hediffResource != null && hediffResource.ResourceAmount == hediffResource.ResourceCapacity)
@@ -32,9 +32,9 @@ namespace HediffResourceFramework
             var result = base.TryCastShot();
             if (result && this.CasterPawn != null)
             {
-                if (verbProps.hediffOptions != null)
+                if (verbProps.targetResourceSettings != null)
                 {
-                    foreach (var hediffOption in verbProps.hediffOptions)
+                    foreach (var hediffOption in verbProps.targetResourceSettings)
                     {
                         Log.Message("Giving: " + this.CasterPawn + " - " + hediffOption.hediff + " - " + hediffOption.resourcePerUse);
                         HediffResourceUtils.AdjustResourceAmount(this.CasterPawn, hediffOption.hediff, hediffOption.resourcePerUse, hediffOption.addHediffIfMissing);

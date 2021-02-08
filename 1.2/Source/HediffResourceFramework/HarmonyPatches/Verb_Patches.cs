@@ -46,9 +46,9 @@ namespace HediffResourceFramework
             if (__instance.Available() && __instance.CasterIsPawn && __instance.EquipmentSource != null)
             {
                 var verbProps = __instance.verbProps as VerbResourceProps;
-                if (verbProps != null && verbProps.hediffOptions != null)
+                if (verbProps != null && verbProps.resourceSettings != null)
                 {
-                    foreach (var option in verbProps.hediffOptions)
+                    foreach (var option in verbProps.resourceSettings)
                     {
                         HediffResourceUtils.AdjustResourceAmount(__instance.CasterPawn, option.hediff, option.resourcePerUse, option.addHediffIfMissing);
                         if (option.postUseDelay != 0)

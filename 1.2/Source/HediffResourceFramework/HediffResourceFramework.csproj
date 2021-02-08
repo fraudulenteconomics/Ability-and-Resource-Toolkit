@@ -70,6 +70,7 @@
     <Compile Include="StatWorkers\StatWorker_MaxResourceCapacityOffset.cs" />
     <Compile Include="StatWorkers\StatWorker_ResourceOffset.cs" />
     <Compile Include="Verbs\Verb_ResourceSelf.cs" />
+    <Compile Include="Verbs\VerbResourceProps.cs" />
     <Compile Include="Verbs\Verb_ResourceTarget.cs" />
   </ItemGroup>
   <ItemGroup>

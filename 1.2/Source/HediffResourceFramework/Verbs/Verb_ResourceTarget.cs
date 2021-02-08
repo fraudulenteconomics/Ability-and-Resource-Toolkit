@@ -8,10 +8,6 @@ using Verse;
 
 namespace HediffResourceFramework
 {
-    public class VerbResourceProps : VerbProperties
-    {
-        public List<HediffOption> hediffOptions;
-    }
     public class Verb_ResourceTarget : Verb_Shoot
     {
         public new VerbResourceProps verbProps => base.verbProps as VerbResourceProps;
@@ -20,9 +16,9 @@ namespace HediffResourceFramework
             var result = base.TryCastShot();
             if (result && this.currentTarget.Thing is Pawn target)
             {
-                if (verbProps.hediffOptions != null)
+                if (verbProps.targetResourceSettings != null)
                 {
-                    foreach (var hediffOption in verbProps.hediffOptions)
+                    foreach (var hediffOption in verbProps.targetResourceSettings)
                     {
                         if (hediffOption.hediff != null)
                         {

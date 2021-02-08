@@ -232,9 +232,9 @@ namespace HediffResourceFramework
 					}
 				}
 				var verbProps = verb.verbProps as VerbResourceProps;
-				if (verbProps != null && verbProps.hediffOptions != null)
+				if (verbProps != null && verbProps.resourceSettings != null)
                 {
-					foreach (var option in verbProps.hediffOptions)
+					foreach (var option in verbProps.resourceSettings)
 					{
 						var resourceHediff = verb.CasterPawn.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
 						if (option.disableIfMissingHediff)
