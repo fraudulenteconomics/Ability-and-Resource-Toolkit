@@ -24,52 +24,54 @@ namespace HediffResourceFramework
             }
             set
             {
-                if (Find.TickManager.TicksGame > delayTicks)
+                resourceAmount = value;
+                if (resourceAmount > ResourceCapacity)
                 {
-                    resourceAmount = value;
-                    if (resourceAmount > ResourceCapacity)
+                    if (ResourceCapacity == 0)
                     {
                         Log.Message($"{this} Resource amount ({resourceAmount}) is bigger than ResourceCapacity, setting it to {ResourceCapacity}");
-                        resourceAmount = ResourceCapacity;
                     }
+                    resourceAmount = ResourceCapacity;
+                }
 
-                    if (resourceAmount < 0)
-                    {
-                        resourceAmount = 0;
-                    }
+                if (resourceAmount < 0)
+                {
+                    resourceAmount = 0;
+                }
 
-                    if (resourceAmount <= 0 && !this.def.keepWhenEmpty)
-                    {
-                        Log.Message($"Removing hediffResource: " + this);
-                        this.pawn.health.RemoveHediff(this);
-                    }
-                    else
-                    {
-                        this.Severity = resourceAmount;
-                        Log.Message($"Adjusting severity ({this.Severity}): " + this);
-                    }
+                if (resourceAmount <= 0 && !this.def.keepWhenEmpty)
+                {
+                    Log.Message($"Removing hediffResource: " + this);
+                    this.pawn.health.RemoveHediff(this);
                 }
                 else
                 {
-                    Log.Message($"Can't change resource {this}: delayed");
+                    this.Severity = resourceAmount;
+                    Log.Message($"Adjusting severity ({this.Severity}): " + this.def.defName);
                 }
             }
         }
 
+        public bool CanGainResource()
+        {
+            return Find.TickManager.TicksGame > this.delayTicks;
+        }
         public void AddDelay(int newDelayTicks)
         {
             this.delayTicks = Find.TickManager.TicksGame + newDelayTicks;
+            Log.Message($"Setting new delay to {delayTicks}");
         }
         public bool CanHaveDelay(int newDelayTicks)
         {
-            if (newDelayTicks > Find.TickManager.TicksGame - delayTicks)
+            Log.Message($"newDelayTicks: {newDelayTicks}, Find.TickManager.TicksGame: {Find.TickManager.TicksGame}, delayTicks: {delayTicks}, Find.TickManager.TicksGame - delayTicks: {Find.TickManager.TicksGame - delayTicks}");
+            if (Find.TickManager.TicksGame > delayTicks || newDelayTicks > Find.TickManager.TicksGame - delayTicks)
             {
                 Log.Message($"{this} can have new delay ticks {newDelayTicks}");
                 return true;
             }
             else
             {
-                Log.Message($"{this} can't have new delay ticks {newDelayTicks}, cur delay ticks: {Find.TickManager.TicksGame - delayTicks}");
+                Log.Message($"{this} can't have new delay ticks {newDelayTicks}, cur delay ticks: {delayTicks}");
                 return false;
             }
         }
@@ -332,7 +334,7 @@ namespace HediffResourceFramework
             base.ExposeData();
             Scribe_Values.Look(ref resourceAmount, "resourceAmount");
             Scribe_Values.Look(ref duration, "duration");
-            Scribe_Values.Look(ref delayTicks, "delayTicks");
+            //Scribe_Values.Look(ref delayTicks, "delayTicks");
         }
     }
 }

@@ -135,7 +135,7 @@ namespace HediffResourceFramework
 						if (resourceEffect.delayTargetOnDamage != IntRange.zero)
 						{
 							Log.Message("EffectOnImpact: Patch_PreApplyDamage - Prefix - hediffResource.delayTicks = Find.TickManager.TicksGame + resourceEffect.delayTargetOnDamage.RandomInRange; - 16", true);
-							hediffResource.delayTicks = Find.TickManager.TicksGame + resourceEffect.delayTargetOnDamage.RandomInRange;
+							hediffResource.AddDelay(resourceEffect.delayTargetOnDamage.RandomInRange);
 						}
 					}
 				}
@@ -212,7 +212,6 @@ namespace HediffResourceFramework
 
 			if (damageIsProcessed && shieldProps.postDamageDelay.HasValue)
 			{
-				var delayTicks = Find.TickManager.TicksGame + shieldProps.postDamageDelay.Value;
 				var apparels = pawn.apparel?.WornApparel?.ToList();
 				if (apparels != null)
 				{
@@ -221,11 +220,10 @@ namespace HediffResourceFramework
 						var hediffComp = apparel.GetComp<CompAdjustHediffs>();
 						if (hediffComp != null && hediffComp.Props.hediffOptions != null)
 						{
-							var newDelayTicks = (int)(delayTicks * hediffComp.Props.postDamageDelayMultiplier);
+							var newDelayTicks = (int)(shieldProps.postDamageDelay.Value * hediffComp.Props.postDamageDelayMultiplier);
 							foreach (var hediffOption in hediffComp.Props.hediffOptions)
 							{
 								var hediffResource = pawn.health.hediffSet.GetFirstHediffOfDef(hediffOption.hediff) as HediffResource;
-								Log.Message("Trying to add new delay: " + delayTicks + " - " + hediffComp.Props.postDamageDelayMultiplier + " - " + newDelayTicks);
 								Log.Message(apparel + " - hediffResource: " + hediffResource);
 								Log.Message(apparel + " - hediffResource.CanHaveDelay(newDelayTicks): " + hediffResource?.CanHaveDelay(newDelayTicks));
 								if (hediffResource != null && hediffResource.CanHaveDelay(newDelayTicks))
@@ -248,7 +246,7 @@ namespace HediffResourceFramework
 						Log.Message(" - ProcessDamage - if (hediffComp != null && hediffComp.Props.hediffOptions != null) - 38", true);
 						if (hediffComp != null && hediffComp.Props.hediffOptions != null)
 						{
-							var newDelayTicks = (int)(delayTicks * hediffComp.Props.postDamageDelayMultiplier);
+							var newDelayTicks = (int)(shieldProps.postDamageDelay.Value * hediffComp.Props.postDamageDelayMultiplier);
 							Log.Message(" - ProcessDamage - foreach (var hediffOption in hediffComp.Props.hediffOptions) - 40", true);
 							foreach (var hediffOption in hediffComp.Props.hediffOptions)
 							{

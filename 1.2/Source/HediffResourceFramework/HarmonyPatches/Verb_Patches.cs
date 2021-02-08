@@ -38,9 +38,9 @@ namespace HediffResourceFramework
         }
 	}
 
-	[HarmonyPatch(typeof(Verb), "TryCastNextBurstShot")]
-	public static class Patch_TryCastNextBurstShot
-	{
+    [HarmonyPatch(typeof(Verb), "TryCastNextBurstShot")]
+    public static class Patch_TryCastNextBurstShot
+    {
         private static void Postfix(Verb __instance)
         {
             if (__instance.Available() && __instance.CasterIsPawn && __instance.EquipmentSource != null)
@@ -58,19 +58,27 @@ namespace HediffResourceFramework
                         if (option.postUseDelay != 0)
                         {
                             var comp = __instance.EquipmentSource.GetComp<CompWeaponAdjustHediffs>();
+
                             if (comp != null)
                             {
                                 if (comp.postUseDelayTicks is null)
                                 {
                                     comp.postUseDelayTicks = new Dictionary<Verb, VerbDisable>();
                                 }
-                                comp.postUseDelayTicks[__instance] = new VerbDisable(Find.TickManager.TicksGame + (int)(option.postUseDelay * comp.Props.postUseDelayMultiplier), comp.Props.disableWeaponPostUse);
-                                Log.Message($"option.postUseDelay: comp: {comp} postUse: {option.postUseDelay}");
+                                comp.postUseDelayTicks[__instance] = new VerbDisable((int)((Find.TickManager.TicksGame + option.postUseDelay) * comp.Props.postUseDelayMultiplier), comp.Props.disableWeaponPostUse);
+                            }
+
+                            var hediffResource = __instance.CasterPawn.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
+                            Log.Message($"__instance.EquipmentSource: {__instance.EquipmentSource}, hediffResource: {hediffResource}, option.hediff: {option.hediff}");
+                            if (hediffResource != null && hediffResource.CanHaveDelay(option.postUseDelay))
+                            {
+                                Log.Message("Patch_TryCastNextBurstShot - Postfix - hediffResource.AddDelay(option.postUseDelay); - 16", true);
+                                hediffResource.AddDelay(option.postUseDelay);
                             }
                         }
                     }
                 }
             }
         }
-	}
+    }
 }
