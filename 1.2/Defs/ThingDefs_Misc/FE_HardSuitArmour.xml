@@ -133,7 +133,7 @@
 						</blackListHediffsPreventEquipping>
 						<dropWeaponOrApparelIfBlacklistHediff>
 						</dropWeaponOrApparelIfBlacklistHediff>
-						<postUseDelayMultiplier>0.75</postUseDelayMultiplier> -->
+						<postUseDelayMultiplier>0.75</postUseDelayMultiplier>
 					</li>
 					<li>
 						<hediff>FE_AbsorptionBarrier</hediff>
@@ -560,7 +560,6 @@
 				<label>self-stim injector</label>
 				<hasStandardCommand>true</hasStandardCommand>
 				<violent>false</violent>
-				<hasStandardCommand>true</hasStandardCommand>
 				<targetable>false</targetable>
 				<nonInterruptingSelfCast>true</nonInterruptingSelfCast>
 				<onlyManualCast>True</onlyManualCast>
