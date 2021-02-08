@@ -498,11 +498,36 @@
 		</costList>
 		<verbs>
 			<li Class="HediffResourceFramework.VerbResourceProps">
-				<hediffDefResource>FE_FusionReactor</hediffDefResource>
-				<resourceAmount>100</resourceAmount>
+				<hediffDefResource>FE_StimHediff</hediffDefResource>
+				<resourceAmount>1</resourceAmount>
 				<addHediffIfMissing>true</addHediffIfMissing>
 				<verbClass>HediffResourceFramework.Verb_ResourceTarget</verbClass>
 				<label>stim injector</label>
+				<hasStandardCommand>true</hasStandardCommand>
+				<defaultProjectile>FE_StimInjectorBullet</defaultProjectile>
+				<warmupTime>0.8</warmupTime>
+				<range>14.9</range>
+				<burstShotCount>1</burstShotCount>
+				<soundCast>Shot_IncendiaryLauncher</soundCast>
+				<soundCastTail>GunTail_Medium</soundCastTail>
+				<muzzleFlashScale>14</muzzleFlashScale>
+				<accuracyTouch>9</accuracyTouch>
+				<accuracyShort>9</accuracyShort>
+				<accuracyMedium>9</accuracyMedium>
+				<accuracyLong>9</accuracyLong>
+				<targetParams>
+					<canTargetPawns>true</canTargetPawns>
+					<canTargetBuildings>false</canTargetBuildings>
+					<canTargetLocations>false</canTargetLocations>
+				</targetParams>
+				<defaultCooldownTime>1.2</defaultCooldownTime>
+			</li>
+			<li Class="HediffResourceFramework.VerbResourceProps">
+				<hediffDefResource>FE_StimHediff</hediffDefResource>
+				<resourceAmount>1</resourceAmount>
+				<addHediffIfMissing>true</addHediffIfMissing>
+				<verbClass>HediffResourceFramework.Verb_ResourceSelf</verbClass>
+				<label>self-stim injector</label>
 				<hasStandardCommand>true</hasStandardCommand>
 				<defaultProjectile>FE_StimInjectorBullet</defaultProjectile>
 				<warmupTime>0.8</warmupTime>
@@ -529,6 +554,11 @@
 					<li>
 						<label>stim injector</label>
 						<description>Injects the target with a stim that increases their combat potential substantially for a short duration.</description>
+						<canBeToggled>false</canBeToggled>
+					</li>
+					<li>
+						<label>self-stim injector</label>
+						<description>Injects the user with a stim that increases their combat potential substantially for a short duration.</description>
 						<canBeToggled>false</canBeToggled>
 					</li>
 				</verbProps>
@@ -564,6 +594,15 @@
 						<minimumResourcePerUse>20</minimumResourcePerUse>
 						<postUseDelay>180</postUseDelay>
 					</li>
+					<li>
+						<hediff>FE_FusionReactor</hediff>
+						<verbLabel>self-stim injector</verbLabel>
+						<resourcePerUse>-10</resourcePerUse>
+						<disableIfMissingHediff>true</disableIfMissingHediff>
+						<disableReason>Insufficient energy.</disableReason>
+						<minimumResourcePerUse>10</minimumResourcePerUse>
+						<postUseDelay>180</postUseDelay>
+					</li>
 				</hediffOptions>
 			</li>
 		</modExtensions>
@@ -574,13 +613,15 @@
 		<label>combat stim bullet</label>
 		<projectile>
 			<damageDef>FE_StimInjectorDamageDef</damageDef>
-			<damageAmountBase>10</damageAmountBase>
+			<damageAmountBase>0</damageAmountBase>
 			<stoppingPower>0</stoppingPower>
-			<speed>80</speed>
+			<speed>1000</speed>
 		</projectile>
 		<graphicData>
-			<texPath>Things/Projectile/Bullet_small</texPath>
+			<texPath>Things/Projectile/LauncherShot</texPath>
 			<graphicClass>Graphic_Single</graphicClass>
+			<shaderType>TransparentPostLight</shaderType>
+			<color>(68,150,215)</color>
 		</graphicData>
 	</ThingDef>
 
@@ -589,25 +630,10 @@
 		<label>stim effect</label>
 		<canInterruptJobs>false</canInterruptJobs>
 		<makesBlood>false</makesBlood>
-		<defaultDamage>10</defaultDamage>
+		<defaultDamage>0</defaultDamage>
 		<harmsHealth>false</harmsHealth>
 		<soundExplosion>Explosion_Smoke</soundExplosion>
 		<combatLogRules>Damage_Smoke</combatLogRules>
-		<modExtensions>
-			<li Class="HediffResourceFramework.EffectOnImpact">
-				<resourceEffects>
-					<li>
-						<hediffDef>FE_ReactivePlating</hediffDef>
-						<adjustTargetResource>1</adjustTargetResource>
-						<removeTargetResource>false</removeTargetResource>
-						<!-- default is false -->
-						<delayTargetOnDamage>100~100</delayTargetOnDamage>
-						<!-- you can make it a random range, ie 100~10000 -->
-					</li>
-				</resourceEffects>
-
-			</li>
-		</modExtensions>
 	</DamageDef>
 
 	<ThingDef ParentName="FE_ModuleBase">
