@@ -172,7 +172,6 @@ namespace HediffResourceFramework
 
 		private static void ProcessDamage(Pawn pawn, ref DamageInfo dinfo, HediffResource hediff, ShieldProperties shieldProps)
 		{
-			Log.Message("Pre: " + hediff.def.defName + " - hediff.ResourceAmount: " + hediff.ResourceAmount + " - Damage amount: " + dinfo.Amount);
 			bool damageIsProcessed = false;
 			if (shieldProps.resourceConsumptionPerDamage.HasValue && hediff.ResourceAmount >= shieldProps.resourceConsumptionPerDamage.Value)
 			{
@@ -199,7 +198,6 @@ namespace HediffResourceFramework
 				var resourceCost = damageAmount / ratioPerAbsorb;
 				if (resourceAmount >= resourceCost)
 				{
-					Log.Message(" - ProcessDamage - dinfo.SetAmount(0f); - 20", true);
 					dinfo.SetAmount(0f);
 					hediff.ResourceAmount -= resourceCost;
 				}
@@ -207,7 +205,6 @@ namespace HediffResourceFramework
 				{
 					damageAmount -= resourceAmount * ratioPerAbsorb;
 					dinfo.SetAmount(damageAmount);
-					Log.Message(" - ProcessDamage - hediff.ResourceAmount = 0; - 24", true);
 					hediff.ResourceAmount = 0;
 				}
 				damageIsProcessed = true;
@@ -223,34 +220,43 @@ namespace HediffResourceFramework
 					{
 						var hediffComp = apparel.GetComp<CompAdjustHediffs>();
 						if (hediffComp != null && hediffComp.Props.hediffOptions != null)
-                        {
+						{
 							var newDelayTicks = (int)(delayTicks * hediffComp.Props.postDamageDelayMultiplier);
 							foreach (var hediffOption in hediffComp.Props.hediffOptions)
-                            {
+							{
 								var hediffResource = pawn.health.hediffSet.GetFirstHediffOfDef(hediffOption.hediff) as HediffResource;
+								Log.Message("Trying to add new delay: " + delayTicks + " - " + hediffComp.Props.postDamageDelayMultiplier + " - " + newDelayTicks);
+								Log.Message(apparel + " - hediffResource: " + hediffResource);
+								Log.Message(apparel + " - hediffResource.CanHaveDelay(newDelayTicks): " + hediffResource?.CanHaveDelay(newDelayTicks));
 								if (hediffResource != null && hediffResource.CanHaveDelay(newDelayTicks))
-                                {
+								{
+									Log.Message(" - ProcessDamage - hediffResource.AddDelay(newDelayTicks);; - 32", true);
 									hediffResource.AddDelay(newDelayTicks);
-                                }
-                            }
+								}
+							}
 						}
 					}
 				}
 
 				var equipments = pawn.equipment.AllEquipmentListForReading;
 				if (equipments != null)
-                {
+				{
 					foreach (var equipment in equipments)
 					{
+						Log.Message(" - ProcessDamage - var hediffComp = equipment.GetComp<CompAdjustHediffs>(); - 37", true);
 						var hediffComp = equipment.GetComp<CompAdjustHediffs>();
+						Log.Message(" - ProcessDamage - if (hediffComp != null && hediffComp.Props.hediffOptions != null) - 38", true);
 						if (hediffComp != null && hediffComp.Props.hediffOptions != null)
 						{
 							var newDelayTicks = (int)(delayTicks * hediffComp.Props.postDamageDelayMultiplier);
+							Log.Message(" - ProcessDamage - foreach (var hediffOption in hediffComp.Props.hediffOptions) - 40", true);
 							foreach (var hediffOption in hediffComp.Props.hediffOptions)
 							{
+								Log.Message(" - ProcessDamage - var hediffResource = pawn.health.hediffSet.GetFirstHediffOfDef(hediffOption.hediff) as HediffResource; - 41", true);
 								var hediffResource = pawn.health.hediffSet.GetFirstHediffOfDef(hediffOption.hediff) as HediffResource;
 								if (hediffResource != null && hediffResource.CanHaveDelay(newDelayTicks))
 								{
+									Log.Message(" - ProcessDamage - hediffResource.AddDelay(newDelayTicks);; - 42", true);
 									hediffResource.AddDelay(newDelayTicks);
 								}
 							}
@@ -258,7 +264,6 @@ namespace HediffResourceFramework
 					}
 				}
 			}
-			Log.Message("Post: " + hediff.def.defName + " - hediff.ResourceAmount: " + hediff.ResourceAmount + " - Damage amount: " + dinfo.Amount);
 		}
 	}
 }

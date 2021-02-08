@@ -58,7 +58,7 @@ namespace HediffResourceFramework
     {
         public List<HediffAdjust> hediffOptions;
 
-        public float postDamageDelayMultiplier;
+        public float postDamageDelayMultiplier = 1f;
 
         public float postUseDelayMultiplier = 1f;
     }
