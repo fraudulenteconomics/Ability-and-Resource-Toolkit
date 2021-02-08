@@ -159,6 +159,7 @@ namespace HediffResourceFramework
 		}
 		public static HediffResource AdjustResourceAmount(Pawn pawn, HediffResourceDef hdDef, float sevOffset, bool addHediffIfMissing)
 		{
+			Log.Message("Adjusting resource: " + hdDef);
 			if (sevOffset != 0f)
 			{
 				HediffResource firstHediffOfDef = pawn.health.hediffSet.GetFirstHediffOfDef(hdDef) as HediffResource;
@@ -170,8 +171,8 @@ namespace HediffResourceFramework
 				else if (addHediffIfMissing)
 				{
 					firstHediffOfDef = HediffMaker.MakeHediff(hdDef, pawn) as HediffResource;
-					firstHediffOfDef.ResourceAmount = sevOffset;
 					pawn.health.AddHediff(firstHediffOfDef);
+					firstHediffOfDef.ResourceAmount = sevOffset;
 					return firstHediffOfDef;
 				}
 			}
@@ -183,6 +184,7 @@ namespace HediffResourceFramework
 			}
 			return null;
 		}
+
 
 		public static float GetQualityMultiplier(QualityCategory qualityCategory)
 		{

@@ -14,6 +14,7 @@ namespace HediffResourceFramework
         public HediffDef hediffDef;
         public float resourceAmount;
         public bool addHediffIfMissing;
+        public int disablePostUse;
     }
     public class Verb_ResourceTarget : Verb_Shoot
     {

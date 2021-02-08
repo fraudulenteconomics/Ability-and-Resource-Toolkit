@@ -529,23 +529,13 @@
 				<verbClass>HediffResourceFramework.Verb_ResourceSelf</verbClass>
 				<label>self-stim injector</label>
 				<hasStandardCommand>true</hasStandardCommand>
-				<defaultProjectile>FE_StimInjectorBullet</defaultProjectile>
-				<warmupTime>0.8</warmupTime>
-				<range>14.9</range>
-				<burstShotCount>1</burstShotCount>
-				<soundCast>Shot_IncendiaryLauncher</soundCast>
-				<soundCastTail>GunTail_Medium</soundCastTail>
-				<muzzleFlashScale>14</muzzleFlashScale>
-				<accuracyTouch>9</accuracyTouch>
-				<accuracyShort>9</accuracyShort>
-				<accuracyMedium>9</accuracyMedium>
-				<accuracyLong>9</accuracyLong>
-				<targetParams>
-					<canTargetPawns>true</canTargetPawns>
-					<canTargetBuildings>false</canTargetBuildings>
-					<canTargetLocations>false</canTargetLocations>
-				</targetParams>
+				<violent>false</violent>
+				<hasStandardCommand>true</hasStandardCommand>
+				<targetable>false</targetable>
+				<nonInterruptingSelfCast>true</nonInterruptingSelfCast>
+				<onlyManualCast>True</onlyManualCast>
 				<defaultCooldownTime>1.2</defaultCooldownTime>
+				<defaultProjectile>FE_StimInjectorBullet</defaultProjectile>
 			</li>
 		</verbs>
 		<comps>
@@ -608,8 +598,8 @@
 		</modExtensions>
 	</ThingDef>
 
-  <ThingDef ParentName="BaseBullet">
-    <defName>FE_StimInjectorBullet</defName>
+	<ThingDef ParentName="BaseBullet">
+		<defName>FE_StimInjectorBullet</defName>
 		<label>combat stim bullet</label>
 		<projectile>
 			<damageDef>FE_StimInjectorDamageDef</damageDef>
@@ -623,8 +613,8 @@
 			<shaderType>TransparentPostLight</shaderType>
 			<color>(68,150,215)</color>
 		</graphicData>
-  </ThingDef>
-  
+	</ThingDef>
+
 	<DamageDef>
 		<defName>FE_StimInjectorDamageDef</defName>
 		<label>stim effect</label>
