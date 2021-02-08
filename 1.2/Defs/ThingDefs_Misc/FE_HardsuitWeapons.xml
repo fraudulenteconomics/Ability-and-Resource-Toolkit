@@ -31,6 +31,25 @@
 		<tickerType>Normal</tickerType>
 		<verbs>
 			<li>
+				<hediffOptions>
+					<li>
+						<hediff>FE_RepulsorRifle</hediff>
+						<verbLabel>FE_RepulsorNormal</verbLabel>
+						<resourcePerUse>2</resourcePerUse>
+						<disableIfMissingHediff>false</disableIfMissingHediff>
+						<disableReason>Too much energy</disableReason>
+						<postUseDelay>1500</postUseDelay>
+						<minimumResourcePerUse>0</minimumResourcePerUse>
+					</li>
+					<li>
+						<hediff>FE_RepulsorRifle</hediff>
+						<resourcePerSecond>-60</resourcePerSecond>
+						<qualityScalesResourcePerSecond>false</qualityScalesResourcePerSecond>
+						<maxResourceCapacityOffset>100</maxResourceCapacityOffset>
+						<qualityScalesCapacityOffset>false</qualityScalesCapacityOffset>
+						<addHediffIfMissing>true</addHediffIfMissing>
+					</li>
+				</hediffOptions>
 				<verbClass>Verb_Shoot</verbClass>
 				<label>FE_RepulsorNormal</label>
 				<hasStandardCommand>true</hasStandardCommand>
@@ -44,6 +63,17 @@
 				<muzzleFlashScale>9</muzzleFlashScale>
 			</li>
 			<li>
+				<hediffOptions>
+					<li>
+						<hediff>FE_RepulsorRifle</hediff>
+						<verbLabel>FE_RepulsorBurst</verbLabel>
+						<resourcePerUse>-20</resourcePerUse>
+						<disableIfMissingHediff>false</disableIfMissingHediff>
+						<disableReason>Not enough energy</disableReason>
+						<postUseDelay>0</postUseDelay>
+						<minimumResourcePerUse>20</minimumResourcePerUse>
+					</li>
+				</hediffOptions>
 				<verbClass>Verb_Shoot</verbClass>
 				<label>FE_RepulsorBurst</label>
 				<hasStandardCommand>true</hasStandardCommand>
@@ -90,49 +120,10 @@
 						<dropIfHediffMissing>true</dropIfHediffMissing>
 						<cannotEquipReasonIncompatible>Not enough power</cannotEquipReasonIncompatible>
 					</li>
-					<li>
-						<hediff>FE_RepulsorRifle</hediff>
-						<resourcePerSecond>-60</resourcePerSecond>
-						<qualityScalesResourcePerSecond>false</qualityScalesResourcePerSecond>
-						<maxResourceCapacityOffset>100</maxResourceCapacityOffset>
-						<qualityScalesCapacityOffset>false</qualityScalesCapacityOffset>
-						<addHediffIfMissing>true</addHediffIfMissing>
-					</li>
+					
 				</hediffOptions>
 			</li>
 		</comps>
-		<modExtensions>
-			<li Class="HediffResourceFramework.HediffAdjustOptions">
-				<hediffOptions>
-					<li>
-						<hediff>FE_RepulsorRifle</hediff>
-						<verbLabel>FE_RepulsorNormal</verbLabel>
-						<resourcePerUse>2</resourcePerUse>
-						<disableIfMissingHediff>false</disableIfMissingHediff>
-						<disableReason>Too much energy</disableReason>
-						<postUseDelay>1500</postUseDelay>
-						<minimumResourcePerUse>0</minimumResourcePerUse>
-					</li>
-					<li>
-						<hediff>FE_RepulsorRifle</hediff>
-						<verbLabel>FE_RepulsorBurst</verbLabel>
-						<resourcePerUse>-20</resourcePerUse>
-						<disableIfMissingHediff>false</disableIfMissingHediff>
-						<disableReason>Not enough energy</disableReason>
-						<postUseDelay>0</postUseDelay>
-						<minimumResourcePerUse>20</minimumResourcePerUse>
-					</li>
-					<li>
-						<hediff>FE_MarksmanOptics</hediff>
-						<verbLabel>FE_RepulsorNormal</verbLabel>
-						<resourcePerUse>1</resourcePerUse>
-						<disableIfMissingHediff>false</disableIfMissingHediff>
-						<minimumResourcePerUse>0</minimumResourcePerUse>
-						<postUseDelay>480</postUseDelay>
-					</li>
-				</hediffOptions>
-			</li>
-		</modExtensions>
 	</ThingDef>
 
 	<ThingDef ParentName="BaseBullet">
@@ -234,6 +225,24 @@
 		<tickerType>Normal</tickerType>
 		<verbs>
 			<li>
+				<hediffOptions>
+					<li>
+						<hediff>FE_FusionReactor</hediff>
+						<verbLabel>powered lmg</verbLabel>
+						<resourcePerUse>-0.5</resourcePerUse>
+						<disableIfMissingHediff>false</disableIfMissingHediff>
+						<disableReason>Invalid</disableReason>
+						<minimumResourcePerUse>0.5</minimumResourcePerUse>
+					</li>
+					<li>
+						<hediff>FE_MarksmanOptics</hediff>
+						<verbLabel>powered lmg</verbLabel>
+						<resourcePerUse>1</resourcePerUse>
+						<disableIfMissingHediff>false</disableIfMissingHediff>
+						<minimumResourcePerUse>0</minimumResourcePerUse>
+						<postUseDelay>480</postUseDelay>
+					</li>
+				</hediffOptions>
 				<verbClass>Verb_Shoot</verbClass>
 				<label>powered lmg</label>
 				<hasStandardCommand>true</hasStandardCommand>
@@ -284,28 +293,6 @@
 				</hediffOptions>
 			</li>
 		</comps>
-		<modExtensions>
-			<li Class="HediffResourceFramework.HediffAdjustOptions">
-				<hediffOptions>
-					<li>
-						<hediff>FE_FusionReactor</hediff>
-						<verbLabel>powered lmg</verbLabel>
-						<resourcePerUse>-0.5</resourcePerUse>
-						<disableIfMissingHediff>false</disableIfMissingHediff>
-						<disableReason>Invalid</disableReason>
-						<minimumResourcePerUse>0.5</minimumResourcePerUse>
-					</li>
-					<li>
-						<hediff>FE_MarksmanOptics</hediff>
-						<verbLabel>powered lmg</verbLabel>
-						<resourcePerUse>1</resourcePerUse>
-						<disableIfMissingHediff>false</disableIfMissingHediff>
-						<minimumResourcePerUse>0</minimumResourcePerUse>
-						<postUseDelay>480</postUseDelay>
-					</li>
-				</hediffOptions>
-			</li>
-		</modExtensions>
 	</ThingDef>
 
 	<ThingDef ParentName="BaseBullet">

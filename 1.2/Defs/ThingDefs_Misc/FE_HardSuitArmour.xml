@@ -133,12 +133,23 @@
 						</blackListHediffsPreventEquipping>
 						<dropWeaponOrApparelIfBlacklistHediff>
 						</dropWeaponOrApparelIfBlacklistHediff>
-						<!--<postUseDelayMultiplier>0.75</postUseDelayMultiplier> -->
+						<postUseDelayMultiplier>0.75</postUseDelayMultiplier> -->
 					</li>
-					<!--<li>
+					<li>
 						<hediff>FE_AbsorptionBarrier</hediff>
+						<resourcePerSecond>0</resourcePerSecond>
+						<qualityScalesResourcePerSecond>false</qualityScalesResourcePerSecond>
+						<addHediffIfMissing>false</addHediffIfMissing>
+						<maxResourceCapacityOffset>0</maxResourceCapacityOffset>
+						<qualityScalesCapacityOffset>false</qualityScalesCapacityOffset>
+						<disallowEquipIfHediffMissing>false</disallowEquipIfHediffMissing>
+						<dropIfHediffMissing>false</dropIfHediffMissing>
+						<blackListHediffsPreventEquipping>
+						</blackListHediffsPreventEquipping>
+						<dropWeaponOrApparelIfBlacklistHediff>
+						</dropWeaponOrApparelIfBlacklistHediff>
 						<postDamageDelayMultiplier>0.75</postDamageDelayMultiplier>
-					</li>-->
+					</li>
 				</hediffOptions>
 			</li>
 		</comps>
@@ -226,6 +237,17 @@
 		</costList>
 		<verbs>
 			<li>
+				<hediffOptions>
+					<li>
+						<hediff>FE_FusionReactor</hediff>
+						<verbLabel>jump</verbLabel>
+						<resourcePerUse>-30</resourcePerUse>
+						<disableIfMissingHediff>false</disableIfMissingHediff>
+						<disableReason>Insufficient energy.</disableReason>
+						<minimumResourcePerUse>30</minimumResourcePerUse>
+						<postUseDelay>300</postUseDelay>
+					</li>
+				</hediffOptions>
 				<verbClass>MVCF.Verbs.Verb_Jump</verbClass>
 				<label>jump</label>
 				<range>13.9</range>
@@ -271,21 +293,6 @@
 				</hediffOptions>
 			</li>
 		</comps>
-		<modExtensions>
-			<li Class="HediffResourceFramework.HediffAdjustOptions">
-				<hediffOptions>
-					<li>
-						<hediff>FE_FusionReactor</hediff>
-						<verbLabel>jump</verbLabel>
-						<resourcePerUse>-30</resourcePerUse>
-						<disableIfMissingHediff>false</disableIfMissingHediff>
-						<disableReason>Insufficient energy.</disableReason>
-						<minimumResourcePerUse>30</minimumResourcePerUse>
-						<postUseDelay>300</postUseDelay>
-					</li>
-				</hediffOptions>
-			</li>
-		</modExtensions>
 	</ThingDef>
 
 	<!-- Still In Development
@@ -319,6 +326,17 @@
 		</costList>
 		<verbs>
 			<li>
+				<hediffOptions>
+					<li>
+						<hediff>FE_FusionReactor</hediff>
+						<verbLabel>Deploy Turret</verbLabel>
+						<resourcePerUse>-50</resourcePerUse>
+						<disableIfMissingHediff>false</disableIfMissingHediff>
+						<disableReason>Insufficient energy.</disableReason>
+						<minimumResourcePerUse>50</minimumResourcePerUse>
+						<postUseDelay>300</postUseDelay>
+					</li>
+				</hediffOptions>
 				<verbClass>Verb_Spawn</verbClass>
 				<label>Deploy Turret</label>
 				<hasStandardCommand>true</hasStandardCommand>
@@ -364,21 +382,6 @@
 				</hediffOptions>
 			</li>
 		</comps>
-		<modExtensions>
-			<li Class="HediffResourceFramework.HediffAdjustOptions">
-				<hediffOptions>
-					<li>
-						<hediff>FE_FusionReactor</hediff>
-						<verbLabel>Deploy Turret</verbLabel>
-						<resourcePerUse>-50</resourcePerUse>
-						<disableIfMissingHediff>false</disableIfMissingHediff>
-						<disableReason>Insufficient energy.</disableReason>
-						<minimumResourcePerUse>50</minimumResourcePerUse>
-						<postUseDelay>300</postUseDelay>
-					</li>
-				</hediffOptions>
-			</li>
-		</modExtensions>
 	</ThingDef>
 
 	<ThingDef ParentName="BuildingBase">
@@ -652,6 +655,17 @@
 		</costList>
 		<verbs>
 			<li>
+				<hediffOptions>
+					<li>
+						<hediff>FE_ChargeBurstModule</hediff>
+						<verbIndex>0</verbIndex>
+						<resourcePerUse>-2</resourcePerUse>
+						<disableIfMissingHediff>false</disableIfMissingHediff>
+						<disableReason>Insufficient charge.</disableReason>
+						<minimumResourcePerUse>2</minimumResourcePerUse>
+						<postUseDelay>600</postUseDelay>
+					</li>
+				</hediffOptions>
 				<verbClass>Verb_Shoot</verbClass>
 				<label>charge blast</label>
 				<hasStandardCommand>true</hasStandardCommand>
@@ -717,21 +731,6 @@
 				<damageScaling>Scalar</damageScaling>
 			</li>
 		</comps>
-		<modExtensions>
-			<li Class="HediffResourceFramework.HediffAdjustOptions">
-				<hediffOptions>
-					<li>
-						<hediff>FE_ChargeBurstModule</hediff>
-						<verbIndex>0</verbIndex>
-						<resourcePerUse>-2</resourcePerUse>
-						<disableIfMissingHediff>false</disableIfMissingHediff>
-						<disableReason>Insufficient charge.</disableReason>
-						<minimumResourcePerUse>2</minimumResourcePerUse>
-						<postUseDelay>600</postUseDelay>
-					</li>
-				</hediffOptions>
-			</li>
-		</modExtensions>
 	</ThingDef>
 
 	<ThingDef ParentName="BaseBullet">
@@ -875,6 +874,17 @@
 		</apparel>
 		<verbs>
 			<li>
+				<hediffOptions>
+					<li>
+						<hediff>FE_FusionReactor</hediff>
+						<verbLabel>head vulcan</verbLabel>
+						<resourcePerUse>-0.8</resourcePerUse>
+						<disableIfMissingHediff>false</disableIfMissingHediff>
+						<disableReason>Not enough energy.</disableReason>
+						<minimumResourcePerUse>2</minimumResourcePerUse>
+						<postUseDelay>120</postUseDelay>
+					</li>
+				</hediffOptions>
 				<verbClass>Verb_Shoot</verbClass>
 				<label>head vulcan</label>
 				<hasStandardCommand>true</hasStandardCommand>
@@ -928,21 +938,6 @@
 				</hediffOptions>
 			</li>
 		</comps>
-		<modExtensions>
-			<li Class="HediffResourceFramework.HediffAdjustOptions">
-				<hediffOptions>
-					<li>
-						<hediff>FE_FusionReactor</hediff>
-						<verbLabel>head vulcan</verbLabel>
-						<resourcePerUse>-0.8</resourcePerUse>
-						<disableIfMissingHediff>false</disableIfMissingHediff>
-						<disableReason>Not enough energy.</disableReason>
-						<minimumResourcePerUse>2</minimumResourcePerUse>
-						<postUseDelay>120</postUseDelay>
-					</li>
-				</hediffOptions>
-			</li>
-		</modExtensions>
 	</ThingDef>
 
 	<ThingDef ParentName="BaseBullet">
