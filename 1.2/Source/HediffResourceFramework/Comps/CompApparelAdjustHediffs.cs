@@ -31,7 +31,7 @@ namespace HediffResourceFramework
         {
             base.Notify_Removed();
             List<HediffResourceDef> hediffResourcesToRemove = Apparel.Wearer.health.hediffSet.hediffs.OfType<HediffResource>()
-                    .Select(x => x.def).Where(x => Props.hediffOptions.Any(y => y.hediff == x)).ToList();
+                    .Select(x => x.def).Where(x => Props.resourceSettings.Any(y => y.hediff == x)).ToList();
             var apparels = Apparel.Wearer.apparel.WornApparel;
             if (apparels != null)
             {
@@ -40,9 +40,9 @@ namespace HediffResourceFramework
                     if (ap != Apparel)
                     {
                         var comp = ap.TryGetComp<CompApparelAdjustHediffs>();
-                        if (comp?.Props?.hediffOptions != null)
+                        if (comp?.Props?.resourceSettings != null)
                         {
-                            foreach (var hediffOption in comp.Props.hediffOptions)
+                            foreach (var hediffOption in comp.Props.resourceSettings)
                             {
                                 if (hediffResourcesToRemove.Contains(hediffOption.hediff))
                                 {
@@ -60,9 +60,9 @@ namespace HediffResourceFramework
                 foreach (var eq in equipments)
                 {
                     var comp = eq.TryGetComp<CompWeaponAdjustHediffs>();
-                    if (comp?.Props?.hediffOptions != null)
+                    if (comp?.Props?.resourceSettings != null)
                     {
-                        foreach (var hediffOption in comp.Props.hediffOptions)
+                        foreach (var hediffOption in comp.Props.resourceSettings)
                         {
                             if (hediffResourcesToRemove.Contains(hediffOption.hediff))
                             {
@@ -97,7 +97,7 @@ namespace HediffResourceFramework
                 {
                     if (!this.postUseDelayTicks?.Values?.Select(x => x.delayTicks).Any(y => y > Find.TickManager.TicksGame) ?? true)
                     {
-                        foreach (var option in Props.hediffOptions)
+                        foreach (var option in Props.resourceSettings)
                         {
                             var hediffResource = Apparel.Wearer.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
                             if (hediffResource != null && !hediffResource.CanGainResource)

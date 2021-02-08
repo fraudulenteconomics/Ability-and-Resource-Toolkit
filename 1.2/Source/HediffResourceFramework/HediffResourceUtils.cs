@@ -32,9 +32,9 @@ namespace HediffResourceFramework
 		public static bool CanWear(Pawn pawn, Apparel apparel, out string reason)
 		{
 			var hediffComp = apparel.GetComp<CompApparelAdjustHediffs>();
-			if (hediffComp?.Props.hediffOptions != null)
+			if (hediffComp?.Props.resourceSettings != null)
 			{
-				foreach (var option in hediffComp.Props.hediffOptions)
+				foreach (var option in hediffComp.Props.resourceSettings)
 				{
 					if (option.disallowEquipIfHediffMissing)
 					{
@@ -67,9 +67,9 @@ namespace HediffResourceFramework
 		public static bool CanEquip(Pawn pawn, ThingWithComps weapon, out string reason)
 		{
 			var hediffComp = weapon.GetComp<CompWeaponAdjustHediffs>();
-			if (hediffComp?.Props.hediffOptions != null)
+			if (hediffComp?.Props.resourceSettings != null)
 			{
-				foreach (var option in hediffComp.Props.hediffOptions)
+				foreach (var option in hediffComp.Props.resourceSettings)
 				{
 					if (option.disallowEquipIfHediffMissing)
 					{
@@ -110,9 +110,9 @@ namespace HediffResourceFramework
 				foreach (var ap in pawn.apparel.WornApparel)
 				{
 					var hediffComp = ap.GetComp<CompApparelAdjustHediffs>();
-					if (hediffComp?.Props.hediffOptions != null)
+					if (hediffComp?.Props.resourceSettings != null)
 					{
-						foreach (var option in hediffComp.Props.hediffOptions)
+						foreach (var option in hediffComp.Props.resourceSettings)
 						{
 							if (option.hediff == hdDef && option.maxResourceCapacityOffset != 0f)
 							{
@@ -136,9 +136,9 @@ namespace HediffResourceFramework
 				foreach (var equipment in equipments)
 				{
 					var hediffComp = equipment.GetComp<CompWeaponAdjustHediffs>();
-					if (hediffComp?.Props.hediffOptions != null)
+					if (hediffComp?.Props.resourceSettings != null)
 					{
-						foreach (var option in hediffComp.Props.hediffOptions)
+						foreach (var option in hediffComp.Props.resourceSettings)
 						{
 							if (option.hediff == hdDef && option.maxResourceCapacityOffset != 0f)
 							{

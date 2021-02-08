@@ -19,7 +19,7 @@ namespace HediffResourceFramework
 				var comp = thing.TryGetComp<CompApparelAdjustHediffs>();
 				if (comp != null)
 				{
-					foreach (var hediffOption in comp.Props.hediffOptions)
+					foreach (var hediffOption in comp.Props.resourceSettings)
 					{
 						if (options.hediffResource == hediffOption.hediff)
 						{
@@ -33,7 +33,7 @@ namespace HediffResourceFramework
 				var comp = thing.TryGetComp<CompWeaponAdjustHediffs>();
 				if (comp != null)
 				{
-					foreach (var hediffOption in comp.Props.hediffOptions)
+					foreach (var hediffOption in comp.Props.resourceSettings)
 					{
 						if (options.hediffResource == hediffOption.hediff)
 						{
@@ -53,7 +53,7 @@ namespace HediffResourceFramework
 				var comp = thing.TryGetComp<CompApparelAdjustHediffs>();
 				if (comp != null)
                 {
-					foreach (var hediffOption in comp.Props.hediffOptions)
+					foreach (var hediffOption in comp.Props.resourceSettings)
                     {
 						if (options.hediffResource == hediffOption.hediff)
                         {
@@ -74,7 +74,7 @@ namespace HediffResourceFramework
 				var comp = thing.TryGetComp<CompWeaponAdjustHediffs>();
 				if (comp != null)
 				{
-					foreach (var hediffOption in comp.Props.hediffOptions)
+					foreach (var hediffOption in comp.Props.resourceSettings)
 					{
 						if (options.hediffResource == hediffOption.hediff)
 						{

@@ -28,9 +28,9 @@ namespace HediffResourceFramework
 					foreach (var apparel in apparels)
 					{
 						var hediffComp = apparel.GetComp<CompApparelAdjustHediffs>();
-						if (hediffComp?.Props.hediffOptions != null)
+						if (hediffComp?.Props.resourceSettings != null)
 						{
-							foreach (var option in hediffComp.Props.hediffOptions)
+							foreach (var option in hediffComp.Props.resourceSettings)
 							{
 								if (option.dropWeaponOrApparelIfBlacklistHediff?.Contains(__instance.def) ?? false)
 								{
@@ -47,9 +47,9 @@ namespace HediffResourceFramework
 					foreach (var equipment in equipments)
 					{
 						var hediffComp = equipment.GetComp<CompWeaponAdjustHediffs>();
-						if (hediffComp?.Props.hediffOptions != null)
+						if (hediffComp?.Props.resourceSettings != null)
 						{
-							foreach (var option in hediffComp.Props.hediffOptions)
+							foreach (var option in hediffComp.Props.resourceSettings)
 							{
 								if (option.dropWeaponOrApparelIfBlacklistHediff?.Contains(__instance.def) ?? false)
 								{
