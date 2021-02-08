@@ -61,7 +61,8 @@ namespace HediffResourceFramework
                                 {
                                     comp.postUseDelayTicks = new Dictionary<Verb, VerbDisable>();
                                 }
-                                comp.postUseDelayTicks[__instance] = new VerbDisable((int)((Find.TickManager.TicksGame + option.postUseDelay) * comp.Props.postUseDelayMultiplier), comp.Props.disableWeaponPostUse);
+                                comp.postUseDelayTicks[__instance] = new VerbDisable((int)((Find.TickManager.TicksGame + option.postUseDelay) 
+                                    * comp.Props.resourceSettings.FirstOrDefault(x => x.hediff == option.hediff)?.postUseDelayMultiplier ?? 1), comp.Props.disableWeaponPostUse);
                             }
 
                             var hediffResource = __instance.CasterPawn.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;

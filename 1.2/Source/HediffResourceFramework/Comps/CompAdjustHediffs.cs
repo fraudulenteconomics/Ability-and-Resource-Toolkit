@@ -29,6 +29,10 @@ namespace HediffResourceFramework
 
         public bool dropIfHediffMissing;
         public bool addHediffIfMissing = false;
+
+        public float postDamageDelayMultiplier = 1f;
+
+        public float postUseDelayMultiplier = 1f;
     }
 
     public class VerbDisable : IExposable
@@ -57,10 +61,6 @@ namespace HediffResourceFramework
     public class CompProperties_AdjustHediffs : CompProperties
     {
         public List<HediffAdjust> resourceSettings;
-
-        public float postDamageDelayMultiplier = 1f;
-
-        public float postUseDelayMultiplier = 1f;
     }
     public class CompAdjustHediffs : ThingComp
     {
