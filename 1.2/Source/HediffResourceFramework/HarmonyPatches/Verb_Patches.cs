@@ -45,16 +45,12 @@ namespace HediffResourceFramework
         {
             if (__instance.Available() && __instance.CasterIsPawn && __instance.EquipmentSource != null)
             {
-                var options = __instance.EquipmentSource.def.GetModExtension<HediffAdjustOptions>();
-                if (options != null)
+                var verbProps = __instance.verbProps as VerbResourceProps;
+                if (verbProps != null && verbProps.hediffOptions != null)
                 {
-                    foreach (var option in options.hediffOptions)
+                    foreach (var option in verbProps.hediffOptions)
                     {
-                        if (HediffResourceUtils.VerbMatches(__instance, option))
-                        {
-                            HediffResourceUtils.AdjustResourceAmount(__instance.CasterPawn, option.hediff, option.resourcePerUse, option.addHediffIfMissing);
-                        }
-
+                        HediffResourceUtils.AdjustResourceAmount(__instance.CasterPawn, option.hediff, option.resourcePerUse, option.addHediffIfMissing);
                         if (option.postUseDelay != 0)
                         {
                             var comp = __instance.EquipmentSource.GetComp<CompWeaponAdjustHediffs>();

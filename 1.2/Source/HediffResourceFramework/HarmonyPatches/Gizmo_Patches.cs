@@ -170,21 +170,14 @@ namespace HediffResourceFramework
 		public static bool TryGetAmmoString(Verb verb, out List<Tuple<HediffOption, HediffResource>> hediffs)
 		{
 			hediffs = new List<Tuple<HediffOption, HediffResource>>();
-			if (verb.CasterIsPawn && verb.EquipmentSource != null)
+			if (verb.CasterIsPawn && verb.verbProps is VerbResourceProps verbResourceProps && verbResourceProps.hediffOptions != null)
 			{
-				var options = verb.EquipmentSource.def.GetModExtension<HediffAdjustOptions>();
-				if (options != null)
+				foreach (var option in verbResourceProps.hediffOptions)
 				{
-					foreach (var option in options.hediffOptions)
+					var resourceHediff = verb.CasterPawn.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
+					if (resourceHediff != null)
 					{
-						if (HediffResourceUtils.VerbMatches(verb, option))
-						{
-							var resourceHediff = verb.CasterPawn.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
-							if (resourceHediff != null)
-                            {
-								hediffs.Add(new Tuple<HediffOption, HediffResource>(option, resourceHediff));
-							}
-						}
+						hediffs.Add(new Tuple<HediffOption, HediffResource>(option, resourceHediff));
 					}
 				}
 			}

@@ -200,27 +200,7 @@ namespace HediffResourceFramework
 				default: return 1f;
 			}
 		}
-		public static bool VerbMatches(Verb verb, HediffOption option)
-		{
-			if (!option.verbLabel.NullOrEmpty())
-			{
-				if (verb.ReportLabel == option.verbLabel)
-				{
-					return true;
-				}
-				return false;
-			}
 
-			if (option.verbIndex != -1)
-			{
-				if (verb.EquipmentSource.def.Verbs.IndexOf(verb.verbProps) == option.verbIndex)
-				{
-					return true;
-				}
-				return false;
-			}
-			return true;
-		}
 		public static bool IsUsableBy(Verb verb, out string disableReason)
 		{
 			if (verb.CasterIsPawn && verb.EquipmentSource != null)
@@ -251,51 +231,48 @@ namespace HediffResourceFramework
 						}
 					}
 				}
-				var options = verb.EquipmentSource.def.GetModExtension<HediffAdjustOptions>();
-				if (options != null)
-				{
-					foreach (var option in options.hediffOptions)
+				var verbProps = verb.verbProps as VerbResourceProps;
+				if (verbProps != null && verbProps.hediffOptions != null)
+                {
+					foreach (var option in verbProps.hediffOptions)
 					{
-						if (VerbMatches(verb, option))
+						var resourceHediff = verb.CasterPawn.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
+						if (option.disableIfMissingHediff)
 						{
-							var resourceHediff = verb.CasterPawn.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
-							if (option.disableIfMissingHediff)
+							bool manaIsEmptyOrNull = resourceHediff != null ? resourceHediff.ResourceAmount <= 0 : true;
+							if (manaIsEmptyOrNull)
 							{
-								bool manaIsEmptyOrNull = resourceHediff != null ? resourceHediff.ResourceAmount <= 0 : true;
-								if (manaIsEmptyOrNull)
-								{
-									disableReason = option.disableReason;
-									return false;
-								}
+								disableReason = option.disableReason;
+								return false;
 							}
+						}
 
-							if (option.minimumResourcePerUse != -1f)
+						if (option.minimumResourcePerUse != -1f)
+						{
+							if (resourceHediff != null && resourceHediff.ResourceAmount < option.minimumResourcePerUse)
 							{
-								if (resourceHediff != null && resourceHediff.ResourceAmount < option.minimumResourcePerUse)
-								{
-									disableReason = option.disableReason;
-									return false;
-								}
+								disableReason = option.disableReason;
+								return false;
 							}
-							if (option.disableAboveResource != -1f)
+						}
+						if (option.disableAboveResource != -1f)
+						{
+							if (resourceHediff != null && resourceHediff.ResourceAmount > option.disableAboveResource)
 							{
-								if (resourceHediff != null && resourceHediff.ResourceAmount > option.disableAboveResource)
-								{
-									disableReason = option.disableReason;
-									return false;
-								}
+								disableReason = option.disableReason;
+								return false;
 							}
+						}
 
-							if (option.resourcePerUse < 0)
+						if (option.resourcePerUse < 0)
+						{
+							if (resourceHediff != null)
 							{
-								if (resourceHediff != null)
+								var num = resourceHediff.ResourceAmount - option.resourcePerUse;
+								if (num < 0)
 								{
-									var num = resourceHediff.ResourceAmount - option.resourcePerUse;
-									if (num < 0)
-									{
-										disableReason = option.disableReason;
-										return false;
-									}
+									disableReason = option.disableReason;
+									return false;
 								}
 							}
 						}

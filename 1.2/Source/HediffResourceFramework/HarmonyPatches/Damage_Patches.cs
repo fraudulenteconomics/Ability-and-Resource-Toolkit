@@ -102,6 +102,8 @@ namespace HediffResourceFramework
 		}
 	}
 
+
+
 	[HarmonyPatch(typeof(Pawn), "PreApplyDamage")]
 	public static class Patch_PreApplyDamage
 	{

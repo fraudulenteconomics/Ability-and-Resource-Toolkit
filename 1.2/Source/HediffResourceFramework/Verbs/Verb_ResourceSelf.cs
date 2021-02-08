@@ -13,13 +13,17 @@ namespace HediffResourceFramework
         public new VerbResourceProps verbProps => base.verbProps as VerbResourceProps;
         public override bool Available()
         {
-            if (verbProps.hediffDefResource != null)
+            if (verbProps.hediffOptions != null)
             {
-                var hediffResource = this.CasterPawn.health.hediffSet.GetFirstHediffOfDef(verbProps.hediffDefResource) as HediffResource;
-                if (hediffResource != null && hediffResource.ResourceAmount == hediffResource.ResourceCapacity)
+                foreach (var hediffOption in verbProps.hediffOptions)
                 {
-                    return false;
+                    var hediffResource = this.CasterPawn.health.hediffSet.GetFirstHediffOfDef(hediffOption.hediff) as HediffResource;
+                    if (hediffResource != null && hediffResource.ResourceAmount == hediffResource.ResourceCapacity)
+                    {
+                        return false;
+                    }
                 }
+
             }
             return true;
         }
@@ -28,14 +32,13 @@ namespace HediffResourceFramework
             var result = base.TryCastShot();
             if (result && this.CasterPawn != null)
             {
-                if (verbProps.hediffDefResource != null)
+                if (verbProps.hediffOptions != null)
                 {
-                    Log.Message("Giving: " + this.CasterPawn + " - " + verbProps.hediffDefResource + " - " + verbProps.resourceAmount);
-                    HediffResourceUtils.AdjustResourceAmount(this.CasterPawn, verbProps.hediffDefResource, verbProps.resourceAmount, verbProps.addHediffIfMissing);
-                }
-                else if (verbProps.hediffDef != null)
-                {
-                    HealthUtility.AdjustSeverity(this.CasterPawn, verbProps.hediffDef, verbProps.resourceAmount);
+                    foreach (var hediffOption in verbProps.hediffOptions)
+                    {
+                        Log.Message("Giving: " + this.CasterPawn + " - " + hediffOption.hediff + " - " + hediffOption.resourcePerUse);
+                        HediffResourceUtils.AdjustResourceAmount(this.CasterPawn, hediffOption.hediff, hediffOption.resourcePerUse, hediffOption.addHediffIfMissing);
+                    }
                 }
             }
             return result;

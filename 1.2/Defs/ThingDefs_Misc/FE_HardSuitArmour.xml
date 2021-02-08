@@ -498,6 +498,16 @@
 		</costList>
 		<verbs>
 			<li Class="HediffResourceFramework.VerbResourceProps">
+				<hediffOptions>
+					<li>
+						<hediff>FE_FusionReactor</hediff>
+						<resourcePerUse>-20</resourcePerUse>
+						<disableIfMissingHediff>true</disableIfMissingHediff>
+						<disableReason>Insufficient energy.</disableReason>
+						<minimumResourcePerUse>20</minimumResourcePerUse>
+						<postUseDelay>180</postUseDelay>
+					</li>
+				</hediffOptions>
 				<hediffDefResource>FE_StimHediff</hediffDefResource>
 				<resourceAmount>1</resourceAmount>
 				<addHediffIfMissing>true</addHediffIfMissing>
@@ -524,6 +534,16 @@
 				<defaultCooldownTime>1.2</defaultCooldownTime>
 			</li>
 			<li Class="HediffResourceFramework.VerbResourceProps">
+				<hediffOptions>
+					<li>
+						<hediff>FE_FusionReactor</hediff>
+						<resourcePerUse>-10</resourcePerUse>
+						<disableIfMissingHediff>true</disableIfMissingHediff>
+						<disableReason>Insufficient energy.</disableReason>
+						<minimumResourcePerUse>10</minimumResourcePerUse>
+						<postUseDelay>180</postUseDelay>
+					</li>
+				</hediffOptions>
 				<hediffDefResource>FE_StimHediff</hediffDefResource>
 				<resourceAmount>1</resourceAmount>
 				<addHediffIfMissing>true</addHediffIfMissing>
@@ -573,30 +593,6 @@
 				</hediffOptions>
 			</li>
 		</comps>
-		<modExtensions>
-			<li Class="HediffResourceFramework.HediffAdjustOptions">
-				<hediffOptions>
-					<li>
-						<hediff>FE_FusionReactor</hediff>
-						<verbLabel>stim injector</verbLabel>
-						<resourcePerUse>-20</resourcePerUse>
-						<disableIfMissingHediff>true</disableIfMissingHediff>
-						<disableReason>Insufficient energy.</disableReason>
-						<minimumResourcePerUse>20</minimumResourcePerUse>
-						<postUseDelay>180</postUseDelay>
-					</li>
-					<li>
-						<hediff>FE_FusionReactor</hediff>
-						<verbLabel>self-stim injector</verbLabel>
-						<resourcePerUse>-10</resourcePerUse>
-						<disableIfMissingHediff>true</disableIfMissingHediff>
-						<disableReason>Insufficient energy.</disableReason>
-						<minimumResourcePerUse>10</minimumResourcePerUse>
-						<postUseDelay>180</postUseDelay>
-					</li>
-				</hediffOptions>
-			</li>
-		</modExtensions>
 	</ThingDef>
 
 	<ThingDef ParentName="BaseBullet">

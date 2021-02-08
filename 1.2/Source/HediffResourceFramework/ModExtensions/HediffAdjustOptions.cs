@@ -21,9 +21,7 @@ namespace HediffResourceFramework
         }
 
         public HediffResourceDef hediff;
-        public int verbIndex = -1;
-        public string verbLabel;
-        
+
         public float resourcePerUse;
         public bool disableIfMissingHediff;
         public float minimumResourcePerUse = -1f;
@@ -32,9 +30,5 @@ namespace HediffResourceFramework
         public string disableReason;
 
         public int postUseDelay;
-    }
-    public class HediffAdjustOptions : DefModExtension
-    {
-        public List<HediffOption> hediffOptions;
     }
 }
