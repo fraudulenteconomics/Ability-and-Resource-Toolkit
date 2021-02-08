@@ -45,34 +45,39 @@ namespace HediffResourceFramework
         {
             if (__instance.Available() && __instance.CasterIsPawn && __instance.EquipmentSource != null)
             {
-                var verbProps = __instance.verbProps as VerbResourceProps;
-                if (verbProps != null && verbProps.resourceSettings != null)
+                var comp = __instance.EquipmentSource.GetComp<CompWeaponAdjustHediffs>();
+                if (comp != null)
                 {
-                    foreach (var option in verbProps.resourceSettings)
+                    if (comp.postUseDelayTicks is null)
                     {
-                        HediffResourceUtils.AdjustResourceAmount(__instance.CasterPawn, option.hediff, option.resourcePerUse, option.addHediffIfMissing);
-                        if (option.postUseDelay != 0)
+                        comp.postUseDelayTicks = new Dictionary<Verb, VerbDisable>();
+                    }
+
+                    var verbProps = __instance.verbProps as VerbResourceProps;
+                    if (verbProps != null && verbProps.resourceSettings != null)
+                    {
+                        var postUseDelayMultipliers = new List<float>();
+                        var postUseDelay = new List<int>();
+
+                        foreach (var option in verbProps.resourceSettings)
                         {
-                            var comp = __instance.EquipmentSource.GetComp<CompWeaponAdjustHediffs>();
-
-                            if (comp != null)
+                            var resourseSettings = comp.Props.resourceSettings.FirstOrDefault(x => x.hediff == option.hediff);
+                            if (resourseSettings != null)
                             {
-                                if (comp.postUseDelayTicks is null)
-                                {
-                                    comp.postUseDelayTicks = new Dictionary<Verb, VerbDisable>();
-                                }
-                                comp.postUseDelayTicks[__instance] = new VerbDisable((int)((Find.TickManager.TicksGame + option.postUseDelay) 
-                                    * comp.Props.resourceSettings.FirstOrDefault(x => x.hediff == option.hediff)?.postUseDelayMultiplier ?? 1), comp.Props.disableWeaponPostUse);
+                                postUseDelayMultipliers.Add(resourseSettings.postUseDelayMultiplier);
                             }
-
-                            var hediffResource = __instance.CasterPawn.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
-                            Log.Message($"__instance.EquipmentSource: {__instance.EquipmentSource}, hediffResource: {hediffResource}, option.hediff: {option.hediff}");
-                            if (hediffResource != null && hediffResource.CanHaveDelay(option.postUseDelay))
+                            postUseDelay.Add(option.postUseDelay);
+                            var hediffResource = HediffResourceUtils.AdjustResourceAmount(__instance.CasterPawn, option.hediff, option.resourcePerUse, option.addHediffIfMissing);
+                            if (option.postUseDelay != 0)
                             {
-                                Log.Message("Patch_TryCastNextBurstShot - Postfix - hediffResource.AddDelay(option.postUseDelay); - 16", true);
-                                hediffResource.AddDelay(option.postUseDelay);
+                                if (hediffResource != null && hediffResource.CanHaveDelay(option.postUseDelay))
+                                {
+                                    hediffResource.AddDelay(option.postUseDelay);
+                                }
                             }
                         }
+
+                        comp.postUseDelayTicks[__instance] = new VerbDisable((int)((Find.TickManager.TicksGame + (int)postUseDelay.Average()) * postUseDelayMultipliers.Average()), comp.Props.disableWeaponPostUse);
                     }
                 }
             }
