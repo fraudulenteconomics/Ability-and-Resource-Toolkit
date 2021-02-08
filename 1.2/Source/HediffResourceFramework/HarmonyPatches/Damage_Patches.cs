@@ -112,31 +112,12 @@ namespace HediffResourceFramework
 			var effectOnImpactOptions = dinfo.Def.GetModExtension<EffectOnImpact>();
 			if (effectOnImpactOptions != null && __instance.health?.hediffSet != null)
 			{
-				Log.Message("EffectOnImpact: Patch_PreApplyDamage - Prefix - foreach (var resourceEffect in effectOnImpactOptions.resourceEffects) - 4", true);
 				foreach (var resourceEffect in effectOnImpactOptions.resourceEffects)
 				{
-					Log.Message("EffectOnImpact: Patch_PreApplyDamage - Prefix - if (resourceEffect.removeTargetResource) - 5", true);
-					if (resourceEffect.removeTargetResource)
+					var hediffResource = HediffResourceUtils.AdjustResourceAmount(__instance, resourceEffect.hediffDef, resourceEffect.adjustTargetResource, resourceEffect.addHediffIfMissing);
+					if (resourceEffect.delayTargetOnDamage != IntRange.zero)
 					{
-						Log.Message("EffectOnImpact: Patch_PreApplyDamage - Prefix - var hediffToRemove = __instance.health.hediffSet.GetFirstHediffOfDef(resourceEffect.hediffDef); - 6", true);
-						var hediffToRemove = __instance.health.hediffSet.GetFirstHediffOfDef(resourceEffect.hediffDef);
-						Log.Message("EffectOnImpact: Patch_PreApplyDamage - Prefix - if (hediffToRemove != null) - 7", true);
-						if (hediffToRemove != null)
-						{
-							Log.Message("EffectOnImpact: Patch_PreApplyDamage - Prefix - __instance.health.RemoveHediff(hediffToRemove); - 8", true);
-							__instance.health.RemoveHediff(hediffToRemove);
-						}
-					}
-					else
-					{
-						Log.Message("EffectOnImpact: Patch_PreApplyDamage - Prefix - var hediffResource = HediffResourceUtils.AdjustResourceAmount(__instance, resourceEffect.hediffDef, resourceEffect.adjustTargetResource, true); - 9", true);
-						var hediffResource = HediffResourceUtils.AdjustResourceAmount(__instance, resourceEffect.hediffDef, resourceEffect.adjustTargetResource, true);
-						Log.Message("EffectOnImpact: Patch_PreApplyDamage - Prefix - if (resourceEffect.delayTargetOnDamage != IntRange.zero) - 15", true);
-						if (resourceEffect.delayTargetOnDamage != IntRange.zero)
-						{
-							Log.Message("EffectOnImpact: Patch_PreApplyDamage - Prefix - hediffResource.delayTicks = Find.TickManager.TicksGame + resourceEffect.delayTargetOnDamage.RandomInRange; - 16", true);
-							hediffResource.AddDelay(resourceEffect.delayTargetOnDamage.RandomInRange);
-						}
+						hediffResource.AddDelay(resourceEffect.delayTargetOnDamage.RandomInRange);
 					}
 				}
 			}
@@ -160,7 +141,6 @@ namespace HediffResourceFramework
 						}
 						if (dinfo.Amount <= 0)
 						{
-							Log.Message(" - Prefix - absorbed = true; - 10", true);
 							absorbed = true;
 						}
 						hediff.AbsorbedDamage(dinfo);

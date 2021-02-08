@@ -52,6 +52,7 @@ namespace HediffResourceFramework
 		public ShieldProperties shieldProperties;
 		public bool keepWhenEmpty;
 		public int lifetimeTicks = -1;
+		public bool hideResourceAmount;
 
 		public bool showResourceBar;
 		public Color? backgroundBarColor;
