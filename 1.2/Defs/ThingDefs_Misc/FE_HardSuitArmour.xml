@@ -133,7 +133,7 @@
 						</blackListHediffsPreventEquipping>
 						<dropWeaponOrApparelIfBlacklistHediff>
 						</dropWeaponOrApparelIfBlacklistHediff>
-						<postUseDelayMultiplier>0.75</postUseDelayMultiplier> -->
+						<postUseDelayMultiplier>0.75</postUseDelayMultiplier>
 					</li>
 					<li>
 						<hediff>FE_AbsorptionBarrier</hediff>
