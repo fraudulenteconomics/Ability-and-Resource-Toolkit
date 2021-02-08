@@ -51,10 +51,10 @@
 		</graphicData>
 		<apparel>
 			<bodyPartGroups>
-				<li>FE_Core_Module</li>
+				<li>Waist</li>
 			</bodyPartGroups>
 			<layers>
-				<li>Middle</li>
+				<li>FE_Core_Module</li>
 			</layers>
 			<tags>
 				<li>PoweredArmor</li>
@@ -100,10 +100,10 @@
 		</graphicData>
 		<apparel>
 			<bodyPartGroups>
-				<li>FE_Core_Module</li>
+				<li>Waist</li>
 			</bodyPartGroups>
 			<layers>
-				<li>Middle</li>
+				<li>FE_Core_Module</li>
 			</layers>
 			<tags>
 				<li>PoweredArmor</li>
@@ -154,10 +154,10 @@
 		</graphicData>
 		<apparel>
 			<bodyPartGroups>
-				<li>FE_Leg_Module</li>
+				<li>Waist</li>
 			</bodyPartGroups>
 			<layers>
-				<li>Middle</li>
+				<li>FE_Leg_Module</li>
 			</layers>
 			<tags>
 				<li>PoweredArmor</li>
@@ -207,10 +207,10 @@
 		</graphicData>
 		<apparel>
 			<bodyPartGroups>
-				<li>FE_Leg_Module</li>
+				<li>Waist</li>
 			</bodyPartGroups>
 			<layers>
-				<li>Middle</li>
+				<li>FE_Leg_Module</li>
 			</layers>
 			<tags>
 				<li>PoweredArmor</li>
@@ -300,10 +300,10 @@
 		</graphicData>
 		<apparel>
 			<bodyPartGroups>
-				<li>FE_Back_Module</li>
+				<li>Waist</li>
 			</bodyPartGroups>
 			<layers>
-				<li>Middle</li>
+				<li>FE_Back_Module</li>
 			</layers>
 			<tags>
 				<li>PoweredArmor</li>
@@ -479,10 +479,10 @@
 		</graphicData>
 		<apparel>
 			<bodyPartGroups>
-				<li>FE_Arm_Module</li>
+				<li>Waist</li>
 			</bodyPartGroups>
 			<layers>
-				<li>Middle</li>
+				<li>FE_Arm_Module</li>
 			</layers>
 			<tags>
 				<li>PoweredArmor</li>
@@ -646,10 +646,10 @@
 		</graphicData>
 		<apparel>
 			<bodyPartGroups>
-				<li>FE_Arm_Module</li>
+				<li>Waist</li>
 			</bodyPartGroups>
 			<layers>
-				<li>Middle</li>
+				<li>FE_Arm_Module</li>
 			</layers>
 			<tags>
 				<li>PoweredArmor</li>
@@ -773,10 +773,10 @@
 		</graphicData>
 		<apparel>
 			<bodyPartGroups>
-				<li>FE_Exo_Module</li>
+				<li>Waist</li>
 			</bodyPartGroups>
 			<layers>
-				<li>Middle</li>
+				<li>FE_Exo_Module</li>
 			</layers>
 			<tags>
 				<li>PoweredArmor</li>
@@ -830,10 +830,10 @@
 		</graphicData>
 		<apparel>
 			<bodyPartGroups>
-				<li>FE_Exo_Module</li>
+				<li>Waist</li>
 			</bodyPartGroups>
 			<layers>
-				<li>Middle</li>
+				<li>FE_Exo_Module</li>
 			</layers>
 			<tags>
 				<li>PoweredArmor</li>
