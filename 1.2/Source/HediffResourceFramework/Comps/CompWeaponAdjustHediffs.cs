@@ -10,7 +10,6 @@ namespace HediffResourceFramework
 {
     public class CompProperties_WeaponAdjustHediffs : CompProperties_AdjustHediffs
     {
-        public string disableWeaponPostUse;
         public CompProperties_WeaponAdjustHediffs()
         {
             this.compClass = typeof(CompWeaponAdjustHediffs);
@@ -18,13 +17,6 @@ namespace HediffResourceFramework
     }
     public class CompWeaponAdjustHediffs : CompAdjustHediffs
     {
-        public CompProperties_WeaponAdjustHediffs Props
-        {
-            get
-            {
-                return (CompProperties_WeaponAdjustHediffs)this.props;
-            }
-        }
 
         private CompEquippable compEquippable;
         private CompEquippable CompEquippable

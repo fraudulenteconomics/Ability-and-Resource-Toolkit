@@ -159,7 +159,6 @@ namespace HediffResourceFramework
 		}
 		public static HediffResource AdjustResourceAmount(Pawn pawn, HediffResourceDef hdDef, float sevOffset, bool addHediffIfMissing)
 		{
-			Log.Message("Adjusting resource: " + hdDef);
 			if (sevOffset != 0f)
 			{
 				HediffResource firstHediffOfDef = pawn.health.hediffSet.GetFirstHediffOfDef(hdDef) as HediffResource;

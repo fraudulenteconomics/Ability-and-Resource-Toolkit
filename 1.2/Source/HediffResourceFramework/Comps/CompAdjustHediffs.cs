@@ -29,9 +29,7 @@ namespace HediffResourceFramework
 
         public bool dropIfHediffMissing;
         public bool addHediffIfMissing = false;
-
         public float postDamageDelayMultiplier = 1f;
-
         public float postUseDelayMultiplier = 1f;
     }
 
@@ -61,6 +59,9 @@ namespace HediffResourceFramework
     public class CompProperties_AdjustHediffs : CompProperties
     {
         public List<HediffAdjust> resourceSettings;
+
+        public string disablePostUse;
+
     }
     public class CompAdjustHediffs : ThingComp
     {
