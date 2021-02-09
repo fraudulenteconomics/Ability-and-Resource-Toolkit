@@ -70,9 +70,11 @@ namespace HediffResourceFramework
 
                     var disablePostUseString = "";
                     var comps = GetAllWeaponAndApparelAdjustHediffsComps(__instance.CasterPawn);
-                    foreach (var comp in comps)
+
+                    foreach (var option in verbProps.resourceSettings)
                     {
-                        foreach (var option in verbProps.resourceSettings)
+                        var hediffResource = HediffResourceUtils.AdjustResourceAmount(__instance.CasterPawn, option.hediff, option.resourcePerUse, option.addHediffIfMissing);
+                        foreach (var comp in comps)
                         {
                             var compResourseSettings = comp.Props.resourceSettings.FirstOrDefault(x => x.hediff == option.hediff);
                             if (compResourseSettings != null)
@@ -89,8 +91,7 @@ namespace HediffResourceFramework
                                 Log.Message($"Adding postUseDelayMultiplier from comp {comp}: {compResourseSettings.postUseDelayMultiplier}");
                                 Log.Message("Adding postUseDelay: " + option.postUseDelay);
                             }
-                        
-                            var hediffResource = HediffResourceUtils.AdjustResourceAmount(__instance.CasterPawn, option.hediff, option.resourcePerUse, option.addHediffIfMissing);
+
                             if (hediffResource != null && option.postUseDelay != 0)
                             {
                                 if (hediffPostUse.ContainsKey(hediffResource))
