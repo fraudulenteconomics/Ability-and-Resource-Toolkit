@@ -14,29 +14,29 @@ using Verse.AI;
 namespace HediffResourceFramework
 {
 
-	[HarmonyPatch(typeof(Verb), "IsStillUsableBy")]
-	public static class Patch_IsStillUsableBy
-	{
-		private static void Postfix(ref bool __result, Verb __instance, Pawn pawn)
-		{
-			if (__result)
-			{
-				__result = HediffResourceUtils.IsUsableBy(__instance, out string disableReason);
-			}
-		}
-	}
-    
-	[HarmonyPatch(typeof(Verb), "Available")]
-	public static class Patch_Available
-	{
-		private static void Postfix(ref bool __result, Verb __instance)
-		{
-			if (__result)
-			{
-				__result = HediffResourceUtils.IsUsableBy(__instance, out string disableReason);
+    [HarmonyPatch(typeof(Verb), "IsStillUsableBy")]
+    public static class Patch_IsStillUsableBy
+    {
+        private static void Postfix(ref bool __result, Verb __instance, Pawn pawn)
+        {
+            if (__result)
+            {
+                __result = HediffResourceUtils.IsUsableBy(__instance, out string disableReason);
             }
         }
-	}
+    }
+
+    [HarmonyPatch(typeof(Verb), "Available")]
+    public static class Patch_Available
+    {
+        private static void Postfix(ref bool __result, Verb __instance)
+        {
+            if (__result)
+            {
+                __result = HediffResourceUtils.IsUsableBy(__instance, out string disableReason);
+            }
+        }
+    }
 
     [HarmonyPatch(typeof(Verb), "TryCastNextBurstShot")]
     public static class Patch_TryCastNextBurstShot
@@ -115,15 +115,27 @@ namespace HediffResourceFramework
                                 }
                             }
                         }
+                        if (verbPostUseDelay.Any() && verbPostUseDelayMultipliers.Any())
+                        {
+                            comp.postUseDelayTicks[__instance] = new VerbDisable((int)((Find.TickManager.TicksGame + verbPostUseDelay.Average()) * verbPostUseDelayMultipliers.Average()), comp.Props.disablePostUse);
+                            Log.Message($"Adding delay {comp.postUseDelayTicks[__instance]} for verb: {__instance}");
+                        }
+                        else if (verbPostUseDelay.Any())
+                        {
+                            comp.postUseDelayTicks[__instance] = new VerbDisable((int)((Find.TickManager.TicksGame + verbPostUseDelay.Average())), comp.Props.disablePostUse);
+                            Log.Message($"Adding delay {comp.postUseDelayTicks[__instance]} for verb: {__instance}");
+                        }
+                        else
+                        {
+                            Log.Message($"Can't add new delay for verb: {__instance} due to missing verbPostUseDelay values");
 
-                        comp.postUseDelayTicks[__instance] = new VerbDisable((int)((Find.TickManager.TicksGame + verbPostUseDelay.Average()) * verbPostUseDelayMultipliers.Average()), comp.Props.disablePostUse);
-                        Log.Message($"Adding delay {comp.postUseDelayTicks[__instance]} for verb: {__instance}");
+                        }
                         foreach (var hediffData in hediffPostUse)
                         {
                             if (hediffPostUse.TryGetValue(hediffData.Key, out List<int> hediffPostUseList))
                             {
                                 int newDelayTicks;
-                                if (hediffPostUseDelayMultipliers.TryGetValue(hediffData.Key, out List<float> hediffPostUseMultipliers))
+                                if (hediffPostUseDelayMultipliers.TryGetValue(hediffData.Key, out List<float> hediffPostUseMultipliers) && hediffPostUseMultipliers.Any())
                                 {
                                     newDelayTicks = (int)(hediffPostUseList.Average() * hediffPostUseMultipliers.Average());
                                     Log.Message($"newDelayTicks: {newDelayTicks}, with multipliers for {hediffData.Key}");
