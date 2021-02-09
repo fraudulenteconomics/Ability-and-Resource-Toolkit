@@ -30,7 +30,7 @@
 					<li>
 						<hediff>FE_AbsorptionBarrier</hediff>
 						<resourcePerSecond>120</resourcePerSecond>
-						<addHediffIfMissing>true</addHediffIfMissing>
+						<addHediffIfMissing>false</addHediffIfMissing>
 						<maxResourceCapacityOffset>50</maxResourceCapacityOffset>
 						<radius>6.9</radius> 
 						<worksThroughWalls>false</worksThroughWalls>
