@@ -91,9 +91,8 @@ namespace HediffResourceFramework
         public float GetHediffResourceCapacityGainFromAmplifiers()
         {
             float num = 0;
-            foreach (var amplifier in amplifiers)
+            foreach (var compAmplifier in GetCompAmplifiers)
             {
-                var compAmplifier = GetCompAmplifierFor(amplifier);
                 num += compAmplifier.GetResourceCapacityGainFor(this.def);
             }
             return num;
@@ -107,23 +106,22 @@ namespace HediffResourceFramework
             }
             return comp;
         }
-        public List<CompAdjustHediffsArea> Amplifiers()
+        public List<CompAdjustHediffsArea> GetCompAmplifiers
         {
-            List<CompAdjustHediffsArea> compAmplifiers = new List<CompAdjustHediffsArea>();
-            for (int num = amplifiers.Count - 1; num >= 0; num--)
+            get
             {
-                var amplifier = amplifiers[num];
-                var comp = GetCompAmplifierFor(amplifier);
-                if (comp != null && comp.InRadiusFor(this.pawn.Position, this.def))
+                List<CompAdjustHediffsArea> compAmplifiers = new List<CompAdjustHediffsArea>();
+                for (int num = amplifiers.Count - 1; num >= 0; num--)
                 {
-                    compAmplifiers.Add(comp);
+                    var amplifier = amplifiers[num];
+                    var comp = GetCompAmplifierFor(amplifier);
+                    if (comp != null && comp.InRadiusFor(this.pawn.Position, this.def))
+                    {
+                        compAmplifiers.Add(comp);
+                    }
                 }
-                else
-                {
-                    amplifiers.RemoveAt(num);
-                }
+                return compAmplifiers;
             }
-            return compAmplifiers;
         }
 
         public void TryAddAmplifier(CompAdjustHediffsArea comp)
@@ -171,6 +169,10 @@ namespace HediffResourceFramework
                 {
                     return false;
                 }
+                if (SourceOnlyAmplifiers())
+                {
+                    return true;
+                }
                 var value = base.ShouldRemove;
                 if (value)
                 {
@@ -178,6 +180,26 @@ namespace HediffResourceFramework
                 }
                 return value;
             }
+        }
+
+        public bool SourceOnlyAmplifiers()
+        {
+            if (!this.def.keepWhenEmpty && amplifiers.Any())
+            {
+                foreach (var amplifier in amplifiers)
+                {
+                    var comp = GetCompAmplifierFor(amplifier);
+                    if (comp != null && !comp.InRadiusFor(this.pawn.Position, this.def))
+                    {
+                        var option = comp.GetFirstHediffOptionFor(this.def);
+                        if (option.removeOutsideArea)
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
         }
 
         public override void Tick()
@@ -267,7 +289,7 @@ namespace HediffResourceFramework
                 }
             }
 
-            var equipments = pawn.equipment.AllEquipmentListForReading;
+            var equipments = pawn.equipment?.AllEquipmentListForReading;
             if (equipments != null)
             {
                 foreach (var equipment in equipments)
@@ -360,7 +382,7 @@ namespace HediffResourceFramework
                 }
             }
 
-            var equipments = pawn.equipment.AllEquipmentListForReading;
+            var equipments = pawn.equipment?.AllEquipmentListForReading;
             if (equipments != null)
             {
                 for (int num = equipments.Count - 1; num >= 0; num--)
@@ -393,7 +415,8 @@ namespace HediffResourceFramework
             base.ExposeData();
             Scribe_Values.Look(ref resourceAmount, "resourceAmount");
             Scribe_Values.Look(ref duration, "duration");
-            //Scribe_Values.Look(ref delayTicks, "delayTicks");
+            Scribe_Values.Look(ref delayTicks, "delayTicks");
+            Scribe_Collections.Look(ref amplifiers, "amplifiers", LookMode.Reference);
         }
     }
 }

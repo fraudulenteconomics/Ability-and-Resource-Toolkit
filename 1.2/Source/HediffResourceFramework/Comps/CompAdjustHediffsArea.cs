@@ -78,7 +78,7 @@ namespace HediffResourceFramework
         {
             if (this.parent.Map != null)
             {
-                var option = this.Props.resourceSettings.FirstOrDefault(x => x.hediff == hediffResourceDef);
+                var option = GetFirstHediffOptionFor(hediffResourceDef);
                 if (option.qualityScalesCapacityOffset && this.parent.TryGetQuality(out QualityCategory qc))
                 {
                     return option.maxResourceCapacityOffset * HediffResourceUtils.GetQualityMultiplier(qc);
@@ -155,13 +155,18 @@ namespace HediffResourceFramework
         {
             if (this.parent.Map != null)
             {
-                var option = this.Props.resourceSettings.FirstOrDefault(x => x.hediff == hediffResourceDef);
+                var option = GetFirstHediffOptionFor(hediffResourceDef);
                 if (option != null && cell.DistanceTo(this.parent.Position) <= option.radius)
                 {
                     return true;
                 }
             }
             return false;
+        }
+
+        public HediffAdjust GetFirstHediffOptionFor(HediffResourceDef hediffResourceDef)
+        {
+            return this.Props.resourceSettings.FirstOrDefault(x => x.hediff == hediffResourceDef);
         }
     }
 }

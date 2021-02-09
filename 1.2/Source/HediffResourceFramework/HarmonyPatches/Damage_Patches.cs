@@ -110,14 +110,13 @@ namespace HediffResourceFramework
 		private static void Prefix(Pawn __instance, ref DamageInfo dinfo, out bool absorbed)
 		{
 			absorbed = false;
-
 			var effectOnImpactOptions = dinfo.Def.GetModExtension<EffectOnImpact>();
 			if (effectOnImpactOptions != null && __instance.health?.hediffSet != null)
 			{
 				foreach (var resourceEffect in effectOnImpactOptions.resourceEffects)
 				{
 					var hediffResource = HediffResourceUtils.AdjustResourceAmount(__instance, resourceEffect.hediffDef, resourceEffect.adjustTargetResource, resourceEffect.addHediffIfMissing);
-					if (resourceEffect.delayTargetOnDamage != IntRange.zero)
+					if (hediffResource != null && resourceEffect.delayTargetOnDamage != IntRange.zero)
 					{
 						hediffResource.AddDelay(resourceEffect.delayTargetOnDamage.RandomInRange);
 					}
@@ -137,7 +136,7 @@ namespace HediffResourceFramework
 						{
 							ProcessDamage(__instance, ref dinfo, hediff, shieldProps);
 						}
-						else if (shieldProps.absorbMeleeDamage && (dinfo.Weapon is null || dinfo.Weapon.IsMeleeWeapon))
+						else if (shieldProps.absorbMeleeDamage && (dinfo.Weapon is null || dinfo.Weapon == ThingDefOf.Human || dinfo.Weapon.IsMeleeWeapon))
 						{
 							ProcessDamage(__instance, ref dinfo, hediff, shieldProps);
 						}
@@ -149,7 +148,6 @@ namespace HediffResourceFramework
 					}
 				}
 			}
-
 		}
 
 		private static void ProcessDamage(Pawn pawn, ref DamageInfo dinfo, HediffResource hediff, ShieldProperties shieldProps)
@@ -218,7 +216,7 @@ namespace HediffResourceFramework
 					}
 				}
 
-				var equipments = pawn.equipment.AllEquipmentListForReading;
+				var equipments = pawn.equipment?.AllEquipmentListForReading;
 				if (equipments != null)
 				{
 					foreach (var equipment in equipments)

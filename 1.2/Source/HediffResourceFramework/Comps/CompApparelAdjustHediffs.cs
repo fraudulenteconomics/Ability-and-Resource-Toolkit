@@ -22,16 +22,38 @@ namespace HediffResourceFramework
         public override void Notify_Removed()
         {
             base.Notify_Removed();
-            List<HediffResourceDef> hediffResourcesToRemove = Apparel.Wearer.health.hediffSet.hediffs.OfType<HediffResource>()
-                    .Select(x => x.def).Where(x => Props.resourceSettings.Any(y => y.hediff == x)).ToList();
-            var apparels = Apparel.Wearer.apparel.WornApparel;
-            if (apparels != null)
+            if (Apparel.Wearer != null)
             {
-                foreach (var ap in apparels)
+                List<HediffResourceDef> hediffResourcesToRemove = Apparel.Wearer.health.hediffSet.hediffs.OfType<HediffResource>()
+        .Select(x => x.def).Where(x => Props.resourceSettings.Any(y => y.hediff == x)).ToList();
+                var apparels = Apparel.Wearer.apparel.WornApparel;
+                if (apparels != null)
                 {
-                    if (ap != Apparel)
+                    foreach (var ap in apparels)
                     {
-                        var comp = ap.TryGetComp<CompApparelAdjustHediffs>();
+                        if (ap != Apparel)
+                        {
+                            var comp = ap.TryGetComp<CompApparelAdjustHediffs>();
+                            if (comp?.Props?.resourceSettings != null)
+                            {
+                                foreach (var hediffOption in comp.Props.resourceSettings)
+                                {
+                                    if (hediffResourcesToRemove.Contains(hediffOption.hediff))
+                                    {
+                                        hediffResourcesToRemove.Remove(hediffOption.hediff);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                var equipments = Apparel.Wearer.equipment?.AllEquipmentListForReading;
+                if (equipments != null)
+                {
+                    foreach (var eq in equipments)
+                    {
+                        var comp = eq.TryGetComp<CompWeaponAdjustHediffs>();
                         if (comp?.Props?.resourceSettings != null)
                         {
                             foreach (var hediffOption in comp.Props.resourceSettings)
@@ -44,35 +66,17 @@ namespace HediffResourceFramework
                         }
                     }
                 }
-            }
-            
-            var equipments = Apparel.Wearer.equipment.AllEquipmentListForReading;
-            if (equipments != null)
-            {
-                foreach (var eq in equipments)
+
+                foreach (var hediffDef in hediffResourcesToRemove)
                 {
-                    var comp = eq.TryGetComp<CompWeaponAdjustHediffs>();
-                    if (comp?.Props?.resourceSettings != null)
+                    var hediff = Apparel.Wearer.health.hediffSet.GetFirstHediffOfDef(hediffDef);
+                    if (hediff != null)
                     {
-                        foreach (var hediffOption in comp.Props.resourceSettings)
-                        {
-                            if (hediffResourcesToRemove.Contains(hediffOption.hediff))
-                            {
-                                hediffResourcesToRemove.Remove(hediffOption.hediff);
-                            }
-                        }
+                        Apparel.Wearer.health.RemoveHediff(hediff);
                     }
                 }
             }
 
-            foreach (var hediffDef in hediffResourcesToRemove)
-            {
-                var hediff = Apparel.Wearer.health.hediffSet.GetFirstHediffOfDef(hediffDef);
-                if (hediff != null)
-                {
-                    Apparel.Wearer.health.RemoveHediff(hediff);
-                }
-            }
         }
 
         public override void PostDestroy(DestroyMode mode, Map previousMap)
