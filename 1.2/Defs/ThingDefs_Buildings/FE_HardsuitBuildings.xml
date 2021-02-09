@@ -25,7 +25,7 @@
 			<ComponentSpacer>6</ComponentSpacer>
 		</costList>
 		<comps>
-			<li Class="HediffResourceFramework.CompProperties_BuildingAdjustHediffs">
+			<li Class="HediffResourceFramework.CompAdjustHediffArea">
 				<resourceSettings>
 					<li>
 						<hediff>FE_AbsorptionBarrier</hediff>
