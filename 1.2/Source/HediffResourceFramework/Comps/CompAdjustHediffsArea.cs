@@ -59,7 +59,10 @@ namespace HediffResourceFramework
             else
             {
                 hediffResource = HediffResourceUtils.AdjustResourceAmount(pawn, option.hediff, num, option.addHediffIfMissing);
-                hediffResource.TryAddAmplifier(this);
+                if (hediffResource != null)
+                {
+                    hediffResource.TryAddAmplifier(this);
+                }
             }
         }
         public float GetResourceGain(HediffAdjust option)

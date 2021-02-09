@@ -68,32 +68,83 @@ namespace HediffResourceFramework
                     var verbProps = __instance.verbProps as VerbResourceProps;
                     if (verbProps != null && verbProps.resourceSettings != null)
                     {
-                        var postUseDelayMultipliers = new List<float>();
-                        var postUseDelay = new List<int>();
+                        var verbPostUseDelay = new List<int>();
+                        var verbPostUseDelayMultipliers = new List<float>();
+
+                        var hediffPostUse = new Dictionary<HediffResource, List<int>>();
+                        var hediffPostUseDelayMultipliers = new Dictionary<HediffResource, List<float>>();
 
                         foreach (var option in verbProps.resourceSettings)
                         {
-                            var resourseSettings = comp.Props.resourceSettings.FirstOrDefault(x => x.hediff == option.hediff);
-                            if (resourseSettings != null)
+                            var compResourseSettings = comp.Props.resourceSettings.FirstOrDefault(x => x.hediff == option.hediff);
+                            if (compResourseSettings != null)
                             {
-                                postUseDelayMultipliers.Add(resourseSettings.postUseDelayMultiplier);
-                                postUseDelay.Add(option.postUseDelay);
-                                Log.Message("Adding postUseDelayMultiplier: " + resourseSettings.postUseDelayMultiplier);
+                                if (option.postUseDelay != 0)
+                                {
+                                    verbPostUseDelay.Add(option.postUseDelay);
+                                    if (compResourseSettings.postUseDelayMultiplier != 1)
+                                    {
+                                        verbPostUseDelayMultipliers.Add(compResourseSettings.postUseDelayMultiplier);
+                                    }
+                                }
+                                Log.Message($"Adding postUseDelayMultiplier from comp {comp}: {compResourseSettings.postUseDelayMultiplier}");
                                 Log.Message("Adding postUseDelay: " + option.postUseDelay);
                             }
 
                             var hediffResource = HediffResourceUtils.AdjustResourceAmount(__instance.CasterPawn, option.hediff, option.resourcePerUse, option.addHediffIfMissing);
-                            if (option.postUseDelay != 0)
+                            if (hediffResource != null && option.postUseDelay != 0)
                             {
-                                var newDelay = (int)(option.postUseDelay * resourseSettings.postUseDelayMultiplier);
-                                if (hediffResource != null && hediffResource.CanHaveDelay(newDelay))
+                                if (hediffPostUse.ContainsKey(hediffResource))
                                 {
-                                    hediffResource.AddDelay(newDelay);
+                                    hediffPostUse[hediffResource].Add(option.postUseDelay);
+                                }
+                                else
+                                {
+                                    hediffPostUse[hediffResource] = new List<int> { option.postUseDelay };
+                                }
+                                if (compResourseSettings.postUseDelayMultiplier != 1)
+                                {
+                                    if (hediffPostUseDelayMultipliers.ContainsKey(hediffResource))
+                                    {
+                                        hediffPostUseDelayMultipliers[hediffResource].Add(compResourseSettings.postUseDelayMultiplier);
+                                    }
+                                    else
+                                    {
+                                        hediffPostUseDelayMultipliers[hediffResource] = new List<float> { compResourseSettings.postUseDelayMultiplier };
+                                    }
                                 }
                             }
                         }
 
-                        comp.postUseDelayTicks[__instance] = new VerbDisable((int)((Find.TickManager.TicksGame + (int)postUseDelay.Average()) * postUseDelayMultipliers.Average()), comp.Props.disablePostUse);
+                        comp.postUseDelayTicks[__instance] = new VerbDisable((int)((Find.TickManager.TicksGame + verbPostUseDelay.Average()) * verbPostUseDelayMultipliers.Average()), comp.Props.disablePostUse);
+                        Log.Message($"Adding delay {comp.postUseDelayTicks[__instance]} for verb: {__instance}");
+                        foreach (var hediffData in hediffPostUse)
+                        {
+                            if (hediffPostUse.TryGetValue(hediffData.Key, out List<int> hediffPostUseList))
+                            {
+                                int newDelayTicks;
+                                if (hediffPostUseDelayMultipliers.TryGetValue(hediffData.Key, out List<float> hediffPostUseMultipliers))
+                                {
+                                    newDelayTicks = (int)(hediffPostUseList.Average() * hediffPostUseMultipliers.Average());
+                                    Log.Message($"newDelayTicks: {newDelayTicks}, with multipliers for {hediffData.Key}");
+                                }
+                                else
+                                {
+                                    newDelayTicks = (int)(hediffPostUseList.Average());
+                                    Log.Message($"newDelayTicks: {newDelayTicks} for {hediffData.Key}");
+                                }
+                                if (hediffData.Key.CanHaveDelay(newDelayTicks))
+                                {
+                                    hediffData.Key.AddDelay(newDelayTicks);
+                                    Log.Message($"Adding delay {newDelayTicks} for {hediffData.Key}");
+
+                                }
+                                else
+                                {
+                                    Log.Message($"{hediffData.Key} can't have new delay in {newDelayTicks}");
+                                }
+                            }
+                        }
                     }
                 }
             }
