@@ -37,6 +37,7 @@ namespace HediffResourceFramework
         public bool affectsAllies;
         public bool affectsEnemies;
         public bool addToCaster;
+        public bool removeOutsideArea;
     }
 
     public class VerbDisable : IExposable

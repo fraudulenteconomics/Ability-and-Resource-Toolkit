@@ -130,7 +130,7 @@ namespace HediffResourceFramework
 				}
 			}
 
-			var equipments = pawn.equipment.AllEquipmentListForReading;
+			var equipments = pawn.equipment?.AllEquipmentListForReading;
 			if (equipments != null)
 			{
 				foreach (var equipment in equipments)

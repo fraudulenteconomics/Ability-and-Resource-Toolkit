@@ -47,7 +47,7 @@
 		<label>absorption barrier</label>
 		<description>An energy field that covers the wearer. Absorbs most incoming damage, but a big enough hit will still get through. The shield will begin to recharge itself about 10 seconds after sustaining any damage.</description>
 		<hediffClass>HediffResourceFramework.HediffResource</hediffClass>
-		<keepWhenEmpty>true</keepWhenEmpty>
+		<keepWhenEmpty>false</keepWhenEmpty>
 		<isBad>false</isBad>
 		<tendable>false</tendable>
 		<makesSickThought>false</makesSickThought>
