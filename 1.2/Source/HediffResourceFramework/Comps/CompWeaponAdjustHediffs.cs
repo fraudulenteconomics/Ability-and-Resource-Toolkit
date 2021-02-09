@@ -124,7 +124,6 @@ namespace HediffResourceFramework
                                 num /= 3.33f;
                                 HediffResourceUtils.AdjustResourceAmount(CompEquippable.PrimaryVerb.CasterPawn, option.hediff, num, option.addHediffIfMissing);
                             }
-
                         }
                     }
                 }

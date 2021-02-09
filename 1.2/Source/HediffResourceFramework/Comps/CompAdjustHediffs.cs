@@ -79,6 +79,7 @@ namespace HediffResourceFramework
                 return (CompProperties_AdjustHediffs)this.props;
             }
         }
+
         public Dictionary<Verb, VerbDisable> postUseDelayTicks;
         public override void PostExposeData()
         {
@@ -90,6 +91,9 @@ namespace HediffResourceFramework
                 gameComp.RegisterComp(this);
             }
         }
+
+        private List<Verb> verbKeys;
+        private List<VerbDisable> verbDisablesValues;
 
         public override void PostSpawnSetup(bool respawningAfterLoad)
         {
@@ -113,8 +117,5 @@ namespace HediffResourceFramework
         {
 
         }
-
-        private List<Verb> verbKeys;
-        private List<VerbDisable> verbDisablesValues;
     }
 }
