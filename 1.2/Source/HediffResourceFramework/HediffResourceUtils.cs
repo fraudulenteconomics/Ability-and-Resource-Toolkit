@@ -157,6 +157,7 @@ namespace HediffResourceFramework
 			}
 			return result;
 		}
+
 		public static HediffResource AdjustResourceAmount(Pawn pawn, HediffResourceDef hdDef, float sevOffset, bool addHediffIfMissing)
 		{
 			if (sevOffset != 0f)
@@ -183,7 +184,6 @@ namespace HediffResourceFramework
 			}
 			return null;
 		}
-
 
 		public static float GetQualityMultiplier(QualityCategory qualityCategory)
 		{

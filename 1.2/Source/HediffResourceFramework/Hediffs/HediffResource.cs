@@ -24,6 +24,7 @@ namespace HediffResourceFramework
             }
             set
             {
+                Log.Message("Start adjusting resource " + value + " to " + this.def.defName);
                 resourceAmount = value;
                 if (resourceAmount > ResourceCapacity)
                 {
@@ -47,10 +48,12 @@ namespace HediffResourceFramework
                 else
                 {
                     this.Severity = resourceAmount;
-                    Log.Message($"Adjusting severity ({this.Severity}): " + this.def.defName);
+                    Log.Message(this.def.defName + ": Adjusting resource: " + resourceAmount);
                 }
             }
         }
+
+        
 
         public bool CanGainResource => Find.TickManager.TicksGame > this.delayTicks;
         public void AddDelay(int newDelayTicks)
@@ -77,7 +80,58 @@ namespace HediffResourceFramework
         {
             get
             {
-                return this.def.maxResourceCapacity + HediffResourceUtils.GetHediffResourceCapacityGainFor(this.pawn, def);
+                return this.def.maxResourceCapacity + HediffResourceUtils.GetHediffResourceCapacityGainFor(this.pawn, def) + GetHediffResourceCapacityGainFromAmplifiers();
+            }
+        }
+
+        public List<Thing> amplifiers = new List<Thing>();
+
+        public Dictionary<Thing, CompAdjustHediffsArea> cachedCompAmplifiers = new Dictionary<Thing, CompAdjustHediffsArea>();
+
+        public float GetHediffResourceCapacityGainFromAmplifiers()
+        {
+            float num = 0;
+            foreach (var amplifier in amplifiers)
+            {
+                var compAmplifier = GetCompAmplifierFor(amplifier);
+                num += compAmplifier.GetResourceCapacityGainFor(this.def);
+            }
+            return num;
+        }
+        public CompAdjustHediffsArea GetCompAmplifierFor(Thing thing)
+        {
+            CompAdjustHediffsArea comp = null;
+            if (!cachedCompAmplifiers.TryGetValue(thing, out comp))
+            {
+                comp = thing.TryGetComp<CompAdjustHediffsArea>();
+            }
+            return comp;
+        }
+        public List<CompAdjustHediffsArea> Amplifiers()
+        {
+            List<CompAdjustHediffsArea> compAmplifiers = new List<CompAdjustHediffsArea>();
+            for (int num = amplifiers.Count - 1; num >= 0; num--)
+            {
+                var amplifier = amplifiers[num];
+                var comp = GetCompAmplifierFor(amplifier);
+                if (comp != null && comp.InRadiusFor(this.pawn.Position, this.def))
+                {
+                    compAmplifiers.Add(comp);
+                }
+                else
+                {
+                    amplifiers.RemoveAt(num);
+                }
+            }
+            return compAmplifiers;
+        }
+
+        public void TryAddAmplifier(CompAdjustHediffsArea comp)
+        {
+            if (!amplifiers.Contains(comp.parent))
+            {
+                amplifiers.Add(comp.parent);
+                cachedCompAmplifiers[comp.parent] = comp;
             }
         }
         public override string Label
@@ -263,6 +317,8 @@ namespace HediffResourceFramework
         public override void PostAdd(DamageInfo? dinfo)
         {
             base.PostAdd(dinfo);
+            Log.Message(this.def.defName + " adding resource hediff to " + this.pawn);
+
             this.resourceAmount = this.def.initialResourceAmount;
             this.duration = 0;
             if (this.def.sendLetterWhenGained && this.pawn.Faction == Faction.OfPlayer)
@@ -272,9 +328,11 @@ namespace HediffResourceFramework
             }
         }
 
+
         public override void PostRemoved()
         {
             base.PostRemoved();
+            Log.Message(this.def.defName + " removing resource hediff from " + this.pawn);
             var apparels = pawn.apparel?.WornApparel?.ToList();
             if (apparels != null)
             {

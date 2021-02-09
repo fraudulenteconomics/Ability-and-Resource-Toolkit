@@ -25,12 +25,12 @@
 			<ComponentSpacer>6</ComponentSpacer>
 		</costList>
 		<comps>
-			<!--<li Class="HediffResourceFramework.CompProperties_BuildingAdjustHediffs">
+			<li Class="HediffResourceFramework.CompProperties_BuildingAdjustHediffs">
 				<resourceSettings>
 					<li>
 						<hediff>FE_AbsorptionBarrier</hediff>
 						<resourcePerSecond>120</resourcePerSecond>
-						<addHediffIfMissing>false</addHediffIfMissing>
+						<addHediffIfMissing>true</addHediffIfMissing>
 						<maxResourceCapacityOffset>50</maxResourceCapacityOffset>
 						<radius>6.9</radius> 
 						<worksThroughWalls>false</worksThroughWalls>
@@ -38,7 +38,7 @@
 						<affectsEnemies>false</affectsEnemies>
 					</li>
 				</resourceSettings>
-			</li> -->
+			</li>
 			<li Class="CompProperties_Power">
 				<compClass>CompPowerTrader</compClass>
 				<basePowerConsumption>750</basePowerConsumption>
@@ -86,7 +86,6 @@
 		<rotatable>false</rotatable>
 		<canOverlapZones>false</canOverlapZones>
 		<minifiedDef>MinifiedThing</minifiedDef>
-		<specialDisplayRadius>6.9</specialDisplayRadius>
 		<tradeability>Sellable</tradeability>
 		<tickerType>Normal</tickerType>
 		<tradeTags>

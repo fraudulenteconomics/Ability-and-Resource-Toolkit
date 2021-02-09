@@ -41,9 +41,21 @@ namespace HediffResourceFramework
     [HarmonyPatch(typeof(Verb), "TryCastNextBurstShot")]
     public static class Patch_TryCastNextBurstShot
     {
-        private static void Prefix(Verb __instance)
+        private static void Prefix(Verb __instance, out bool __state)
         {
-            if (__instance.Available() && __instance.CasterIsPawn && __instance.EquipmentSource != null)
+            if (__instance.Available())
+            {
+                __state = true;
+            }
+            else
+            {
+                __state = false;
+            }
+        }
+
+        private static void Postfix(Verb __instance, bool __state)
+        {
+            if (__state && __instance.CasterIsPawn && __instance.EquipmentSource != null)
             {
                 var comp = __instance.EquipmentSource.GetComp<CompAdjustHediffs>();
                 if (comp != null)

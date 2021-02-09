@@ -31,6 +31,12 @@ namespace HediffResourceFramework
         public bool addHediffIfMissing = false;
         public float postDamageDelayMultiplier = 1f;
         public float postUseDelayMultiplier = 1f;
+
+        public float radius;
+        public bool worksThroughWalls;
+        public bool affectsAllies;
+        public bool affectsEnemies;
+        public bool addToCaster;
     }
 
     public class VerbDisable : IExposable

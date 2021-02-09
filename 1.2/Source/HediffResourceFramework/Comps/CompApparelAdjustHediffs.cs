@@ -18,14 +18,6 @@ namespace HediffResourceFramework
 
     public class CompApparelAdjustHediffs : CompAdjustHediffs
     {
-        public CompProperties_ApparelAdjustHediffs Props
-        {
-            get
-            {
-                return (CompProperties_ApparelAdjustHediffs)this.props;
-            }
-        }
-
         public Apparel Apparel => this.parent as Apparel;
         public override void Notify_Removed()
         {
