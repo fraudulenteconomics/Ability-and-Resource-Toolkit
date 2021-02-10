@@ -350,7 +350,7 @@
 	<ThingDef ParentName="FE_ModuleBase">
 		<defName>FE_DeployableTurret</defName>
 		<label>module (back) - deployable turret</label>
-		<description>A back module for a fusion hardsuit. Contains a launching device with a complex system of micro-constructor mechanites, this apparatus allows a temporary micro turret to be deployed at the target location. This uses an extremely high amount of energy and requires the fusion reactor to essentially reprime itself before being used again.</description>
+		<description>A back module for a fusion hardsuit. Contains a launching device with a complex system of micro-constructor mechanites, this apparatus allows a temporary micro turret to be deployed at the target location. The turret will shoot at any enemies in range, but cannot be controlled in any manner. This uses an extremely high amount of energy and requires the fusion reactor to essentially reprime itself before being used again.</description>
 		<graphicData>
 			<texPath>Things/Item/Health/HealthItem</texPath>
 			<graphicClass>Graphic_Single</graphicClass>
@@ -440,6 +440,7 @@
 		<label>micro-turret</label>
 		<description>A portable automatic turret. Requires steel to refurbish its barrel after heavy use. May explode when damaged. Its dumb AI brain can't be directly controlled, so beware of friendly fire.</description>
 		<thingClass>Building_TurretGun</thingClass>
+		<selectable>false</selectable>
 		<graphicData>
 			<texPath>Things/Building/Security/TurretMini_Base</texPath>
 			<graphicClass>Graphic_Single</graphicClass>
@@ -454,13 +455,9 @@
 		</graphicData>
 		<uiIconPath>Things/Building/Security/TurretMini_MenuIcon</uiIconPath>
 		<uiIconScale>0.90</uiIconScale>
-		<minifiedDef>MinifiedThing</minifiedDef>
 		<altitudeLayer>Building</altitudeLayer>
 		<stealable>false</stealable>
 		<rotatable>false</rotatable>
-		<thingCategories>
-			<li>BuildingsSecurity</li>
-		</thingCategories>
 		<statBases>
 			<MaxHitPoints>100</MaxHitPoints>
 			<Flammability>0.7</Flammability>
@@ -504,23 +501,18 @@
 		<pathCost>50</pathCost>
 		<fillPercent>0.4</fillPercent>
 		<hasTooltip>true</hasTooltip>
-		<costStuffCount>30</costStuffCount>
 		<terrainAffordanceNeeded>Light</terrainAffordanceNeeded>
-		<designationCategory>Security</designationCategory>
 		<building>
 			<combatPower>45</combatPower>
 			<ai_combatDangerous>true</ai_combatDangerous>
 			<turretGunDef>Gun_MiniTurret</turretGunDef>
-			<turretBurstCooldownTime>4.8</turretBurstCooldownTime>
+			<turretBurstCooldownTime>1.9</turretBurstCooldownTime>
 		</building>
 		<placeWorkers>
 			<li>PlaceWorker_TurretTop</li>
 			<li>PlaceWorker_ShowTurretRadius</li>
 		</placeWorkers>
 		<designationHotKey>Misc2</designationHotKey>
-		<researchPrerequisites>
-			<li>GunTurrets</li>
-		</researchPrerequisites>
 	</ThingDef>
 
 	<ThingDef ParentName="FE_ModuleBase">
