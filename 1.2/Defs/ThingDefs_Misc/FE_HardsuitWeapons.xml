@@ -240,15 +240,15 @@
 						<hediff>FE_FusionReactor</hediff>
 						<resourcePerUse>-1.2</resourcePerUse>
 						<disableIfMissingHediff>false</disableIfMissingHediff>
-						<disableReason>Invalid</disableReason>
+						<disableReason>Insufficient energy.</disableReason>
 						<minimumResourcePerUse>1.2</minimumResourcePerUse>
+						<postUseDelay>90</postUseDelay>
 					</li>
 					<li>
 						<hediff>FE_MarksmanOptics</hediff>
 						<resourcePerUse>1</resourcePerUse>
 						<disableIfMissingHediff>false</disableIfMissingHediff>
 						<minimumResourcePerUse>0</minimumResourcePerUse>
-						<postUseDelay>480</postUseDelay>
 					</li>
 				</resourceSettings>
 				<verbClass>Verb_Shoot</verbClass>

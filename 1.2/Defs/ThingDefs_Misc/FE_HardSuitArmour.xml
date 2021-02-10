@@ -507,6 +507,7 @@
 			<turretGunDef>Gun_MiniTurret</turretGunDef>
 			<turretBurstCooldownTime>1.9</turretBurstCooldownTime>
 			<deconstructible>false</deconstructible>
+			<repairable>false</repairable>
 		</building>
 		<placeWorkers>
 			<li>PlaceWorker_TurretTop</li>
