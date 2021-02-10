@@ -1,9 +1,9 @@
 <Defs>
 
 	<MVCF.ModDef>
-		<defName>MM_MagicalMenagerie</defName>
-		<label>Magical Menagerie</label>
-		<description>Adding animal ranged attacks for Magical Menagerie creatures</description>
+		<defName>FE_FusionHardsuitVerbEnable</defName>
+		<label>Fusion Hardsuit</label>
+		<description>Activates necessary features.</description>
 		<Features>
 			<ApparelVerbs>true</ApparelVerbs>
 			<!-- <RangedAnimals>true</RangedAnimals> -->
