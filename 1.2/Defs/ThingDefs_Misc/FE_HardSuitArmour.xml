@@ -346,16 +346,15 @@
 			</li>
 		</comps>
 	</ThingDef>
-
-	<!-- Still In Development
 	
 	<ThingDef ParentName="FE_ModuleBase">
 		<defName>FE_DeployableTurret</defName>
-		<label>deployable turret module</label>
-		<description>Composed of a complex system of micro-constructor mechanites, this apparatus allows a temporary micro turret to be deployed at the target location. This uses an extremely high amount of energy and requires the fusion reactor to essentially reprime itself before being used again.</description>
+		<label>module (back) - deployable turret</label>
+		<description>A back module for a fusion hardsuit. Contains a launching device with a complex system of micro-constructor mechanites, this apparatus allows a temporary micro turret to be deployed at the target location. This uses an extremely high amount of energy and requires the fusion reactor to essentially reprime itself before being used again.</description>
 		<graphicData>
 			<texPath>Things/Item/Health/HealthItem</texPath>
 			<graphicClass>Graphic_Single</graphicClass>
+			<color>(180,50, 180)</color>
 		</graphicData>
 		<apparel>
 			<bodyPartGroups>
@@ -388,7 +387,7 @@
 						<postUseDelay>300</postUseDelay>
 					</li>
 				</resourceSettings>
-				<verbClass>Verb_Spawn</verbClass>
+				<verbClass>FraudeconCode.Verb_SpawnFaction</verbClass>
 				<label>Deploy Turret</label>
 				<hasStandardCommand>true</hasStandardCommand>
 				<warmupTime>2</warmupTime>
@@ -522,7 +521,7 @@
 		<researchPrerequisites>
 			<li>GunTurrets</li>
 		</researchPrerequisites>
-	</ThingDef> -->
+	</ThingDef>
 
 	<ThingDef ParentName="FE_ModuleBase">
 		<defName>FE_AuxiliaryBattery</defName>
