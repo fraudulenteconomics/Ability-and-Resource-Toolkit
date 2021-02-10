@@ -30,7 +30,7 @@
 				<resourceSettings>
 					<li>
 						<hediff>FE_AbsorptionBarrier</hediff>
-						<resourcePerSecond>120</resourcePerSecond>
+						<resourcePerSecond>1</resourcePerSecond>
 						<addHediffIfMissing>false</addHediffIfMissing>
 						<removeOutsideArea>false</removeOutsideArea>
 						<maxResourceCapacityOffset>50</maxResourceCapacityOffset>

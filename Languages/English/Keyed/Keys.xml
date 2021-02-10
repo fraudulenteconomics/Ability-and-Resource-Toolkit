@@ -2,7 +2,7 @@
 	<HRF.Fulfils>Generates {0} per second.</HRF.Fulfils>
 	<HRF.CannotWear>Cannot wear {0}</HRF.CannotWear>
 	<HRF.DrinkWarning>(will make pawn sick due to conflicting resource)</HRF.DrinkWarning>
-	<FE.FusionReactorGainedTitle>{PAWN_nameDef} is using a fusion hardsuit.</FE.FusionReactorGainedTitle>
+	<FE.FusionReactorGainedTitle>Hardsuit online.</FE.FusionReactorGainedTitle>
 	<FE.FusionReactorGainedMessage>{PAWN_nameDef} has just put on a fusion hardsuit and may now use specialized modules and powered equipment. These items may be created on the fabrication bench after researching fusion technology.</FE.FusionReactorGainedMessage>
 	
 	<HRF.ManaHediffGainedTitle>{PAWN_nameDef} gained {RESOURCE_label}</HRF.ManaHediffGainedTitle>

@@ -113,7 +113,7 @@
 				<resourceSettings>
 					<li>
 						<hediff>FE_RepulsorRifle</hediff>
-						<resourcePerSecond>-150</resourcePerSecond>
+						<resourcePerSecond>-0.5</resourcePerSecond>
 						<qualityScalesResourcePerSecond>false</qualityScalesResourcePerSecond>
 						<maxResourceCapacityOffset>100</maxResourceCapacityOffset>
 						<qualityScalesCapacityOffset>false</qualityScalesCapacityOffset>

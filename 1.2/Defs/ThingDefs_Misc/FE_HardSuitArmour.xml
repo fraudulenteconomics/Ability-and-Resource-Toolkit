@@ -25,7 +25,7 @@
 				<resourceSettings>
 					<li>
 						<hediff>FE_FusionReactor</hediff>
-						<resourcePerSecond>600</resourcePerSecond>
+						<resourcePerSecond>2</resourcePerSecond>
 						<qualityScalesResourcePerSecond>true</qualityScalesResourcePerSecond>
 						<addHediffIfMissing>true</addHediffIfMissing>
 						<maxResourceCapacityOffset>150</maxResourceCapacityOffset>
@@ -169,7 +169,7 @@
 				<resourceSettings>
 					<li>
 						<hediff>FE_FusionReactor</hediff>
-						<resourcePerSecond>150</resourcePerSecond>
+						<resourcePerSecond>1</resourcePerSecond>
 						<qualityScalesResourcePerSecond>false</qualityScalesResourcePerSecond>
 						<addHediffIfMissing>false</addHediffIfMissing>
 						<maxResourceCapacityOffset>-30</maxResourceCapacityOffset>
@@ -240,7 +240,7 @@
 				<resourceSettings>
 					<li>
 						<hediff>FE_FusionReactor</hediff>
-						<resourcePerSecond>-60</resourcePerSecond>
+						<resourcePerSecond>-0.1</resourcePerSecond>
 						<qualityScalesResourcePerSecond>false</qualityScalesResourcePerSecond>
 						<addHediffIfMissing>false</addHediffIfMissing>
 						<maxResourceCapacityOffset>0</maxResourceCapacityOffset>
@@ -440,7 +440,6 @@
 		<label>micro-turret</label>
 		<description>A portable automatic turret. Requires steel to refurbish its barrel after heavy use. May explode when damaged. Its dumb AI brain can't be directly controlled, so beware of friendly fire.</description>
 		<thingClass>Building_TurretGun</thingClass>
-		<selectable>false</selectable>
 		<graphicData>
 			<texPath>Things/Building/Security/TurretMini_Base</texPath>
 			<graphicClass>Graphic_Single</graphicClass>
@@ -470,7 +469,7 @@
 		<comps>
 			<li Class="CompProperties_Explosive">
 				<wickTicks>240</wickTicks>
-				<explosiveRadius>3.9</explosiveRadius>
+				<explosiveRadius>1.9</explosiveRadius>
 				<explosiveDamageType>Bomb</explosiveDamageType>
 				<chanceNeverExplodeFromDamage>0.5</chanceNeverExplodeFromDamage>
 			</li>
@@ -507,6 +506,7 @@
 			<ai_combatDangerous>true</ai_combatDangerous>
 			<turretGunDef>Gun_MiniTurret</turretGunDef>
 			<turretBurstCooldownTime>1.9</turretBurstCooldownTime>
+			<deconstructible>false</deconstructible>
 		</building>
 		<placeWorkers>
 			<li>PlaceWorker_TurretTop</li>
@@ -619,7 +619,7 @@
 	<ThingDef ParentName="FE_ModuleBase">
 		<defName>FE_AutonomousStunner</defName>
 		<label>module (back) - autonomous stunner</label>
-		<description>A back module for a fusion hardsuit. Contains an autonomous defense system that automatically fires stunning rounds at any enemies that get too close. Consumes a small amount of energy per burst.</description>
+		<description>A back module for a fusion hardsuit. Contains an autonomous defense system that automatically fires stunning rounds at any enemies that get too close. Can be manually retargetted if the current target gets too far away. Toggling this on and off also resets its current target. Consumes a small amount of energy per burst.</description>
 		<graphicData>
 			<texPath>Things/Item/Health/HealthItem</texPath>
 			<graphicClass>Graphic_Single</graphicClass>
@@ -932,7 +932,7 @@
 						<disableIfMissingHediff>false</disableIfMissingHediff>
 						<disableReason>Insufficient charge.</disableReason>
 						<minimumResourcePerUse>2</minimumResourcePerUse>
-						<postUseDelay>600</postUseDelay>
+						<postUseDelay>300</postUseDelay>
 					</li>
 				</resourceSettings>
 				<verbClass>Verb_Shoot</verbClass>
@@ -972,7 +972,7 @@
 				<resourceSettings>
 					<li>
 						<hediff>FE_FusionReactor</hediff>
-						<resourcePerSecond>-90</resourcePerSecond>
+						<resourcePerSecond>-0.2</resourcePerSecond>
 						<qualityScalesResourcePerSecond>false</qualityScalesResourcePerSecond>
 						<addHediffIfMissing>false</addHediffIfMissing>
 						<maxResourceCapacityOffset>0</maxResourceCapacityOffset>
@@ -987,7 +987,7 @@
 					</li>
 					<li>
 						<hediff>FE_ChargeBurstModule</hediff>
-						<resourcePerSecond>60</resourcePerSecond>
+						<resourcePerSecond>0.5</resourcePerSecond>
 						<qualityScalesResourcePerSecond>false</qualityScalesResourcePerSecond>
 						<addHediffIfMissing>true</addHediffIfMissing>
 						<maxResourceCapacityOffset>10</maxResourceCapacityOffset>
@@ -1054,7 +1054,7 @@
 				<resourceSettings>
 					<li>
 						<hediff>FE_FusionReactor</hediff>
-						<resourcePerSecond>-60</resourcePerSecond>
+						<resourcePerSecond>-0.2</resourcePerSecond>
 						<qualityScalesResourcePerSecond>false</qualityScalesResourcePerSecond>
 						<addHediffIfMissing>false</addHediffIfMissing>
 						<maxResourceCapacityOffset>-25</maxResourceCapacityOffset>
@@ -1069,7 +1069,7 @@
 					</li>
 					<li>
 						<hediff>FE_AbsorptionBarrier</hediff>
-						<resourcePerSecond>1200</resourcePerSecond>
+						<resourcePerSecond>3</resourcePerSecond>
 						<qualityScalesResourcePerSecond>false</qualityScalesResourcePerSecond>
 						<addHediffIfMissing>true</addHediffIfMissing>
 						<maxResourceCapacityOffset>100</maxResourceCapacityOffset>
@@ -1128,7 +1128,7 @@
 					</li>
 					<li>
 						<hediff>FE_ReactivePlating</hediff>
-						<resourcePerSecond>-120</resourcePerSecond>
+						<resourcePerSecond>-0.5</resourcePerSecond>
 						<qualityScalesResourcePerSecond>false</qualityScalesResourcePerSecond>
 						<addHediffIfMissing>true</addHediffIfMissing>
 						<maxResourceCapacityOffset>100</maxResourceCapacityOffset>
@@ -1283,7 +1283,7 @@
 					</li>
 					<li>
 						<hediff>FE_MarksmanOptics</hediff>
-						<resourcePerSecond>-300</resourcePerSecond>
+						<resourcePerSecond>-0.5</resourcePerSecond>
 						<qualityScalesResourcePerSecond>false</qualityScalesResourcePerSecond>
 						<addHediffIfMissing>true</addHediffIfMissing>
 						<maxResourceCapacityOffset>100</maxResourceCapacityOffset>
