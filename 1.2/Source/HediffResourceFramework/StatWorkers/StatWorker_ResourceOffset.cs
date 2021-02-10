@@ -23,7 +23,7 @@ namespace HediffResourceFramework
 					{
 						foreach (var hediffOption in comp.Props.resourceSettings)
 						{
-							if (options.hediffResource == hediffOption.hediff && hediffOption.resourcePerSecond != 0)
+							if (options.hediffResource == hediffOption.hediff && GetValue(hediffOption, thing) != 0)
 							{
 								return true;
 							}
@@ -37,7 +37,7 @@ namespace HediffResourceFramework
 					{
 						foreach (var hediffOption in comp.Props.resourceSettings)
 						{
-							if (options.hediffResource == hediffOption.hediff && hediffOption.resourcePerSecond != 0)
+							if (options.hediffResource == hediffOption.hediff && GetValue(hediffOption, thing) != 0)
 							{
 								return true;
 							}
@@ -60,14 +60,7 @@ namespace HediffResourceFramework
                     {
 						if (options.hediffResource == hediffOption.hediff)
                         {
-							if (hediffOption.qualityScalesResourcePerSecond && thing.TryGetQuality(out QualityCategory qc))
-							{
-								val += hediffOption.resourcePerSecond * HediffResourceUtils.GetQualityMultiplier(qc);
-							}
-							else
-							{
-								val += hediffOption.resourcePerSecond;
-							}
+							val += GetValue(hediffOption, thing);
 						}
                     }
                 }
@@ -79,22 +72,26 @@ namespace HediffResourceFramework
 				{
 					foreach (var hediffOption in comp.Props.resourceSettings)
 					{
-
 						if (options.hediffResource == hediffOption.hediff)
 						{
-							if (hediffOption.qualityScalesResourcePerSecond && thing.TryGetQuality(out QualityCategory qc))
-							{
-								val += hediffOption.resourcePerSecond * HediffResourceUtils.GetQualityMultiplier(qc);
-							}
-							else
-							{
-								val += hediffOption.resourcePerSecond;
-							}
+							val += GetValue(hediffOption, thing);
 						}
 					}
 				}
 			}
 			base.FinalizeValue(req, ref val, applyPostProcess);
+		}
+
+		public float GetValue(HediffAdjust hediffOption, Thing thing)
+        {
+			if (hediffOption.qualityScalesResourcePerSecond && thing.TryGetQuality(out QualityCategory qc))
+			{
+				return hediffOption.resourcePerSecond * HediffResourceUtils.GetQualityMultiplier(qc);
+			}
+			else
+			{
+				return hediffOption.resourcePerSecond;
+			}
 		}
         public override string GetExplanationFinalizePart(StatRequest req, ToStringNumberSense numberSense, float finalVal)
 		{

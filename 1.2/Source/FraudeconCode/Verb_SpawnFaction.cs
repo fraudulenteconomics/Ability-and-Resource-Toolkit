@@ -17,8 +17,9 @@ namespace FraudeconCode
 			{
 				return false;
 			}
-			var thing = GenSpawn.Spawn(verbProps.spawnDef, currentTarget.Cell, caster.Map);
+			var thing = ThingMaker.MakeThing(verbProps.spawnDef);
 			thing.SetFaction(this.Caster.Faction);
+			GenPlace.TryPlaceThing(thing, currentTarget.Cell, caster.Map, ThingPlaceMode.Near);
 			if (verbProps.colonyWideTaleDef != null)
 			{
 				Pawn pawn = caster.Map.mapPawns.FreeColonistsSpawned.RandomElementWithFallback();

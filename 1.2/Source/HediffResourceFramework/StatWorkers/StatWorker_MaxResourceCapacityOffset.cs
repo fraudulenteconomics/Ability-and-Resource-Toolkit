@@ -23,7 +23,7 @@ namespace HediffResourceFramework
 					{
 						foreach (var hediffOption in comp.Props.resourceSettings)
 						{
-							if (options.hediffResource == hediffOption.hediff && hediffOption.maxResourceCapacityOffset != 0)
+							if (options.hediffResource == hediffOption.hediff && GetValue(hediffOption, thing) != 0)
 							{
 								return true;
 							}
@@ -37,7 +37,7 @@ namespace HediffResourceFramework
 					{
 						foreach (var hediffOption in comp.Props.resourceSettings)
 						{
-							if (options.hediffResource == hediffOption.hediff && hediffOption.maxResourceCapacityOffset != 0)
+							if (options.hediffResource == hediffOption.hediff && GetValue(hediffOption, thing) != 0)
 							{
 								return true;
 							}
@@ -61,16 +61,9 @@ namespace HediffResourceFramework
                     {
 						if (options.hediffResource == hediffOption.hediff)
                         {
-							if (hediffOption.qualityScalesCapacityOffset && thing.TryGetQuality(out QualityCategory qc))
-                            {
-								val += hediffOption.maxResourceCapacityOffset * HediffResourceUtils.GetQualityMultiplier(qc);
-							}
-							else
-                            {
-								val += hediffOption.maxResourceCapacityOffset;
-							}
+							val += GetValue(hediffOption, thing);
 						}
-                    }
+					}
                 }
 			}
 			else if (thing.def.IsWeapon)
@@ -82,21 +75,26 @@ namespace HediffResourceFramework
 					{
 						if (options.hediffResource == hediffOption.hediff)
 						{
-							if (hediffOption.qualityScalesCapacityOffset && thing.TryGetQuality(out QualityCategory qc))
-							{
-								val += hediffOption.maxResourceCapacityOffset * HediffResourceUtils.GetQualityMultiplier(qc);
-							}
-							else
-							{
-								val += hediffOption.maxResourceCapacityOffset;
-							}
+							val += GetValue(hediffOption, thing);
 						}
 					}
 				}
 			}
 			base.FinalizeValue(req, ref val, applyPostProcess);
 		}
-        public override string GetExplanationFinalizePart(StatRequest req, ToStringNumberSense numberSense, float finalVal)
+
+		public float GetValue(HediffAdjust hediffOption, Thing thing)
+		{
+			if (hediffOption.qualityScalesResourcePerSecond && thing.TryGetQuality(out QualityCategory qc))
+			{
+				return hediffOption.maxResourceCapacityOffset * HediffResourceUtils.GetQualityMultiplier(qc);
+			}
+			else
+			{
+				return hediffOption.maxResourceCapacityOffset;
+			}
+		}
+		public override string GetExplanationFinalizePart(StatRequest req, ToStringNumberSense numberSense, float finalVal)
 		{
 			StringBuilder stringBuilder = new StringBuilder();
 			stringBuilder.AppendLine(base.GetExplanationFinalizePart(req, numberSense, finalVal));
