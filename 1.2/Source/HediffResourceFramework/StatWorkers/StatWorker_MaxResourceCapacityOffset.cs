@@ -13,35 +13,39 @@ namespace HediffResourceFramework
 		public override bool ShouldShowFor(StatRequest req)
 		{
 			Thing thing = req.Thing;
-			var options = stat.GetModExtension<StatWorkerExtender>();
-			if (thing.def.IsApparel)
-			{
-				var comp = thing.TryGetComp<CompApparelAdjustHediffs>();
-				if (comp != null)
+			if (thing?.def != null)
+            {
+				var options = stat.GetModExtension<StatWorkerExtender>();
+				if (thing.def.IsApparel)
 				{
-					foreach (var hediffOption in comp.Props.resourceSettings)
+					var comp = thing.TryGetComp<CompApparelAdjustHediffs>();
+					if (comp != null)
 					{
-						if (options.hediffResource == hediffOption.hediff)
+						foreach (var hediffOption in comp.Props.resourceSettings)
 						{
-							return true;
+							if (options.hediffResource == hediffOption.hediff && hediffOption.maxResourceCapacityOffset != 0)
+							{
+								return true;
+							}
+						}
+					}
+				}
+				else if (thing.def.IsWeapon)
+				{
+					var comp = thing.TryGetComp<CompWeaponAdjustHediffs>();
+					if (comp != null)
+					{
+						foreach (var hediffOption in comp.Props.resourceSettings)
+						{
+							if (options.hediffResource == hediffOption.hediff && hediffOption.maxResourceCapacityOffset != 0)
+							{
+								return true;
+							}
 						}
 					}
 				}
 			}
-			else if (thing.def.IsWeapon)
-			{
-				var comp = thing.TryGetComp<CompWeaponAdjustHediffs>();
-				if (comp != null)
-				{
-					foreach (var hediffOption in comp.Props.resourceSettings)
-					{
-						if (options.hediffResource == hediffOption.hediff)
-						{
-							return true;
-						}
-					}
-				}
-			}
+
 			return false;
 		}
 		public override void FinalizeValue(StatRequest req, ref float val, bool applyPostProcess)
