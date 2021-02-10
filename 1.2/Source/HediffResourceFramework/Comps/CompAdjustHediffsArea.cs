@@ -18,10 +18,20 @@ namespace HediffResourceFramework
 
     public class CompAdjustHediffsArea : CompAdjustHediffs
     {
+        private CompPowerTrader powerComp;
+        private CompRefuelable fuelComp;
+        private CompFlickable flickableComp;
+        public override void PostSpawnSetup(bool respawningAfterLoad)
+        {
+            base.PostSpawnSetup(respawningAfterLoad);
+            powerComp = this.parent.GetComp<CompPowerTrader>();
+            fuelComp = this.parent.GetComp<CompRefuelable>();
+            flickableComp = this.parent.GetComp<CompFlickable>();
+        }
         public override void ResourceTick()
         {
             base.ResourceTick();
-            if (this.parent.Map != null && this.parent.IsHashIntervalTick(60))
+            if (Active && this.parent.IsHashIntervalTick(60))
             {
                 foreach (var option in Props.resourceSettings)
                 {
@@ -49,6 +59,35 @@ namespace HediffResourceFramework
             }
         }
 
+        public bool Active => this.parent.Map != null && IsEnabled();
+        public bool IsEnabled()
+        {
+            if (flickableComp != null && !flickableComp.SwitchIsOn)
+            {
+                return false;
+            }
+            if (powerComp != null && !powerComp.PowerOn)
+            {
+                return false;
+            }
+            if (fuelComp != null && !fuelComp.HasFuel)
+            {
+                return false;
+            }
+            return true;
+        }
+        public bool InRadiusFor(IntVec3 cell, HediffResourceDef hediffResourceDef)
+        {
+            if (Active)
+            {
+                var option = GetFirstHediffOptionFor(hediffResourceDef);
+                if (option != null && cell.DistanceTo(this.parent.Position) <= option.radius)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
         public void AppendResource(Pawn pawn, HediffAdjust option, float num)
         {
             var hediffResource = pawn.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
@@ -79,7 +118,7 @@ namespace HediffResourceFramework
 
         public float GetResourceCapacityGainFor(HediffResourceDef hediffResourceDef)
         {
-            if (this.parent.Map != null)
+            if (Active)
             {
                 var option = GetFirstHediffOptionFor(hediffResourceDef);
                 if (option.qualityScalesCapacityOffset && this.parent.TryGetQuality(out QualityCategory qc))
@@ -148,23 +187,13 @@ namespace HediffResourceFramework
         public override void PostDrawExtraSelectionOverlays()
         {
             base.PostDrawExtraSelectionOverlays();
-            foreach (var option in this.Props.resourceSettings)
+            if (Active)
             {
-                GenDraw.DrawFieldEdges(GetAllCells(option).ToList());
-            }
-        }
-
-        public bool InRadiusFor(IntVec3 cell, HediffResourceDef hediffResourceDef)
-        {
-            if (this.parent.Map != null)
-            {
-                var option = GetFirstHediffOptionFor(hediffResourceDef);
-                if (option != null && cell.DistanceTo(this.parent.Position) <= option.radius)
+                foreach (var option in this.Props.resourceSettings)
                 {
-                    return true;
+                    GenDraw.DrawFieldEdges(GetAllCells(option).ToList());
                 }
             }
-            return false;
         }
 
         public HediffAdjust GetFirstHediffOptionFor(HediffResourceDef hediffResourceDef)
