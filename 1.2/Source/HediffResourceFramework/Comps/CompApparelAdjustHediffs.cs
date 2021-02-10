@@ -103,12 +103,10 @@ namespace HediffResourceFramework
                             else
                             {
                                 float num = option.resourcePerSecond;
-                                num *= 0.00333333341f;
                                 if (option.qualityScalesResourcePerSecond && Apparel.TryGetQuality(out QualityCategory qc))
                                 {
                                     num *= HediffResourceUtils.GetQualityMultiplier(qc);
                                 }
-                                num /= 3.33f;
                                 HediffResourceUtils.AdjustResourceAmount(Apparel.Wearer, option.hediff, num, option.addHediffIfMissing);
                             }
                         }

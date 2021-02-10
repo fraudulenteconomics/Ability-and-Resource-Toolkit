@@ -67,6 +67,9 @@
 			<li Class="CompProperties_Breakdownable"/>
 			<li Class="CompProperties_Flickable"/>
 		</comps>
+		<placeWorkers>
+			<li>HediffResourceFramework.PlaceWorker_ShowHediffAreaRadius</li>
+		</placeWorkers>
 		<altitudeLayer>Building</altitudeLayer>
 		<building>
 			<destroySound>BuildingDestroyed_Metal_Medium</destroySound>
