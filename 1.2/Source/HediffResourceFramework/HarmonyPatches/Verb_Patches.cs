@@ -76,7 +76,7 @@ namespace HediffResourceFramework
                         var hediffResource = HediffResourceUtils.AdjustResourceAmount(__instance.CasterPawn, option.hediff, option.resourcePerUse, option.addHediffIfMissing);
                         foreach (var comp in comps)
                         {
-                            var compResourseSettings = comp.Props.resourceSettings.FirstOrDefault(x => x.hediff == option.hediff);
+                            var compResourseSettings = comp.Props.resourceSettings?.FirstOrDefault(x => x.hediff == option.hediff);
                             if (compResourseSettings != null)
                             {
                                 if (option.postUseDelay != 0)
@@ -102,7 +102,7 @@ namespace HediffResourceFramework
                                 {
                                     hediffPostUse[hediffResource] = new List<int> { option.postUseDelay };
                                 }
-                                if (compResourseSettings.postUseDelayMultiplier != 1)
+                                if (compResourseSettings != null && compResourseSettings.postUseDelayMultiplier != 1)
                                 {
                                     if (hediffPostUseDelayMultipliers.ContainsKey(hediffResource))
                                     {
@@ -148,7 +148,7 @@ namespace HediffResourceFramework
                     }
                     foreach (var hediffData in hediffPostUse)
                     {
-                        if (hediffPostUse.TryGetValue(hediffData.Key, out List<int> hediffPostUseList))
+                        if (hediffData.Key != null && hediffPostUse.TryGetValue(hediffData.Key, out List<int> hediffPostUseList))
                         {
                             int newDelayTicks;
                             if (hediffPostUseDelayMultipliers.TryGetValue(hediffData.Key, out List<float> hediffPostUseMultipliers) && hediffPostUseMultipliers.Any())
