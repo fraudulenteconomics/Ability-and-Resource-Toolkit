@@ -70,7 +70,7 @@
 		</recipeMaker>
 	</ThingDef>
 
-	<ThingDef Name="FE_ModuleBase" ParentName="ArmorMachineableNoQualityBase" Abstract="True">
+	<ThingDef Name="FE_ModuleBase" ParentName="FE_ArmorMachineableNoQualityBase" Abstract="True">
 		<techLevel>Spacer</techLevel>
 		<tradeability>Sellable</tradeability>
 		<generateCommonality>0.01</generateCommonality>
