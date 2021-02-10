@@ -107,12 +107,10 @@ namespace HediffResourceFramework
         public float GetResourceGain(HediffAdjust option)
         {
             float num = option.resourcePerSecond;
-            num *= 0.00333333341f;
             if (option.qualityScalesResourcePerSecond && this.parent.TryGetQuality(out QualityCategory qc))
             {
                 num *= HediffResourceUtils.GetQualityMultiplier(qc);
             }
-            num /= 3.33f;
             return num;
         }
 

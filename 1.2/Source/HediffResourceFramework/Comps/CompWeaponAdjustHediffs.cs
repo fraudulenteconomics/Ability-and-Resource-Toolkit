@@ -116,12 +116,10 @@ namespace HediffResourceFramework
                             else 
                             {
                                 float num = option.resourcePerSecond;
-                                num *= 0.00333333341f;
                                 if (option.qualityScalesResourcePerSecond && equipment.TryGetQuality(out QualityCategory qc))
                                 {
                                     num *= HediffResourceUtils.GetQualityMultiplier(qc);
                                 }
-                                num /= 3.33f;
                                 HediffResourceUtils.AdjustResourceAmount(CompEquippable.PrimaryVerb.CasterPawn, option.hediff, num, option.addHediffIfMissing);
                             }
                         }
