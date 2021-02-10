@@ -21,7 +21,8 @@
 			<li>BuildingsSpecial</li>
 		</thingCategories>
 		<costList>
-			<Steel>50</Steel>
+			<Plasteel>50</Plasteel>
+			<Uranium>20</Uranium>
 			<ComponentSpacer>6</ComponentSpacer>
 		</costList>
 		<comps>
@@ -47,6 +48,7 @@
 			<li Class="CompProperties_Refuelable">
 				<fuelConsumptionRate>40.0</fuelConsumptionRate>
 				<fuelCapacity>20</fuelCapacity>
+				<initialFuelPercent>1</initialFuelPercent>
 				<fuelFilter>
 					<thingDefs>
 						<li>Uranium</li>
@@ -88,6 +90,10 @@
 		<canOverlapZones>false</canOverlapZones>
 		<minifiedDef>MinifiedThing</minifiedDef>
 		<tradeability>Sellable</tradeability>
+		<researchPrerequisites>
+			<li>FE_FusionTechnology</li>
+		</researchPrerequisites>
+		<designationCategory>Security</designationCategory>
 		<tickerType>Normal</tickerType>
 		<tradeTags>
 			<li>ExoticBuilding</li>

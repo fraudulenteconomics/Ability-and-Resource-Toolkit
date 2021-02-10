@@ -15,7 +15,6 @@
 		<letterType>PositiveEvent</letterType>
 		<letterTitleKey>FE.FusionReactorGainedTitle</letterTitleKey>
 		<letterMessageKey>FE.FusionReactorGainedMessage</letterMessageKey>
-		<maxResourceCapacity>100</maxResourceCapacity>
 	</HediffResourceFramework.HediffResourceDef>	
 
 	<HediffResourceFramework.HediffResourceDef>
@@ -47,7 +46,7 @@
 		<label>absorption barrier</label>
 		<description>An energy field that covers the wearer. Absorbs most incoming damage, but a big enough hit will still get through. The shield will begin to recharge itself about 10 seconds after sustaining any damage.</description>
 		<hediffClass>HediffResourceFramework.HediffResource</hediffClass>
-		<keepWhenEmpty>false</keepWhenEmpty>
+		<keepWhenEmpty>true</keepWhenEmpty>
 		<isBad>false</isBad>
 		<tendable>false</tendable>
 		<makesSickThought>false</makesSickThought>
@@ -72,10 +71,6 @@
 		<tendable>false</tendable>
 		<makesSickThought>false</makesSickThought>
 		<defaultLabelColor>(0.8,0.2,0.2)</defaultLabelColor>
-		<initialResourceAmount>1</initialResourceAmount>
-		<maxResourceCapacity>100</maxResourceCapacity>
-		<initialSeverity>1</initialSeverity>
-		<showResourceBar>true</showResourceBar>
 		<resourceGainPerAllDamages>5</resourceGainPerAllDamages>
 		<stages>
 			<li>
@@ -113,7 +108,6 @@
 		<initialResourceAmount>1</initialResourceAmount>
 		<makesSickThought>false</makesSickThought>
 		<defaultLabelColor>(0.8,0.9,0.2)</defaultLabelColor>
-		<showResourceBar>true</showResourceBar>
 		<stages>
 			<li>
 				<label>inactive</label>
@@ -134,7 +128,7 @@
 			</li>	
 			<li>
 				<label>optimized</label>
-				<minSeverity>100</minSeverity>
+				<minSeverity>90</minSeverity>
 				<statOffsets>
 					<ShootingAccuracyPawn>15</ShootingAccuracyPawn>
 				</statOffsets>
@@ -152,6 +146,7 @@
 		<tendable>false</tendable>
 		<makesSickThought>false</makesSickThought>
 		<defaultLabelColor>(0.9,0.9,0.9)</defaultLabelColor>
+		<resourceBarTextColor>(25, 25, 50)</resourceBarTextColor>
 		<shieldProperties>
 			<absorbMeleeDamage>true</absorbMeleeDamage>
 			<absorbRangeDamage>true</absorbRangeDamage>
@@ -174,10 +169,11 @@
 		<tendable>false</tendable>
 		<makesSickThought>false</makesSickThought>
 		<defaultLabelColor>(0.1,0.9,0.6)</defaultLabelColor>
-		<maxResourceCapacity>1</maxResourceCapacity>
-		<lifetimeTicks>1500</lifetimeTicks>
+		<maxResourceCapacity>2</maxResourceCapacity>
+		<lifetimeTicks>2100</lifetimeTicks>
 		<stages>
 			<li>
+				<minSeverity>0.1</minSeverity>
 				<painFactor>0.5</painFactor>
 				<capMods>
 					<li>
@@ -191,6 +187,25 @@
 					<li>
 						<capacity>Moving</capacity>
 						<offset>0.25</offset>
+					</li>
+				</capMods>
+			</li>
+			<li>
+				<minSeverity>1.1</minSeverity>
+				<label>double-dose</label>
+				<painFactor>0.35</painFactor>
+				<capMods>
+					<li>
+						<capacity>Consciousness</capacity>
+						<offset>0.15</offset>
+					</li>
+					<li>
+						<capacity>Sight</capacity>
+						<offset>0.35</offset>
+					</li>
+					<li>
+						<capacity>Moving</capacity>
+						<offset>0.35</offset>
 					</li>
 				</capMods>
 			</li>
