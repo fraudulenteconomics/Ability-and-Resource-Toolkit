@@ -1,5 +1,20 @@
 <Defs>
 
+	<MVCF.ModDef>
+		<defName>FE_FusionHardsuitVerbEnable</defName>
+		<label>Fusion Hardsuit</label>
+		<description>Activates necessary features.</description>
+		<Features>
+			<ApparelVerbs>true</ApparelVerbs>
+			<!-- <RangedAnimals>true</RangedAnimals> -->
+			<!-- <HediffVerbs>true</HediffVerbs> -->
+			<IntegratedToggle>true</IntegratedToggle>
+			<ExtraEquipmentVerbs>true</ExtraEquipmentVerbs>
+			<Drawing>true</Drawing>
+			<IndependentFire>true</IndependentFire>
+		</Features>
+	</MVCF.ModDef>
+
 	<HediffResourceFramework.HediffResourceDef>
 		<defName>FE_FusionReactor</defName>
 		<label>fusion reactor</label>
@@ -170,7 +185,7 @@
 		<makesSickThought>false</makesSickThought>
 		<defaultLabelColor>(0.1,0.9,0.6)</defaultLabelColor>
 		<maxResourceCapacity>2</maxResourceCapacity>
-		<lifetimeTicks>2100</lifetimeTicks>
+		<lifetimeTicks>2700</lifetimeTicks>
 		<stages>
 			<li>
 				<minSeverity>0.1</minSeverity>
