@@ -43,6 +43,13 @@
 						<postUseDelay>1500</postUseDelay>
 						<minimumResourcePerUse>0</minimumResourcePerUse>
 					</li>
+					<li>
+						<hediff>FE_MarksmanOptics</hediff>
+						<resourcePerUse>1</resourcePerUse>
+						<disableIfMissingHediff>false</disableIfMissingHediff>
+						<minimumResourcePerUse>0</minimumResourcePerUse>
+						<postUseDelay>480</postUseDelay>
+					</li>
 				</resourceSettings>
 				<verbClass>Verb_Shoot</verbClass>
 				<label>FE_RepulsorNormal</label>
@@ -219,7 +226,7 @@
 			<AccuracyShort>0.68</AccuracyShort>
 			<AccuracyMedium>0.55</AccuracyMedium>
 			<AccuracyLong>0.46</AccuracyLong>
-			<RangedWeapon_Cooldown>0.1</RangedWeapon_Cooldown>
+			<RangedWeapon_Cooldown>0.05</RangedWeapon_Cooldown>
 		</statBases>
 		<costList>
 			<Plasteel>75</Plasteel>
@@ -248,7 +255,7 @@
 				<label>powered lmg</label>
 				<hasStandardCommand>true</hasStandardCommand>
 				<defaultProjectile>FE_Bullet_PoweredLMG</defaultProjectile>
-				<warmupTime>0.1</warmupTime>
+				<warmupTime>0.05</warmupTime>
 				<range>32.9</range>
 				<burstShotCount>1</burstShotCount>
 				<soundCast>Shot_Minigun</soundCast>

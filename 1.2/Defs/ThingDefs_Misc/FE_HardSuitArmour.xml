@@ -44,17 +44,14 @@
 			<workSkill>Crafting</workSkill>
 			<effectWorking>Smith</effectWorking>
 			<soundWorking>Recipe_Machining</soundWorking>
-			<recipeMaker>
-				<researchPrerequisite>FE_FusionTechnology</researchPrerequisite>
-				<unfinishedThingDef>UnfinishedTechArmor</unfinishedThingDef>
-				<skillRequirements>
-					<Crafting>7</Crafting>
-				</skillRequirements>
-			</recipeMaker>
+			<researchPrerequisite>FE_FusionTechnology</researchPrerequisite>
+			<unfinishedThingDef>UnfinishedTechArmor</unfinishedThingDef>
+			<skillRequirements>
+				<Crafting>7</Crafting>
+			</skillRequirements>
 			<recipeUsers>
 				<li>TableMachining</li>
 			</recipeUsers>
-			<unfinishedThingDef>UnfinishedArmor</unfinishedThingDef>
 			<defaultIngredientFilter>
 				<categories>
 					<li>Root</li>
@@ -76,11 +73,6 @@
 		<generateCommonality>0.01</generateCommonality>
 		<tickerType>Normal</tickerType>
 		<recipeMaker>
-			<researchPrerequisite>FE_FusionTechnology</researchPrerequisite>
-			<unfinishedThingDef>UnfinishedTechArmor</unfinishedThingDef>
-			<skillRequirements>
-				<Crafting>7</Crafting>
-			</skillRequirements>
 			<recipeUsers Inherit="False">
 				<li>FabricationBench</li>
 			</recipeUsers>
@@ -329,6 +321,7 @@
 					<li>
 						<label>jump</label>
 						<description>Integrated jump jets used for limited bursts of accellerated movement.</description>
+						<draw>false</draw>
 					</li>
 				</verbProps>
 			</li>
@@ -532,6 +525,221 @@
 	</ThingDef> -->
 
 	<ThingDef ParentName="FE_ModuleBase">
+		<defName>FE_AuxiliaryBattery</defName>
+		<label>module (back) - auxiliary battery</label>
+		<description>A back module for a fusion hardsuit. Contains 5 uranium fueled energy injectors that can immediately restore 150 energy each. The unit is incredibly heavy and slows the user down considerably. Requires 10 uranium per battery charge to refuel.</description>
+		<graphicData>
+			<texPath>Things/Item/Health/HealthItem</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<color>(180,50, 180)</color>
+		</graphicData>
+		<apparel>
+			<bodyPartGroups>
+				<li>Waist</li>
+			</bodyPartGroups>
+			<layers>
+				<li>FE_Back_Module</li>
+			</layers>
+			<tags>
+				<li>PoweredArmor</li>
+			</tags>
+			<defaultOutfitTags>
+				<li>Soldier</li>
+			</defaultOutfitTags>
+		</apparel>
+		<equippedStatOffsets>
+			<MoveSpeed>-1.0</MoveSpeed>
+		</equippedStatOffsets>
+		<costList>
+			<ComponentSpacer>2</ComponentSpacer>
+			<Plasteel>50</Plasteel>
+			<Uranium>20</Uranium>
+		</costList>
+		<verbs>
+			<li Class="HediffResourceFramework.VerbResourceProps">
+				<targetResourceSettings>
+					<li>
+						<hediff>FE_FusionReactor</hediff>
+						<resourcePerUse>150</resourcePerUse>
+						<addHediffIfMissing>false</addHediffIfMissing>
+					</li>
+				</targetResourceSettings>
+				<verbClass>HediffResourceFramework.Verb_ResourceSelf</verbClass>
+				<label>fusion energy bolster</label>
+				<hasStandardCommand>true</hasStandardCommand>
+				<violent>false</violent>
+				<targetable>false</targetable>
+				<nonInterruptingSelfCast>true</nonInterruptingSelfCast>
+				<onlyManualCast>True</onlyManualCast>
+				<defaultCooldownTime>1.0</defaultCooldownTime>
+				<defaultProjectile>FE_BlankBullet</defaultProjectile>
+			</li>
+		</verbs>
+		<comps>
+			<li Class="CompProperties_Reloadable">
+				<maxCharges>5</maxCharges>
+				<ammoDef>Uranium</ammoDef>
+				<ammoCountToRefill>10</ammoCountToRefill>
+				<baseReloadTicks>90</baseReloadTicks>
+				<soundReload>Standard_Reload</soundReload>
+				<hotKey>Misc4</hotKey>
+				<chargeNoun>fusion charge</chargeNoun>
+				<displayGizmoWhileUndrafted>false</displayGizmoWhileUndrafted>
+			</li>
+			<li Class="HediffResourceFramework.CompProperties_ApparelAdjustHediffs">
+				<resourceSettings>
+					<li>
+						<hediff>FE_FusionReactor</hediff>
+						<resourcePerSecond>0</resourcePerSecond>
+						<qualityScalesResourcePerSecond>false</qualityScalesResourcePerSecond>
+						<addHediffIfMissing>false</addHediffIfMissing>
+						<maxResourceCapacityOffset>0</maxResourceCapacityOffset>
+						<cannotEquipReason>No available fusion connection.</cannotEquipReason>
+						<qualityScalesCapacityOffset>false</qualityScalesCapacityOffset>
+						<disallowEquipIfHediffMissing>true</disallowEquipIfHediffMissing>
+						<dropIfHediffMissing>true</dropIfHediffMissing>
+						<blackListHediffsPreventEquipping>
+						</blackListHediffsPreventEquipping>
+						<dropWeaponOrApparelIfBlacklistHediff>
+						</dropWeaponOrApparelIfBlacklistHediff>
+					</li>
+				</resourceSettings>
+			</li>
+		</comps>
+	</ThingDef>
+
+	<ThingDef ParentName="BaseBullet">
+		<defName>FE_BlankBullet</defName>
+		<label>combat stim bullet</label>
+		<projectile>
+			<damageDef>Bullet</damageDef>
+			<damageAmountBase>0</damageAmountBase>
+			<stoppingPower>0</stoppingPower>
+			<speed>1000</speed>
+		</projectile>
+		<graphicData>
+			<texPath>Things/Projectile/LauncherShot</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<shaderType>TransparentPostLight</shaderType>
+			<color>(68,150,215)</color>
+		</graphicData>
+	</ThingDef>
+
+	<ThingDef ParentName="FE_ModuleBase">
+		<defName>FE_AutonomousStunner</defName>
+		<label>module (back) - autonomous stunner</label>
+		<description>A back module for a fusion hardsuit. Contains an autonomous defense system that automatically fires stunning rounds at any enemies that get too close. Consumes a small amount of energy per burst.</description>
+		<graphicData>
+			<texPath>Things/Item/Health/HealthItem</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<color>(180,50, 180)</color>
+		</graphicData>
+		<apparel>
+			<bodyPartGroups>
+				<li>Waist</li>
+			</bodyPartGroups>
+			<layers>
+				<li>FE_Back_Module</li>
+			</layers>
+			<tags>
+				<li>PoweredArmor</li>
+			</tags>
+			<defaultOutfitTags>
+				<li>Soldier</li>
+			</defaultOutfitTags>
+		</apparel>
+		<costList>
+			<ComponentSpacer>2</ComponentSpacer>
+			<Plasteel>50</Plasteel>
+			<Uranium>20</Uranium>
+		</costList>
+		<verbs>
+			<li Class="HediffResourceFramework.VerbResourceProps">
+				<resourceSettings>
+					<li>
+						<hediff>FE_FusionReactor</hediff>
+						<resourcePerUse>-5</resourcePerUse>
+						<disableIfMissingHediff>true</disableIfMissingHediff>
+						<disableReason>Insufficient energy.</disableReason>
+						<minimumResourcePerUse>5</minimumResourcePerUse>
+						<postUseDelay>180</postUseDelay>
+					</li>
+				</resourceSettings>
+				<verbClass>HediffResourceFramework.Verb_ResourceTarget</verbClass>
+				<label>stunner</label>
+				<hasStandardCommand>true</hasStandardCommand>
+				<defaultProjectile>FE_StunnerBullet</defaultProjectile>
+				<warmupTime>0.5</warmupTime>
+				<violent>false</violent>
+				<range>9.9</range>
+				<burstShotCount>1</burstShotCount>
+				<soundCast>Shot_AssaultRifle</soundCast>
+				<soundCastTail>GunTail_Medium</soundCastTail>
+				<muzzleFlashScale>14</muzzleFlashScale>
+				<accuracyTouch>0.9</accuracyTouch>
+				<accuracyShort>0.6</accuracyShort>
+				<accuracyMedium>0.1</accuracyMedium>
+				<accuracyLong>0.1</accuracyLong>
+				<targetParams>
+					<canTargetPawns>true</canTargetPawns>
+					<canTargetBuildings>false</canTargetBuildings>
+					<canTargetLocations>false</canTargetLocations>
+				</targetParams>
+				<defaultCooldownTime>1.5</defaultCooldownTime>
+			</li>
+		</verbs>
+		<comps>
+			<li Class="MVCF.Comps.CompProperties_VerbGiver">
+				<verbProps>
+					<li>
+						<label>stunner</label>
+						<description>An autonomous defense weapon that stuns incoming enemies.</description>
+						<canBeToggled>true</canBeToggled>
+						<draw>false</draw>
+						<canFireIndependently>true</canFireIndependently>
+					</li>
+				</verbProps>
+			</li>
+			<li Class="HediffResourceFramework.CompProperties_ApparelAdjustHediffs">
+				<resourceSettings>
+					<li>
+						<hediff>FE_FusionReactor</hediff>
+						<resourcePerSecond>0</resourcePerSecond>
+						<qualityScalesResourcePerSecond>false</qualityScalesResourcePerSecond>
+						<addHediffIfMissing>false</addHediffIfMissing>
+						<maxResourceCapacityOffset>0</maxResourceCapacityOffset>
+						<cannotEquipReason>No available fusion connection.</cannotEquipReason>
+						<qualityScalesCapacityOffset>false</qualityScalesCapacityOffset>
+						<disallowEquipIfHediffMissing>true</disallowEquipIfHediffMissing>
+						<dropIfHediffMissing>true</dropIfHediffMissing>
+						<blackListHediffsPreventEquipping>
+						</blackListHediffsPreventEquipping>
+						<dropWeaponOrApparelIfBlacklistHediff>
+						</dropWeaponOrApparelIfBlacklistHediff>
+					</li>
+				</resourceSettings>
+			</li>
+		</comps>
+	</ThingDef>
+
+	<ThingDef ParentName="BaseBullet">
+		<defName>FE_StunnerBullet</defName>
+		<label>blank bullet</label>
+		<projectile>
+			<damageDef>Stun</damageDef>
+			<damageAmountBase>1</damageAmountBase>
+			<stoppingPower>3</stoppingPower>
+			<speed>120</speed>
+		</projectile>
+		<graphicData>
+			<texPath>Things/Projectile/LauncherShot</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<shaderType>TransparentPostLight</shaderType>
+			<color>(190,190,40)</color>
+		</graphicData>
+	</ThingDef>
+
+	<ThingDef ParentName="FE_ModuleBase">
 		<defName>FE_StimInjector</defName>
 		<label>module (arm) - stim injector</label>
 		<description>An arm module for a fusion hardsuit. Contains a pressurized combat stim injector, as well as a self-injector. Unlike most other combat enhancements, this one does not inflict any withdrawl symptoms upon the target after the effect fades due to the efficacy of the mechanite injectors. The stim can be stacked up to two times per target, with diminishing returns.</description>
@@ -637,6 +845,7 @@
 						<label>stim injector</label>
 						<description>Injects the target with a stim that increases their combat potential substantially for a short duration. May be applied up to two times per target.</description>
 						<canBeToggled>false</canBeToggled>
+						<draw>false</draw>
 					</li>
 					<li>
 						<label>self-stim injector</label>
@@ -764,6 +973,7 @@
 						<label>charge blast</label>
 						<description>Shoots a concentrated burst of energy at the target. Damage increases the longer the weapon goes without firing.</description>
 						<canBeToggled>true</canBeToggled>
+						<draw>false</draw>
 					</li>
 				</verbProps>
 			</li>
@@ -868,7 +1078,7 @@
 					</li>
 					<li>
 						<hediff>FE_AbsorptionBarrier</hediff>
-						<resourcePerSecond>150</resourcePerSecond>
+						<resourcePerSecond>1200</resourcePerSecond>
 						<qualityScalesResourcePerSecond>false</qualityScalesResourcePerSecond>
 						<addHediffIfMissing>true</addHediffIfMissing>
 						<maxResourceCapacityOffset>100</maxResourceCapacityOffset>
@@ -886,7 +1096,7 @@
 		<graphicData>
 			<texPath>Things/Item/Health/HealthItem</texPath>
 			<graphicClass>Graphic_Single</graphicClass>
-			<color>(180,50, 50)</color>
+			<color>(50,180, 50)</color>
 		</graphicData>
 		<apparel>
 			<bodyPartGroups>
@@ -1000,6 +1210,7 @@
 						<label>head vulcan</label>
 						<description>Fires short range head vulcan rounds. Highly inaccurate but effective up close.</description>
 						<canBeToggled>true</canBeToggled>
+						<draw>false</draw>
 					</li>
 				</verbProps>
 			</li>
