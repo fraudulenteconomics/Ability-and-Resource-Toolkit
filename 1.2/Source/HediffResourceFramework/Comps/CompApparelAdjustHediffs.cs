@@ -25,7 +25,7 @@ namespace HediffResourceFramework
             if (Apparel.Wearer != null)
             {
                 List<HediffResourceDef> hediffResourcesToRemove = Apparel.Wearer.health.hediffSet.hediffs.OfType<HediffResource>()
-        .Select(x => x.def).Where(x => Props.resourceSettings.Any(y => y.hediff == x)).ToList();
+                    .Select(x => x.def).Where(x => Props.resourceSettings.Any(y => y.hediff == x)).ToList();
                 var apparels = Apparel.Wearer.apparel.WornApparel;
                 if (apparels != null)
                 {
@@ -47,7 +47,7 @@ namespace HediffResourceFramework
                         }
                     }
                 }
-
+                
                 var equipments = Apparel.Wearer.equipment?.AllEquipmentListForReading;
                 if (equipments != null)
                 {
@@ -107,6 +107,7 @@ namespace HediffResourceFramework
                                 {
                                     num *= HediffResourceUtils.GetQualityMultiplier(qc);
                                 }
+                                Log.Message(this + " - " + Find.TickManager.TicksGame + " - apparel adjust hediff: " + option.hediff + " - num: " + num);
                                 HediffResourceUtils.AdjustResourceAmount(Apparel.Wearer, option.hediff, num, option.addHediffIfMissing);
                             }
                         }

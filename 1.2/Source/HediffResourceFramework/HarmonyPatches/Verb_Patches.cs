@@ -88,8 +88,6 @@ namespace HediffResourceFramework
                                         verbPostUseDelayMultipliers.Add(compResourseSettings.postUseDelayMultiplier);
                                     }
                                 }
-                                Log.Message($"Adding postUseDelayMultiplier from comp {comp}: {compResourseSettings.postUseDelayMultiplier}");
-                                Log.Message("Adding postUseDelay: " + option.postUseDelay);
                             }
 
                             if (hediffResource != null && option.postUseDelay != 0)
@@ -126,7 +124,6 @@ namespace HediffResourceFramework
                                 comp.postUseDelayTicks = new Dictionary<Verb, VerbDisable>();
                             }
                             comp.postUseDelayTicks[__instance] = new VerbDisable((int)((Find.TickManager.TicksGame + verbPostUseDelay.Average()) * verbPostUseDelayMultipliers.Average()), disablePostUseString);
-                            Log.Message($"Adding delay {comp.postUseDelayTicks[__instance]} {__instance}");
                         }
                     }
                     else if (verbPostUseDelay.Any())
@@ -138,13 +135,7 @@ namespace HediffResourceFramework
                                 comp.postUseDelayTicks = new Dictionary<Verb, VerbDisable>();
                             }
                             comp.postUseDelayTicks[__instance] = new VerbDisable((int)((Find.TickManager.TicksGame + verbPostUseDelay.Average())), disablePostUseString);
-                            Log.Message($"Adding delay {comp.postUseDelayTicks[__instance]} {__instance}");
                         }
-                    }
-                    else
-                    {
-                        Log.Message($"Can't add new delay for verb: {__instance} due to missing verbPostUseDelay values");
-
                     }
                     foreach (var hediffData in hediffPostUse)
                     {
@@ -154,22 +145,14 @@ namespace HediffResourceFramework
                             if (hediffPostUseDelayMultipliers.TryGetValue(hediffData.Key, out List<float> hediffPostUseMultipliers) && hediffPostUseMultipliers.Any())
                             {
                                 newDelayTicks = (int)(hediffPostUseList.Average() * hediffPostUseMultipliers.Average());
-                                Log.Message($"newDelayTicks: {newDelayTicks}, with multipliers for {hediffData.Key}");
                             }
                             else
                             {
                                 newDelayTicks = (int)(hediffPostUseList.Average());
-                                Log.Message($"newDelayTicks: {newDelayTicks} for {hediffData.Key}");
                             }
                             if (hediffData.Key.CanHaveDelay(newDelayTicks))
                             {
                                 hediffData.Key.AddDelay(newDelayTicks);
-                                Log.Message($"Adding delay {newDelayTicks} for {hediffData.Key}");
-
-                            }
-                            else
-                            {
-                                Log.Message($"{hediffData.Key} can't have new delay in {newDelayTicks}");
                             }
                         }
                     }

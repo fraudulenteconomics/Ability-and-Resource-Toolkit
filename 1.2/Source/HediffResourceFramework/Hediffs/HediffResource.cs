@@ -24,7 +24,6 @@ namespace HediffResourceFramework
             }
             set
             {
-                Log.Message("Start adjusting resource " + value + " to " + this.def.defName);
                 resourceAmount = value;
                 if (resourceAmount > ResourceCapacity)
                 {
@@ -42,13 +41,11 @@ namespace HediffResourceFramework
 
                 if (resourceAmount <= 0 && !this.def.keepWhenEmpty)
                 {
-                    Log.Message($"Removing hediffResource: " + this);
                     this.pawn.health.RemoveHediff(this);
                 }
                 else
                 {
                     this.Severity = resourceAmount;
-                    Log.Message(this.def.defName + ": Adjusting resource: " + resourceAmount);
                 }
             }
         }
@@ -59,19 +56,15 @@ namespace HediffResourceFramework
         public void AddDelay(int newDelayTicks)
         {
             this.delayTicks = Find.TickManager.TicksGame + newDelayTicks;
-            Log.Message($"Setting new delay to {delayTicks}");
         }
         public bool CanHaveDelay(int newDelayTicks)
         {
-            Log.Message($"newDelayTicks: {newDelayTicks}, Find.TickManager.TicksGame: {Find.TickManager.TicksGame}, delayTicks: {delayTicks}, Find.TickManager.TicksGame - delayTicks: {Find.TickManager.TicksGame - delayTicks}");
             if (Find.TickManager.TicksGame > delayTicks || newDelayTicks > Find.TickManager.TicksGame - delayTicks)
             {
-                Log.Message($"{this} can have new delay ticks {newDelayTicks}");
                 return true;
             }
             else
             {
-                Log.Message($"{this} can't have new delay ticks {newDelayTicks}, cur delay ticks: {delayTicks}");
                 return false;
             }
         }
@@ -168,6 +161,10 @@ namespace HediffResourceFramework
                 if (this.def.keepWhenEmpty && this.ResourceAmount <= 0)
                 {
                     return false;
+                }
+                if (this.ResourceCapacity < 0)
+                {
+                    return true;
                 }
                 if (SourceOnlyAmplifiers())
                 {

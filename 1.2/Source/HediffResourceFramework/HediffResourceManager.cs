@@ -19,7 +19,10 @@ namespace HediffResourceFramework
         public void RegisterComp(CompAdjustHediffs comp)
         {
             Log.Message("Registering: " + comp);
-            compHediffResources.Add(comp);
+            if (!compHediffResources.Contains(comp))
+            {
+                compHediffResources.Add(comp);
+            }
         }
 
         private void PreInit()
