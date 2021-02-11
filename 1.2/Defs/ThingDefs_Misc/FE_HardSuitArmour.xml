@@ -102,7 +102,7 @@
 				<li>FE_Core_Module</li>
 			</layers>
 			<tags>
-				<li>PoweredArmor</li>
+				<li>FusionArmor</li>
 			</tags>
 			<defaultOutfitTags>
 				<li>Soldier</li>
@@ -153,7 +153,7 @@
 				<li>FE_Core_Module</li>
 			</layers>
 			<tags>
-				<li>PoweredArmor</li>
+				<li>FusionArmor</li>
 			</tags>
 			<defaultOutfitTags>
 				<li>Soldier</li>
@@ -220,7 +220,7 @@
 				<li>FE_Leg_Module</li>
 			</layers>
 			<tags>
-				<li>PoweredArmor</li>
+				<li>FusionArmor</li>
 			</tags>
 			<defaultOutfitTags>
 				<li>Soldier</li>
@@ -275,7 +275,7 @@
 				<li>FE_Leg_Module</li>
 			</layers>
 			<tags>
-				<li>PoweredArmor</li>
+				<li>FusionArmor</li>
 			</tags>
 			<defaultOutfitTags>
 				<li>Soldier</li>
@@ -320,6 +320,7 @@
 				<verbProps>
 					<li>
 						<label>jump</label>
+						<visualLabel>jump module</visualLabel>
 						<description>Integrated jump jets used for limited bursts of accellerated movement.</description>
 						<draw>false</draw>
 					</li>
@@ -364,7 +365,7 @@
 				<li>FE_Back_Module</li>
 			</layers>
 			<tags>
-				<li>PoweredArmor</li>
+				<li>FusionArmor</li>
 			</tags>
 			<defaultOutfitTags>
 				<li>Soldier</li>
@@ -410,6 +411,7 @@
 					<li>
 						<label>Deploy Turret</label>
 						<description>Deploys a temporary autonomous turret.</description>
+						<draw>false</draw>
 					</li>
 				</verbProps>
 			</li>
@@ -533,7 +535,7 @@
 				<li>FE_Back_Module</li>
 			</layers>
 			<tags>
-				<li>PoweredArmor</li>
+				<li>FusionArmor</li>
 			</tags>
 			<defaultOutfitTags>
 				<li>Soldier</li>
@@ -620,7 +622,7 @@
 	<ThingDef ParentName="FE_ModuleBase">
 		<defName>FE_AutonomousStunner</defName>
 		<label>module (back) - autonomous stunner</label>
-		<description>A back module for a fusion hardsuit. Contains an autonomous defense system that automatically fires stunning rounds at any enemies that get too close. Can be manually retargetted if the current target gets too far away. Toggling this on and off also resets its current target. Consumes a small amount of energy per burst.</description>
+		<description>A back module for a fusion hardsuit. Contains an autonomous defense system that automatically fires stunning rounds at any enemies that get too close. Consumes a small amount of energy per burst.</description>
 		<graphicData>
 			<texPath>Things/Item/Health/HealthItem</texPath>
 			<graphicClass>Graphic_Single</graphicClass>
@@ -634,7 +636,7 @@
 				<li>FE_Back_Module</li>
 			</layers>
 			<tags>
-				<li>PoweredArmor</li>
+				<li>FusionArmor</li>
 			</tags>
 			<defaultOutfitTags>
 				<li>Soldier</li>
@@ -650,11 +652,9 @@
 				<resourceSettings>
 					<li>
 						<hediff>FE_FusionReactor</hediff>
-						<resourcePerUse>-5</resourcePerUse>
+						<resourcePerUse>0</resourcePerUse>
 						<disableIfMissingHediff>true</disableIfMissingHediff>
 						<disableReason>Insufficient energy.</disableReason>
-						<minimumResourcePerUse>5</minimumResourcePerUse>
-						<postUseDelay>180</postUseDelay>
 					</li>
 				</resourceSettings>
 				<verbClass>HediffResourceFramework.Verb_ResourceTarget</verbClass>
@@ -685,6 +685,7 @@
 				<verbProps>
 					<li>
 						<label>stunner</label>
+						<visualLabel>autonomous stunner</visualLabel>
 						<description>An autonomous defense weapon that stuns incoming enemies.</description>
 						<canBeToggled>true</canBeToggled>
 						<draw>false</draw>
@@ -748,7 +749,7 @@
 				<li>FE_Arm_Module</li>
 			</layers>
 			<tags>
-				<li>PoweredArmor</li>
+				<li>FusionArmor</li>
 			</tags>
 			<defaultOutfitTags>
 				<li>Soldier</li>
@@ -913,7 +914,7 @@
 				<li>FE_Arm_Module</li>
 			</layers>
 			<tags>
-				<li>PoweredArmor</li>
+				<li>FusionArmor</li>
 			</tags>
 			<defaultOutfitTags>
 				<li>Soldier</li>
@@ -940,8 +941,9 @@
 				<label>charge blast</label>
 				<hasStandardCommand>true</hasStandardCommand>
 				<defaultProjectile>FE_ChargeBurstBullet</defaultProjectile>
-				<warmupTime>2.0</warmupTime>
+				<warmupTime>0.25</warmupTime>
 				<range>40.9</range>
+				<onlyManualCast>true</onlyManualCast>
 				<burstShotCount>1</burstShotCount>
 				<soundCast>Shot_Shotgun</soundCast>
 				<soundCastTail>GunTail_Heavy</soundCastTail>
@@ -955,7 +957,7 @@
 					<canTargetBuildings>true</canTargetBuildings>
 					<canTargetLocations>false</canTargetLocations>
 				</targetParams>
-				<defaultCooldownTime>1.5</defaultCooldownTime>
+				<defaultCooldownTime>0.5</defaultCooldownTime>
 			</li>
 		</verbs>
 		<comps>
@@ -963,8 +965,9 @@
 				<verbProps>
 					<li>
 						<label>charge blast</label>
+						<visualLabel>charge blaster</visualLabel>
 						<description>Shoots a concentrated burst of energy at the target. Damage increases the longer the weapon goes without firing.</description>
-						<canBeToggled>true</canBeToggled>
+						<canBeToggled>false</canBeToggled>
 						<draw>false</draw>
 					</li>
 				</verbProps>
@@ -988,7 +991,7 @@
 					</li>
 					<li>
 						<hediff>FE_ChargeBurstModule</hediff>
-						<resourcePerSecond>0.5</resourcePerSecond>
+						<resourcePerSecond>1</resourcePerSecond>
 						<qualityScalesResourcePerSecond>false</qualityScalesResourcePerSecond>
 						<addHediffIfMissing>true</addHediffIfMissing>
 						<maxResourceCapacityOffset>10</maxResourceCapacityOffset>
@@ -1039,7 +1042,7 @@
 				<li>FE_Exo_Module</li>
 			</layers>
 			<tags>
-				<li>PoweredArmor</li>
+				<li>FusionArmor</li>
 			</tags>
 			<defaultOutfitTags>
 				<li>Soldier</li>
@@ -1098,7 +1101,7 @@
 				<li>FE_Exo_Module</li>
 			</layers>
 			<tags>
-				<li>PoweredArmor</li>
+				<li>FusionArmor</li>
 			</tags>
 			<defaultOutfitTags>
 				<li>Soldier</li>
@@ -1200,6 +1203,7 @@
 				<verbProps>
 					<li>
 						<label>head vulcan</label>
+						<visualLabel>dual head vulcans</visualLabel>
 						<description>Fires short range head vulcan rounds. Highly inaccurate but effective up close.</description>
 						<canBeToggled>true</canBeToggled>
 						<draw>false</draw>

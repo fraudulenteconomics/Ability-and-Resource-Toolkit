@@ -40,7 +40,7 @@
 	</StatDef>
 	
 	
-	<StatDef>
+	<!-- <StatDef>
 		<defName>FE_MarksmanOpticsPerSecond</defName>
 		<workerClass>HediffResourceFramework.StatWorker_ResourceOffset</workerClass> 
 		<label>marksman energy per second</label>
@@ -70,6 +70,6 @@
 				<hediffResource>FE_MarksmanOptics</hediffResource>
 			</li>
 		</modExtensions>
-	</StatDef>
+	</StatDef> -->
 	
 </Defs>

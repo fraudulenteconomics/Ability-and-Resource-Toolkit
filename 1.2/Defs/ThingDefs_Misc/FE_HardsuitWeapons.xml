@@ -78,8 +78,8 @@
 				<label>FE_RepulsorBurst</label>
 				<hasStandardCommand>true</hasStandardCommand>
 				<defaultProjectile>FE_Bullet_RepulsorBlast</defaultProjectile>
-				<warmupTime>2.0</warmupTime>
-				<range>49.9</range>
+				<warmupTime>1.0</warmupTime>
+				<range>38.9</range>
 				<burstShotCount>1</burstShotCount>
 				<soundCast>Shot_AssaultRifle</soundCast>
 				<soundCastTail>GunTail_Medium</soundCastTail>
@@ -108,7 +108,24 @@
 		<weaponTags Inherit="False">
 			<li>FE_FusionWeapon</li>
 		</weaponTags>
-		<comps>
+		<comps Inherit="False">
+			<li>
+				<compClass>CompQuality</compClass>
+			</li>
+			<li Class="CompProperties_Forbiddable"/>      
+			<li Class="MVCF.Comps.CompProperties_VerbProps">
+				<compClass>CompEquippable</compClass>
+				<verbProps>
+					<li>
+						<label>FE_RepulsorNormal</label>
+						<canBeToggled>false</canBeToggled>
+					</li>
+					<li>
+						<label>FE_RepulsorBurst</label>
+						<canBeToggled>true</canBeToggled>
+					</li>
+				</verbProps>
+			</li>
 			<li Class="HediffResourceFramework.CompProperties_WeaponAdjustHediffs">
 				<resourceSettings>
 					<li>
@@ -144,7 +161,7 @@
 		</graphicData>
 		<projectile>
 			<damageDef>FE_RepulsorDamage</damageDef>
-			<damageAmountBase>5</damageAmountBase>
+			<damageAmountBase>4</damageAmountBase>
 			<speed>95</speed>
 		</projectile>
 	</ThingDef>
@@ -194,8 +211,6 @@
 			<speed>80</speed>
 			<damageDef>Bomb</damageDef>
 			<damageAmountBase>35</damageAmountBase>
-			<explosionRadius>3.5</explosionRadius>
-			<ai_IsIncendiary>true</ai_IsIncendiary>
 			<arcHeightFactor>0.2</arcHeightFactor>
 			<shadowSize>0.6</shadowSize>
 		</projectile>
@@ -249,6 +264,7 @@
 						<resourcePerUse>1</resourcePerUse>
 						<disableIfMissingHediff>false</disableIfMissingHediff>
 						<minimumResourcePerUse>0</minimumResourcePerUse>
+						<postUseDelay>480</postUseDelay>
 					</li>
 				</resourceSettings>
 				<verbClass>Verb_Shoot</verbClass>
