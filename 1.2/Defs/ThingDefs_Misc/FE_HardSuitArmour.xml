@@ -228,7 +228,7 @@
 		</apparel>
 		<equippedStatOffsets>
 			<MoveSpeed>0.8</MoveSpeed>
-			<MeleeDodgeChance>10</MeleeDodgeChance>
+			<MeleeDodgeChance>2</MeleeDodgeChance>
 		</equippedStatOffsets>
 		<costList>
 			<ComponentSpacer>2</ComponentSpacer>
