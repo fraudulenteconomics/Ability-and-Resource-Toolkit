@@ -166,7 +166,6 @@ namespace HediffResourceFramework
 				if (firstHediffOfDef != null)
 				{
 					firstHediffOfDef.ResourceAmount += sevOffset;
-					Log.Message(firstHediffOfDef.def.defName + " adjusting amount: " + sevOffset);
 					return firstHediffOfDef;
 				}
 				else if (addHediffIfMissing)
@@ -174,7 +173,6 @@ namespace HediffResourceFramework
 					firstHediffOfDef = HediffMaker.MakeHediff(hdDef, pawn) as HediffResource;
 					pawn.health.AddHediff(firstHediffOfDef);
 					firstHediffOfDef.ResourceAmount = sevOffset;
-					Log.Message(firstHediffOfDef.def.defName + " adjusting amount: " + sevOffset);
 					return firstHediffOfDef;
 				}
 			}

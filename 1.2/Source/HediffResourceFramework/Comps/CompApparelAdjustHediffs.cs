@@ -107,7 +107,6 @@ namespace HediffResourceFramework
                                 {
                                     num *= HediffResourceUtils.GetQualityMultiplier(qc);
                                 }
-                                Log.Message(this + " - " + Find.TickManager.TicksGame + " - apparel adjust hediff: " + option.hediff + " - num: " + num);
                                 HediffResourceUtils.AdjustResourceAmount(Apparel.Wearer, option.hediff, num, option.addHediffIfMissing);
                             }
                         }

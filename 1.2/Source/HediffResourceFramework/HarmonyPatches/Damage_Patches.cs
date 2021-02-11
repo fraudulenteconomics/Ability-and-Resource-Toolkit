@@ -45,25 +45,55 @@ namespace HediffResourceFramework
 		{
 			if (__instance.Launcher is Pawn launcher)
 			{
-				var equipment = launcher.equipment?.Primary;
-				if (equipment != null && __instance.EquipmentDef == equipment.def)
+				var compCharge = GetCompChargeSourceFor(launcher, __instance, out float resourceAmount);
+				if (compCharge != null)
 				{
-					var compCharge = equipment.GetComp<CompChargeResource>();
-					if (compCharge != null && compCharge.projectilesWithChargedResource.TryGetValue(__instance, out float resourceAmount))
+					Log.Message("1 instance - " + __instance + " - __result: " + __result + " - hediffResource: " + resourceAmount + " - compCharge.Props.damageScaling.HasValue: " + compCharge.Props.damageScaling.HasValue);
+					switch (compCharge.Props.damageScaling.Value)
 					{
-						Log.Message("1 instance - " + __instance + " - __result: " + __result + " - hediffResource: " + resourceAmount + " - compCharge.Props.damageScaling.HasValue: " + compCharge.Props.damageScaling.HasValue);
-						switch (compCharge.Props.damageScaling.Value)
-						{
-							case DamageScalingMode.Flat: DoFlatDamage(ref __result, resourceAmount, compCharge); break;
-							case DamageScalingMode.Scalar: DoScalarDamage(ref __result, resourceAmount, compCharge); break;
-							case DamageScalingMode.Linear: DoLinearDamage(ref __result, resourceAmount, compCharge); break;
-							default: break;
-						}
-						Log.Message("2 instance - " + __instance + " - result: " + __result + " - hediffResource: " + resourceAmount + " - compCharge.Props.damageScaling.HasValue: " + compCharge.Props.damageScaling.HasValue);
+						case DamageScalingMode.Flat: DoFlatDamage(ref __result, resourceAmount, compCharge); break;
+						case DamageScalingMode.Scalar: DoScalarDamage(ref __result, resourceAmount, compCharge); break;
+						case DamageScalingMode.Linear: DoLinearDamage(ref __result, resourceAmount, compCharge); break;
+						default: break;
 					}
+					Log.Message("2 instance - " + __instance + " - result: " + __result + " - hediffResource: " + resourceAmount + " - compCharge.Props.damageScaling.HasValue: " + compCharge.Props.damageScaling.HasValue);
 				}
 			}
 		}
+
+		public static CompChargeResource GetCompChargeSourceFor(Pawn pawn, Projectile projectile, out float resourceAmount)
+        {
+			resourceAmount = 0;
+
+			var equipments = pawn.equipment?.AllEquipmentListForReading;
+			if (equipments != null)
+			{
+				foreach (var equipment in equipments)
+				{
+					var chargeComp = equipment.GetComp<CompChargeResource>();
+					if (chargeComp != null && chargeComp.projectilesWithChargedResource.TryGetValue(projectile, out resourceAmount))
+					{
+						return chargeComp;
+					}
+				}
+			}
+
+			var apparels = pawn.apparel?.WornApparel?.ToList();
+			if (apparels != null)
+			{
+				foreach (var apparel in apparels)
+				{
+					var chargeComp = apparel.GetComp<CompChargeResource>();
+					if (chargeComp != null && chargeComp.projectilesWithChargedResource.TryGetValue(projectile, out resourceAmount))
+					{
+						return chargeComp;
+					}
+				}
+			}
+
+			return null;
+		}
+
 
 		private static void DoFlatDamage(ref int __result, float resourceAmount, CompChargeResource compCharge)
 		{
