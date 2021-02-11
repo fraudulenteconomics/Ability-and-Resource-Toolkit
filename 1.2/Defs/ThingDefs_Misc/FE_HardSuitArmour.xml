@@ -577,6 +577,7 @@
 				<burstShotCount>1</burstShotCount>
 				<soundAiming>OrbitalTargeter_Aiming</soundAiming>
 				<soundCast>OrbitalTargeter_Fire</soundCast>
+				<violent>false</violent>
 				<onlyManualCast>true</onlyManualCast>
 				<targetParams>
 					<canTargetLocations>true</canTargetLocations>
