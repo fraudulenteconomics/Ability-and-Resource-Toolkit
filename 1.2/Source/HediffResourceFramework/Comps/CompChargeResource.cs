@@ -83,6 +83,7 @@ namespace HediffResourceFramework
         public override void PostExposeData()
         {
             base.PostExposeData();
+            projectilesWithChargedResource.RemoveAll(x => x.Key.DestroyedOrNull());
             Scribe_Collections.Look(ref projectilesWithChargedResource, "projectilesWithChargedResource", LookMode.Reference, LookMode.Deep, ref projectileValues, ref projectileVlaues);
         }
 
