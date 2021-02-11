@@ -21,7 +21,6 @@ namespace HediffResourceFramework
 	public class HediffComp_ResourcePerSecond : HediffComp
 	{
 		public HediffCompProperties_ResourcePerSecond Props => (HediffCompProperties_ResourcePerSecond)props;
-
 		public HediffResource HediffResource => parent as HediffResource;
 		public override void CompPostTick(ref float severityAdjustment)
 		{

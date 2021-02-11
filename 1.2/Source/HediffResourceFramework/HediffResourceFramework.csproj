@@ -49,6 +49,8 @@
     <Compile Include="Comps\CompAdjustHediffs.cs" />
     <Compile Include="Comps\CompAdjustHediffsArea.cs" />
     <Compile Include="Comps\CompChargeResource.cs" />
+    <Compile Include="Comps\HediffComp_AdjustHediffs.cs" />
+    <Compile Include="Comps\IAdjustResource.cs" />
     <Compile Include="Comps\PlaceWorker_ShowHediffAreaRadius.cs" />
     <Compile Include="Comps\HediffComp_ResourcePerSecond.cs" />
     <Compile Include="Comps\IngestionOutcomeDoer_GiveHediffResource.cs" />

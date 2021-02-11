@@ -68,21 +68,33 @@ namespace HediffResourceFramework
         public List<HediffAdjust> resourceSettings;
 
         public string disablePostUse;
-
-        public string savePrefix;
-
     }
-    public class CompAdjustHediffs : ThingComp
+    public class CompAdjustHediffs : ThingComp, IAdjustResource
     {
-        public CompProperties_AdjustHediffs Props
+        public CompProperties_AdjustHediffs Props => (CompProperties_AdjustHediffs)this.props;
+        public Thing Parent => this.parent;
+        public List<HediffAdjust> ResourceSettings => Props.resourceSettings;
+        public string DisablePostUse => Props.disablePostUse;
+
+        private Dictionary<Verb, VerbDisable> postUseDelayTicks;
+        public Dictionary<Verb, VerbDisable> PostUseDelayTicks => postUseDelayTicks;
+        public bool TryGetQuality(out QualityCategory qc)
         {
-            get
-            {
-                return (CompProperties_AdjustHediffs)this.props;
-            }
+            return this.parent.TryGetQuality(out qc);
         }
 
-        public Dictionary<Verb, VerbDisable> postUseDelayTicks;
+        public void Register()
+        {
+            var gameComp = Current.Game.GetComponent<HediffResourceManager>();
+            gameComp.RegisterAdjuster(this);
+        }
+
+        public void Deregister()
+        {
+            var gameComp = Current.Game.GetComponent<HediffResourceManager>();
+            gameComp.DeregisterAdjuster(this);
+        }
+
         public override void PostExposeData()
         {
             base.PostExposeData();
@@ -90,31 +102,29 @@ namespace HediffResourceFramework
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
                 var gameComp = Current.Game.GetComponent<HediffResourceManager>();
-                gameComp.RegisterComp(this);
+                gameComp.RegisterAdjuster(this);
             }
         }
 
         private List<Verb> verbKeys;
         private List<VerbDisable> verbDisablesValues;
-
         public override void PostSpawnSetup(bool respawningAfterLoad)
         {
             base.PostSpawnSetup(respawningAfterLoad);
-            var gameComp = Current.Game.GetComponent<HediffResourceManager>();
-            gameComp.RegisterComp(this);
+            Register();
         }
 
         public override void PostPostMake()
         {
             base.PostPostMake();
-            var gameComp = Current.Game.GetComponent<HediffResourceManager>();
-            gameComp.RegisterComp(this);
+            Register();
         }
 
         public virtual void Notify_Removed()
         {
-
+            Deregister();
         }
+
         public virtual void ResourceTick()
         {
 

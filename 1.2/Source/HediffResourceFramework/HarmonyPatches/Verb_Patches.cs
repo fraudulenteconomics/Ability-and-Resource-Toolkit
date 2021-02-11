@@ -19,8 +19,10 @@ namespace HediffResourceFramework
     {
         private static void Postfix(ref bool __result, Verb __instance, Pawn pawn)
         {
+            Log.Message("Patch_IsStillUsableBy - Postfix - if (__result) - 1", true);
             if (__result)
             {
+                Log.Message("Patch_IsStillUsableBy - Postfix - __result = HediffResourceUtils.IsUsableBy(__instance, out string disableReason); - 2", true);
                 __result = HediffResourceUtils.IsUsableBy(__instance, out string disableReason);
             }
         }
@@ -31,8 +33,10 @@ namespace HediffResourceFramework
     {
         private static void Postfix(ref bool __result, Verb __instance)
         {
+            Log.Message("Patch_Available - Postfix - if (__result) - 3", true);
             if (__result)
             {
+                Log.Message("Patch_Available - Postfix - __result = HediffResourceUtils.IsUsableBy(__instance, out string disableReason); - 4", true);
                 __result = HediffResourceUtils.IsUsableBy(__instance, out string disableReason);
             }
         }
@@ -43,71 +47,98 @@ namespace HediffResourceFramework
     {
         private static void Prefix(Verb __instance, out bool __state)
         {
+            Log.Message("Patch_TryCastNextBurstShot - Prefix - if (__instance.Available()) - 5", true);
             if (__instance.Available())
             {
+                Log.Message("Patch_TryCastNextBurstShot - Prefix - __state = true; - 6", true);
                 __state = true;
             }
             else
             {
+                Log.Message("Patch_TryCastNextBurstShot - Prefix - __state = false; - 7", true);
                 __state = false;
             }
         }
 
         private static void Postfix(Verb __instance, bool __state)
         {
+            Log.Message("Patch_TryCastNextBurstShot - Postfix - if (__state && __instance.CasterIsPawn && __instance.EquipmentSource != null) - 8", true);
             if (__state && __instance.CasterIsPawn && __instance.EquipmentSource != null)
             {
+                Log.Message("Patch_TryCastNextBurstShot - Postfix - var verbProps = __instance.verbProps as VerbResourceProps; - 9", true);
                 var verbProps = __instance.verbProps as VerbResourceProps;
+                Log.Message("Patch_TryCastNextBurstShot - Postfix - if (verbProps != null && verbProps.resourceSettings != null) - 10", true);
                 if (verbProps != null && verbProps.resourceSettings != null)
                 {
+                    Log.Message("Patch_TryCastNextBurstShot - Postfix - var hediffResourceManage = Current.Game.GetComponent<HediffResourceManager>(); - 11", true);
                     var hediffResourceManage = Current.Game.GetComponent<HediffResourceManager>();
 
                     var verbPostUseDelay = new List<int>();
+                    Log.Message("Patch_TryCastNextBurstShot - Postfix - var verbPostUseDelayMultipliers = new List<float>(); - 13", true);
                     var verbPostUseDelayMultipliers = new List<float>();
 
                     var hediffPostUse = new Dictionary<HediffResource, List<int>>();
+                    Log.Message("Patch_TryCastNextBurstShot - Postfix - var hediffPostUseDelayMultipliers = new Dictionary<HediffResource, List<float>>(); - 15", true);
                     var hediffPostUseDelayMultipliers = new Dictionary<HediffResource, List<float>>();
 
                     var disablePostUseString = "";
-                    var comps = GetAllWeaponAndApparelAdjustHediffsComps(__instance.CasterPawn);
+                    Log.Message("Patch_TryCastNextBurstShot - Postfix - var comps = HediffResourceUtils.GetAllAdjustHediffsComps(__instance.CasterPawn); - 17", true);
+                    var comps = HediffResourceUtils.GetAllAdjustHediffsComps(__instance.CasterPawn);
 
+                    Log.Message("Patch_TryCastNextBurstShot - Postfix - foreach (var option in verbProps.resourceSettings) - 18", true);
                     foreach (var option in verbProps.resourceSettings)
                     {
+                        Log.Message("Patch_TryCastNextBurstShot - Postfix - var hediffResource = HediffResourceUtils.AdjustResourceAmount(__instance.CasterPawn, option.hediff, option.resourcePerUse, option.addHediffIfMissing); - 19", true);
                         var hediffResource = HediffResourceUtils.AdjustResourceAmount(__instance.CasterPawn, option.hediff, option.resourcePerUse, option.addHediffIfMissing);
+                        Log.Message("Patch_TryCastNextBurstShot - Postfix - foreach (var comp in comps) - 20", true);
                         foreach (var comp in comps)
                         {
-                            var compResourseSettings = comp.Props.resourceSettings?.FirstOrDefault(x => x.hediff == option.hediff);
+                            Log.Message("Patch_TryCastNextBurstShot - Postfix - var compResourseSettings = comp.ResourceSettings?.FirstOrDefault(x => x.hediff == option.hediff); - 21", true);
+                            var compResourseSettings = comp.ResourceSettings?.FirstOrDefault(x => x.hediff == option.hediff);
+                            Log.Message("Patch_TryCastNextBurstShot - Postfix - if (compResourseSettings != null) - 22", true);
                             if (compResourseSettings != null)
                             {
+                                Log.Message("Patch_TryCastNextBurstShot - Postfix - if (option.postUseDelay != 0) - 23", true);
                                 if (option.postUseDelay != 0)
                                 {
+                                    Log.Message("Patch_TryCastNextBurstShot - Postfix - verbPostUseDelay.Add(option.postUseDelay); - 24", true);
                                     verbPostUseDelay.Add(option.postUseDelay);
-                                    disablePostUseString += comp.Props.disablePostUse + "\n";
+                                    disablePostUseString += comp.DisablePostUse + "\n";
+                                    Log.Message("Patch_TryCastNextBurstShot - Postfix - if (compResourseSettings.postUseDelayMultiplier != 1) - 25", true);
                                     if (compResourseSettings.postUseDelayMultiplier != 1)
                                     {
+                                        Log.Message("Patch_TryCastNextBurstShot - Postfix - verbPostUseDelayMultipliers.Add(compResourseSettings.postUseDelayMultiplier); - 26", true);
                                         verbPostUseDelayMultipliers.Add(compResourseSettings.postUseDelayMultiplier);
                                     }
                                 }
                             }
 
+                            Log.Message("Patch_TryCastNextBurstShot - Postfix - if (hediffResource != null && option.postUseDelay != 0) - 27", true);
                             if (hediffResource != null && option.postUseDelay != 0)
                             {
+                                Log.Message("Patch_TryCastNextBurstShot - Postfix - if (hediffPostUse.ContainsKey(hediffResource)) - 28", true);
                                 if (hediffPostUse.ContainsKey(hediffResource))
                                 {
+                                    Log.Message("Patch_TryCastNextBurstShot - Postfix - hediffPostUse[hediffResource].Add(option.postUseDelay); - 29", true);
                                     hediffPostUse[hediffResource].Add(option.postUseDelay);
                                 }
                                 else
                                 {
+                                    Log.Message("Patch_TryCastNextBurstShot - Postfix - hediffPostUse[hediffResource] = new List<int> { option.postUseDelay }; - 30", true);
                                     hediffPostUse[hediffResource] = new List<int> { option.postUseDelay };
                                 }
+                                Log.Message("Patch_TryCastNextBurstShot - Postfix - if (compResourseSettings != null && compResourseSettings.postUseDelayMultiplier != 1) - 31", true);
                                 if (compResourseSettings != null && compResourseSettings.postUseDelayMultiplier != 1)
                                 {
+                                    Log.Message("Patch_TryCastNextBurstShot - Postfix - if (hediffPostUseDelayMultipliers.ContainsKey(hediffResource)) - 32", true);
                                     if (hediffPostUseDelayMultipliers.ContainsKey(hediffResource))
                                     {
+                                        Log.Message("Patch_TryCastNextBurstShot - Postfix - hediffPostUseDelayMultipliers[hediffResource].Add(compResourseSettings.postUseDelayMultiplier); - 33", true);
                                         hediffPostUseDelayMultipliers[hediffResource].Add(compResourseSettings.postUseDelayMultiplier);
                                     }
                                     else
                                     {
+                                        Log.Message("Patch_TryCastNextBurstShot - Postfix - hediffPostUseDelayMultipliers[hediffResource] = new List<float> { compResourseSettings.postUseDelayMultiplier }; - 34", true);
                                         hediffPostUseDelayMultipliers[hediffResource] = new List<float> { compResourseSettings.postUseDelayMultiplier };
                                     }
                                 }
@@ -115,33 +146,31 @@ namespace HediffResourceFramework
                         }
                     }
 
+                    Log.Message("Patch_TryCastNextBurstShot - Postfix - if (verbPostUseDelay.Any() && verbPostUseDelayMultipliers.Any()) - 35", true);
                     if (verbPostUseDelay.Any() && verbPostUseDelayMultipliers.Any())
                     {
+                        Log.Message("Patch_TryCastNextBurstShot - Postfix - foreach (var comp in comps) - 36", true);
                         foreach (var comp in comps)
                         {
-                            if (comp.postUseDelayTicks is null)
-                            {
-                                comp.postUseDelayTicks = new Dictionary<Verb, VerbDisable>();
-                            }
-                            comp.postUseDelayTicks[__instance] = new VerbDisable((int)((Find.TickManager.TicksGame + verbPostUseDelay.Average()) * verbPostUseDelayMultipliers.Average()), disablePostUseString);
+                            comp.PostUseDelayTicks[__instance] = new VerbDisable((int)((Find.TickManager.TicksGame + verbPostUseDelay.Average()) * verbPostUseDelayMultipliers.Average()), disablePostUseString);
                         }
                     }
                     else if (verbPostUseDelay.Any())
                     {
+                        Log.Message("Patch_TryCastNextBurstShot - Postfix - foreach (var comp in comps) - 39", true);
                         foreach (var comp in comps)
                         {
-                            if (comp.postUseDelayTicks is null)
-                            {
-                                comp.postUseDelayTicks = new Dictionary<Verb, VerbDisable>();
-                            }
-                            comp.postUseDelayTicks[__instance] = new VerbDisable((int)((Find.TickManager.TicksGame + verbPostUseDelay.Average())), disablePostUseString);
+                            comp.PostUseDelayTicks[__instance] = new VerbDisable((int)((Find.TickManager.TicksGame + verbPostUseDelay.Average())), disablePostUseString);
                         }
                     }
+                    Log.Message("Patch_TryCastNextBurstShot - Postfix - foreach (var hediffData in hediffPostUse) - 41", true);
                     foreach (var hediffData in hediffPostUse)
                     {
+                        Log.Message("Patch_TryCastNextBurstShot - Postfix - if (hediffData.Key != null && hediffPostUse.TryGetValue(hediffData.Key, out List<int> hediffPostUseList)) - 42", true);
                         if (hediffData.Key != null && hediffPostUse.TryGetValue(hediffData.Key, out List<int> hediffPostUseList))
                         {
                             int newDelayTicks;
+                            Log.Message("Patch_TryCastNextBurstShot - Postfix - if (hediffPostUseDelayMultipliers.TryGetValue(hediffData.Key, out List<float> hediffPostUseMultipliers) && hediffPostUseMultipliers.Any()) - 44", true);
                             if (hediffPostUseDelayMultipliers.TryGetValue(hediffData.Key, out List<float> hediffPostUseMultipliers) && hediffPostUseMultipliers.Any())
                             {
                                 newDelayTicks = (int)(hediffPostUseList.Average() * hediffPostUseMultipliers.Average());
@@ -158,37 +187,6 @@ namespace HediffResourceFramework
                     }
                 }
             }
-        }
-
-        public static List<CompAdjustHediffs> GetAllWeaponAndApparelAdjustHediffsComps(Pawn pawn)
-        {
-            List<CompAdjustHediffs> compAdjustHediffs = new List<CompAdjustHediffs>();
-            var apparels = pawn.apparel?.WornApparel?.ToList();
-            if (apparels != null)
-            {
-                foreach (var apparel in apparels)
-                {
-                    var comp = apparel.GetComp<CompApparelAdjustHediffs>();
-                    if (comp != null)
-                    {
-                        compAdjustHediffs.Add(comp);
-                    }
-                }
-            }
-
-            var equipments = pawn.equipment?.AllEquipmentListForReading;
-            if (equipments != null)
-            {
-                foreach (var equipment in equipments)
-                {
-                    var comp = equipment.GetComp<CompWeaponAdjustHediffs>();
-                    if (comp != null)
-                    {
-                        compAdjustHediffs.Add(comp);
-                    }
-                }
-            }
-            return compAdjustHediffs;
         }
     }
 }

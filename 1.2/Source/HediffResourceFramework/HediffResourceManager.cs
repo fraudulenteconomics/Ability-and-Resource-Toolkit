@@ -10,26 +10,33 @@ namespace HediffResourceFramework
 {
     public class HediffResourceManager : GameComponent
     {
-        private List<CompAdjustHediffs> compHediffResources = new List<CompAdjustHediffs>();
+        private List<IAdjustResource> resourceAdjusters = new List<IAdjustResource>();
         public HediffResourceManager(Game game)
         {
 
         }
 
-        public void RegisterComp(CompAdjustHediffs comp)
+        public void RegisterAdjuster(IAdjustResource adjuster)
         {
-            Log.Message("Registering: " + comp);
-            if (!compHediffResources.Contains(comp))
+            Log.Message("Registering: " + adjuster);
+            if (!resourceAdjusters.Contains(adjuster))
             {
-                compHediffResources.Add(comp);
+                resourceAdjusters.Add(adjuster);
             }
         }
-
+        public void DeregisterAdjuster(IAdjustResource adjuster)
+        {
+            Log.Message("Deregistering: " + adjuster);
+            if (resourceAdjusters.Contains(adjuster))
+            {
+                resourceAdjusters.Remove(adjuster);
+            }
+        }
         private void PreInit()
         {
-            if (compHediffResources is null)
+            if (resourceAdjusters is null)
             {
-                compHediffResources = new List<CompAdjustHediffs>();
+                resourceAdjusters = new List<IAdjustResource>();
             }
         }
 
@@ -48,16 +55,16 @@ namespace HediffResourceFramework
         {
             base.GameComponentTick();
 
-            for (int num = compHediffResources.Count - 1; num >= 0; num--)
+            for (int num = resourceAdjusters.Count - 1; num >= 0; num--)
             {
-                var comp = compHediffResources[num];
-                if (!comp.parent.Destroyed)
+                var adjuster = resourceAdjusters[num];
+                if (!adjuster.Parent.Destroyed)
                 {
-                    comp.ResourceTick();
+                    adjuster.ResourceTick();
                 }
                 else
                 {
-                    compHediffResources.RemoveAt(num);
+                    resourceAdjusters.RemoveAt(num);
                 }
             }
         }

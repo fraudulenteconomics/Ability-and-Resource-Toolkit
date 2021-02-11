@@ -104,7 +104,7 @@ namespace HediffResourceFramework
             {
                 if (CompEquippable.PrimaryVerb.CasterPawn.IsHashIntervalTick(60))
                 {
-                    if (!this.postUseDelayTicks?.Values?.Select(x => x.delayTicks).Any(y => y > Find.TickManager.TicksGame) ?? true)
+                    if (!this.PostUseDelayTicks?.Values?.Select(x => x.delayTicks).Any(y => y > Find.TickManager.TicksGame) ?? true)
                     {
                         foreach (var option in Props.resourceSettings)
                         {

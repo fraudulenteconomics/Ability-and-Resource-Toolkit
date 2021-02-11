@@ -21,7 +21,6 @@ namespace HediffResourceFramework
         public Apparel Apparel => this.parent as Apparel;
         public override void Notify_Removed()
         {
-            base.Notify_Removed();
             if (Apparel.Wearer != null)
             {
                 List<HediffResourceDef> hediffResourcesToRemove = Apparel.Wearer.health.hediffSet.hediffs.OfType<HediffResource>()
@@ -91,7 +90,7 @@ namespace HediffResourceFramework
             {
                 if (Apparel.Wearer.IsHashIntervalTick(60))
                 {
-                    if (!this.postUseDelayTicks?.Values?.Select(x => x.delayTicks).Any(y => y > Find.TickManager.TicksGame) ?? true)
+                    if (!this.PostUseDelayTicks?.Values?.Select(x => x.delayTicks).Any(y => y > Find.TickManager.TicksGame) ?? true)
                     {
                         foreach (var option in Props.resourceSettings)
                         {

@@ -102,30 +102,19 @@ namespace HediffResourceFramework
 		{
 			return pawn.health.hediffSet.hediffs.Any(x => x is HediffResource);
 		}
-		public static float GetHediffResourceCapacityGainFor(Pawn pawn, HediffResourceDef hdDef)
+
+		public static List<IAdjustResource> GetAllAdjustHediffsComps(Pawn pawn)
 		{
-			float result = 0;
-			if (pawn.apparel?.WornApparel != null)
+			List<IAdjustResource> adjustHediffs = new List<IAdjustResource>();
+			var apparels = pawn.apparel?.WornApparel?.ToList();
+			if (apparels != null)
 			{
-				foreach (var ap in pawn.apparel.WornApparel)
+				foreach (var apparel in apparels)
 				{
-					var hediffComp = ap.GetComp<CompApparelAdjustHediffs>();
-					if (hediffComp?.Props.resourceSettings != null)
+					var comp = apparel.GetComp<CompApparelAdjustHediffs>();
+					if (comp != null)
 					{
-						foreach (var option in hediffComp.Props.resourceSettings)
-						{
-							if (option.hediff == hdDef && option.maxResourceCapacityOffset != 0f)
-							{
-								if (option.qualityScalesCapacityOffset && ap.TryGetQuality(out QualityCategory qc))
-								{
-									result += (option.maxResourceCapacityOffset * GetQualityMultiplier(qc));
-								}
-								else
-								{
-									result += option.maxResourceCapacityOffset;
-								}
-							}
-						}
+						adjustHediffs.Add(comp);
 					}
 				}
 			}
@@ -135,26 +124,50 @@ namespace HediffResourceFramework
 			{
 				foreach (var equipment in equipments)
 				{
-					var hediffComp = equipment.GetComp<CompWeaponAdjustHediffs>();
-					if (hediffComp?.Props.resourceSettings != null)
+					var comp = equipment.GetComp<CompWeaponAdjustHediffs>();
+					if (comp != null)
 					{
-						foreach (var option in hediffComp.Props.resourceSettings)
+						adjustHediffs.Add(comp);
+					}
+				}
+			}
+			if (pawn.health?.hediffSet?.hediffs != null)
+			{
+				foreach (var hediff in pawn.health.hediffSet.hediffs)
+				{
+					var comp = hediff.TryGetComp<HediffComp_AdjustHediffs>();
+					if (comp != null)
+					{
+						adjustHediffs.Add(comp);
+					}
+				}
+			}
+			return adjustHediffs;
+		}
+		public static float GetHediffResourceCapacityGainFor(Pawn pawn, HediffResourceDef hdDef)
+		{
+			float result = 0;
+			var comps = GetAllAdjustHediffsComps(pawn);
+			foreach (var comp in comps)
+            {
+				if (comp.ResourceSettings != null)
+                {
+					foreach (var option in comp.ResourceSettings)
+					{
+						if (option.hediff == hdDef && option.maxResourceCapacityOffset != 0f)
 						{
-							if (option.hediff == hdDef && option.maxResourceCapacityOffset != 0f)
+							if (option.qualityScalesCapacityOffset && comp.TryGetQuality(out QualityCategory qc))
 							{
-								if (option.qualityScalesCapacityOffset && equipment.TryGetQuality(out QualityCategory qc))
-								{
-									result += (option.maxResourceCapacityOffset * GetQualityMultiplier(qc));
-								}
-								else
-								{
-									result += option.maxResourceCapacityOffset;
-								}
+								result += (option.maxResourceCapacityOffset * GetQualityMultiplier(qc));
+							}
+							else
+							{
+								result += option.maxResourceCapacityOffset;
 							}
 						}
 					}
 				}
-			}
+            } 
 			return result;
 		}
 
