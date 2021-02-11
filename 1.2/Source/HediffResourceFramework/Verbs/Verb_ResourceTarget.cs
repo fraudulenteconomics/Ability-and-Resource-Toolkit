@@ -5,16 +5,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Verse;
+using Verse.AI;
 
 namespace HediffResourceFramework
 {
-    public class Verb_ResourceTarget : Verb_Shoot
+    public class Verb_ResourceTarget : Verb_CastBase
     {
         public new VerbResourceProps verbProps => base.verbProps as VerbResourceProps;
         protected override bool TryCastShot()
         {
-            var result = base.TryCastShot();
-            if (result && this.currentTarget.Thing is Pawn target)
+            if (this.currentTarget.Thing is Pawn target)
             {
                 if (verbProps.targetResourceSettings != null)
                 {
@@ -28,7 +28,7 @@ namespace HediffResourceFramework
                     }
                 }
             }
-            return result;
+            return true;
         }
     }
 }

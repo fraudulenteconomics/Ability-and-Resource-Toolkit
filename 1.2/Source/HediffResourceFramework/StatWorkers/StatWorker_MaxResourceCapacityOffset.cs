@@ -85,7 +85,7 @@ namespace HediffResourceFramework
 
 		public float GetValue(HediffAdjust hediffOption, Thing thing)
 		{
-			if (hediffOption.qualityScalesResourcePerSecond && thing.TryGetQuality(out QualityCategory qc))
+			if (hediffOption.qualityScalesCapacityOffset && thing.TryGetQuality(out QualityCategory qc))
 			{
 				return hediffOption.maxResourceCapacityOffset * HediffResourceUtils.GetQualityMultiplier(qc);
 			}

@@ -5,10 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Verse;
+using Verse.AI;
 
 namespace HediffResourceFramework
 {
-    public class Verb_ResourceSelf : Verb_Shoot
+    public class Verb_ResourceSelf : Verb_CastBase
     {
         public new VerbResourceProps verbProps => base.verbProps as VerbResourceProps;
         public override bool Available()
@@ -29,8 +30,7 @@ namespace HediffResourceFramework
         }
         protected override bool TryCastShot()
         {
-            var result = base.TryCastShot();
-            if (result && this.CasterPawn != null)
+            if (this.CasterPawn != null)
             {
                 if (verbProps.targetResourceSettings != null)
                 {
@@ -41,7 +41,7 @@ namespace HediffResourceFramework
                     }
                 }
             }
-            return result;
+            return true;
         }
     }
 }
