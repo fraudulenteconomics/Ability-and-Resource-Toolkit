@@ -69,6 +69,8 @@ namespace HediffResourceFramework
 
         public string disablePostUse;
 
+        public string savePrefix;
+
     }
     public class CompAdjustHediffs : ThingComp
     {

@@ -1115,6 +1115,15 @@
 						<postUseDelay>300</postUseDelay>
 					</li>
 				</resourceSettings>
+				<chargeSettings>
+					<li>
+						<hediffResource>FE_ChargeBurstModule</hediffResource>
+						<minimumResourcePerUse>2</minimumResourcePerUse>
+						<resourcePerCharge>2</resourcePerCharge>
+						<damagePerCharge>0.19</damagePerCharge>
+						<damageScaling>Scalar</damageScaling>
+					</li>
+				</chargeSettings>
 				<verbClass>Verb_Shoot</verbClass>
 				<label>charge blast</label>
 				<hasStandardCommand>true</hasStandardCommand>
@@ -1176,13 +1185,7 @@
 					</li>
 				</resourceSettings>
 			</li>
-			<li Class="HediffResourceFramework.CompProperties_ChargeResource">
-				<hediffResource>FE_ChargeBurstModule</hediffResource>
-				<minimumResourcePerUse>2</minimumResourcePerUse>
-				<resourcePerCharge>2</resourcePerCharge>
-				<damagePerCharge>1.19</damagePerCharge>
-				<damageScaling>Scalar</damageScaling>
-			</li>
+			<li Class="HediffResourceFramework.CompProperties_ChargeResource"/>
 		</comps>
 	</ThingDef>
 

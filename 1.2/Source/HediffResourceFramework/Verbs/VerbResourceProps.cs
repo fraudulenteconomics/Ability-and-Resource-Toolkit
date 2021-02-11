@@ -13,5 +13,7 @@ namespace HediffResourceFramework
         public List<HediffOption> resourceSettings;
 
         public List<HediffOption> targetResourceSettings;
+
+        public List<ChargeSettings> chargeSettings;
     }
 }
