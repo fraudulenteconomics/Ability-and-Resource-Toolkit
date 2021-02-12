@@ -41,6 +41,22 @@ namespace HediffResourceFramework
             }
         }
 
+        public override void Drop()
+        {
+            base.Drop();
+            var pawn = Equipment?.PrimaryVerb?.CasterPawn;
+            if (pawn != null)
+            {
+                if (pawn.Map != null)
+                {
+                    pawn.equipment.TryDropEquipment(this.parent, out ThingWithComps result, pawn.Position);
+                }
+                else
+                {
+                    pawn.inventory.TryAddItemNotForSale(this.parent);
+                }
+            }
+        }
         public override void PostDestroy(DestroyMode mode, Map previousMap)
         {
             this.Notify_Removed();
@@ -76,7 +92,5 @@ namespace HediffResourceFramework
                 }
             }
         }
-
-
     }
 }

@@ -19,7 +19,7 @@ namespace HediffResourceFramework
         Thing Parent { get; }
         List<HediffAdjust> ResourceSettings { get; }
         string DisablePostUse { get; }
-
         bool TryGetQuality(out QualityCategory qc);
+        void Drop();
     }
 }

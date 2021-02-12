@@ -27,6 +27,22 @@ namespace HediffResourceFramework
             }
         }
 
+        public override void Drop()
+        {
+            base.Drop();
+            var pawn = Apparel.Wearer;
+            if (pawn != null)
+            {
+                if (pawn.Map != null)
+                {
+                    pawn.apparel.TryDrop(Apparel);
+                }
+                else
+                {
+                    pawn.inventory.TryAddItemNotForSale(Apparel);
+                }
+            }
+        }
         public override void PostDestroy(DestroyMode mode, Map previousMap)
         {
             this.Notify_Removed();

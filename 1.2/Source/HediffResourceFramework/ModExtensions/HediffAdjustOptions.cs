@@ -29,6 +29,7 @@ namespace HediffResourceFramework
         public bool addHediffIfMissing = false;
         public string disableReason;
 
+
         public bool resetLifetimeTicks;
         public int postUseDelay;
     }

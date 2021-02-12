@@ -36,22 +36,27 @@ namespace HediffResourceFramework
 			{
 				foreach (var option in hediffComp.Props.resourceSettings)
 				{
+					var hediff = pawn.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
 					if (option.disallowEquipIfHediffMissing)
 					{
-						var hediff = pawn.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
 						if (hediff is null)
 						{
 							reason = option.cannotEquipReason;
 							return false;
 						}
 					}
+					if (option.disallowEquipIfOverCapacity && (hediff.OverCapacity || !hediff.CanGainCapacity(option.maxResourceCapacityOffset)))
+                    {
+						reason = option.overCapacityReason;
+						return false;
+					}
 
 					if (option.blackListHediffsPreventEquipping != null)
 					{
 						foreach (var hediffDef in option.blackListHediffsPreventEquipping)
 						{
-							var hediff = pawn.health.hediffSet.GetFirstHediffOfDef(hediffDef);
-							if (hediff != null)
+							var blackListHediff = pawn.health.hediffSet.GetFirstHediffOfDef(hediffDef);
+							if (blackListHediff != null)
 							{
 								reason = option.cannotEquipReasonIncompatible + hediffDef.label;
 								return false;
@@ -71,9 +76,9 @@ namespace HediffResourceFramework
 			{
 				foreach (var option in hediffComp.Props.resourceSettings)
 				{
+					var hediff = pawn.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
 					if (option.disallowEquipIfHediffMissing)
 					{
-						var hediff = pawn.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
 						if (hediff is null || hediff.ResourceAmount <= 0)
 						{
 							reason = option.cannotEquipReason;
@@ -81,12 +86,18 @@ namespace HediffResourceFramework
 						}
 					}
 
+					if (option.disallowEquipIfOverCapacity && (hediff.OverCapacity || !hediff.CanGainCapacity(option.maxResourceCapacityOffset)))
+					{
+						reason = option.overCapacityReason;
+						return false;
+					}
+
 					if (option.blackListHediffsPreventEquipping != null)
 					{
 						foreach (var hediffDef in option.blackListHediffsPreventEquipping)
 						{
-							var hediff = pawn.health.hediffSet.GetFirstHediffOfDef(hediffDef);
-							if (hediff != null)
+							var blackListHediff = pawn.health.hediffSet.GetFirstHediffOfDef(hediffDef);
+							if (blackListHediff != null)
 							{
 								reason = option.cannotEquipReasonIncompatible;
 								return false;
@@ -197,6 +208,25 @@ namespace HediffResourceFramework
 				if (hediff != null)
 				{
 					pawn.health.RemoveHediff(hediff);
+				}
+			}
+		}
+
+		public static void TryDropExcessHediffGears(Pawn pawn)
+		{
+			var comps = GetAllAdjustHediffsComps(pawn);
+			foreach (var comp in comps)
+			{
+				if (comp.ResourceSettings != null)
+				{
+					foreach (var hediffOption in comp.ResourceSettings)
+					{
+						var hediff = pawn.health.hediffSet.GetFirstHediffOfDef(hediffOption.hediff) as HediffResource;
+						if (hediff != null && hediffOption.dropIfOverCapacity && hediff.OverCapacity)
+						{
+							comp.Drop();
+						}
+					}
 				}
 			}
 		}

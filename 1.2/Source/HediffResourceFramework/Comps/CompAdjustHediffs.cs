@@ -38,6 +38,10 @@ namespace HediffResourceFramework
         public bool affectsEnemies;
         public bool addToCaster;
         public bool removeOutsideArea;
+
+        public bool disallowEquipIfOverCapacity;
+        public bool dropIfOverCapacity;
+        public string overCapacityReason;
     }
 
     public class VerbDisable : IExposable
@@ -93,6 +97,10 @@ namespace HediffResourceFramework
             return this.parent.TryGetQuality(out qc);
         }
 
+        public virtual void Drop()
+        {
+
+        }
         public void Register()
         {
             var gameComp = Current.Game.GetComponent<HediffResourceManager>();

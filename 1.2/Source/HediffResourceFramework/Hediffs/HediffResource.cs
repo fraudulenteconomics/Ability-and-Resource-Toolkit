@@ -50,8 +50,6 @@ namespace HediffResourceFramework
             }
         }
 
-        
-
         public bool CanGainResource => Find.TickManager.TicksGame > this.delayTicks;
         public void AddDelay(int newDelayTicks)
         {
@@ -75,6 +73,13 @@ namespace HediffResourceFramework
             {
                 return this.def.maxResourceCapacity + HediffResourceUtils.GetHediffResourceCapacityGainFor(this.pawn, def) + GetHediffResourceCapacityGainFromAmplifiers();
             }
+        }
+
+        public bool OverCapacity => ResourceAmount > ResourceCapacity || 0 < ResourceCapacity;
+
+        public bool CanGainCapacity(float newCapacity)
+        {
+            return ResourceCapacity + newCapacity >= 0;
         }
 
         public List<Thing> amplifiers = new List<Thing>();
@@ -203,8 +208,11 @@ namespace HediffResourceFramework
         {
             base.Tick();
             this.duration++;
+            if (this.OverCapacity)
+            {
+                HediffResourceUtils.TryDropExcessHediffGears(this.pawn);
+            }
         }
-
         
         private Vector3 impactAngleVect;
 

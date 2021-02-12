@@ -56,6 +56,11 @@ namespace HediffResourceFramework
             qc = QualityCategory.Normal;
             return false;
         }
+
+        public void Drop()
+        {
+            this.Pawn.health.RemoveHediff(this.parent);
+        }
         public void Notify_Removed()
         {
             Deregister();
