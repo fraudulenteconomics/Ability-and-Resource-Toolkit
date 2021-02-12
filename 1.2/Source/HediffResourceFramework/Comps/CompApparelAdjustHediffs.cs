@@ -23,59 +23,8 @@ namespace HediffResourceFramework
         {
             if (Apparel.Wearer != null)
             {
-                List<HediffResourceDef> hediffResourcesToRemove = Apparel.Wearer.health.hediffSet.hediffs.OfType<HediffResource>()
-                    .Select(x => x.def).Where(x => Props.resourceSettings.Any(y => y.hediff == x)).ToList();
-                var apparels = Apparel.Wearer.apparel.WornApparel;
-                if (apparels != null)
-                {
-                    foreach (var ap in apparels)
-                    {
-                        if (ap != Apparel)
-                        {
-                            var comp = ap.TryGetComp<CompApparelAdjustHediffs>();
-                            if (comp?.Props?.resourceSettings != null)
-                            {
-                                foreach (var hediffOption in comp.Props.resourceSettings)
-                                {
-                                    if (hediffResourcesToRemove.Contains(hediffOption.hediff))
-                                    {
-                                        hediffResourcesToRemove.Remove(hediffOption.hediff);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                
-                var equipments = Apparel.Wearer.equipment?.AllEquipmentListForReading;
-                if (equipments != null)
-                {
-                    foreach (var eq in equipments)
-                    {
-                        var comp = eq.TryGetComp<CompWeaponAdjustHediffs>();
-                        if (comp?.Props?.resourceSettings != null)
-                        {
-                            foreach (var hediffOption in comp.Props.resourceSettings)
-                            {
-                                if (hediffResourcesToRemove.Contains(hediffOption.hediff))
-                                {
-                                    hediffResourcesToRemove.Remove(hediffOption.hediff);
-                                }
-                            }
-                        }
-                    }
-                }
-
-                foreach (var hediffDef in hediffResourcesToRemove)
-                {
-                    var hediff = Apparel.Wearer.health.hediffSet.GetFirstHediffOfDef(hediffDef);
-                    if (hediff != null)
-                    {
-                        Apparel.Wearer.health.RemoveHediff(hediff);
-                    }
-                }
+                HediffResourceUtils.RemoveExcessHediffResources(Apparel.Wearer, this);
             }
-
         }
 
         public override void PostDestroy(DestroyMode mode, Map previousMap)
