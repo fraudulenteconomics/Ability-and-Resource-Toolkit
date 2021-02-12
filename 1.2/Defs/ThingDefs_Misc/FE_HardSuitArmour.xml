@@ -355,6 +355,9 @@
 						<cannotEquipReason>No available fusion connection.</cannotEquipReason>
 						<disallowEquipIfHediffMissing>true</disallowEquipIfHediffMissing>
 						<dropIfHediffMissing>true</dropIfHediffMissing>
+						<disallowEquipIfOverCapacity>true</disallowEquipIfOverCapacity>
+						<overCapacityReason>Not enough reactor capacity.</overCapacityReason>
+						<dropIfOverCapacity>true</dropIfOverCapacity>
 						<blackListHediffsPreventEquipping>
 						</blackListHediffsPreventEquipping>
 						<dropWeaponOrApparelIfBlacklistHediff>
@@ -1250,6 +1253,9 @@
 						<qualityScalesCapacityOffset>false</qualityScalesCapacityOffset>
 						<disallowEquipIfHediffMissing>true</disallowEquipIfHediffMissing>
 						<dropIfHediffMissing>true</dropIfHediffMissing>
+						<disallowEquipIfOverCapacity>true</disallowEquipIfOverCapacity>
+						<overCapacityReason>Not enough reactor capacity.</overCapacityReason>
+						<dropIfOverCapacity>true</dropIfOverCapacity>
 						<blackListHediffsPreventEquipping>
 						</blackListHediffsPreventEquipping>
 						<dropWeaponOrApparelIfBlacklistHediff>
@@ -1465,6 +1471,9 @@
 						<cannotEquipReason>No available fusion connection.</cannotEquipReason>
 						<disallowEquipIfHediffMissing>true</disallowEquipIfHediffMissing>
 						<dropIfHediffMissing>true</dropIfHediffMissing>
+						<disallowEquipIfOverCapacity>true</disallowEquipIfOverCapacity>
+						<overCapacityReason>Not enough reactor capacity.</overCapacityReason>
+						<dropIfOverCapacity>true</dropIfOverCapacity>
 						<blackListHediffsPreventEquipping>
 						</blackListHediffsPreventEquipping>
 						<dropWeaponOrApparelIfBlacklistHediff>
