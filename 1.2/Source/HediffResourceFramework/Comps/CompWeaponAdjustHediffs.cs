@@ -35,61 +35,10 @@ namespace HediffResourceFramework
         public override void Notify_Removed()
         {
             base.Notify_Removed();
-            List<HediffResourceDef> hediffResourcesToRemove = Equipment.PrimaryVerb.CasterPawn.health.hediffSet.hediffs.OfType<HediffResource>()
-                .Select(x => x.def).Where(x => Props.resourceSettings.Any(y => y.hediff == x)).ToList();
             if (Equipment?.PrimaryVerb?.CasterPawn != null)
             {
-                var equipments = Equipment.PrimaryVerb.CasterPawn.equipment?.AllEquipmentListForReading;
-                if (equipments != null)
-                {
-                    foreach (var eq in equipments)
-                    {
-                        if (eq != Equipment.parent)
-                        {
-                            var comp = eq.TryGetComp<CompWeaponAdjustHediffs>();
-                            if (comp?.Props?.resourceSettings != null)
-                            {
-                                foreach (var hediffOption in comp.Props.resourceSettings)
-                                {
-                                    if (hediffResourcesToRemove.Contains(hediffOption.hediff))
-                                    {
-                                        hediffResourcesToRemove.Remove(hediffOption.hediff);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-
-                var apparels = Equipment.PrimaryVerb.CasterPawn.apparel?.WornApparel;
-                if (apparels != null)
-                {
-                    foreach (var ap in apparels)
-                    {
-                        var comp = ap.TryGetComp<CompApparelAdjustHediffs>();
-                        if (comp?.Props?.resourceSettings != null)
-                        {
-                            foreach (var hediffOption in comp.Props.resourceSettings)
-                            {
-                                if (hediffResourcesToRemove.Contains(hediffOption.hediff))
-                                {
-                                    hediffResourcesToRemove.Remove(hediffOption.hediff);
-                                }
-                            }
-                        }
-                    }
-                }
-
-                foreach (var hediffDef in hediffResourcesToRemove)
-                {
-                    var hediff = Equipment.PrimaryVerb.CasterPawn.health.hediffSet.GetFirstHediffOfDef(hediffDef);
-                    if (hediff != null)
-                    {
-                        Equipment.PrimaryVerb.CasterPawn.health.RemoveHediff(hediff);
-                    }
-                }
+                HediffResourceUtils.RemoveExcessHediffResources(Equipment?.PrimaryVerb?.CasterPawn, this);
             }
- 
         }
 
         public override void PostDestroy(DestroyMode mode, Map previousMap)

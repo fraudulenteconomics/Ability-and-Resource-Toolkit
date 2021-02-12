@@ -171,6 +171,35 @@ namespace HediffResourceFramework
 			return result;
 		}
 
+		public static void RemoveExcessHediffResources(Pawn pawn, IAdjustResource adjuster)
+        {
+			List<HediffResourceDef> hediffResourcesToRemove = pawn.health.hediffSet.hediffs.OfType<HediffResource>()
+				.Select(x => x.def).Where(x => adjuster.ResourceSettings?.Any(y => y.hediff == x) ?? false).ToList();
+
+			var comps = GetAllAdjustHediffsComps(pawn);
+			foreach (var comp in comps)
+			{
+				if (comp.Parent != adjuster && comp.ResourceSettings != null)
+				{
+					foreach (var hediffOption in comp.ResourceSettings)
+					{
+						if (!hediffOption.addHediffIfMissing && hediffResourcesToRemove.Contains(hediffOption.hediff))
+						{
+							hediffResourcesToRemove.Remove(hediffOption.hediff);
+						}
+					}
+				}
+			}
+
+			foreach (var hediffDef in hediffResourcesToRemove)
+			{
+				var hediff = pawn.health.hediffSet.GetFirstHediffOfDef(hediffDef);
+				if (hediff != null)
+				{
+					pawn.health.RemoveHediff(hediff);
+				}
+			}
+		}
 		public static HediffResource AdjustResourceAmount(Pawn pawn, HediffResourceDef hdDef, float sevOffset, bool addHediffIfMissing)
 		{
 			if (sevOffset != 0f)

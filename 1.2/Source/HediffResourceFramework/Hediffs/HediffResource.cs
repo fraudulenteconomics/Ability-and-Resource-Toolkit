@@ -162,10 +162,10 @@ namespace HediffResourceFramework
                 {
                     return false;
                 }
-                if (this.ResourceCapacity < 0)
-                {
-                    return true;
-                }
+                //if (this.ResourceCapacity < 0)
+                //{
+                //    return true;
+                //}
                 if (SourceOnlyAmplifiers())
                 {
                     return true;

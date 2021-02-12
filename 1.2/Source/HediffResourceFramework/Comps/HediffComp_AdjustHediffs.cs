@@ -61,56 +61,8 @@ namespace HediffResourceFramework
             Deregister();
             if (this.Pawn != null)
             {
-                List<HediffResourceDef> hediffResourcesToRemove = this.Pawn.health.hediffSet.hediffs.OfType<HediffResource>()
-                    .Select(x => x.def).Where(x => Props.resourceSettings.Any(y => y.hediff == x)).ToList();
-                var apparels = this.Pawn.apparel.WornApparel;
-                if (apparels != null)
-                {
-                    foreach (var ap in apparels)
-                    {
-                        var comp = ap.TryGetComp<CompApparelAdjustHediffs>();
-                        if (comp?.Props?.resourceSettings != null)
-                        {
-                            foreach (var hediffOption in comp.Props.resourceSettings)
-                            {
-                                if (hediffResourcesToRemove.Contains(hediffOption.hediff))
-                                {
-                                    hediffResourcesToRemove.Remove(hediffOption.hediff);
-                                }
-                            }
-                        }
-                    }
-                }
-
-                var equipments = this.Pawn.equipment?.AllEquipmentListForReading;
-                if (equipments != null)
-                {
-                    foreach (var eq in equipments)
-                    {
-                        var comp = eq.TryGetComp<CompWeaponAdjustHediffs>();
-                        if (comp?.Props?.resourceSettings != null)
-                        {
-                            foreach (var hediffOption in comp.Props.resourceSettings)
-                            {
-                                if (hediffResourcesToRemove.Contains(hediffOption.hediff))
-                                {
-                                    hediffResourcesToRemove.Remove(hediffOption.hediff);
-                                }
-                            }
-                        }
-                    }
-                }
-
-                foreach (var hediffDef in hediffResourcesToRemove)
-                {
-                    var hediff = this.Pawn.health.hediffSet.GetFirstHediffOfDef(hediffDef);
-                    if (hediff != null)
-                    {
-                        this.Pawn.health.RemoveHediff(hediff);
-                    }
-                }
+                HediffResourceUtils.RemoveExcessHediffResources(this.Pawn, this);
             }
-
         }
 
         public override void CompPostPostRemoved()

@@ -19,10 +19,8 @@ namespace HediffResourceFramework
     {
         private static void Postfix(ref bool __result, Verb __instance, Pawn pawn)
         {
-            Log.Message("Patch_IsStillUsableBy - Postfix - if (__result) - 1", true);
             if (__result)
             {
-                Log.Message("Patch_IsStillUsableBy - Postfix - __result = HediffResourceUtils.IsUsableBy(__instance, out string disableReason); - 2", true);
                 __result = HediffResourceUtils.IsUsableBy(__instance, out string disableReason);
             }
         }
