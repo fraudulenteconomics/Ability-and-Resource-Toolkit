@@ -7,7 +7,7 @@
 		<Features>
 			<ApparelVerbs>true</ApparelVerbs>
 			<!-- <RangedAnimals>true</RangedAnimals> -->
-			<!-- <HediffVerbs>true</HediffVerbs> -->
+			<HediffVerbs>true</HediffVerbs>
 			<IntegratedToggle>true</IntegratedToggle>
 			<ExtraEquipmentVerbs>true</ExtraEquipmentVerbs>
 			<Drawing>true</Drawing>
@@ -17,7 +17,7 @@
 
 	<HediffResourceFramework.HediffResourceDef>
 		<defName>FE_FusionReactor</defName>
-		<label>fusion reactor</label>
+		<label>fusion energy</label>
 		<description>Energy from a spacer personal fusion reactor. Used to power compatible devices.</description>
 		<hediffClass>HediffResourceFramework.HediffResource</hediffClass>
 		<keepWhenEmpty>true</keepWhenEmpty>

@@ -439,7 +439,7 @@
 	<ThingDef ParentName="FE_ModuleBase">
 		<defName>FE_JumpModule</defName>
 		<label>module (leg) - powered jump</label>
-		<description>A leg module for a fusion hardsuit. Contains a set of super-charged jump jets that can be mounted on the legs of the hardsuit. Using fusion energy as a fuel source, these jump jets can be used an unlimited amount of times, provided there is energy available for their use. The reactor takes a few seconds to resume charging after discharging the energy.</description>
+		<description>A leg module for a fusion hardsuit. Contains a set of super-charged jump jets that can be mounted on the legs of the hardsuit. Using fusion energy as a fuel source, these jump jets can be used an unlimited amount of times, provided there is energy available for their use. The reactor takes a few seconds to resume charging after discharging the energy./n/nCan be used by non-violent pawns.</description>
 		<graphicData>
 			<texPath>Things/Item/Health/HealthItem</texPath>
 			<graphicClass>Graphic_Single</graphicClass>
@@ -529,7 +529,7 @@
 	<ThingDef ParentName="FE_ModuleBase">
 		<defName>FE_DeployableTurret</defName>
 		<label>module (back) - deployable turret</label>
-		<description>A back module for a fusion hardsuit. Contains a launching device with a complex system of micro-constructor mechanites, this apparatus allows a temporary micro turret to be deployed at the target location. The turret will shoot at any enemies in range, but cannot be controlled in any manner. This uses an extremely high amount of energy and requires the fusion reactor to essentially reprime itself before being used again.</description>
+		<description>A back module for a fusion hardsuit. Contains a launching device with a complex system of micro-constructor mechanites, this apparatus allows a temporary micro turret to be deployed at the target location. The turret will shoot at any enemies in range, but cannot be controlled in any manner. This uses an extremely high amount of energy and requires the fusion reactor to essentially reprime itself before being used again./n/nCan be used by non-violent pawns.</description>
 		<graphicData>
 			<texPath>Things/Item/Health/HealthItem</texPath>
 			<graphicClass>Graphic_Single</graphicClass>
@@ -559,11 +559,11 @@
 				<resourceSettings>
 					<li>
 						<hediff>FE_FusionReactor</hediff>
-						<resourcePerUse>-50</resourcePerUse>
+						<resourcePerUse>-100</resourcePerUse>
 						<disableIfMissingHediff>false</disableIfMissingHediff>
 						<disableReason>Insufficient energy.</disableReason>
 						<minimumResourcePerUse>50</minimumResourcePerUse>
-						<postUseDelay>300</postUseDelay>
+						<postUseDelay>600</postUseDelay>
 					</li>
 				</resourceSettings>
 				<verbClass>FraudeconCode.Verb_SpawnFaction</verbClass>
@@ -700,7 +700,7 @@
 	<ThingDef ParentName="FE_ModuleBase">
 		<defName>FE_AuxiliaryBattery</defName>
 		<label>module (back) - auxiliary battery</label>
-		<description>A back module for a fusion hardsuit. Contains 5 uranium fueled energy injectors that can immediately restore 150 energy each. The unit is incredibly heavy and slows the user down considerably. Requires 10 uranium per battery charge to refuel.</description>
+		<description>A back module for a fusion hardsuit. Contains 5 uranium fueled energy injectors that can immediately restore 150 energy each. The unit is incredibly heavy and slows the user down considerably. Requires 10 uranium per battery charge to refuel./n/nCan be used by non-violent pawns.</description>
 		<graphicData>
 			<texPath>Things/Item/Health/HealthItem</texPath>
 			<graphicClass>Graphic_Single</graphicClass>
@@ -801,7 +801,7 @@
 	<ThingDef ParentName="FE_ModuleBase">
 		<defName>FE_AutonomousStunner</defName>
 		<label>module (back) - autonomous stunner</label>
-		<description>A back module for a fusion hardsuit. Contains an autonomous defense system that automatically fires stunning rounds at any enemies that get too close. Consumes a small amount of energy per burst.</description>
+		<description>A back module for a fusion hardsuit. Contains an autonomous defense system that automatically fires stunning rounds at any enemies that get too close. Consumes a small amount of energy per burst./n/nCan be used by non-violent pawns.</description>
 		<graphicData>
 			<texPath>Things/Item/Health/HealthItem</texPath>
 			<graphicClass>Graphic_Single</graphicClass>
@@ -847,16 +847,16 @@
 				<soundCast>Shot_AssaultRifle</soundCast>
 				<soundCastTail>GunTail_Medium</soundCastTail>
 				<muzzleFlashScale>14</muzzleFlashScale>
-				<accuracyTouch>0.9</accuracyTouch>
-				<accuracyShort>0.6</accuracyShort>
-				<accuracyMedium>0.1</accuracyMedium>
-				<accuracyLong>0.1</accuracyLong>
+				<accuracyTouch>0.99</accuracyTouch>
+				<accuracyShort>0.69</accuracyShort>
+				<accuracyMedium>0.19</accuracyMedium>
+				<accuracyLong>0.19</accuracyLong>
 				<targetParams>
 					<canTargetPawns>true</canTargetPawns>
 					<canTargetBuildings>false</canTargetBuildings>
 					<canTargetLocations>false</canTargetLocations>
 				</targetParams>
-				<defaultCooldownTime>1.5</defaultCooldownTime>
+				<defaultCooldownTime>1.0</defaultCooldownTime>
 			</li>
 		</verbs>
 		<comps>
@@ -914,7 +914,7 @@
 	<ThingDef ParentName="FE_ModuleBase">
 		<defName>FE_StimInjector</defName>
 		<label>module (arm) - stim injector</label>
-		<description>An arm module for a fusion hardsuit. Contains a pressurized combat stim injector, as well as a self-injector. Unlike most other combat enhancements, this one does not inflict any withdrawl symptoms upon the target after the effect fades due to the efficacy of the mechanite injectors. The stim can be stacked up to two times per target, with diminishing returns.</description>
+		<description>An arm module for a fusion hardsuit. Contains a pressurized combat stim injector, as well as a self-injector. Unlike most other combat enhancements, this one does not inflict any withdrawl symptoms upon the target after the effect fades due to the efficacy of the mechanite injectors. The stim can be stacked up to two times per target, with diminishing returns./n/nCan be used by non-violent pawns.</description>
 		<graphicData>
 			<texPath>Things/Item/Health/HealthItem</texPath>
 			<graphicClass>Graphic_Single</graphicClass>
@@ -1155,7 +1155,7 @@
 						<label>charge blast</label>
 						<visualLabel>charge blaster</visualLabel>
 						<description>Shoots a concentrated burst of energy at the target. Damage increases the longer the weapon goes without firing.</description>
-						<canBeToggled>false</canBeToggled>
+						<canBeToggled>true</canBeToggled>
 						<draw>false</draw>
 					</li>
 				</verbProps>
