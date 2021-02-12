@@ -76,7 +76,7 @@ namespace HediffResourceFramework
 			var label = hediffResource.def.LabelCap;
 			if (hediffResource.def.lifetimeTicks != -1)
 			{
-				label += " (" + Mathf.CeilToInt((hediffResource.def.lifetimeTicks - hediffResource.duration).TicksToSeconds()) + "s)";
+				label += " (" + Mathf.CeilToInt((hediffResource.def.lifetimeTicks - hediffResource.LifetimeDuration).TicksToSeconds()) + "s)";
 			}
 			Widgets.Label(rect3, label);
 			Rect rect4 = rect2;

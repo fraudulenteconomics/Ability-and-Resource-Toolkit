@@ -88,7 +88,7 @@ namespace HediffResourceFramework
                             var targetHediff = target.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
                             if (targetHediff != null)
                             {
-                                targetHediff.duration -= option.extendLifetime;
+                                targetHediff.LifetimeDuration -= option.extendLifetime;
                             }
                         }
                         Log.Message("Patch_TryCastNextBurstShot - Postfix - var hediffResource = HediffResourceUtils.AdjustResourceAmount(__instance.CasterPawn, option.hediff, option.resourcePerUse, option.addHediffIfMissing); - 19", true);
