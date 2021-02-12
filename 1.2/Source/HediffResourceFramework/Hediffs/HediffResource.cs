@@ -14,31 +14,8 @@ namespace HediffResourceFramework
     {
         public new HediffResourceDef def => base.def as HediffResourceDef;
         private float resourceAmount;
-        private int duration;
+        public int duration;
         public int delayTicks;
-
-        public int LifetimeDuration
-        {
-            get
-            {
-                return duration;
-            }
-            set
-            {
-                Log.Message("Setting duration to " + value);
-                duration = value;
-                if (duration < 0)
-                {
-                    if (Mathf.Abs(duration) > this.def.maxLifetimeTicks - this.def.lifetimeTicks)
-                    {
-                        duration = -(this.def.maxLifetimeTicks - this.def.lifetimeTicks);
-                        Log.Message("Capping duration to " + duration);
-
-                    }
-                }
-                Log.Message("Current duration: " + duration);
-            }
-        }
         public float ResourceAmount
         {
             get

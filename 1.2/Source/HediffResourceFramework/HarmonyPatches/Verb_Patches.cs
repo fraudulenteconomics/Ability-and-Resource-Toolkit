@@ -69,12 +69,12 @@ namespace HediffResourceFramework
                         var target = __instance.CurrentTarget.Thing as Pawn;
                         foreach (var option in verbProps.targetResourceSettings)
                         {
-                            if (option.extendLifetime != -1 && target != null)
+                            if (option.resetLifetimeTicks && target != null)
                             {
                                 var targetHediff = target.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
                                 if (targetHediff != null)
                                 {
-                                    targetHediff.LifetimeDuration -= option.extendLifetime;
+                                    targetHediff.duration = 0;
                                 }
                             }
                         }
