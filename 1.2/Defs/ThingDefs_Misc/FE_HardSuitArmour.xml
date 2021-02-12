@@ -956,6 +956,7 @@
 						<hediff>FE_StimHediff</hediff>
 						<resourcePerUse>1</resourcePerUse>
 						<addHediffIfMissing>true</addHediffIfMissing>
+						<extendLifetime>3600</extendLifetime>
 					</li>
 				</targetResourceSettings>
 				<verbClass>HediffResourceFramework.Verb_ResourceTarget</verbClass>
@@ -997,6 +998,7 @@
 						<hediff>FE_StimHediff</hediff>
 						<resourcePerUse>1</resourcePerUse>
 						<addHediffIfMissing>true</addHediffIfMissing>
+						<extendLifetime>3600</extendLifetime>
 					</li>
 				</targetResourceSettings>
 				<verbClass>HediffResourceFramework.Verb_ResourceSelf</verbClass>
