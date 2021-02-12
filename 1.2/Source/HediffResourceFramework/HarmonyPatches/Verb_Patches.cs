@@ -33,10 +33,8 @@ namespace HediffResourceFramework
     {
         private static void Postfix(ref bool __result, Verb __instance)
         {
-            Log.Message("Patch_Available - Postfix - if (__result) - 3", true);
             if (__result)
             {
-                Log.Message("Patch_Available - Postfix - __result = HediffResourceUtils.IsUsableBy(__instance, out string disableReason); - 4", true);
                 __result = HediffResourceUtils.IsUsableBy(__instance, out string disableReason);
             }
         }
@@ -47,27 +45,21 @@ namespace HediffResourceFramework
     {
         private static void Prefix(Verb __instance, out bool __state)
         {
-            Log.Message("Patch_TryCastNextBurstShot - Prefix - if (__instance.Available()) - 5", true);
             if (__instance.Available())
             {
-                Log.Message("Patch_TryCastNextBurstShot - Prefix - __state = true; - 6", true);
                 __state = true;
             }
             else
             {
-                Log.Message("Patch_TryCastNextBurstShot - Prefix - __state = false; - 7", true);
                 __state = false;
             }
         }
 
         private static void Postfix(Verb __instance, bool __state)
         {
-            Log.Message("Patch_TryCastNextBurstShot - Postfix - if (__state && __instance.CasterIsPawn && __instance.EquipmentSource != null) - 8", true);
             if (__state && __instance.CasterIsPawn && __instance.EquipmentSource != null)
             {
-                Log.Message("Patch_TryCastNextBurstShot - Postfix - var verbProps = __instance.verbProps as VerbResourceProps; - 9", true);
                 var verbProps = __instance.verbProps as VerbResourceProps;
-                Log.Message("Patch_TryCastNextBurstShot - Postfix - if (verbProps != null && verbProps.resourceSettings != null) - 10", true);
                 if (verbProps != null && verbProps.resourceSettings != null)
                 {
                     Log.Message("Patch_TryCastNextBurstShot - Postfix - var hediffResourceManage = Current.Game.GetComponent<HediffResourceManager>(); - 11", true);

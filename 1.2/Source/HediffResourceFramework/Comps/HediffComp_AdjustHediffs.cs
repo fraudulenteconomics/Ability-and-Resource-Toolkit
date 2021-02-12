@@ -17,7 +17,7 @@ namespace HediffResourceFramework
         public string disablePostUse;
         public HediffCompProperties_AdjustHediffs()
 		{
-			compClass = typeof(HediffComp_ResourcePerSecond);
+			compClass = typeof(HediffComp_AdjustHediffs);
 		}
 	}
 
@@ -29,7 +29,17 @@ namespace HediffResourceFramework
         public string DisablePostUse => Props.disablePostUse;
 
         private Dictionary<Verb, VerbDisable> postUseDelayTicks;
-        public Dictionary<Verb, VerbDisable> PostUseDelayTicks => postUseDelayTicks;
+        public Dictionary<Verb, VerbDisable> PostUseDelayTicks
+        {
+            get
+            {
+                if (postUseDelayTicks is null)
+                {
+                    postUseDelayTicks = new Dictionary<Verb, VerbDisable>();
+                }
+                return postUseDelayTicks;
+            }
+        }
         public void Register()
         {
             var gameComp = Current.Game.GetComponent<HediffResourceManager>();
@@ -109,13 +119,18 @@ namespace HediffResourceFramework
             base.CompPostPostRemoved();
         }
 
+        public override void CompPostPostAdd(DamageInfo? dinfo)
+        {
+            base.CompPostPostAdd(dinfo);
+            Register();
+        }
         public void ResourceTick()
         {
             if (this.Pawn != null)
             {
                 if (this.Pawn.IsHashIntervalTick(60))
                 {
-                    if (!this.postUseDelayTicks?.Values?.Select(x => x.delayTicks).Any(y => y > Find.TickManager.TicksGame) ?? true)
+                    if (!this.PostUseDelayTicks?.Values?.Select(x => x.delayTicks).Any(y => y > Find.TickManager.TicksGame) ?? true)
                     {
                         foreach (var option in Props.resourceSettings)
                         {

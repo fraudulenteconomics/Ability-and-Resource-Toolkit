@@ -77,7 +77,17 @@ namespace HediffResourceFramework
         public string DisablePostUse => Props.disablePostUse;
 
         private Dictionary<Verb, VerbDisable> postUseDelayTicks;
-        public Dictionary<Verb, VerbDisable> PostUseDelayTicks => postUseDelayTicks;
+        public Dictionary<Verb, VerbDisable> PostUseDelayTicks
+        {
+            get
+            {
+                if (postUseDelayTicks is null)
+                {
+                    postUseDelayTicks = new Dictionary<Verb, VerbDisable>();
+                }
+                return postUseDelayTicks;
+            }
+        }
         public bool TryGetQuality(out QualityCategory qc)
         {
             return this.parent.TryGetQuality(out qc);

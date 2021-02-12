@@ -25,7 +25,9 @@ namespace HediffResourceFramework
 		public override void CompPostTick(ref float severityAdjustment)
 		{
 			base.CompPostTick(ref severityAdjustment);
-			if (base.Pawn.IsHashIntervalTick(60) && HediffResource.CanGainResource)
+			Log.Message("base.Pawn: " + base.Pawn + ", HediffResource: " + HediffResource);
+
+			if (base.Pawn?.IsHashIntervalTick(60) ?? false && HediffResource.CanGainResource)
 			{
 				HediffResource.ResourceAmount += Props.resourcePerSecond;
 			}

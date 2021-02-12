@@ -64,7 +64,7 @@
 					<li>
 						<label>discharge</label>
 						<description>Discharges all available fusion energy through the reactor exhaust port.</description>
-						<draw>true</draw>
+						<draw>false</draw>
 						<canBeToggled>true</canBeToggled>
 					</li>
 				</verbProps>
