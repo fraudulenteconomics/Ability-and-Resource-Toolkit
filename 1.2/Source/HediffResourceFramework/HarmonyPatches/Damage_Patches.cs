@@ -21,44 +21,43 @@ namespace HediffResourceFramework
 	{
 		public static void Postfix(Projectile __instance, Thing launcher, Vector3 origin, LocalTargetInfo usedTarget, LocalTargetInfo intendedTarget, ProjectileHitFlags hitFlags, Thing equipment = null, ThingDef targetCoverDef = null)
 		{
-			if (launcher is Pawn pawn && equipment is ThingWithComps eq && __instance.EquipmentDef == equipment.def)
+			if (launcher is Pawn pawn && Patch_TryCastShot.verbSource != null)
 			{
-				var verbs = eq.def.Verbs.OfType<VerbResourceProps>();
-				if (verbs != null)
+				var compCharge = GetChargeSourceFrom(Patch_TryCastShot.verbSource, pawn);
+				if (compCharge != null)
                 {
-					var compCharge = eq.TryGetComp<CompChargeResource>();
-					foreach (var verb in verbs)
-                    {
-						if (verb.chargeSettings != null)
-                        {
-							foreach (var chargeSettings in verb.chargeSettings)
-                            {
-								var hediffResource = pawn.health.hediffSet.GetFirstHediffOfDef(chargeSettings.hediffResource) as HediffResource;
-								if (hediffResource != null && chargeSettings.damageScaling.HasValue)
+					var verbProps = Patch_TryCastShot.verbSource.GetVerb.verbProps as VerbResourceProps;
+					if (verbProps?.chargeSettings != null)
+					{
+						foreach (var chargeSettings in verbProps.chargeSettings)
+						{
+							var hediffResource = pawn.health.hediffSet.GetFirstHediffOfDef(chargeSettings.hediffResource) as HediffResource;
+							if (hediffResource != null && chargeSettings.damageScaling.HasValue)
+							{
+								Log.Message("Should do charging damage: " + __instance + " - " + hediffResource);
+								if (compCharge.ProjectilesWithChargedResource.ContainsKey(__instance))
 								{
-									Log.Message("Should do charging damage: " + __instance + " - " + hediffResource);
-									if (compCharge.projectilesWithChargedResource is null)
-                                    {
-										compCharge.projectilesWithChargedResource = new Dictionary<Projectile, ChargeResources>();
-                                    }
-
-									if (compCharge.projectilesWithChargedResource.ContainsKey(__instance))
-                                    {
-										compCharge.projectilesWithChargedResource[__instance].chargeResources.Add(new ChargeResource(hediffResource.ResourceAmount, chargeSettings));
-									}
-									else
-                                    {
-										compCharge.projectilesWithChargedResource[__instance] = new ChargeResources();
-										compCharge.projectilesWithChargedResource[__instance].chargeResources = new List<ChargeResource> { new ChargeResource(hediffResource.ResourceAmount, chargeSettings) };
-									}
-									hediffResource.ResourceAmount = 0f;
+									compCharge.ProjectilesWithChargedResource[__instance].chargeResources.Add(new ChargeResource(hediffResource.ResourceAmount, chargeSettings));
 								}
+								else
+								{
+									compCharge.ProjectilesWithChargedResource[__instance] = new ChargeResources();
+									compCharge.ProjectilesWithChargedResource[__instance].chargeResources = new List<ChargeResource> { new ChargeResource(hediffResource.ResourceAmount, chargeSettings) };
+								}
+								hediffResource.ResourceAmount = 0f;
 							}
-                        }
-                    }
-                }
+						}
+					}
+				}
 			}
 		}
+
+		private static IChargeResource GetChargeSourceFrom(Verb verb, Pawn pawn)
+        {
+			if (verb.EquipmentSource != null) return verb.EquipmentSource.GetComp<CompChargeResource>();
+			if (verb.HediffCompSource != null) return verb.HediffSource.TryGetComp<HediffCompChargeResource>();
+			return null;
+        }
 	}
 
 	[HarmonyPatch(typeof(Projectile), "DamageAmount", MethodType.Getter)]
@@ -68,8 +67,8 @@ namespace HediffResourceFramework
 		{
 			if (__instance.Launcher is Pawn launcher)
 			{
-				var compCharge = GetCompChargeSourceFor(launcher, __instance);
-				if (compCharge?.projectilesWithChargedResource != null && compCharge.projectilesWithChargedResource.TryGetValue(__instance, out ChargeResources chargeResources) && chargeResources != null)
+				var compCharge = HediffResourceUtils.GetCompChargeSourceFor(launcher, __instance);
+				if (compCharge?.ProjectilesWithChargedResource != null && compCharge.ProjectilesWithChargedResource.TryGetValue(__instance, out ChargeResources chargeResources) && chargeResources != null)
 				{
 					foreach (var chargeResource in chargeResources.chargeResources)
 					{
@@ -83,42 +82,10 @@ namespace HediffResourceFramework
 						}
 						Log.Message("2 instance - " + __instance + " - result: " + __result + " - hediffResource: " + chargeResource.chargeResource + " - compCharge.Props.damageScaling.HasValue: " + chargeResource.chargeSettings.damageScaling.HasValue);
 					}
-					compCharge.projectilesWithChargedResource.Remove(__instance);
+					compCharge.ProjectilesWithChargedResource.Remove(__instance);
 				}
 			}
 		}
-
-		public static CompChargeResource GetCompChargeSourceFor(Pawn pawn, Projectile projectile)
-        {
-			var equipments = pawn.equipment?.AllEquipmentListForReading;
-			if (equipments != null)
-			{
-				foreach (var equipment in equipments)
-				{
-					var chargeComp = equipment.GetComp<CompChargeResource>();
-					if (chargeComp != null && (chargeComp.projectilesWithChargedResource?.ContainsKey(projectile) ?? false))
-					{
-						return chargeComp;
-					}
-				}
-			}
-
-			var apparels = pawn.apparel?.WornApparel?.ToList();
-			if (apparels != null)
-			{
-				foreach (var apparel in apparels)
-				{
-					var chargeComp = apparel.GetComp<CompChargeResource>();
-					if (chargeComp != null && (chargeComp.projectilesWithChargedResource?.ContainsKey(projectile) ?? false))
-					{
-						return chargeComp;
-					}
-				}
-			}
-			return null;
-		}
-
-
 		private static void DoFlatDamage(ref int __result, float resourceAmount, ChargeSettings chargeSettings)
 		{
 			var oldDamage = __result;

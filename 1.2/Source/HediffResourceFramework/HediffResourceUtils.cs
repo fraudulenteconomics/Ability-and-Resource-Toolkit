@@ -359,5 +359,48 @@ namespace HediffResourceFramework
 		{
 			gizmo.Disable(disableReason);
 		}
+
+		public static IChargeResource GetCompChargeSourceFor(Pawn pawn, Projectile projectile)
+		{
+			var equipments = pawn.equipment?.AllEquipmentListForReading;
+			if (equipments != null)
+			{
+				foreach (var equipment in equipments)
+				{
+					var chargeComp = equipment.GetComp<CompChargeResource>();
+					if (chargeComp != null && (chargeComp.ProjectilesWithChargedResource?.ContainsKey(projectile) ?? false))
+					{
+						return chargeComp;
+					}
+				}
+			}
+
+			var apparels = pawn.apparel?.WornApparel?.ToList();
+			if (apparels != null)
+			{
+				foreach (var apparel in apparels)
+				{
+					var chargeComp = apparel.GetComp<CompChargeResource>();
+					if (chargeComp != null && (chargeComp.ProjectilesWithChargedResource?.ContainsKey(projectile) ?? false))
+					{
+						return chargeComp;
+					}
+				}
+			}
+
+			if (pawn.health?.hediffSet?.hediffs != null)
+			{
+				foreach (var hediff in pawn.health.hediffSet.hediffs)
+				{
+					var chargeComp = hediff.TryGetComp<HediffCompChargeResource>();
+					if (chargeComp != null)
+					{
+						return chargeComp;
+					}
+				}
+			}
+
+			return null;
+		}
 	}
 }
