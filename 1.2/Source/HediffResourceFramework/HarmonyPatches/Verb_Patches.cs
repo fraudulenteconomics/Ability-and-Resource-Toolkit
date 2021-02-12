@@ -40,6 +40,8 @@ namespace HediffResourceFramework
         }
     }
 
+
+
     [HarmonyPatch(typeof(Verb), "TryCastNextBurstShot")]
     public static class Patch_TryCastNextBurstShot
     {
@@ -77,9 +79,18 @@ namespace HediffResourceFramework
                     Log.Message("Patch_TryCastNextBurstShot - Postfix - var comps = HediffResourceUtils.GetAllAdjustHediffsComps(__instance.CasterPawn); - 17", true);
                     var comps = HediffResourceUtils.GetAllAdjustHediffsComps(__instance.CasterPawn);
 
+                    var target = __instance.CurrentTarget.Thing as Pawn;
                     Log.Message("Patch_TryCastNextBurstShot - Postfix - foreach (var option in verbProps.resourceSettings) - 18", true);
                     foreach (var option in verbProps.resourceSettings)
                     {
+                        if (option.extendLifetime != -1 && target != null)
+                        {
+                            var targetHediff = target.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
+                            if (targetHediff != null)
+                            {
+                                targetHediff.duration -= option.extendLifetime;
+                            }
+                        }
                         Log.Message("Patch_TryCastNextBurstShot - Postfix - var hediffResource = HediffResourceUtils.AdjustResourceAmount(__instance.CasterPawn, option.hediff, option.resourcePerUse, option.addHediffIfMissing); - 19", true);
                         var hediffResource = HediffResourceUtils.AdjustResourceAmount(__instance.CasterPawn, option.hediff, option.resourcePerUse, option.addHediffIfMissing);
                         Log.Message("Patch_TryCastNextBurstShot - Postfix - foreach (var comp in comps) - 20", true);
