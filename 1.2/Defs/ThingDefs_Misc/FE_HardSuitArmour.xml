@@ -959,7 +959,7 @@
 						<hediff>FE_StimHediff</hediff>
 						<resourcePerUse>1</resourcePerUse>
 						<addHediffIfMissing>true</addHediffIfMissing>
-						<extendLifetime>3600</extendLifetime>
+						<resetLifetimeTicks>true</resetLifetimeTicks>
 					</li>
 				</targetResourceSettings>
 				<verbClass>HediffResourceFramework.Verb_ResourceTarget</verbClass>
@@ -979,6 +979,8 @@
 				<accuracyMedium>9</accuracyMedium>
 				<accuracyLong>9</accuracyLong>
 				<targetParams>
+					<onlyTargetColonists>true</onlyTargetColonists>
+					<neverTargetHostileFaction>true</neverTargetHostileFaction>
 					<canTargetPawns>true</canTargetPawns>
 					<canTargetBuildings>false</canTargetBuildings>
 					<canTargetLocations>false</canTargetLocations>
@@ -1001,7 +1003,7 @@
 						<hediff>FE_StimHediff</hediff>
 						<resourcePerUse>1</resourcePerUse>
 						<addHediffIfMissing>true</addHediffIfMissing>
-						<extendLifetime>3600</extendLifetime>
+						<resetLifetimeTicks>true</resetLifetimeTicks>
 					</li>
 				</targetResourceSettings>
 				<verbClass>HediffResourceFramework.Verb_ResourceSelf</verbClass>
@@ -1043,6 +1045,21 @@
 						<qualityScalesCapacityOffset>false</qualityScalesCapacityOffset>
 						<disallowEquipIfHediffMissing>true</disallowEquipIfHediffMissing>
 						<dropIfHediffMissing>true</dropIfHediffMissing>
+						<blackListHediffsPreventEquipping>
+						</blackListHediffsPreventEquipping>
+						<dropWeaponOrApparelIfBlacklistHediff>
+						</dropWeaponOrApparelIfBlacklistHediff>
+					</li>
+					<li>
+						<hediff>FE_StimHediff</hediff>
+						<resourcePerSecond>-0.01</resourcePerSecond>
+						<qualityScalesResourcePerSecond>false</qualityScalesResourcePerSecond>
+						<addHediffIfMissing>false</addHediffIfMissing>
+						<maxResourceCapacityOffset>0</maxResourceCapacityOffset>
+						<cannotEquipReason>No available fusion connection.</cannotEquipReason>
+						<qualityScalesCapacityOffset>false</qualityScalesCapacityOffset>
+						<disallowEquipIfHediffMissing>false</disallowEquipIfHediffMissing>
+						<dropIfHediffMissing>false</dropIfHediffMissing>
 						<blackListHediffsPreventEquipping>
 						</blackListHediffsPreventEquipping>
 						<dropWeaponOrApparelIfBlacklistHediff>

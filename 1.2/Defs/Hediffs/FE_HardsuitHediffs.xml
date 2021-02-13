@@ -188,7 +188,6 @@
 		<lifetimeTicks>7200</lifetimeTicks>
 		<stages>
 			<li>
-				<minSeverity>0.1</minSeverity>
 				<painFactor>0.5</painFactor>
 				<capMods>
 					<li>
