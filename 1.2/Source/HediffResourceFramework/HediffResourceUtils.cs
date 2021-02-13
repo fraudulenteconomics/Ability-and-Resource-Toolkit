@@ -45,7 +45,7 @@ namespace HediffResourceFramework
 							return false;
 						}
 					}
-					if (option.disallowEquipIfOverCapacity && (hediff.OverCapacity || !hediff.CanGainCapacity(option.maxResourceCapacityOffset)))
+					if (option.disallowEquipIfOverCapacity && !hediff.CanGainCapacity(option.maxResourceCapacityOffset))
                     {
 						reason = option.overCapacityReason;
 						return false;
@@ -86,7 +86,7 @@ namespace HediffResourceFramework
 						}
 					}
 
-					if (option.disallowEquipIfOverCapacity && (hediff.OverCapacity || !hediff.CanGainCapacity(option.maxResourceCapacityOffset)))
+					if (option.disallowEquipIfOverCapacity && !hediff.CanGainCapacity(option.maxResourceCapacityOffset))
 					{
 						reason = option.overCapacityReason;
 						return false;
@@ -222,7 +222,7 @@ namespace HediffResourceFramework
 					foreach (var hediffOption in comp.ResourceSettings)
 					{
 						var hediff = pawn.health.hediffSet.GetFirstHediffOfDef(hediffOption.hediff) as HediffResource;
-						if (hediff != null && hediffOption.dropIfOverCapacity && hediff.OverCapacity)
+						if (hediff != null && hediffOption.dropIfOverCapacity && hediff.ResourceCapacity < 0)
 						{
 							comp.Drop();
 						}

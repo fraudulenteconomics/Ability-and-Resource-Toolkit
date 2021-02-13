@@ -75,8 +75,6 @@ namespace HediffResourceFramework
             }
         }
 
-        public bool OverCapacity => ResourceAmount > ResourceCapacity || 0 < ResourceCapacity;
-
         public bool CanGainCapacity(float newCapacity)
         {
             return ResourceCapacity > newCapacity || ResourceCapacity > 0;
@@ -208,7 +206,7 @@ namespace HediffResourceFramework
         {
             base.Tick();
             this.duration++;
-            if (this.OverCapacity)
+            if (ResourceCapacity < 0)
             {
                 HediffResourceUtils.TryDropExcessHediffGears(this.pawn);
             }
