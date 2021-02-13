@@ -52,6 +52,7 @@
     <Compile Include="Comps\CompTraitsAdjustHediffs.cs" />
     <Compile Include="Comps\HediffCompChargeResource.cs" />
     <Compile Include="Comps\CompChargeResource.cs" />
+    <Compile Include="Comps\HediffComp_AdjustHediffsPerStages.cs" />
     <Compile Include="Comps\HediffComp_AdjustHediffs.cs" />
     <Compile Include="Comps\IChargeResource.cs" />
     <Compile Include="Comps\IAdjustResource.cs" />
@@ -68,6 +69,7 @@
     <Compile Include="HarmonyPatches\Hediff_Patches.cs" />
     <Compile Include="HarmonyPatches\Verb_Patches.cs" />
     <Compile Include="HediffResourceManager.cs" />
+    <Compile Include="HediffResourceUtils - Copy.cs" />
     <Compile Include="HediffResourceUtils.cs" />
     <Compile Include="Hediffs\HediffResource.cs" />
     <Compile Include="Hediffs\HediffResourceDef.cs" />

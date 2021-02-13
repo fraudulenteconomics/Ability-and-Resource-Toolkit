@@ -22,7 +22,7 @@ namespace HediffResourceFramework
                     {
                         if (hediffOption.hediff != null)
                         {
-                            Log.Message("Giving: " + target + " - " + hediffOption.hediff + " - " + hediffOption.resourcePerUse);
+                            HRFLog.Message("Giving: " + target + " - " + hediffOption.hediff + " - " + hediffOption.resourcePerUse);
                             HediffResourceUtils.AdjustResourceAmount(target, hediffOption.hediff, hediffOption.resourcePerUse, hediffOption.addHediffIfMissing);
                         }
                     }

@@ -65,27 +65,20 @@ namespace HediffResourceFramework
                 {
                     if (!this.PostUseDelayTicks?.Values?.Select(x => x.delayTicks).Any(y => y > Find.TickManager.TicksGame) ?? true)
                     {
-                        foreach (var trait in Pawn.story?.traits?.allTraits?.Select(x => x.def))
+                        foreach (var option in ResourceSettings)
                         {
-                            var traitAdjustOptions = trait.GetModExtension<TraitsAdjustHediff>();
-                            if (traitAdjustOptions?.resourceSettings != null)
+                            var hediffResource = Pawn.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
+                            if (hediffResource != null && !hediffResource.CanGainResource)
                             {
-                                foreach (var option in traitAdjustOptions.resourceSettings)
-                                {
-                                    var hediffResource = Pawn.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
-                                    if (hediffResource != null && !hediffResource.CanGainResource)
-                                    {
-                                        continue;
-                                    }
-                                    else
-                                    {
-                                        float num = option.resourcePerSecond;
-                                        HediffResourceUtils.AdjustResourceAmount(Pawn, option.hediff, num, option.addHediffIfMissing);
-                                    }
-                                }
+                                continue;
+                            }
+                            else
+                            {
+                                float num = option.resourcePerSecond;
+                                HediffResourceUtils.AdjustResourceAmount(Pawn, option.hediff, num, option.addHediffIfMissing);
                             }
                         }
-                     }
+                    }
                 }
             }
         }

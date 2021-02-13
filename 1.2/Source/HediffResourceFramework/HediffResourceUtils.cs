@@ -152,6 +152,11 @@ namespace HediffResourceFramework
 					{
 						adjustHediffs.Add(comp);
 					}
+					var comp2 = hediff.TryGetComp<HediffComp_AdjustHediffsPerStages>();
+					if (comp2 != null)
+					{
+						adjustHediffs.Add(comp2);
+					}
 				}
 			}
 
@@ -171,9 +176,9 @@ namespace HediffResourceFramework
 			float result = 0;
 			var comps = GetAllAdjustHediffsComps(pawn);
 			foreach (var comp in comps)
-            {
+			{
 				if (comp.ResourceSettings != null)
-                {
+				{
 					foreach (var option in comp.ResourceSettings)
 					{
 						if (option.hediff == hdDef && option.maxResourceCapacityOffset != 0f)
@@ -189,7 +194,7 @@ namespace HediffResourceFramework
 						}
 					}
 				}
-            } 
+			}
 			return result;
 		}
 
