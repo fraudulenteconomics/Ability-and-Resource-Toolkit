@@ -3,11 +3,11 @@
 
 	<TraitDef>
 		<defName>HRF_PowerUser</defName>
-		<commonality>1000</commonality>
+		<commonality>0.1</commonality>
 		<degreeDatas>
 			<li>
 				<label>power user</label>
-				<description>[PAWN_nameDef] tends to occasionally allow their mind to drift, even in the middle of working.</description>
+				<description>[PAWN_nameDef] is able to get the most out of technology, even to the point of subconsciously overclocking any fusion technology they handle.</description>
 			</li>
 		</degreeDatas>
 		<modExtensions>
@@ -15,9 +15,9 @@
 				<resourceSettings>
 					<li>
 						<hediff>FE_FusionReactor</hediff>
-						<resourcePerSecond>2</resourcePerSecond>
-						<addHediffIfMissing>true</addHediffIfMissing>
-						<maxResourceCapacityOffset>150</maxResourceCapacityOffset>
+						<resourcePerSecond>0.5</resourcePerSecond>
+						<addHediffIfMissing>false</addHediffIfMissing>
+						<maxResourceCapacityOffset>25</maxResourceCapacityOffset>
 					</li>
 				</resourceSettings>
 			</li>
