@@ -77,7 +77,7 @@ namespace HediffResourceFramework
     {
         public CompProperties_AdjustHediffs Props => (CompProperties_AdjustHediffs)this.props;
         public Thing Parent => this.parent;
-        public List<HediffAdjust> ResourceSettings => Props.resourceSettings;
+        public virtual List<HediffAdjust> ResourceSettings => Props.resourceSettings;
         public string DisablePostUse => Props.disablePostUse;
 
         private Dictionary<Verb, VerbDisable> postUseDelayTicks;

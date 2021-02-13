@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+	<TraitDef>
+		<defName>HRF_PowerUser</defName>
+		<commonality>1000</commonality>
+		<degreeDatas>
+			<li>
+				<label>power user</label>
+				<description>[PAWN_nameDef] tends to occasionally allow their mind to drift, even in the middle of working.</description>
+			</li>
+		</degreeDatas>
+		<modExtensions>
+			<li Class="HediffResourceFramework.TraitsAdjustHediff">
+				<resourceSettings>
+					<li>
+						<hediff>FE_FusionReactor</hediff>
+						<resourcePerSecond>2</resourcePerSecond>
+						<addHediffIfMissing>true</addHediffIfMissing>
+						<maxResourceCapacityOffset>150</maxResourceCapacityOffset>
+					</li>
+				</resourceSettings>
+			</li>
+		</modExtensions>
+	</TraitDef>
+
+</Defs>

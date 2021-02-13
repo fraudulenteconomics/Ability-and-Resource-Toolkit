@@ -267,49 +267,22 @@ namespace HediffResourceFramework
         public float TotalResourceGainAmount()
         {
             float num = 0;
-            var apparels = pawn.apparel?.WornApparel?.ToList();
-            if (apparels != null)
-            {
-                foreach (var apparel in apparels)
-                {
-                    var hediffComp = apparel.GetComp<CompApparelAdjustHediffs>();
-                    if (hediffComp?.Props.resourceSettings != null)
-                    {
-                        foreach (var option in hediffComp.Props.resourceSettings)
-                        {
-                            if (option.hediff == def)
-                            {
-                                var num2 = option.resourcePerSecond;
-                                if (option.qualityScalesResourcePerSecond && apparel.TryGetQuality(out QualityCategory qc))
-                                {
-                                    num2 *= HediffResourceUtils.GetQualityMultiplier(qc);
-                                }
-                                num += num2;
-                            }
-                        }
-                    }
-                }
-            }
 
-            var equipments = pawn.equipment?.AllEquipmentListForReading;
-            if (equipments != null)
+            var comps = HediffResourceUtils.GetAllAdjustHediffsComps(this.pawn);
+            foreach (var comp in comps)
             {
-                foreach (var equipment in equipments)
+                if (comp.ResourceSettings != null)
                 {
-                    var hediffComp = equipment.GetComp<CompWeaponAdjustHediffs>();
-                    if (hediffComp?.Props.resourceSettings != null)
+                    foreach (var option in comp.ResourceSettings)
                     {
-                        foreach (var option in hediffComp.Props.resourceSettings)
+                        if (option.hediff == def)
                         {
-                            if (option.hediff == def)
+                            var num2 = option.resourcePerSecond;
+                            if (option.qualityScalesResourcePerSecond && comp.TryGetQuality(out QualityCategory qc))
                             {
-                                var num2 = option.resourcePerSecond;
-                                if (option.qualityScalesResourcePerSecond && equipment.TryGetQuality(out QualityCategory qc))
-                                {
-                                    num2 *= HediffResourceUtils.GetQualityMultiplier(qc);
-                                }
-                                num += num2;
+                                num2 *= HediffResourceUtils.GetQualityMultiplier(qc);
                             }
+                            num += num2;
                         }
                     }
                 }
@@ -353,55 +326,17 @@ namespace HediffResourceFramework
         {
             base.PostRemoved();
             Log.Message(this.def.defName + " removing resource hediff from " + this.pawn);
-            var apparels = pawn.apparel?.WornApparel?.ToList();
-            if (apparels != null)
-            {
-                for (int num = apparels.Count - 1; num >= 0; num--)
-                {
-                    var apparel = apparels[num];
-                    var hediffComp = apparel.GetComp<CompApparelAdjustHediffs>();
-                    if (hediffComp?.Props.resourceSettings != null)
-                    {
-                        foreach (var option in hediffComp.Props.resourceSettings)
-                        {
-                            if (option.dropIfHediffMissing && option.hediff == def)
-                            {
-                                if (pawn.Map != null)
-                                {
-                                    pawn.apparel.TryDrop(apparel);
-                                }
-                                else
-                                {
-                                    pawn.inventory.TryAddItemNotForSale(apparel);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
 
-            var equipments = pawn.equipment?.AllEquipmentListForReading;
-            if (equipments != null)
+            var comps = HediffResourceUtils.GetAllAdjustHediffsComps(this.pawn);
+            foreach (var comp in comps)
             {
-                for (int num = equipments.Count - 1; num >= 0; num--)
+                if (comp.ResourceSettings != null)
                 {
-                    var equipment = equipments[num];
-                    var hediffComp = equipment.GetComp<CompWeaponAdjustHediffs>();
-                    if (hediffComp?.Props.resourceSettings != null)
+                    foreach (var option in comp.ResourceSettings)
                     {
-                        foreach (var option in hediffComp.Props.resourceSettings)
+                        if (option.dropIfHediffMissing && option.hediff == def)
                         {
-                            if (option.dropIfHediffMissing && option.hediff == def)
-                            {
-                                if (pawn.Map != null)
-                                {
-                                    pawn.equipment.TryDropEquipment(equipment, out ThingWithComps result, pawn.Position);
-                                }
-                                else
-                                {
-                                    pawn.inventory.TryAddItemNotForSale(equipment);
-                                }
-                            }
+                            comp.Drop();
                         }
                     }
                 }

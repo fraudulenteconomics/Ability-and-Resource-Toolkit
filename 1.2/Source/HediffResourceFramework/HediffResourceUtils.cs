@@ -142,6 +142,7 @@ namespace HediffResourceFramework
 					}
 				}
 			}
+
 			if (pawn.health?.hediffSet?.hediffs != null)
 			{
 				foreach (var hediff in pawn.health.hediffSet.hediffs)
@@ -153,6 +154,16 @@ namespace HediffResourceFramework
 					}
 				}
 			}
+
+			if (pawn.story?.traits?.allTraits != null)
+            {
+				var comp = pawn.TryGetComp<CompTraitsAdjustHediffs>();
+				if (comp != null)
+				{
+					adjustHediffs.Add(comp);
+				}
+			}
+
 			return adjustHediffs;
 		}
 		public static float GetHediffResourceCapacityGainFor(Pawn pawn, HediffResourceDef hdDef)
@@ -225,6 +236,10 @@ namespace HediffResourceFramework
 						if (hediff != null && hediffOption.dropIfOverCapacity && hediff.ResourceCapacity < 0)
 						{
 							comp.Drop();
+							if (!hediffOption.overCapacityReason.NullOrEmpty())
+                            {
+								Messages.Message(hediffOption.overCapacityReason, MessageTypeDefOf.CautionInput);
+                            }
 						}
 					}
 				}

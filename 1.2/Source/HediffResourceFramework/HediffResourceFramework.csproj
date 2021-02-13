@@ -49,6 +49,7 @@
     <Compile Include="Comps\CompAdjustHediffs.cs" />
     <Compile Include="Comps\CompAdjustHediffsArea.cs" />
     <Compile Include="Comps\ChargeResource.cs" />
+    <Compile Include="Comps\CompTraitsAdjustHediffs.cs" />
     <Compile Include="Comps\HediffCompChargeResource.cs" />
     <Compile Include="Comps\CompChargeResource.cs" />
     <Compile Include="Comps\HediffComp_AdjustHediffs.cs" />
@@ -70,6 +71,7 @@
     <Compile Include="HediffResourceUtils.cs" />
     <Compile Include="Hediffs\HediffResource.cs" />
     <Compile Include="Hediffs\HediffResourceDef.cs" />
+    <Compile Include="ModExtensions\TraitsAdjustHediff.cs" />
     <Compile Include="ModExtensions\EffectOnImpact.cs" />
     <Compile Include="ModExtensions\StatWorkerExtender.cs" />
     <Compile Include="ModExtensions\HediffAdjustOptions.cs" />

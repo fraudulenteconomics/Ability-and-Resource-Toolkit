@@ -19,17 +19,17 @@ namespace HediffResourceFramework
 
         public void RegisterAdjuster(IAdjustResource adjuster)
         {
-            Log.Message("Registering: " + adjuster);
             if (!resourceAdjusters.Contains(adjuster))
             {
+                Log.Message("Registering: " + adjuster);
                 resourceAdjusters.Add(adjuster);
             }
         }
         public void DeregisterAdjuster(IAdjustResource adjuster)
         {
-            Log.Message("Deregistering: " + adjuster);
             if (resourceAdjusters.Contains(adjuster))
             {
+                Log.Message("Deregistering: " + adjuster);
                 resourceAdjusters.Remove(adjuster);
             }
         }
