@@ -29,7 +29,7 @@ namespace HediffResourceFramework
                 {
                     if (ResourceCapacity == 0)
                     {
-                        Log.Message($"{this} Resource amount ({resourceAmount}) is bigger than ResourceCapacity, setting it to {ResourceCapacity}");
+                        HRFLog.Message($"{this} Resource amount ({resourceAmount}) is bigger than ResourceCapacity, setting it to {ResourceCapacity}");
                     }
                     resourceAmount = ResourceCapacity;
                 }
@@ -176,7 +176,7 @@ namespace HediffResourceFramework
                 var value = base.ShouldRemove;
                 if (value)
                 {
-                    Log.Message("Removing: " + this + " this.ResourceAmount: " + this.ResourceAmount + " - this.Severity: " + this.Severity);
+                    HRFLog.Message("Removing: " + this + " this.ResourceAmount: " + this.ResourceAmount + " - this.Severity: " + this.Severity);
                 }
                 return value;
             }
@@ -310,7 +310,7 @@ namespace HediffResourceFramework
         public override void PostAdd(DamageInfo? dinfo)
         {
             base.PostAdd(dinfo);
-            Log.Message(this.def.defName + " adding resource hediff to " + this.pawn);
+            HRFLog.Message(this.def.defName + " adding resource hediff to " + this.pawn);
 
             this.resourceAmount = this.def.initialResourceAmount;
             this.duration = 0;
@@ -325,7 +325,7 @@ namespace HediffResourceFramework
         public override void PostRemoved()
         {
             base.PostRemoved();
-            Log.Message(this.def.defName + " removing resource hediff from " + this.pawn);
+            HRFLog.Message(this.def.defName + " removing resource hediff from " + this.pawn);
 
             var comps = HediffResourceUtils.GetAllAdjustHediffsComps(this.pawn);
             foreach (var comp in comps)

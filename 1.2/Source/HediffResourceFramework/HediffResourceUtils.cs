@@ -47,7 +47,7 @@ namespace HediffResourceFramework
 					}
 					if (option.disallowEquipIfOverCapacity && !hediff.CanGainCapacity(option.maxResourceCapacityOffset))
                     {
-						reason = option.overCapacityReason;
+						reason = option.overCapacityReasonKey.Translate(pawn.Named("PAWN"), apparel.Named("THING"));
 						return false;
 					}
 
@@ -88,7 +88,7 @@ namespace HediffResourceFramework
 
 					if (option.disallowEquipIfOverCapacity && !hediff.CanGainCapacity(option.maxResourceCapacityOffset))
 					{
-						reason = option.overCapacityReason;
+						reason = option.overCapacityReasonKey.Translate(pawn.Named("PAWN"), weapon.Named("THING"));
 						return false;
 					}
 
@@ -152,6 +152,11 @@ namespace HediffResourceFramework
 					{
 						adjustHediffs.Add(comp);
 					}
+					var comp2 = hediff.TryGetComp<HediffComp_AdjustHediffsPerStages>();
+					if (comp2 != null)
+					{
+						adjustHediffs.Add(comp2);
+					}
 				}
 			}
 
@@ -171,9 +176,9 @@ namespace HediffResourceFramework
 			float result = 0;
 			var comps = GetAllAdjustHediffsComps(pawn);
 			foreach (var comp in comps)
-            {
+			{
 				if (comp.ResourceSettings != null)
-                {
+				{
 					foreach (var option in comp.ResourceSettings)
 					{
 						if (option.hediff == hdDef && option.maxResourceCapacityOffset != 0f)
@@ -189,7 +194,7 @@ namespace HediffResourceFramework
 						}
 					}
 				}
-            } 
+			}
 			return result;
 		}
 
@@ -236,9 +241,9 @@ namespace HediffResourceFramework
 						if (hediff != null && hediffOption.dropIfOverCapacity && hediff.ResourceCapacity < 0)
 						{
 							comp.Drop();
-							if (!hediffOption.overCapacityReason.NullOrEmpty())
+							if (!hediffOption.overCapacityReasonKey.NullOrEmpty())
                             {
-								Messages.Message(hediffOption.overCapacityReason, MessageTypeDefOf.CautionInput);
+								Messages.Message(hediffOption.overCapacityReasonKey.Translate(pawn.Named("PAWN"), comp.Parent.Named("THING")), MessageTypeDefOf.CautionInput);
                             }
 						}
 					}

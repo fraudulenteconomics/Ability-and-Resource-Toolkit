@@ -34,7 +34,7 @@ namespace HediffResourceFramework
 							var hediffResource = pawn.health.hediffSet.GetFirstHediffOfDef(chargeSettings.hediffResource) as HediffResource;
 							if (hediffResource != null && chargeSettings.damageScaling.HasValue)
 							{
-								Log.Message("Should do charging damage: " + __instance + " - " + hediffResource);
+								HRFLog.Message("Should do charging damage: " + __instance + " - " + hediffResource);
 								if (compCharge.ProjectilesWithChargedResource.ContainsKey(__instance))
 								{
 									compCharge.ProjectilesWithChargedResource[__instance].chargeResources.Add(new ChargeResource(hediffResource.ResourceAmount, chargeSettings));
@@ -72,7 +72,7 @@ namespace HediffResourceFramework
 				{
 					foreach (var chargeResource in chargeResources.chargeResources)
 					{
-						Log.Message("1 instance - " + __instance + " - __result: " + __result + " - hediffResource: " + chargeResource.chargeResource + " - compCharge.Props.damageScaling.HasValue: " + chargeResource.chargeSettings.damageScaling.HasValue);
+						HRFLog.Message("1 instance - " + __instance + " - __result: " + __result + " - hediffResource: " + chargeResource.chargeResource + " - compCharge.Props.damageScaling.HasValue: " + chargeResource.chargeSettings.damageScaling.HasValue);
 						switch (chargeResource.chargeSettings.damageScaling)
 						{
 							case DamageScalingMode.Flat: DoFlatDamage(ref __result, chargeResource.chargeResource, chargeResource.chargeSettings); break;
@@ -80,7 +80,7 @@ namespace HediffResourceFramework
 							case DamageScalingMode.Linear: DoLinearDamage(ref __result, chargeResource.chargeResource, chargeResource.chargeSettings); break;
 							default: break;
 						}
-						Log.Message("2 instance - " + __instance + " - result: " + __result + " - hediffResource: " + chargeResource.chargeResource + " - compCharge.Props.damageScaling.HasValue: " + chargeResource.chargeSettings.damageScaling.HasValue);
+						HRFLog.Message("2 instance - " + __instance + " - result: " + __result + " - hediffResource: " + chargeResource.chargeResource + " - compCharge.Props.damageScaling.HasValue: " + chargeResource.chargeSettings.damageScaling.HasValue);
 					}
 					compCharge.ProjectilesWithChargedResource.Remove(__instance);
 				}
@@ -90,22 +90,22 @@ namespace HediffResourceFramework
 		{
 			var oldDamage = __result;
 			__result = (int)(__result + (chargeSettings.damagePerCharge * (resourceAmount - chargeSettings.minimumResourcePerUse) / chargeSettings.resourcePerCharge));
-			Log.Message("Flat: old damage: " + oldDamage + " - new damage: " + __result);
+			HRFLog.Message("Flat: old damage: " + oldDamage + " - new damage: " + __result);
 		}
 		private static void DoScalarDamage(ref int __result, float resourceAmount, ChargeSettings chargeSettings)
 		{
 			var oldDamage = __result;
-			Log.Message("chargeSettings.damagePerCharge: " + chargeSettings.damagePerCharge + " - resourceAmount: " + resourceAmount 
+			HRFLog.Message("chargeSettings.damagePerCharge: " + chargeSettings.damagePerCharge + " - resourceAmount: " + resourceAmount 
 				+ " - chargeSettings.minimumResourcePerUse: " + chargeSettings.minimumResourcePerUse + " - chargeSettings.resourcePerCharge: " + chargeSettings.resourcePerCharge);
 			__result = (int)(__result * Mathf.Pow((1 + chargeSettings.damagePerCharge), (resourceAmount - chargeSettings.minimumResourcePerUse) / chargeSettings.resourcePerCharge));
-			Log.Message("Scalar: old damage: " + oldDamage + " - new damage: " + __result);
+			HRFLog.Message("Scalar: old damage: " + oldDamage + " - new damage: " + __result);
 		}
 
 		private static void DoLinearDamage(ref int __result, float resourceAmount, ChargeSettings chargeSettings)
 		{
 			var oldDamage = __result;
 			__result = (int)(__result * (1 + (chargeSettings.damagePerCharge * (resourceAmount - chargeSettings.minimumResourcePerUse) / chargeSettings.resourcePerCharge)));
-			Log.Message("Linear: old damage: " + oldDamage + " - new damage: " + __result);
+			HRFLog.Message("Linear: old damage: " + oldDamage + " - new damage: " + __result);
 		}
 	}
 
@@ -227,11 +227,11 @@ namespace HediffResourceFramework
 							{
 								var newDelayTicks = (int)(shieldProps.postDamageDelay.Value * hediffOption.postDamageDelayMultiplier);
 								var hediffResource = pawn.health.hediffSet.GetFirstHediffOfDef(hediffOption.hediff) as HediffResource;
-								Log.Message(apparel + " - hediffResource: " + hediffResource);
-								Log.Message(apparel + " - hediffResource.CanHaveDelay(newDelayTicks): " + hediffResource?.CanHaveDelay(newDelayTicks));
+								HRFLog.Message(apparel + " - hediffResource: " + hediffResource);
+								HRFLog.Message(apparel + " - hediffResource.CanHaveDelay(newDelayTicks): " + hediffResource?.CanHaveDelay(newDelayTicks));
 								if (hediffResource != null && hediffResource.CanHaveDelay(newDelayTicks))
 								{
-									Log.Message(" - ProcessDamage - hediffResource.AddDelay(newDelayTicks);; - 32", true);
+									HRFLog.Message(" - ProcessDamage - hediffResource.AddDelay(newDelayTicks);; - 32", true);
 									hediffResource.AddDelay(newDelayTicks);
 								}
 							}
@@ -244,20 +244,20 @@ namespace HediffResourceFramework
 				{
 					foreach (var equipment in equipments)
 					{
-						Log.Message(" - ProcessDamage - var hediffComp = equipment.GetComp<CompAdjustHediffs>(); - 37", true);
+						HRFLog.Message(" - ProcessDamage - var hediffComp = equipment.GetComp<CompAdjustHediffs>(); - 37", true);
 						var hediffComp = equipment.GetComp<CompAdjustHediffs>();
-						Log.Message(" - ProcessDamage - if (hediffComp != null && hediffComp.Props.hediffOptions != null) - 38", true);
+						HRFLog.Message(" - ProcessDamage - if (hediffComp != null && hediffComp.Props.hediffOptions != null) - 38", true);
 						if (hediffComp != null && hediffComp.Props.resourceSettings != null)
 						{
-							Log.Message(" - ProcessDamage - foreach (var hediffOption in hediffComp.Props.hediffOptions) - 40", true);
+							HRFLog.Message(" - ProcessDamage - foreach (var hediffOption in hediffComp.Props.hediffOptions) - 40", true);
 							foreach (var hediffOption in hediffComp.Props.resourceSettings)
 							{
 								var newDelayTicks = (int)(shieldProps.postDamageDelay.Value * hediffOption.postDamageDelayMultiplier);
-								Log.Message(" - ProcessDamage - var hediffResource = pawn.health.hediffSet.GetFirstHediffOfDef(hediffOption.hediff) as HediffResource; - 41", true);
+								HRFLog.Message(" - ProcessDamage - var hediffResource = pawn.health.hediffSet.GetFirstHediffOfDef(hediffOption.hediff) as HediffResource; - 41", true);
 								var hediffResource = pawn.health.hediffSet.GetFirstHediffOfDef(hediffOption.hediff) as HediffResource;
 								if (hediffResource != null && hediffResource.CanHaveDelay(newDelayTicks))
 								{
-									Log.Message(" - ProcessDamage - hediffResource.AddDelay(newDelayTicks);; - 42", true);
+									HRFLog.Message(" - ProcessDamage - hediffResource.AddDelay(newDelayTicks);; - 42", true);
 									hediffResource.AddDelay(newDelayTicks);
 								}
 							}

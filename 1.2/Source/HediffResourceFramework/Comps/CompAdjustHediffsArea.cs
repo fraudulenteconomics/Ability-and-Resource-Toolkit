@@ -44,12 +44,12 @@ namespace HediffResourceFramework
 
                             if (option.affectsAllies && (pawn.Faction == this.parent.Faction || !pawn.Faction.HostileTo(this.parent.Faction)))
                             {
-                                Log.Message($"Ally: {pawn}, resource: {option.hediff}, num to adjust: {num}");
+                                HRFLog.Message($"Ally: {pawn}, resource: {option.hediff}, num to adjust: {num}");
                                 AppendResource(pawn, option, num);
                             }
                             else if (option.affectsEnemies && pawn.Faction.HostileTo(this.parent.Faction))
                             {
-                                Log.Message($"Enemy: {pawn}, resource: {option.hediff}, num to adjust: {num}");
+                                HRFLog.Message($"Enemy: {pawn}, resource: {option.hediff}, num to adjust: {num}");
                                 AppendResource(pawn, option, num);
                             }
                         }

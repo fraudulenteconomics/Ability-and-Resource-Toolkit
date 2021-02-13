@@ -21,7 +21,7 @@ namespace HediffResourceFramework
         {
             if (!resourceAdjusters.Contains(adjuster))
             {
-                Log.Message("Registering: " + adjuster);
+                HRFLog.Message("Registering: " + adjuster);
                 resourceAdjusters.Add(adjuster);
             }
         }
@@ -29,7 +29,7 @@ namespace HediffResourceFramework
         {
             if (resourceAdjusters.Contains(adjuster))
             {
-                Log.Message("Deregistering: " + adjuster);
+                HRFLog.Message("Deregistering: " + adjuster);
                 resourceAdjusters.Remove(adjuster);
             }
         }

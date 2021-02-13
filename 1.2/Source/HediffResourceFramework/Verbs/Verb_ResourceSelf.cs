@@ -36,7 +36,7 @@ namespace HediffResourceFramework
                 {
                     foreach (var hediffOption in verbProps.targetResourceSettings)
                     {
-                        Log.Message("Giving: " + this.CasterPawn + " - " + hediffOption.hediff + " - " + hediffOption.resourcePerUse);
+                        HRFLog.Message("Giving: " + this.CasterPawn + " - " + hediffOption.hediff + " - " + hediffOption.resourcePerUse);
                         HediffResourceUtils.AdjustResourceAmount(this.CasterPawn, hediffOption.hediff, hediffOption.resourcePerUse, hediffOption.addHediffIfMissing);
                     }
                 }

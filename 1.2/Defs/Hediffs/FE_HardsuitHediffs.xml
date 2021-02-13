@@ -149,6 +149,24 @@
 				</statOffsets>
 			</li>
 		</stages>
+		<comps>
+			<li Class="HediffResourceFramework.HediffCompProperties_AdjustHediffsPerStages">
+				<resourceSettingsPerStages>
+					<li/>
+					<li/>
+					<li/>
+					<li>
+						<li>
+							<hediff>FE_FusionReactor</hediff>
+							<resourcePerSecond>1</resourcePerSecond>
+							<addHediffIfMissing>true</addHediffIfMissing>
+							<maxResourceCapacityOffset>50</maxResourceCapacityOffset>
+						</li>
+					</li>
+				</resourceSettingsPerStages>
+
+			</li>
+		</comps>
 	</HediffResourceFramework.HediffResourceDef> 
 
 	<HediffResourceFramework.HediffResourceDef>
@@ -225,5 +243,4 @@
 			</li>
 		</stages>
 	</HediffResourceFramework.HediffResourceDef>
-
 </Defs>
