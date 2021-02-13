@@ -38,7 +38,19 @@ namespace HediffResourceFramework
         }
     }
 
-
+    [HarmonyPatch(typeof(Verb_LaunchProjectile), "TryCastShot")]
+    public static class Patch_TryCastShot
+    {
+        public static Verb verbSource;
+        private static void Prefix(Verb __instance)
+        {
+            verbSource = __instance;
+        }
+        private static void Postfix(Verb __instance)
+        {
+            verbSource = null;
+        }
+    }
 
     [HarmonyPatch(typeof(Verb), "TryCastNextBurstShot")]
     public static class Patch_TryCastNextBurstShot
@@ -65,17 +77,21 @@ namespace HediffResourceFramework
                     if (verbProps.targetResourceSettings != null)
                     {
                         var target = __instance.CurrentTarget.Thing as Pawn;
-                        foreach (var option in verbProps.targetResourceSettings)
+                        if (target != null)
                         {
-                            if (option.resetLifetimeTicks && target != null)
+                            foreach (var option in verbProps.targetResourceSettings)
                             {
-                                var targetHediff = target.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
-                                if (targetHediff != null)
+                                if (option.resetLifetimeTicks)
                                 {
-                                    targetHediff.duration = 0;
+                                    var targetHediff = target.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
+                                    if (targetHediff != null)
+                                    {
+                                        targetHediff.duration = 0;
+                                    }
                                 }
                             }
                         }
+
                     }
 
                     if (verbProps.resourceSettings != null)

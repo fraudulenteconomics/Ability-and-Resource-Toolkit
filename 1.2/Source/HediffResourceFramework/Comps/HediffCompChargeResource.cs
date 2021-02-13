@@ -8,14 +8,14 @@ using Verse;
 
 namespace HediffResourceFramework
 {
-    public class CompProperties_ChargeResource : CompProperties
+    public class HediffCompProperties_ChargeResource : HediffCompProperties
     {
-        public CompProperties_ChargeResource()
+        public HediffCompProperties_ChargeResource()
         {
-            this.compClass = typeof(CompChargeResource);
+            this.compClass = typeof(HediffCompChargeResource);
         }
     }
-    public class CompChargeResource : ThingComp, IChargeResource
+    public class HediffCompChargeResource : HediffComp, IChargeResource
     {
         private Dictionary<Projectile, ChargeResources> projectilesWithChargedResource = new Dictionary<Projectile, ChargeResources>();
         public Dictionary<Projectile, ChargeResources> ProjectilesWithChargedResource
@@ -29,10 +29,10 @@ namespace HediffResourceFramework
                 return projectilesWithChargedResource;
             }
         }
-        public CompProperties_ChargeResource Props => (CompProperties_ChargeResource)this.props;
-        public override void PostExposeData()
+        public HediffCompProperties_ChargeResource Props => (HediffCompProperties_ChargeResource)this.props;
+        public override void CompExposeData()
         {
-            base.PostExposeData();
+            base.CompExposeData();
             projectilesWithChargedResource?.RemoveAll(x => x.Key.DestroyedOrNull());
             Scribe_Collections.Look(ref projectilesWithChargedResource, "projectilesWithChargedResource", LookMode.Reference, LookMode.Deep, ref projectileValues, ref projectileVlaues);
         }

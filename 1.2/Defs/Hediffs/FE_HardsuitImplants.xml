@@ -20,6 +20,7 @@
 					</li>
 				</resourceSettings>
 			</li>
+			<li Class="HediffResourceFramework.HediffCompProperties_ChargeResource"/>
 			<li Class="MVCF.Comps.HediffCompProperties_ExtendedVerbGiver">
 				<verbs>
 					<li Class="HediffResourceFramework.VerbResourceProps">
@@ -70,85 +71,85 @@
 				</verbProps>
 			</li>
 		</comps>
-			<addedPartProps>
-				<solid>true</solid>
-				<partEfficiency>1.35</partEfficiency>
-				<betterThanNatural>true</betterThanNatural>
-			</addedPartProps>
-		</HediffDef>
+		<addedPartProps>
+			<solid>true</solid>
+			<partEfficiency>1.35</partEfficiency>
+			<betterThanNatural>true</betterThanNatural>
+		</addedPartProps>
+	</HediffDef>
 
-		<ThingDef ParentName="BaseBullet">
-			<defName>FE_ReactorDischargeBullet</defName>
-			<label>reactor discharge</label>
-			<graphicData>
-				<texPath>Things/Projectile/Bullet_Shotgun</texPath>
-				<graphicClass>Graphic_Single</graphicClass>
-				<color>(30,220, 220)</color>
-			</graphicData>
-			<projectile>
-				<damageDef>Bomb</damageDef>
-				<damageAmountBase>1</damageAmountBase>
-				<stoppingPower>5</stoppingPower>
-				<armorPenetrationBase>2.0</armorPenetrationBase>
-				<speed>110</speed>
-			</projectile>
-		</ThingDef>
+	<ThingDef ParentName="BaseBullet">
+		<defName>FE_ReactorDischargeBullet</defName>
+		<label>reactor discharge</label>
+		<graphicData>
+			<texPath>Things/Projectile/Bullet_Shotgun</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<color>(30,220, 220)</color>
+		</graphicData>
+		<projectile>
+			<damageDef>Bomb</damageDef>
+			<damageAmountBase>1</damageAmountBase>
+			<stoppingPower>5</stoppingPower>
+			<armorPenetrationBase>2.0</armorPenetrationBase>
+			<speed>110</speed>
+		</projectile>
+	</ThingDef>
 
-		<ThingDef ParentName="BodyPartBionicBase">
-			<defName>FE_FusionHeartThing</defName>
-			<label>internal fusion reactor</label>
-			<description>An internal fusion reactor designed to replace a human heart. It powers not only the body, but also provides a limited source of fusion energy as well, allowing for an uplink with limited amounts of fusion modules.</description>
-			<descriptionHyperlinks>
-				<RecipeDef>FE_InstallFusionHeart</RecipeDef>
-			</descriptionHyperlinks>
-			<costList>
-				<Plasteel>25</Plasteel>
-				<Uranium>15</Uranium>
-				<ComponentSpacer>4</ComponentSpacer>
-			</costList>
-			<recipeMaker Inherit="false">
-				<workSpeedStat>GeneralLaborSpeed</workSpeedStat>
-				<workSkill>Crafting</workSkill>
-				<effectWorking>Smith</effectWorking>
-				<soundWorking>Recipe_Smith</soundWorking>
-				<unfinishedThingDef>UnfinishedHealthItemBionic</unfinishedThingDef>
-				<skillRequirements>
-					<Crafting>8</Crafting>
-				</skillRequirements>
-				<researchPrerequisite>FE_FusionTechnology</researchPrerequisite>
-				<recipeUsers>
-					<li>FabricationBench</li>
-				</recipeUsers>
-			</recipeMaker>
-		</ThingDef>
+	<ThingDef ParentName="BodyPartBionicBase">
+		<defName>FE_FusionHeartThing</defName>
+		<label>internal fusion reactor</label>
+		<description>An internal fusion reactor designed to replace a human heart. It powers not only the body, but also provides a limited source of fusion energy as well, allowing for an uplink with limited amounts of fusion modules.</description>
+		<descriptionHyperlinks>
+			<RecipeDef>FE_InstallFusionHeart</RecipeDef>
+		</descriptionHyperlinks>
+		<costList>
+			<Plasteel>25</Plasteel>
+			<Uranium>15</Uranium>
+			<ComponentSpacer>4</ComponentSpacer>
+		</costList>
+		<recipeMaker Inherit="false">
+			<workSpeedStat>GeneralLaborSpeed</workSpeedStat>
+			<workSkill>Crafting</workSkill>
+			<effectWorking>Smith</effectWorking>
+			<soundWorking>Recipe_Smith</soundWorking>
+			<unfinishedThingDef>UnfinishedHealthItemBionic</unfinishedThingDef>
+			<skillRequirements>
+				<Crafting>8</Crafting>
+			</skillRequirements>
+			<researchPrerequisite>FE_FusionTechnology</researchPrerequisite>
+			<recipeUsers>
+				<li>FabricationBench</li>
+			</recipeUsers>
+		</recipeMaker>
+	</ThingDef>
 
-		<RecipeDef ParentName="SurgeryInstallBodyPartArtificialBase">
-			<defName>FE_InstallFusionHeart</defName>
-			<label>install internal fusion reactor</label>
-			<description>Install an internal fusion reactor.</description>
-			<descriptionHyperlinks>
-				<ThingDef>FE_FusionHeartThing</ThingDef>
-				<HediffDef>FE_FusionHeartHediff</HediffDef>
-			</descriptionHyperlinks>
-			<jobString>Installing internal fusion reactor.</jobString>
-			<ingredients>
-				<li>
-					<filter>
-						<thingDefs>
-							<li>FE_FusionHeartThing</li>
-						</thingDefs>
-					</filter>
-					<count>1</count>
-				</li>
-			</ingredients>
-			<fixedIngredientFilter>
-				<thingDefs>
-					<li>FE_FusionHeartThing</li>
-				</thingDefs>
-			</fixedIngredientFilter>
-			<appliedOnFixedBodyParts>
-				<li>Heart</li>
-			</appliedOnFixedBodyParts>
-			<addsHediff>FE_FusionHeartHediff</addsHediff>
-		</RecipeDef>
-	</Defs>
+	<RecipeDef ParentName="SurgeryInstallBodyPartArtificialBase">
+		<defName>FE_InstallFusionHeart</defName>
+		<label>install internal fusion reactor</label>
+		<description>Install an internal fusion reactor.</description>
+		<descriptionHyperlinks>
+			<ThingDef>FE_FusionHeartThing</ThingDef>
+			<HediffDef>FE_FusionHeartHediff</HediffDef>
+		</descriptionHyperlinks>
+		<jobString>Installing internal fusion reactor.</jobString>
+		<ingredients>
+			<li>
+				<filter>
+					<thingDefs>
+						<li>FE_FusionHeartThing</li>
+					</thingDefs>
+				</filter>
+				<count>1</count>
+			</li>
+		</ingredients>
+		<fixedIngredientFilter>
+			<thingDefs>
+				<li>FE_FusionHeartThing</li>
+			</thingDefs>
+		</fixedIngredientFilter>
+		<appliedOnFixedBodyParts>
+			<li>Heart</li>
+		</appliedOnFixedBodyParts>
+		<addsHediff>FE_FusionHeartHediff</addsHediff>
+	</RecipeDef>
+</Defs>

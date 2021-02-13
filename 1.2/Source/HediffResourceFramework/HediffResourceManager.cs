@@ -11,6 +11,7 @@ namespace HediffResourceFramework
     public class HediffResourceManager : GameComponent
     {
         private List<IAdjustResource> resourceAdjusters = new List<IAdjustResource>();
+
         public HediffResourceManager(Game game)
         {
 

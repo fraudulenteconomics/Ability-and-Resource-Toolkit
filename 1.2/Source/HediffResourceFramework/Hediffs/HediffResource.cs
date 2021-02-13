@@ -79,7 +79,7 @@ namespace HediffResourceFramework
 
         public bool CanGainCapacity(float newCapacity)
         {
-            return ResourceCapacity + newCapacity >= 0;
+            return ResourceCapacity > newCapacity || ResourceCapacity > 0;
         }
 
         public List<Thing> amplifiers = new List<Thing>();
