@@ -47,7 +47,7 @@ namespace HediffResourceFramework
 					}
 					if (option.disallowEquipIfOverCapacity && !hediff.CanGainCapacity(option.maxResourceCapacityOffset))
                     {
-						reason = option.overCapacityReason;
+						reason = option.overCapacityReasonKey.Translate(pawn.Named("PAWN"), apparel.Named("THING"));
 						return false;
 					}
 
@@ -88,7 +88,7 @@ namespace HediffResourceFramework
 
 					if (option.disallowEquipIfOverCapacity && !hediff.CanGainCapacity(option.maxResourceCapacityOffset))
 					{
-						reason = option.overCapacityReason;
+						reason = option.overCapacityReasonKey.Translate(pawn.Named("PAWN"), weapon.Named("THING"));
 						return false;
 					}
 
@@ -241,9 +241,9 @@ namespace HediffResourceFramework
 						if (hediff != null && hediffOption.dropIfOverCapacity && hediff.ResourceCapacity < 0)
 						{
 							comp.Drop();
-							if (!hediffOption.overCapacityReason.NullOrEmpty())
+							if (!hediffOption.overCapacityReasonKey.NullOrEmpty())
                             {
-								Messages.Message(hediffOption.overCapacityReason, MessageTypeDefOf.CautionInput);
+								Messages.Message(hediffOption.overCapacityReasonKey.Translate(pawn.Named("PAWN"), comp.Parent.Named("THING")), MessageTypeDefOf.CautionInput);
                             }
 						}
 					}

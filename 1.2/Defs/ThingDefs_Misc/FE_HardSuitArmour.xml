@@ -356,7 +356,7 @@
 						<disallowEquipIfHediffMissing>true</disallowEquipIfHediffMissing>
 						<dropIfHediffMissing>true</dropIfHediffMissing>
 						<disallowEquipIfOverCapacity>true</disallowEquipIfOverCapacity>
-						<overCapacityReason>Not enough reactor capacity.</overCapacityReason>
+						<overCapacityReasonKey>HRF.FusionReactorOverCapacityReason</overCapacityReasonKey>
 						<dropIfOverCapacity>true</dropIfOverCapacity>
 						<blackListHediffsPreventEquipping>
 						</blackListHediffsPreventEquipping>
@@ -1271,7 +1271,7 @@
 						<disallowEquipIfHediffMissing>true</disallowEquipIfHediffMissing>
 						<dropIfHediffMissing>true</dropIfHediffMissing>
 						<disallowEquipIfOverCapacity>true</disallowEquipIfOverCapacity>
-						<overCapacityReason>Not enough reactor capacity.</overCapacityReason>
+						<overCapacityReasonKey>HRF.FusionReactorOverCapacityReason</overCapacityReasonKey>
 						<dropIfOverCapacity>true</dropIfOverCapacity>
 						<blackListHediffsPreventEquipping>
 						</blackListHediffsPreventEquipping>
@@ -1489,7 +1489,7 @@
 						<disallowEquipIfHediffMissing>true</disallowEquipIfHediffMissing>
 						<dropIfHediffMissing>true</dropIfHediffMissing>
 						<disallowEquipIfOverCapacity>true</disallowEquipIfOverCapacity>
-						<overCapacityReason>Not enough reactor capacity.</overCapacityReason>
+						<overCapacityReasonKey>HRF.FusionReactorOverCapacityReason</overCapacityReasonKey>
 						<dropIfOverCapacity>true</dropIfOverCapacity>
 						<blackListHediffsPreventEquipping>
 						</blackListHediffsPreventEquipping>

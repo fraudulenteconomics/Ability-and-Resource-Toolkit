@@ -41,7 +41,7 @@ namespace HediffResourceFramework
 
         public bool disallowEquipIfOverCapacity;
         public bool dropIfOverCapacity;
-        public string overCapacityReason;
+        public string overCapacityReasonKey;
     }
 
     public class VerbDisable : IExposable

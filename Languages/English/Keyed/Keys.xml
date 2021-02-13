@@ -8,4 +8,6 @@
 	<HRF.ManaHediffGainedTitle>{PAWN_nameDef} gained {RESOURCE_label}</HRF.ManaHediffGainedTitle>
 	<HRF.ManaHediffGainedText>{PAWN_nameDef} gained {RESOURCE_label}</HRF.ManaHediffGainedText>
 	<HRF.ManaPotionHediffPoisonMessage>{PAWN_nameDef} drank {INGESTED_label}</HRF.ManaPotionHediffPoisonMessage>
+	
+	<HRF.FusionReactorOverCapacityReason>{PAWN_nameDef} can't wear {THING_label}</HRF.FusionReactorOverCapacityReason>
 </LanguageData>
