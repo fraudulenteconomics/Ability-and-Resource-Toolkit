@@ -27,6 +27,11 @@ namespace HediffResourceFramework
                         }
                     }
                 }
+                if (base.EquipmentSource != null)
+                {
+                    base.EquipmentSource.GetComp<CompChangeableProjectile>()?.Notify_ProjectileLaunched();
+                    base.EquipmentSource.GetComp<CompReloadable>()?.UsedOnce();
+                }
             }
             return true;
         }

@@ -40,6 +40,11 @@ namespace HediffResourceFramework
                         HediffResourceUtils.AdjustResourceAmount(this.CasterPawn, hediffOption.hediff, hediffOption.resourcePerUse, hediffOption.addHediffIfMissing);
                     }
                 }
+                if (base.EquipmentSource != null)
+                {
+                    base.EquipmentSource.GetComp<CompChangeableProjectile>()?.Notify_ProjectileLaunched();
+                    base.EquipmentSource.GetComp<CompReloadable>()?.UsedOnce();
+                }
             }
             return true;
         }
