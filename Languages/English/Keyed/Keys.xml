@@ -9,5 +9,5 @@
 	<HRF.ManaHediffGainedText>{PAWN_nameDef} gained {RESOURCE_label}</HRF.ManaHediffGainedText>
 	<HRF.ManaPotionHediffPoisonMessage>{PAWN_nameDef} drank {INGESTED_label}</HRF.ManaPotionHediffPoisonMessage>
 	
-	<HRF.FusionReactorOverCapacityReason>{PAWN_nameDef} can't wear {THING_label}</HRF.FusionReactorOverCapacityReason>
+	<HRF.FusionReactorOverCapacityReason>{PAWN_nameDef} has insufficient max energy, {THING_label} has been removed.</HRF.FusionReactorOverCapacityReason>
 </LanguageData>
