@@ -48,22 +48,98 @@ namespace HediffResourceFramework
 		}
 	}
 
+	public class FloatValueCache
+	{
+		public FloatValueCache(float value)
+		{
+			this.value = value;
+		}
+		private float value;
+		public float Value
+        {
+			get
+            {
+				updateCount++;
+				return value;
+			}
+			set
+            {
+				this.value = value;
+				updateCount = 0;
+            }
+        }
+		public int updateCount;
+	}
 
 	[StaticConstructorOnStartup]
 	public class Gizmo_ResourceStatus : Gizmo
 	{
-		public HediffResource hediffResource;
+		private HediffResource hediffResource;
 
 		private static readonly Texture2D EmptyShieldBarTex = SolidColorMaterials.NewSolidColorTexture(Color.clear);
-		public Gizmo_ResourceStatus()
+		public Gizmo_ResourceStatus(HediffResource hediffResource)
 		{
 			order = -100f;
+			this.hediffResource = hediffResource;
+			resourceCapacityCache = new FloatValueCache(hediffResource.ResourceCapacity);
+			resourceAmountCache = new FloatValueCache(hediffResource.ResourceAmount);
 		}
-
 		public override float GetWidth(float maxWidth)
 		{
 			return 140f;
 		}
+
+		private Texture2D fullShieldBarTexCache;
+		private Texture2D FullShieldBarTex
+        {
+			get
+            {
+				if (fullShieldBarTexCache is null)
+                {
+					Color fullShieldBarColor;
+
+					if (hediffResource.def.progressBarColor.HasValue)
+					{
+						fullShieldBarColor = hediffResource.def.progressBarColor.Value;
+					}
+					else
+					{
+						fullShieldBarColor = hediffResource.def.defaultLabelColor;
+					}
+					fullShieldBarTexCache = SolidColorMaterials.NewSolidColorTexture(fullShieldBarColor);
+				}
+				return fullShieldBarTexCache;
+			}
+        }
+
+		private Color cachedBackgroundColor = Color.clear;
+		private Color BackGroundColor
+        {
+			get
+            {
+				if (cachedBackgroundColor == Color.clear)
+                {
+					cachedBackgroundColor = hediffResource.def.backgroundBarColor.HasValue ? hediffResource.def.backgroundBarColor.Value : Widgets.WindowBGFillColor; ;
+				}
+				return cachedBackgroundColor;
+            }
+        }
+
+		private Color cachedDrawBox = Color.clear;
+		private Color DrawBoxColor
+        {
+			get
+            {
+				if (cachedDrawBox == Color.clear)
+                {
+					cachedDrawBox = new ColorInt(97, 108, 122).ToColor;
+				}
+				return cachedDrawBox;
+            }
+        }
+
+		public FloatValueCache resourceCapacityCache;
+		public FloatValueCache resourceAmountCache;
 
 		public override GizmoResult GizmoOnGUI(Vector2 topLeft, float maxWidth)
 		{
@@ -81,36 +157,35 @@ namespace HediffResourceFramework
 			Widgets.Label(rect3, label);
 			Rect rect4 = rect2;
 			rect4.yMin = rect2.y + rect2.height / 2f;
-			float fillPercent = hediffResource.ResourceAmount / hediffResource.ResourceCapacity;
-			Color fullShieldBarColor;
 
-			if (hediffResource.def.progressBarColor.HasValue)
+			if (resourceCapacityCache.updateCount > 30)
             {
-				fullShieldBarColor = hediffResource.def.progressBarColor.Value;
+				resourceCapacityCache.Value = hediffResource.ResourceCapacity;
+				resourceAmountCache.Value = hediffResource.ResourceAmount;
 			}
-			else
-            {
-				fullShieldBarColor = hediffResource.def.defaultLabelColor;
-			}
-			var fullShieldBarTex = SolidColorMaterials.NewSolidColorTexture(fullShieldBarColor);
-			Widgets.FillableBar(rect4, fillPercent, fullShieldBarTex, EmptyShieldBarTex, doBorder: false);
+
+			var resourceAmount = resourceAmountCache.Value;
+			var resourceCapacity = resourceCapacityCache.Value;
+			float fillPercent = resourceAmount / resourceCapacity;
+
+			Widgets.FillableBar(rect4, fillPercent, FullShieldBarTex, EmptyShieldBarTex, doBorder: false);
 			Text.Font = GameFont.Small;
 			Text.Anchor = TextAnchor.MiddleCenter;
 			if (hediffResource.def.resourceBarTextColor.HasValue)
             {
 				GUI.color = hediffResource.def.resourceBarTextColor.Value;
 			}
-			Widgets.Label(rect4, (hediffResource.ResourceAmount).ToString("F0") + " / " + (hediffResource.ResourceCapacity).ToString("F0"));
+			Widgets.Label(rect4, (resourceAmount).ToString("F0") + " / " + (resourceCapacity).ToString("F0"));
 			Text.Anchor = TextAnchor.UpperLeft;
 			GUI.color = Color.white;
 			return new GizmoResult(GizmoState.Clear);
 		}
 
-		public static void DrawWindowBackground(Rect rect, HediffResourceDef hediffResourceDef)
+		public void DrawWindowBackground(Rect rect, HediffResourceDef hediffResourceDef)
 		{
-			GUI.color = hediffResourceDef.backgroundBarColor.HasValue ? hediffResourceDef.backgroundBarColor.Value : Widgets.WindowBGFillColor;
+			GUI.color = BackGroundColor;
 			GUI.DrawTexture(rect, BaseContent.WhiteTex);
-			GUI.color = new ColorInt(97, 108, 122).ToColor;
+			GUI.color = DrawBoxColor;
 			Widgets.DrawBox(rect);
 			GUI.color = Color.white;
 		}
@@ -119,11 +194,15 @@ namespace HediffResourceFramework
 	[HarmonyPatch(typeof(Pawn), "GetGizmos")]
 	public class Pawn_GetGizmos_Patch
 	{
-		public static void Postfix(ref IEnumerable<Gizmo> __result, Pawn __instance)
+		public static Dictionary<HediffResource, Gizmo_ResourceStatus> cachedGizmos = new Dictionary<HediffResource, Gizmo_ResourceStatus>();
+		public static IEnumerable<Gizmo> Postfix(IEnumerable<Gizmo> __result, Pawn __instance)
 		{
-			if (__instance.Faction == Faction.OfPlayer && __result != null)
+			foreach (var g in __result)
+            {
+				yield return g;
+            }
+			if (__instance.Faction == Faction.OfPlayer)
 			{
-				List<Gizmo> list = __result.ToList<Gizmo>();
 				var hediffResources = __instance.health?.hediffSet?.hediffs.OfType<HediffResource>();
 				if (hediffResources != null)
                 {
@@ -131,13 +210,19 @@ namespace HediffResourceFramework
                     {
 						if (hediffResource.def.showResourceBar)
                         {
-							Gizmo_ResourceStatus gizmo_hediffResourceStatus = new Gizmo_ResourceStatus();
-							gizmo_hediffResourceStatus.hediffResource = hediffResource;
-							list.Add(gizmo_hediffResourceStatus);
+							if (cachedGizmos.TryGetValue(hediffResource, out Gizmo_ResourceStatus gizmo_ResourceStatus))
+                            {
+								yield return gizmo_ResourceStatus;
+							}
+							else
+                            {
+								gizmo_ResourceStatus = new Gizmo_ResourceStatus(hediffResource);
+								cachedGizmos[hediffResource] = gizmo_ResourceStatus;
+								yield return gizmo_ResourceStatus;
+							}
 						}
 					}
                 }
-				__result = list;
 			}
 		}
 	}
