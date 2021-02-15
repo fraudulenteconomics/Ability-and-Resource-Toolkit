@@ -65,15 +65,16 @@ namespace HediffResourceFramework
         public override void ResourceTick()
         {
             base.ResourceTick();
-            if (this.parent is ThingWithComps equipment && CompEquippable.PrimaryVerb.CasterPawn != null)
+            var pawn = CompEquippable.PrimaryVerb.CasterPawn;
+            if (pawn != null)
             {
-                if (CompEquippable.PrimaryVerb.CasterPawn.IsHashIntervalTick(60))
+                if (pawn.IsHashIntervalTick(60))
                 {
                     if (!this.PostUseDelayTicks?.Values?.Select(x => x.delayTicks).Any(y => y > Find.TickManager.TicksGame) ?? true)
                     {
                         foreach (var option in Props.resourceSettings)
                         {
-                            var hediffResource = CompEquippable.PrimaryVerb.CasterPawn.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
+                            var hediffResource = pawn.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
                             if (hediffResource != null && !hediffResource.CanGainResource)
                             {
                                 continue;
@@ -81,11 +82,11 @@ namespace HediffResourceFramework
                             else 
                             {
                                 float num = option.resourcePerSecond;
-                                if (option.qualityScalesResourcePerSecond && equipment.TryGetQuality(out QualityCategory qc))
+                                if (option.qualityScalesResourcePerSecond && this.parent.TryGetQuality(out QualityCategory qc))
                                 {
                                     num *= HediffResourceUtils.GetQualityMultiplier(qc);
                                 }
-                                HediffResourceUtils.AdjustResourceAmount(CompEquippable.PrimaryVerb.CasterPawn, option.hediff, num, option.addHediffIfMissing);
+                                HediffResourceUtils.AdjustResourceAmount(pawn, option.hediff, num, option.addHediffIfMissing);
                             }
                         }
                     }

@@ -83,15 +83,16 @@ namespace HediffResourceFramework
         }
         public void ResourceTick()
         {
-            if (this.Pawn != null)
+            var pawn = this.Pawn;
+            if (pawn != null)
             {
-                if (this.Pawn.IsHashIntervalTick(60))
+                if (pawn.IsHashIntervalTick(60))
                 {
                     if (!this.PostUseDelayTicks?.Values?.Select(x => x.delayTicks).Any(y => y > Find.TickManager.TicksGame) ?? true)
                     {
                         foreach (var option in Props.resourceSettings)
                         {
-                            var hediffResource = this.Pawn.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
+                            var hediffResource = pawn.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
                             if (hediffResource != null && !hediffResource.CanGainResource)
                             {
                                 continue;
@@ -99,7 +100,7 @@ namespace HediffResourceFramework
                             else
                             {
                                 float num = option.resourcePerSecond;
-                                HediffResourceUtils.AdjustResourceAmount(this.Pawn, option.hediff, num, option.addHediffIfMissing);
+                                HediffResourceUtils.AdjustResourceAmount(pawn, option.hediff, num, option.addHediffIfMissing);
                             }
                         }
                     }

@@ -271,9 +271,10 @@ namespace HediffResourceFramework
             var comps = HediffResourceUtils.GetAllAdjustHediffsComps(this.pawn);
             foreach (var comp in comps)
             {
-                if (comp.ResourceSettings != null)
+                var resourceSettings = comp.ResourceSettings;
+                if (resourceSettings != null)
                 {
-                    foreach (var option in comp.ResourceSettings)
+                    foreach (var option in resourceSettings)
                     {
                         if (option.hediff == def)
                         {
@@ -330,9 +331,10 @@ namespace HediffResourceFramework
             var comps = HediffResourceUtils.GetAllAdjustHediffsComps(this.pawn);
             foreach (var comp in comps)
             {
-                if (comp.ResourceSettings != null)
+                var resourceSettings = comp.ResourceSettings;
+                if (resourceSettings != null)
                 {
-                    foreach (var option in comp.ResourceSettings)
+                    foreach (var option in resourceSettings)
                     {
                         if (option.dropIfHediffMissing && option.hediff == def)
                         {

@@ -31,14 +31,19 @@ namespace HediffResourceFramework
     {
         public Pawn Pawn => this.parent as Pawn;
 
+        public static Dictionary<TraitDef, TraitsAdjustHediff> cachedModExtensions = new Dictionary<TraitDef, TraitsAdjustHediff>();
         public override List<HediffAdjust> ResourceSettings
         {
             get
             {
                 var resourceSettings = new List<HediffAdjust>();
-                foreach (var trait in Pawn.story?.traits?.allTraits?.Select(x => x.def))
+                foreach (var trait in Pawn.story?.traits?.allTraits)
                 {
-                    var traitAdjustOptions = trait.GetModExtension<TraitsAdjustHediff>();
+                    if (!cachedModExtensions.TryGetValue(trait.def, out TraitsAdjustHediff traitAdjustOptions))
+                    {
+                        traitAdjustOptions = trait.def.GetModExtension<TraitsAdjustHediff>();
+                        cachedModExtensions[trait.def] = traitAdjustOptions;
+                    }
                     if (traitAdjustOptions?.resourceSettings != null)
                     {
                         resourceSettings.AddRange(traitAdjustOptions.resourceSettings);
@@ -59,15 +64,16 @@ namespace HediffResourceFramework
         public override void ResourceTick()
         {
             base.ResourceTick();
-            if (Pawn != null && !Pawn.Dead)
+            var pawn = Pawn;
+            if (pawn != null && !pawn.Dead)
             {
-                if (Pawn.IsHashIntervalTick(60))
+                if (pawn.IsHashIntervalTick(60))
                 {
                     if (!this.PostUseDelayTicks?.Values?.Select(x => x.delayTicks).Any(y => y > Find.TickManager.TicksGame) ?? true)
                     {
                         foreach (var option in ResourceSettings)
                         {
-                            var hediffResource = Pawn.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
+                            var hediffResource = pawn.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
                             if (hediffResource != null && !hediffResource.CanGainResource)
                             {
                                 continue;

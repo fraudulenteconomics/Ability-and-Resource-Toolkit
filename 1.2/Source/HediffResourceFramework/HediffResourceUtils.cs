@@ -9,6 +9,29 @@ using Verse;
 
 namespace HediffResourceFramework
 {
+
+	public class AdjustResourcesCache
+	{
+		public AdjustResourcesCache(List<IAdjustResource> value)
+		{
+			this.value = value;
+		}
+		private List<IAdjustResource> value;
+		public List<IAdjustResource> Value
+		{
+			get
+			{
+				return value;
+			}
+			set
+			{
+				this.value = value;
+				updateTick = Find.TickManager.TicksGame;
+			}
+		}
+		public int updateTick;
+	}
+
 	[StaticConstructorOnStartup]
 	public static class HediffResourceUtils
 	{
@@ -114,19 +137,49 @@ namespace HediffResourceFramework
 			return pawn.health.hediffSet.hediffs.Any(x => x is HediffResource);
 		}
 
+		private static Dictionary<Pawn, AdjustResourcesCache> resourceCache = new Dictionary<Pawn, AdjustResourcesCache>();
 		public static List<IAdjustResource> GetAllAdjustHediffsComps(Pawn pawn)
 		{
+			if (resourceCache.TryGetValue(pawn, out AdjustResourcesCache adjustResourcesCache))
+            {
+				var adjusters = adjustResourcesCache.Value;
+				if (Find.TickManager.TicksGame > adjustResourcesCache.updateTick + 60)
+                {
+					adjusters = GetAdjustResourcesInt(pawn);
+					adjustResourcesCache.Value = adjusters;
+				}
+				return adjusters;
+            }
+			else
+            {
+				var adjusters = GetAdjustResourcesInt(pawn);
+				resourceCache[pawn] = new AdjustResourcesCache(adjusters);
+				return adjusters;
+			}
+		}
+
+		private static Dictionary<Apparel, CompApparelAdjustHediffs> compApparelAdjustCache = new Dictionary<Apparel, CompApparelAdjustHediffs>();
+		private static Dictionary<ThingWithComps, CompWeaponAdjustHediffs> compWeaponAdjustCache = new Dictionary<ThingWithComps, CompWeaponAdjustHediffs>();
+		private static Dictionary<Hediff, HediffComp_AdjustHediffs> hediffCompAdjustCache = new Dictionary<Hediff, HediffComp_AdjustHediffs>();
+		private static Dictionary<Hediff, HediffComp_AdjustHediffsPerStages> hediffCompAdjustPerStageCache = new Dictionary<Hediff, HediffComp_AdjustHediffsPerStages>();
+		private static Dictionary<Pawn, CompTraitsAdjustHediffs> compTraitsAdjustHediffsCache = new Dictionary<Pawn, CompTraitsAdjustHediffs>();
+		private static List<IAdjustResource> GetAdjustResourcesInt(Pawn pawn)
+        {
 			List<IAdjustResource> adjustHediffs = new List<IAdjustResource>();
 			var apparels = pawn.apparel?.WornApparel?.ToList();
 			if (apparels != null)
 			{
 				foreach (var apparel in apparels)
 				{
-					var comp = apparel.GetComp<CompApparelAdjustHediffs>();
+					if (!compApparelAdjustCache.TryGetValue(apparel, out CompApparelAdjustHediffs comp))
+                    {
+						comp = apparel.GetComp<CompApparelAdjustHediffs>();
+						compApparelAdjustCache[apparel] = comp;
+                    }
 					if (comp != null)
-					{
+                    {
 						adjustHediffs.Add(comp);
-					}
+                    }
 				}
 			}
 
@@ -135,7 +188,11 @@ namespace HediffResourceFramework
 			{
 				foreach (var equipment in equipments)
 				{
-					var comp = equipment.GetComp<CompWeaponAdjustHediffs>();
+					if (!compWeaponAdjustCache.TryGetValue(equipment, out CompWeaponAdjustHediffs comp))
+					{
+						comp = equipment.GetComp<CompWeaponAdjustHediffs>();
+						compWeaponAdjustCache[equipment] = comp;
+					}
 					if (comp != null)
 					{
 						adjustHediffs.Add(comp);
@@ -147,12 +204,20 @@ namespace HediffResourceFramework
 			{
 				foreach (var hediff in pawn.health.hediffSet.hediffs)
 				{
-					var comp = hediff.TryGetComp<HediffComp_AdjustHediffs>();
+					if (!hediffCompAdjustCache.TryGetValue(hediff, out HediffComp_AdjustHediffs comp))
+					{
+						comp = hediff.TryGetComp<HediffComp_AdjustHediffs>();
+						hediffCompAdjustCache[hediff] = comp;
+					}
 					if (comp != null)
 					{
 						adjustHediffs.Add(comp);
 					}
-					var comp2 = hediff.TryGetComp<HediffComp_AdjustHediffsPerStages>();
+					if (!hediffCompAdjustPerStageCache.TryGetValue(hediff, out HediffComp_AdjustHediffsPerStages comp2))
+					{
+						comp2 = hediff.TryGetComp<HediffComp_AdjustHediffsPerStages>();
+						hediffCompAdjustPerStageCache[hediff] = comp2;
+					}
 					if (comp2 != null)
 					{
 						adjustHediffs.Add(comp2);
@@ -160,15 +225,16 @@ namespace HediffResourceFramework
 				}
 			}
 
-			if (pawn.story?.traits?.allTraits != null)
-            {
-				var comp = pawn.TryGetComp<CompTraitsAdjustHediffs>();
-				if (comp != null)
-				{
-					adjustHediffs.Add(comp);
-				}
+			if (!compTraitsAdjustHediffsCache.TryGetValue(pawn, out CompTraitsAdjustHediffs traitComp))
+			{
+				traitComp = pawn.TryGetComp<CompTraitsAdjustHediffs>();
+				compTraitsAdjustHediffsCache[pawn] = traitComp;
 			}
 
+			if (traitComp != null)
+			{
+				adjustHediffs.Add(traitComp);
+			}
 			return adjustHediffs;
 		}
 		public static float GetHediffResourceCapacityGainFor(Pawn pawn, HediffResourceDef hdDef)
@@ -177,9 +243,10 @@ namespace HediffResourceFramework
 			var comps = GetAllAdjustHediffsComps(pawn);
 			foreach (var comp in comps)
 			{
-				if (comp.ResourceSettings != null)
+				var resourceSettings = comp.ResourceSettings;
+				if (resourceSettings != null)
 				{
-					foreach (var option in comp.ResourceSettings)
+					foreach (var option in resourceSettings)
 					{
 						if (option.hediff == hdDef && option.maxResourceCapacityOffset != 0f)
 						{
@@ -206,9 +273,10 @@ namespace HediffResourceFramework
 			var comps = GetAllAdjustHediffsComps(pawn);
 			foreach (var comp in comps)
 			{
-				if (comp.Parent != adjuster && comp.ResourceSettings != null)
+				var resourceSettings = comp.ResourceSettings;
+				if (comp.Parent != adjuster && resourceSettings != null)
 				{
-					foreach (var hediffOption in comp.ResourceSettings)
+					foreach (var hediffOption in resourceSettings)
 					{
 						if (!hediffOption.addHediffIfMissing && hediffResourcesToRemove.Contains(hediffOption.hediff))
 						{
@@ -233,9 +301,10 @@ namespace HediffResourceFramework
 			var comps = GetAllAdjustHediffsComps(pawn);
 			foreach (var comp in comps)
 			{
-				if (comp.ResourceSettings != null)
+				var resourceSettings = comp.ResourceSettings;
+				if (resourceSettings != null)
 				{
-					foreach (var hediffOption in comp.ResourceSettings)
+					foreach (var hediffOption in resourceSettings)
 					{
 						var hediff = pawn.health.hediffSet.GetFirstHediffOfDef(hediffOption.hediff) as HediffResource;
 						if (hediff != null && hediffOption.dropIfOverCapacity && hediff.ResourceCapacity < 0)

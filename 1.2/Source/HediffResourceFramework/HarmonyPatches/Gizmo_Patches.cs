@@ -59,16 +59,15 @@ namespace HediffResourceFramework
         {
 			get
             {
-				updateCount++;
 				return value;
 			}
 			set
             {
 				this.value = value;
-				updateCount = 0;
+				updateTick = Find.TickManager.TicksGame;
             }
         }
-		public int updateCount;
+		public int updateTick;
 	}
 
 	[StaticConstructorOnStartup]
@@ -158,7 +157,7 @@ namespace HediffResourceFramework
 			Rect rect4 = rect2;
 			rect4.yMin = rect2.y + rect2.height / 2f;
 
-			if (resourceCapacityCache.updateCount > 30)
+			if (Find.TickManager.TicksGame > resourceCapacityCache.updateTick + 30)
             {
 				resourceCapacityCache.Value = hediffResource.ResourceCapacity;
 				resourceAmountCache.Value = hediffResource.ResourceAmount;
