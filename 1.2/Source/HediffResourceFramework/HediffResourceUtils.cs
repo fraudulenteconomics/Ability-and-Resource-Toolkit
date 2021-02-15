@@ -274,12 +274,14 @@ namespace HediffResourceFramework
 			foreach (var comp in comps)
 			{
 				var resourceSettings = comp.ResourceSettings;
-				if (comp.Parent != adjuster && resourceSettings != null)
+				if (comp.Parent != adjuster.Parent && resourceSettings != null)
 				{
 					foreach (var hediffOption in resourceSettings)
 					{
-						if (!hediffOption.addHediffIfMissing && hediffResourcesToRemove.Contains(hediffOption.hediff))
+						Log.Message($"adjuster.Parent: {adjuster.Parent}, comp.Parent: {comp.Parent}, hediffOption.hediff: {hediffOption.hediff}, hediffOption.addHediffIfMissing: {hediffOption.addHediffIfMissing}");
+						if (hediffOption.addHediffIfMissing && hediffResourcesToRemove.Contains(hediffOption.hediff))
 						{
+							Log.Message("Can't remove " + hediffOption.hediff + " due to blocker: " + comp.Parent + ", adjuster: " + adjuster.Parent);
 							hediffResourcesToRemove.Remove(hediffOption.hediff);
 						}
 					}
@@ -363,9 +365,9 @@ namespace HediffResourceFramework
 
 		public static bool IsUsableBy(Verb verb, out string disableReason)
 		{
-			if (verb.CasterIsPawn && verb.EquipmentSource != null)
+			if (verb.CasterIsPawn)
 			{
-				var hediffResources = verb.CasterPawn.health.hediffSet.hediffs.OfType<HediffResource>().ToHashSet();
+				var hediffResources = verb.CasterPawn.health.hediffSet.hediffs.OfType<HediffResource>();
 				foreach (var hediff in hediffResources)
 				{
 					if (hediff.def.shieldProperties?.cannotUseVerbType != null)

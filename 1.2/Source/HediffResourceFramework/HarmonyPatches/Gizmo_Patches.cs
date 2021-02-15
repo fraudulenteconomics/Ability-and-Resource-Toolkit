@@ -246,7 +246,6 @@ namespace HediffResourceFramework
 						GUI.color = Color.white;
 						Text.Font = GameFont.Small;
 					}
-
 				}
 			}
 		}

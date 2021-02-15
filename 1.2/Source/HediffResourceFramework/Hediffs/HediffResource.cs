@@ -206,7 +206,7 @@ namespace HediffResourceFramework
         {
             base.Tick();
             this.duration++;
-            if (ResourceCapacity < 0)
+            if (Find.TickManager.TicksGame % 30 == 0 && ResourceCapacity < 0)
             {
                 HediffResourceUtils.TryDropExcessHediffGears(this.pawn);
             }
