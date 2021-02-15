@@ -67,22 +67,19 @@ namespace HediffResourceFramework
             var pawn = Pawn;
             if (pawn != null && !pawn.Dead)
             {
-                if (pawn.IsHashIntervalTick(60))
+                if (!this.PostUseDelayTicks?.Values?.Select(x => x.delayTicks).Any(y => y > Find.TickManager.TicksGame) ?? true)
                 {
-                    if (!this.PostUseDelayTicks?.Values?.Select(x => x.delayTicks).Any(y => y > Find.TickManager.TicksGame) ?? true)
+                    foreach (var option in ResourceSettings)
                     {
-                        foreach (var option in ResourceSettings)
+                        var hediffResource = pawn.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
+                        if (hediffResource != null && !hediffResource.CanGainResource)
                         {
-                            var hediffResource = pawn.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
-                            if (hediffResource != null && !hediffResource.CanGainResource)
-                            {
-                                continue;
-                            }
-                            else
-                            {
-                                float num = option.resourcePerSecond;
-                                HediffResourceUtils.AdjustResourceAmount(Pawn, option.hediff, num, option.addHediffIfMissing);
-                            }
+                            continue;
+                        }
+                        else
+                        {
+                            float num = option.resourcePerSecond;
+                            HediffResourceUtils.AdjustResourceAmount(Pawn, option.hediff, num, option.addHediffIfMissing);
                         }
                     }
                 }

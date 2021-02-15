@@ -30,7 +30,7 @@ namespace HediffResourceFramework
         }
         public override void ResourceTick()
         {
-            if (Active && this.parent.IsHashIntervalTick(60))
+            if (Active)
             {
                 foreach (var option in Props.resourceSettings)
                 {

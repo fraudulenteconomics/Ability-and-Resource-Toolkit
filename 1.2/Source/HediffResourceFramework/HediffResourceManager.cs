@@ -59,7 +59,8 @@ namespace HediffResourceFramework
             for (int num = resourceAdjusters.Count - 1; num >= 0; num--)
             {
                 var adjuster = resourceAdjusters[num];
-                if (!adjuster.Parent.Destroyed)
+                var parent = adjuster.Parent;
+                if (parent != null && !parent.Destroyed && parent.IsHashIntervalTick(60))
                 {
                     adjuster.ResourceTick();
                 }

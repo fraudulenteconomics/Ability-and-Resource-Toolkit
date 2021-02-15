@@ -54,26 +54,23 @@ namespace HediffResourceFramework
             var pawn = Apparel.Wearer;
             if (pawn != null)
             {
-                if (pawn.IsHashIntervalTick(60))
+                if (!this.PostUseDelayTicks?.Values?.Select(x => x.delayTicks).Any(y => y > Find.TickManager.TicksGame) ?? true)
                 {
-                    if (!this.PostUseDelayTicks?.Values?.Select(x => x.delayTicks).Any(y => y > Find.TickManager.TicksGame) ?? true)
+                    foreach (var option in Props.resourceSettings)
                     {
-                        foreach (var option in Props.resourceSettings)
+                        var hediffResource = pawn.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
+                        if (hediffResource != null && !hediffResource.CanGainResource)
                         {
-                            var hediffResource = pawn.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
-                            if (hediffResource != null && !hediffResource.CanGainResource)
+                            continue;
+                        }
+                        else
+                        {
+                            float num = option.resourcePerSecond;
+                            if (option.qualityScalesResourcePerSecond && Apparel.TryGetQuality(out QualityCategory qc))
                             {
-                                continue;
+                                num *= HediffResourceUtils.GetQualityMultiplier(qc);
                             }
-                            else
-                            {
-                                float num = option.resourcePerSecond;
-                                if (option.qualityScalesResourcePerSecond && Apparel.TryGetQuality(out QualityCategory qc))
-                                {
-                                    num *= HediffResourceUtils.GetQualityMultiplier(qc);
-                                }
-                                HediffResourceUtils.AdjustResourceAmount(pawn, option.hediff, num, option.addHediffIfMissing);
-                            }
+                            HediffResourceUtils.AdjustResourceAmount(pawn, option.hediff, num, option.addHediffIfMissing);
                         }
                     }
                 }

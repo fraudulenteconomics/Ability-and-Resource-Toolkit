@@ -97,25 +97,22 @@ namespace HediffResourceFramework
             var pawn = this.Pawn;
             if (pawn != null)
             {
-                if (pawn.IsHashIntervalTick(60))
+                if (!this.PostUseDelayTicks?.Values?.Select(x => x.delayTicks).Any(y => y > Find.TickManager.TicksGame) ?? true)
                 {
-                    if (!this.PostUseDelayTicks?.Values?.Select(x => x.delayTicks).Any(y => y > Find.TickManager.TicksGame) ?? true)
+                    var resourceSetting = ResourceSettings;
+                    if (resourceSetting != null)
                     {
-                        var resourceSetting = ResourceSettings;
-                        if (resourceSetting != null)
+                        foreach (var option in resourceSetting)
                         {
-                            foreach (var option in resourceSetting)
+                            var hediffResource = pawn.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
+                            if (hediffResource != null && !hediffResource.CanGainResource)
                             {
-                                var hediffResource = pawn.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
-                                if (hediffResource != null && !hediffResource.CanGainResource)
-                                {
-                                    continue;
-                                }
-                                else
-                                {
-                                    float num = option.resourcePerSecond;
-                                    HediffResourceUtils.AdjustResourceAmount(pawn, option.hediff, num, option.addHediffIfMissing);
-                                }
+                                continue;
+                            }
+                            else
+                            {
+                                float num = option.resourcePerSecond;
+                                HediffResourceUtils.AdjustResourceAmount(pawn, option.hediff, num, option.addHediffIfMissing);
                             }
                         }
                     }
