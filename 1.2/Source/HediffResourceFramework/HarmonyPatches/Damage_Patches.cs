@@ -118,7 +118,7 @@ namespace HediffResourceFramework
 		public static void Postfix(bool portrait, Pawn ___pawn)
 		{
 			if (portrait) return;
-			foreach (var hediff in ___pawn.health.hediffSet.hediffs.OfType<HediffResource>())
+			foreach (var hediff in HediffResourceUtils.GetHediffResourcesFor(___pawn))
 			{
 				hediff.Draw();
 			}

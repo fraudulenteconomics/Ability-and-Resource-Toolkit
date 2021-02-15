@@ -108,6 +108,7 @@ namespace HediffResourceFramework
         public override void CompExposeData()
         {
             base.CompExposeData();
+            postUseDelayTicks.RemoveAll(x => x.Key.CasterPawn.DestroyedOrNull());
             Scribe_Collections.Look(ref postUseDelayTicks, "postUseDelayTicks", LookMode.Reference, LookMode.Deep, ref verbKeys, ref verbDisablesValues);
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
