@@ -183,7 +183,7 @@
 		<shieldProperties>
 			<absorbMeleeDamage>true</absorbMeleeDamage>
 			<absorbRangeDamage>true</absorbRangeDamage>
-			<maxAbsorb>999</maxAbsorb>
+			<maxAbsorb>10</maxAbsorb>
 			<damageAbsorbedPerResource>1</damageAbsorbedPerResource>
 			<postDamageDelay>0</postDamageDelay>
 		</shieldProperties>

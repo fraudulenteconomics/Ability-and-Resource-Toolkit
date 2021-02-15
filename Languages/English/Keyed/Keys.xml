@@ -2,8 +2,8 @@
 	<HRF.Fulfils>Generates {0} per second.</HRF.Fulfils>
 	<HRF.CannotWear>Cannot wear {0}</HRF.CannotWear>
 	<HRF.DrinkWarning>(will make pawn sick due to conflicting resource)</HRF.DrinkWarning>
-	<FE.FusionReactorGainedTitle>Fusion reactor online</FE.FusionReactorGainedTitle>
-	<FE.FusionReactorGainedMessage>{PAWN_nameDef} has just acquired a fusion reactor and may now use specialized modules and powered equipment. These items may be created on the fabrication bench after researching fusion technology.</FE.FusionReactorGainedMessage>
+	<FE.FusionReactorGainedTitle>Fusion energy detected</FE.FusionReactorGainedTitle>
+	<FE.FusionReactorGainedMessage>{PAWN_nameDef} has just acquired a fusion energy source and may now use specialized modules and powered equipment. These items may be created on the fabrication bench after researching fusion technology.</FE.FusionReactorGainedMessage>
 	
 	<HRF.ManaHediffGainedTitle>{PAWN_nameDef} gained {RESOURCE_label}</HRF.ManaHediffGainedTitle>
 	<HRF.ManaHediffGainedText>{PAWN_nameDef} gained {RESOURCE_label}</HRF.ManaHediffGainedText>
