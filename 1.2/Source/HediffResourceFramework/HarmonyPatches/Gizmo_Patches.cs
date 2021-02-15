@@ -202,7 +202,7 @@ namespace HediffResourceFramework
             }
 			if (__instance.Faction == Faction.OfPlayer)
 			{
-				var hediffResources = __instance.health?.hediffSet?.hediffs.OfType<HediffResource>();
+				var hediffResources = HediffResourceUtils.GetHediffResourcesFor(__instance);
 				if (hediffResources != null)
                 {
 					foreach (var hediffResource in hediffResources)
@@ -242,7 +242,7 @@ namespace HediffResourceFramework
 						Vector2 vector = new Vector2(5f, pos);
 						Text.Font = GameFont.Tiny;
 						GUI.color = hediffs[i].Item2.def.defaultLabelColor;
-						Widgets.Label(new Rect(butRect.x + vector.x, butRect.y + vector.y, butRect.width - 3f, 75f - pos), hediffs[i].Item1.minimumResourcePerUse + "/" + (int)hediffs[i].Item2.ResourceAmount); ;
+						Widgets.Label(new Rect(butRect.x + vector.x, butRect.y + vector.y, butRect.width - 3f, 75f - pos), hediffs[i].Item1.minimumResourcePerUse.ToString());
 						GUI.color = Color.white;
 						Text.Font = GameFont.Small;
 					}

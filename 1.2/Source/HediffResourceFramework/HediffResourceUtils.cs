@@ -9,14 +9,34 @@ using Verse;
 
 namespace HediffResourceFramework
 {
-
+	public class HediffResourcesCache
+	{
+		public HediffResourcesCache(List<HediffResource> value)
+		{
+			this.value = value;
+		}
+		public List<HediffResource> value;
+		public List<HediffResource> Value
+		{
+			get
+			{
+				return value;
+			}
+			set
+			{
+				this.value = value;
+				updateTick = Find.TickManager.TicksGame;
+			}
+		}
+		public int updateTick;
+	}
 	public class AdjustResourcesCache
 	{
 		public AdjustResourcesCache(List<IAdjustResource> value)
 		{
 			this.value = value;
 		}
-		private List<IAdjustResource> value;
+		public List<IAdjustResource> value;
 		public List<IAdjustResource> Value
 		{
 			get
@@ -142,7 +162,7 @@ namespace HediffResourceFramework
 		{
 			if (resourceCache.TryGetValue(pawn, out AdjustResourcesCache adjustResourcesCache))
             {
-				var adjusters = adjustResourcesCache.Value;
+				var adjusters = adjustResourcesCache.value;
 				if (Find.TickManager.TicksGame > adjustResourcesCache.updateTick + 60)
                 {
 					adjusters = GetAdjustResourcesInt(pawn);
@@ -363,11 +383,32 @@ namespace HediffResourceFramework
 			}
 		}
 
+		private static Dictionary<Pawn, HediffResourcesCache> hediffResourcesCache = new Dictionary<Pawn, HediffResourcesCache>();
+
+		public static List<HediffResource> GetHediffResourcesFor(Pawn pawn)
+        {
+			if (hediffResourcesCache.TryGetValue(pawn, out HediffResourcesCache hediffResourceCache))
+			{
+				var hediffResources = hediffResourceCache.value;
+				if (Find.TickManager.TicksGame > hediffResourceCache.updateTick + 30)
+				{
+					hediffResources = pawn.health.hediffSet.hediffs.OfType<HediffResource>().ToList();
+					hediffResourceCache.Value = hediffResources;
+				}
+				return hediffResources;
+			}
+			else
+			{
+				var hediffResources = pawn.health.hediffSet.hediffs.OfType<HediffResource>().ToList();
+				hediffResourcesCache[pawn] = new HediffResourcesCache(hediffResources);
+				return hediffResources;
+			}
+		}
 		public static bool IsUsableBy(Verb verb, out string disableReason)
 		{
-			if (verb.CasterIsPawn)
+			if (verb.CasterPawn is Pawn pawn)
 			{
-				var hediffResources = verb.CasterPawn.health.hediffSet.hediffs.OfType<HediffResource>();
+				var hediffResources = GetHediffResourcesFor(pawn);
 				foreach (var hediff in hediffResources)
 				{
 					if (hediff.def.shieldProperties?.cannotUseVerbType != null)
@@ -398,7 +439,7 @@ namespace HediffResourceFramework
                 {
 					foreach (var option in verbProps.resourceSettings)
 					{
-						var resourceHediff = verb.CasterPawn.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
+						var resourceHediff = pawn.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
 						if (option.disableIfMissingHediff)
 						{
 							bool manaIsEmptyOrNull = resourceHediff != null ? resourceHediff.ResourceAmount <= 0 : true;
