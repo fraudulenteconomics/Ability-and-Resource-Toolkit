@@ -534,5 +534,159 @@ namespace HediffResourceFramework
 
 			return null;
 		}
+
+		public static void ApplyResourceSettings(Verb verb, IResourceProps props)
+        {
+			if (props.TargetResourceSettings != null)
+			{
+				var target = verb.CurrentTarget.Thing as Pawn;
+				if (target != null)
+				{
+					foreach (var option in props.TargetResourceSettings)
+					{
+						if (option.resetLifetimeTicks)
+						{
+							var targetHediff = target.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
+							if (targetHediff != null)
+							{
+								targetHediff.duration = 0;
+							}
+						}
+					}
+				}
+
+			}
+
+			if (props.ResourceSettings != null)
+			{
+				var hediffResourceManage = Current.Game.GetComponent<HediffResourceManager>();
+
+				var verbPostUseDelay = new List<int>();
+				var verbPostUseDelayMultipliers = new List<float>();
+
+				var hediffPostUse = new Dictionary<HediffResource, List<int>>();
+				var hediffPostUseDelayMultipliers = new Dictionary<HediffResource, List<float>>();
+
+				var disablePostUseString = "";
+				var comps = GetAllAdjustHediffsComps(verb.CasterPawn);
+
+				foreach (var option in props.ResourceSettings)
+				{
+					var hediffResource = AdjustResourceAmount(verb.CasterPawn, option.hediff, option.resourcePerUse, option.addHediffIfMissing);
+					foreach (var comp in comps)
+					{
+						var compResourseSettings = comp.ResourceSettings?.FirstOrDefault(x => x.hediff == option.hediff);
+						if (compResourseSettings != null)
+						{
+							if (option.postUseDelay != 0)
+							{
+								verbPostUseDelay.Add(option.postUseDelay);
+								disablePostUseString += comp.DisablePostUse + "\n";
+								if (compResourseSettings.postUseDelayMultiplier != 1)
+								{
+									verbPostUseDelayMultipliers.Add(compResourseSettings.postUseDelayMultiplier);
+								}
+							}
+						}
+
+						if (hediffResource != null && option.postUseDelay != 0)
+						{
+							if (hediffPostUse.ContainsKey(hediffResource))
+							{
+								hediffPostUse[hediffResource].Add(option.postUseDelay);
+							}
+							else
+							{
+								hediffPostUse[hediffResource] = new List<int> { option.postUseDelay };
+							}
+							if (compResourseSettings != null && compResourseSettings.postUseDelayMultiplier != 1)
+							{
+								if (hediffPostUseDelayMultipliers.ContainsKey(hediffResource))
+								{
+									hediffPostUseDelayMultipliers[hediffResource].Add(compResourseSettings.postUseDelayMultiplier);
+								}
+								else
+								{
+									hediffPostUseDelayMultipliers[hediffResource] = new List<float> { compResourseSettings.postUseDelayMultiplier };
+								}
+							}
+						}
+					}
+				}
+
+				if (verbPostUseDelay.Any() && verbPostUseDelayMultipliers.Any())
+				{
+					foreach (var comp in comps)
+					{
+						comp.PostUseDelayTicks[verb] = new VerbDisable((int)((Find.TickManager.TicksGame + verbPostUseDelay.Average()) * verbPostUseDelayMultipliers.Average()), disablePostUseString);
+					}
+				}
+				else if (verbPostUseDelay.Any())
+				{
+					foreach (var comp in comps)
+					{
+						comp.PostUseDelayTicks[verb] = new VerbDisable((int)((Find.TickManager.TicksGame + verbPostUseDelay.Average())), disablePostUseString);
+					}
+				}
+				foreach (var hediffData in hediffPostUse)
+				{
+					if (hediffData.Key != null && hediffPostUse.TryGetValue(hediffData.Key, out List<int> hediffPostUseList))
+					{
+						int newDelayTicks;
+						if (hediffPostUseDelayMultipliers.TryGetValue(hediffData.Key, out List<float> hediffPostUseMultipliers) && hediffPostUseMultipliers.Any())
+						{
+							newDelayTicks = (int)(hediffPostUseList.Average() * hediffPostUseMultipliers.Average());
+						}
+						else
+						{
+							newDelayTicks = (int)(hediffPostUseList.Average());
+						}
+						if (hediffData.Key.CanHaveDelay(newDelayTicks))
+						{
+							hediffData.Key.AddDelay(newDelayTicks);
+						}
+					}
+				}
+			}
+		}
+
+		public static void ApplyChargeResource(ref float damageAmount, ChargeResources chargeResources)
+        {
+			Log.Message("chargeResources.chargeResources: " + chargeResources.chargeResources.Count());
+			foreach (var chargeResource in chargeResources.chargeResources)
+			{
+				HRFLog.Message("1 instance - __result: " + damageAmount + " - hediffResource: " + chargeResource.chargeResource + " - compCharge.Props.damageScaling.HasValue: " + chargeResource.chargeSettings.damageScaling.HasValue);
+				switch (chargeResource.chargeSettings.damageScaling)
+				{
+					case DamageScalingMode.Flat: DoFlatDamage(ref damageAmount, chargeResource.chargeResource, chargeResource.chargeSettings); break;
+					case DamageScalingMode.Scalar: DoScalarDamage(ref damageAmount, chargeResource.chargeResource, chargeResource.chargeSettings); break;
+					case DamageScalingMode.Linear: DoLinearDamage(ref damageAmount, chargeResource.chargeResource, chargeResource.chargeSettings); break;
+					default: break;
+				}
+				HRFLog.Message("2 instance - result: " + damageAmount + " - hediffResource: " + chargeResource.chargeResource + " - compCharge.Props.damageScaling.HasValue: " + chargeResource.chargeSettings.damageScaling.HasValue);
+			}
+		}
+
+		private static void DoFlatDamage(ref float __result, float resourceAmount, ChargeSettings chargeSettings)
+		{
+			var oldDamage = __result;
+			__result = (int)(__result + (chargeSettings.damagePerCharge * (resourceAmount - chargeSettings.minimumResourcePerUse) / chargeSettings.resourcePerCharge));
+			HRFLog.Message("Flat: old damage: " + oldDamage + " - new damage: " + __result);
+		}
+		private static void DoScalarDamage(ref float __result, float resourceAmount, ChargeSettings chargeSettings)
+		{
+			var oldDamage = __result;
+			HRFLog.Message("chargeSettings.damagePerCharge: " + chargeSettings.damagePerCharge + " - resourceAmount: " + resourceAmount
+				+ " - chargeSettings.minimumResourcePerUse: " + chargeSettings.minimumResourcePerUse + " - chargeSettings.resourcePerCharge: " + chargeSettings.resourcePerCharge);
+			__result = (int)(__result * Mathf.Pow((1 + chargeSettings.damagePerCharge), (resourceAmount - chargeSettings.minimumResourcePerUse) / chargeSettings.resourcePerCharge));
+			HRFLog.Message("Scalar: old damage: " + oldDamage + " - new damage: " + __result);
+		}
+
+		private static void DoLinearDamage(ref float __result, float resourceAmount, ChargeSettings chargeSettings)
+		{
+			var oldDamage = __result;
+			__result = (int)(__result * (1 + (chargeSettings.damagePerCharge * (resourceAmount - chargeSettings.minimumResourcePerUse) / chargeSettings.resourcePerCharge)));
+			HRFLog.Message("Linear: old damage: " + oldDamage + " - new damage: " + __result);
+		}
 	}
 }

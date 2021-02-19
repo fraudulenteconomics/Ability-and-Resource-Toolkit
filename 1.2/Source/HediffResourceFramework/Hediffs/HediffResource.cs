@@ -25,6 +25,7 @@ namespace HediffResourceFramework
             set
             {
                 resourceAmount = value;
+                Log.Message(this.def + " setting resourceAmount to " + value);
                 if (resourceAmount > ResourceCapacity)
                 {
                     if (ResourceCapacity == 0)

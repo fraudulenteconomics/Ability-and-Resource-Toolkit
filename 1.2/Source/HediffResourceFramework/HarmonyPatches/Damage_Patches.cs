@@ -70,43 +70,14 @@ namespace HediffResourceFramework
 				var compCharge = HediffResourceUtils.GetCompChargeSourceFor(launcher, __instance);
 				if (compCharge?.ProjectilesWithChargedResource != null && compCharge.ProjectilesWithChargedResource.TryGetValue(__instance, out ChargeResources chargeResources) && chargeResources != null)
 				{
-					foreach (var chargeResource in chargeResources.chargeResources)
-					{
-						HRFLog.Message("1 instance - " + __instance + " - __result: " + __result + " - hediffResource: " + chargeResource.chargeResource + " - compCharge.Props.damageScaling.HasValue: " + chargeResource.chargeSettings.damageScaling.HasValue);
-						switch (chargeResource.chargeSettings.damageScaling)
-						{
-							case DamageScalingMode.Flat: DoFlatDamage(ref __result, chargeResource.chargeResource, chargeResource.chargeSettings); break;
-							case DamageScalingMode.Scalar: DoScalarDamage(ref __result, chargeResource.chargeResource, chargeResource.chargeSettings); break;
-							case DamageScalingMode.Linear: DoLinearDamage(ref __result, chargeResource.chargeResource, chargeResource.chargeSettings); break;
-							default: break;
-						}
-						HRFLog.Message("2 instance - " + __instance + " - result: " + __result + " - hediffResource: " + chargeResource.chargeResource + " - compCharge.Props.damageScaling.HasValue: " + chargeResource.chargeSettings.damageScaling.HasValue);
-					}
+					var amount = (float)__result;
+					HediffResourceUtils.ApplyChargeResource(ref amount, chargeResources);
+					__result = (int)amount;
 					compCharge.ProjectilesWithChargedResource.Remove(__instance);
 				}
 			}
 		}
-		private static void DoFlatDamage(ref int __result, float resourceAmount, ChargeSettings chargeSettings)
-		{
-			var oldDamage = __result;
-			__result = (int)(__result + (chargeSettings.damagePerCharge * (resourceAmount - chargeSettings.minimumResourcePerUse) / chargeSettings.resourcePerCharge));
-			HRFLog.Message("Flat: old damage: " + oldDamage + " - new damage: " + __result);
-		}
-		private static void DoScalarDamage(ref int __result, float resourceAmount, ChargeSettings chargeSettings)
-		{
-			var oldDamage = __result;
-			HRFLog.Message("chargeSettings.damagePerCharge: " + chargeSettings.damagePerCharge + " - resourceAmount: " + resourceAmount 
-				+ " - chargeSettings.minimumResourcePerUse: " + chargeSettings.minimumResourcePerUse + " - chargeSettings.resourcePerCharge: " + chargeSettings.resourcePerCharge);
-			__result = (int)(__result * Mathf.Pow((1 + chargeSettings.damagePerCharge), (resourceAmount - chargeSettings.minimumResourcePerUse) / chargeSettings.resourcePerCharge));
-			HRFLog.Message("Scalar: old damage: " + oldDamage + " - new damage: " + __result);
-		}
 
-		private static void DoLinearDamage(ref int __result, float resourceAmount, ChargeSettings chargeSettings)
-		{
-			var oldDamage = __result;
-			__result = (int)(__result * (1 + (chargeSettings.damagePerCharge * (resourceAmount - chargeSettings.minimumResourcePerUse) / chargeSettings.resourcePerCharge)));
-			HRFLog.Message("Linear: old damage: " + oldDamage + " - new damage: " + __result);
-		}
 	}
 
 	[HarmonyPatch(typeof(PawnRenderer), "RenderPawnInternal", new Type[] 

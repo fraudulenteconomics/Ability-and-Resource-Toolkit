@@ -8,12 +8,16 @@ using Verse;
 
 namespace HediffResourceFramework
 {
-    public class ToolResource : Tool
+    public class ToolResource : Tool, IResourceProps
     {
         public List<HediffOption> resourceSettings;
 
         public List<HediffOption> targetResourceSettings;
 
         public List<ChargeSettings> chargeSettings;
+
+        public List<HediffOption> ResourceSettings => resourceSettings;
+        public List<HediffOption> TargetResourceSettings => targetResourceSettings;
+        public List<ChargeSettings> ChargeSettings => chargeSettings;
     }
 }

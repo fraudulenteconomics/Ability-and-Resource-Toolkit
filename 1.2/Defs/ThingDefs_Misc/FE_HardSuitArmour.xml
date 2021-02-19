@@ -841,7 +841,6 @@
 				</resourceSettings>
 				<targetResourceSettings>
 					<li>
-						<effectRadius>5</effectRadius>
 						<hediff>FE_FusionReactor</hediff>
 						<resourcePerUse>150</resourcePerUse>
 						<addHediffIfMissing>true</addHediffIfMissing>

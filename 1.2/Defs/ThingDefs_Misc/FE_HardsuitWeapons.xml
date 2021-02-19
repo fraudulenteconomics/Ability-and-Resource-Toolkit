@@ -355,24 +355,24 @@
 				<power>12</power>
 				<cooldownTime>2</cooldownTime>
 			</li>
-			<li>
+			<li Class="HediffResourceFramework.ToolResource">
 				<label>point</label>
 				<capacities>
 					<li>Stab</li>
 				</capacities>
 				<power>21</power>
 				<cooldownTime>2.0</cooldownTime>
-				<!-- <resourceSettings>
-						<li>
-							<hediff>FE_FusionReactor</hediff>
-							<resourcePerUse>-3</resourcePerUse>
-							<disableIfMissingHediff>false</disableIfMissingHediff>
-							<disableReason>Insufficient energy.</disableReason>
-							<minimumResourcePerUse>3</minimumResourcePerUse>
-							<postUseDelay>0</postUseDelay>
-						</li>
-					</resourceSettings>
-					<chargeSettings>
+				<resourceSettings>
+					<li>
+						<hediff>FE_FusionReactor</hediff>
+						<resourcePerUse>-3</resourcePerUse>
+						<disableIfMissingHediff>false</disableIfMissingHediff>
+						<disableReason>Insufficient energy.</disableReason>
+						<minimumResourcePerUse>3</minimumResourcePerUse>
+						<postUseDelay>0</postUseDelay>
+					</li>
+				</resourceSettings>
+				<chargeSettings>
 					<li>
 						<hediffResource>FE_CutterCharge</hediffResource>
 						<minimumResourcePerUse>1</minimumResourcePerUse>
@@ -380,7 +380,7 @@
 						<damagePerCharge>0.15</damagePerCharge>
 						<damageScaling>Linear</damageScaling>
 					</li>
-				</chargeSettings> -->
+				</chargeSettings>
 				<extraMeleeDamages>
 					<li>
 						<def>Flame</def>
@@ -389,24 +389,24 @@
 					</li>
 				</extraMeleeDamages>
 			</li>
-			<li>
+			<li Class="HediffResourceFramework.ToolResource">
 				<label>edge</label>
 				<capacities>
 					<li>Cut</li>
 				</capacities>
 				<power>21</power>
 				<cooldownTime>2.0</cooldownTime>
-				<!-- <resourceSettings>
-						<li>
-							<hediff>FE_FusionReactor</hediff>
-							<resourcePerUse>-3</resourcePerUse>
-							<disableIfMissingHediff>false</disableIfMissingHediff>
-							<disableReason>Insufficient energy.</disableReason>
-							<minimumResourcePerUse>3</minimumResourcePerUse>
-							<postUseDelay>0</postUseDelay>
-						</li>
-					</resourceSettings>
-					<chargeSettings>
+				<resourceSettings>
+					<li>
+						<hediff>FE_FusionReactor</hediff>
+						<resourcePerUse>-3</resourcePerUse>
+						<disableIfMissingHediff>false</disableIfMissingHediff>
+						<disableReason>Insufficient energy.</disableReason>
+						<minimumResourcePerUse>3</minimumResourcePerUse>
+						<postUseDelay>0</postUseDelay>
+					</li>
+				</resourceSettings>
+				<chargeSettings>
 					<li>
 						<hediffResource>FE_CutterCharge</hediffResource>
 						<minimumResourcePerUse>1</minimumResourcePerUse>
@@ -414,7 +414,7 @@
 						<damagePerCharge>0.15</damagePerCharge>
 						<damageScaling>Linear</damageScaling>
 					</li>
-				</chargeSettings> -->
+				</chargeSettings>
 				<extraMeleeDamages>
 					<li>
 						<def>Flame</def>
@@ -425,7 +425,7 @@
 			</li>
 		</tools>
 		<verbs>
-		<li Class="HediffResourceFramework.VerbResourceProps">
+			<li Class="HediffResourceFramework.VerbResourceProps">
 				<resourceSettings>
 					<li>
 						<hediff>FE_FusionReactor</hediff>
@@ -442,7 +442,7 @@
 						<resourcePerUse>1</resourcePerUse>
 						<addHediffIfMissing>true</addHediffIfMissing>
 						<resetLifetimeTicks>true</resetLifetimeTicks>
-						<!--<effectRadius>4.9</effectRadius>-->
+						<effectRadius>4.9</effectRadius>
 					</li>
 				</targetResourceSettings>
 				<verbClass>HediffResourceFramework.Verb_ResourceSelf</verbClass>
@@ -470,7 +470,7 @@
 					</li>
 				</verbProps>
 			</li>
-		<li Class="HediffResourceFramework.CompProperties_WeaponAdjustHediffs">
+			<li Class="HediffResourceFramework.CompProperties_WeaponAdjustHediffs">
 				<resourceSettings>
 					<li>
 						<hediff>FE_CutterCharge</hediff>

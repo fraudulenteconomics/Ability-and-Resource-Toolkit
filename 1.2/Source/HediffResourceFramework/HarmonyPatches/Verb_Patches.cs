@@ -38,6 +38,46 @@ namespace HediffResourceFramework
         }
     }
 
+    [HarmonyPatch(typeof(Verb_MeleeAttackDamage), "DamageInfosToApply")]
+    public static class Patch_DamageInfosToApply
+    {
+        private static void Postfix(ref IEnumerable<DamageInfo> __result, Verb __instance, LocalTargetInfo target)
+        {
+            Log.Message("Patch_DamageInfosToApply - Postfix - if (__instance.tool is IResourceProps props && props.ChargeSettings != null && __instance.CasterPawn != null) - 1", true);
+            if (__instance.tool is IResourceProps props && props.ChargeSettings != null && __instance.CasterPawn != null)
+            {
+                Log.Message("Patch_DamageInfosToApply - Postfix - var list = __result.ToList(); - 2", true);
+                var list = __result.ToList();
+                Log.Message("Patch_DamageInfosToApply - Postfix - foreach (var chargeSettings in props.ChargeSettings) - 3", true);
+                foreach (var chargeSettings in props.ChargeSettings)
+                {
+                    Log.Message("chargeSettings: " + chargeSettings.resourcePerCharge);
+                    Log.Message("Patch_DamageInfosToApply - Postfix - var hediffResource = __instance.CasterPawn.health.hediffSet.GetFirstHediffOfDef(chargeSettings.hediffResource) as HediffResource; - 4", true);
+                    var hediffResource = __instance.CasterPawn.health.hediffSet.GetFirstHediffOfDef(chargeSettings.hediffResource) as HediffResource;
+                    Log.Message("Patch_DamageInfosToApply - Postfix - foreach (var damageInfo in list) - 5", true);
+                    foreach (var damageInfo in list)
+                    {
+                        var chargeResources = new ChargeResources();
+                        chargeResources.chargeResources = new List<ChargeResource> { new ChargeResource(hediffResource.ResourceAmount, chargeSettings) };
+                        Log.Message("Patch_DamageInfosToApply - Postfix - var chargeResources = new ChargeResources(); - 6", true);
+                        Log.Message("Patch_DamageInfosToApply - Postfix - chargeResources.chargeResources = new List<ChargeResource> { new ChargeResource(hediffResource.ResourceAmount, chargeSettings) }; - 7", true);
+                        Log.Message("Patch_DamageInfosToApply - Postfix - var amount = damageInfo.Amount; - 8", true);
+                        var amount = damageInfo.Amount;
+                        Log.Message("Patch_DamageInfosToApply - Postfix - HediffResourceUtils.ApplyChargeResource(ref amount, chargeResources); - 9", true);
+                        HediffResourceUtils.ApplyChargeResource(ref amount, chargeResources);
+                        Log.Message("Patch_DamageInfosToApply - Postfix - if (amount != damageInfo.Amount) - 10", true);
+                        if (amount != damageInfo.Amount)
+                        {
+                            Log.Message("Patch_DamageInfosToApply - Postfix - damageInfo.SetAmount(amount); - 11", true);
+                            damageInfo.SetAmount(amount);
+                            hediffResource.ResourceAmount = 0;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     [HarmonyPatch(typeof(Verb_LaunchProjectile), "TryCastShot")]
     public static class Patch_TryCastShot
     {
@@ -69,122 +109,19 @@ namespace HediffResourceFramework
 
         private static void Postfix(Verb __instance, bool __state)
         {
+            Log.Message(" - Postfix - if (__state && __instance.CasterIsPawn) - 1", true);
             if (__state && __instance.CasterIsPawn)
             {
-                var verbProps = __instance.verbProps as VerbResourceProps;
-                if (verbProps != null)
+                Log.Message(" - Postfix - if (__instance.verbProps is IResourceProps verbProps) - 2", true);
+                if (__instance.verbProps is IResourceProps verbProps)
                 {
-                    if (verbProps.targetResourceSettings != null)
-                    {
-                        var target = __instance.CurrentTarget.Thing as Pawn;
-                        if (target != null)
-                        {
-                            foreach (var option in verbProps.targetResourceSettings)
-                            {
-                                if (option.resetLifetimeTicks)
-                                {
-                                    var targetHediff = target.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
-                                    if (targetHediff != null)
-                                    {
-                                        targetHediff.duration = 0;
-                                    }
-                                }
-                            }
-                        }
-
-                    }
-
-                    if (verbProps.resourceSettings != null)
-                    {
-                        var hediffResourceManage = Current.Game.GetComponent<HediffResourceManager>();
-
-                        var verbPostUseDelay = new List<int>();
-                        var verbPostUseDelayMultipliers = new List<float>();
-
-                        var hediffPostUse = new Dictionary<HediffResource, List<int>>();
-                        var hediffPostUseDelayMultipliers = new Dictionary<HediffResource, List<float>>();
-
-                        var disablePostUseString = "";
-                        var comps = HediffResourceUtils.GetAllAdjustHediffsComps(__instance.CasterPawn);
-
-                        foreach (var option in verbProps.resourceSettings)
-                        {
-                            var hediffResource = HediffResourceUtils.AdjustResourceAmount(__instance.CasterPawn, option.hediff, option.resourcePerUse, option.addHediffIfMissing);
-                            foreach (var comp in comps)
-                            {
-                                var compResourseSettings = comp.ResourceSettings?.FirstOrDefault(x => x.hediff == option.hediff);
-                                if (compResourseSettings != null)
-                                {
-                                    if (option.postUseDelay != 0)
-                                    {
-                                        verbPostUseDelay.Add(option.postUseDelay);
-                                        disablePostUseString += comp.DisablePostUse + "\n";
-                                        if (compResourseSettings.postUseDelayMultiplier != 1)
-                                        {
-                                            verbPostUseDelayMultipliers.Add(compResourseSettings.postUseDelayMultiplier);
-                                        }
-                                    }
-                                }
-
-                                if (hediffResource != null && option.postUseDelay != 0)
-                                {
-                                    if (hediffPostUse.ContainsKey(hediffResource))
-                                    {
-                                        hediffPostUse[hediffResource].Add(option.postUseDelay);
-                                    }
-                                    else
-                                    {
-                                        hediffPostUse[hediffResource] = new List<int> { option.postUseDelay };
-                                    }
-                                    if (compResourseSettings != null && compResourseSettings.postUseDelayMultiplier != 1)
-                                    {
-                                        if (hediffPostUseDelayMultipliers.ContainsKey(hediffResource))
-                                        {
-                                            hediffPostUseDelayMultipliers[hediffResource].Add(compResourseSettings.postUseDelayMultiplier);
-                                        }
-                                        else
-                                        {
-                                            hediffPostUseDelayMultipliers[hediffResource] = new List<float> { compResourseSettings.postUseDelayMultiplier };
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-                        if (verbPostUseDelay.Any() && verbPostUseDelayMultipliers.Any())
-                        {
-                            foreach (var comp in comps)
-                            {
-                                comp.PostUseDelayTicks[__instance] = new VerbDisable((int)((Find.TickManager.TicksGame + verbPostUseDelay.Average()) * verbPostUseDelayMultipliers.Average()), disablePostUseString);
-                            }
-                        }
-                        else if (verbPostUseDelay.Any())
-                        {
-                            foreach (var comp in comps)
-                            {
-                                comp.PostUseDelayTicks[__instance] = new VerbDisable((int)((Find.TickManager.TicksGame + verbPostUseDelay.Average())), disablePostUseString);
-                            }
-                        }
-                        foreach (var hediffData in hediffPostUse)
-                        {
-                            if (hediffData.Key != null && hediffPostUse.TryGetValue(hediffData.Key, out List<int> hediffPostUseList))
-                            {
-                                int newDelayTicks;
-                                if (hediffPostUseDelayMultipliers.TryGetValue(hediffData.Key, out List<float> hediffPostUseMultipliers) && hediffPostUseMultipliers.Any())
-                                {
-                                    newDelayTicks = (int)(hediffPostUseList.Average() * hediffPostUseMultipliers.Average());
-                                }
-                                else
-                                {
-                                    newDelayTicks = (int)(hediffPostUseList.Average());
-                                }
-                                if (hediffData.Key.CanHaveDelay(newDelayTicks))
-                                {
-                                    hediffData.Key.AddDelay(newDelayTicks);
-                                }
-                            }
-                        }
-                    }
+                    Log.Message(" - Postfix - HediffResourceUtils.ApplyResourceSettings(__instance, verbProps); - 3", true);
+                    HediffResourceUtils.ApplyResourceSettings(__instance, verbProps);
+                }
+                else if (__instance.tool is IResourceProps toolProps)
+                {
+                    Log.Message(" - Postfix - HediffResourceUtils.ApplyResourceSettings(__instance, toolProps); - 5", true);
+                    HediffResourceUtils.ApplyResourceSettings(__instance, toolProps);
                 }
             }
         }
