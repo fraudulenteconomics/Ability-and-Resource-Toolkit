@@ -118,10 +118,12 @@
 				<verbProps>
 					<li>
 						<label>FE_RepulsorNormal</label>
+						<description>Fires normal repulsor rounds.</description>
 						<canBeToggled>false</canBeToggled>
 					</li>
 					<li>
 						<label>FE_RepulsorBurst</label>
+						<description>Fires a charge repulsor burst that requires repulsor energy stored in the array.</description>
 						<canBeToggled>true</canBeToggled>
 					</li>
 				</verbProps>
@@ -347,13 +349,23 @@
 			<color>(24,244,200)</color>
 		</graphicData>
 		<tools>
-			<li>
+			<li Class="HediffResourceFramework.ToolResource">
 				<label>handle</label>
 				<capacities>
 					<li>Blunt</li>
 				</capacities>
 				<power>12</power>
 				<cooldownTime>2</cooldownTime>
+				<resourceSettings>
+					<li>
+						<hediff>FE_CutterCharge</hediff>
+						<resourcePerUse>1</resourcePerUse>
+						<disableIfMissingHediff>false</disableIfMissingHediff>
+						<disableReason>Insufficient energy.</disableReason>
+						<minimumResourcePerUse>0</minimumResourcePerUse>
+						<postUseDelay>300</postUseDelay>
+					</li>
+				</resourceSettings>
 			</li>
 			<li Class="HediffResourceFramework.ToolResource">
 				<label>point</label>
@@ -364,23 +376,14 @@
 				<cooldownTime>2.0</cooldownTime>
 				<resourceSettings>
 					<li>
-						<hediff>FE_FusionReactor</hediff>
-						<resourcePerUse>-3</resourcePerUse>
+						<hediff>FE_CutterCharge</hediff>
+						<resourcePerUse>1</resourcePerUse>
 						<disableIfMissingHediff>false</disableIfMissingHediff>
 						<disableReason>Insufficient energy.</disableReason>
-						<minimumResourcePerUse>3</minimumResourcePerUse>
-						<postUseDelay>0</postUseDelay>
+						<minimumResourcePerUse>0</minimumResourcePerUse>
+						<postUseDelay>300</postUseDelay>
 					</li>
 				</resourceSettings>
-				<chargeSettings>
-					<li>
-						<hediffResource>FE_CutterCharge</hediffResource>
-						<minimumResourcePerUse>1</minimumResourcePerUse>
-						<resourcePerCharge>1</resourcePerCharge>
-						<damagePerCharge>0.15</damagePerCharge>
-						<damageScaling>Linear</damageScaling>
-					</li>
-				</chargeSettings>
 				<extraMeleeDamages>
 					<li>
 						<def>Flame</def>
@@ -398,23 +401,14 @@
 				<cooldownTime>2.0</cooldownTime>
 				<resourceSettings>
 					<li>
-						<hediff>FE_FusionReactor</hediff>
-						<resourcePerUse>-3</resourcePerUse>
+						<hediff>FE_CutterCharge</hediff>
+						<resourcePerUse>1</resourcePerUse>
 						<disableIfMissingHediff>false</disableIfMissingHediff>
 						<disableReason>Insufficient energy.</disableReason>
-						<minimumResourcePerUse>3</minimumResourcePerUse>
-						<postUseDelay>0</postUseDelay>
+						<minimumResourcePerUse>0</minimumResourcePerUse>
+						<postUseDelay>300</postUseDelay>
 					</li>
 				</resourceSettings>
-				<chargeSettings>
-					<li>
-						<hediffResource>FE_CutterCharge</hediffResource>
-						<minimumResourcePerUse>1</minimumResourcePerUse>
-						<resourcePerCharge>1</resourcePerCharge>
-						<damagePerCharge>0.15</damagePerCharge>
-						<damageScaling>Linear</damageScaling>
-					</li>
-				</chargeSettings>
 				<extraMeleeDamages>
 					<li>
 						<def>Flame</def>
@@ -428,12 +422,12 @@
 			<li Class="HediffResourceFramework.VerbResourceProps">
 				<resourceSettings>
 					<li>
-						<hediff>FE_FusionReactor</hediff>
-						<resourcePerUse>-25</resourcePerUse>
+						<hediff>FE_CutterCharge</hediff>
+						<resourcePerUse>-5</resourcePerUse>
 						<disableIfMissingHediff>true</disableIfMissingHediff>
-						<disableReason>Insufficient energy.</disableReason>
-						<minimumResourcePerUse>25</minimumResourcePerUse>
-						<postUseDelay>180</postUseDelay>
+						<disableReason>Insufficient charge.</disableReason>
+						<minimumResourcePerUse>5</minimumResourcePerUse>
+						<postUseDelay>0</postUseDelay>
 					</li>
 				</resourceSettings>
 				<targetResourceSettings>
@@ -443,6 +437,9 @@
 						<addHediffIfMissing>true</addHediffIfMissing>
 						<resetLifetimeTicks>true</resetLifetimeTicks>
 						<effectRadius>4.9</effectRadius>
+						<!--<worksThroughWalls>false</worksThroughWalls>
+						<affectsAllies>true</affectsAllies>
+						<affectsEnemies>false</affectsEnemies>-->
 					</li>
 				</targetResourceSettings>
 				<verbClass>HediffResourceFramework.Verb_ResourceSelf</verbClass>
@@ -450,10 +447,60 @@
 				<hasStandardCommand>true</hasStandardCommand>
 				<violent>false</violent>
 				<targetable>false</targetable>
-				<nonInterruptingSelfCast>true</nonInterruptingSelfCast>
+				<soundCast>Message_PositiveEvent</soundCast>
+				<!--<nonInterruptingSelfCast>true</nonInterruptingSelfCast>-->
+				<warmupTime>1.5</warmupTime>
 				<onlyManualCast>True</onlyManualCast>
+				<range>4.9</range>
+				<drawHighlightWithLineOfSight>true</drawHighlightWithLineOfSight>
 				<defaultCooldownTime>1.0</defaultCooldownTime>
 				<defaultProjectile>FE_StimInjectorBullet</defaultProjectile>
+				<targetParams>
+					<canTargetSelf>true</canTargetSelf>
+				</targetParams>
+			</li>
+			<li Class="HediffResourceFramework.VerbResourceProps">
+				<resourceSettings>
+					<li>
+						<hediff>FE_CutterCharge</hediff>
+						<resourcePerUse>-5</resourcePerUse>
+						<disableIfMissingHediff>true</disableIfMissingHediff>
+						<disableReason>Insufficient charge.</disableReason>
+						<minimumResourcePerUse>5</minimumResourcePerUse>
+						<postUseDelay>0</postUseDelay>
+					</li>
+				</resourceSettings>
+				<targetResourceSettings>
+					<li>
+						<hediff>FE_FusionSurge</hediff>
+						<resourcePerUse>1</resourcePerUse>
+						<addHediffIfMissing>true</addHediffIfMissing>
+						<resetLifetimeTicks>true</resetLifetimeTicks>
+						<effectRadius>2.9</effectRadius>
+						<!--<worksThroughWalls>false</worksThroughWalls>
+						<affectsAllies>true</affectsAllies>
+						<affectsEnemies>false</affectsEnemies>-->
+					</li>
+				</targetResourceSettings>
+				<verbClass>HediffResourceFramework.Verb_ResourceTarget</verbClass>
+				<label>ex-fusion surge</label>
+				<hasStandardCommand>true</hasStandardCommand>
+				<violent>false</violent>
+				<targetable>false</targetable>
+				<soundCast>Message_PositiveEvent</soundCast>
+				<!--<nonInterruptingSelfCast>true</nonInterruptingSelfCast>-->
+				<warmupTime>1.5</warmupTime>
+				<onlyManualCast>True</onlyManualCast>
+				<range>14.9</range>
+				<defaultCooldownTime>1.0</defaultCooldownTime>
+				<defaultProjectile>FE_StimInjectorBullet</defaultProjectile>
+				<targetParams>
+					<onlyTargetColonists>true</onlyTargetColonists>
+					<canTargetLocations>true</canTargetLocations>
+					<canTargetBuildings>false</canTargetBuildings>
+					<canTargetAnimals>false</canTargetAnimals>
+					<canTargetMechs>false</canTargetMechs>
+				</targetParams>
 			</li>
 		</verbs>
 		<comps Inherit="False">
@@ -466,6 +513,12 @@
 				<verbProps>
 					<li>
 						<label>in-fusion surge</label>
+						<description>Temporarily supercharges all nearby allies.</description>
+						<canBeToggled>false</canBeToggled>
+					</li>
+					<li>
+						<label>ex-fusion surge</label>
+						<description>Temporarily supercharges all nearby allies at a target location.</description>
 						<canBeToggled>false</canBeToggled>
 					</li>
 				</verbProps>
@@ -474,7 +527,7 @@
 				<resourceSettings>
 					<li>
 						<hediff>FE_CutterCharge</hediff>
-						<resourcePerSecond>0.5</resourcePerSecond>
+						<resourcePerSecond>-0.5</resourcePerSecond>
 						<qualityScalesResourcePerSecond>false</qualityScalesResourcePerSecond>
 						<maxResourceCapacityOffset>5</maxResourceCapacityOffset>
 						<qualityScalesCapacityOffset>false</qualityScalesCapacityOffset>

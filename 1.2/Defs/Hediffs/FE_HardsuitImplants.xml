@@ -152,4 +152,93 @@
 		</appliedOnFixedBodyParts>
 		<addsHediff>FE_FusionHeartHediff</addsHediff>
 	</RecipeDef>
+
+	<HediffDef ParentName="AddedBodyPartBase">
+		<defName>FE_FusionArmHediff</defName>
+		<label>fusion arm</label>
+		<labelNoun>a fusion arm</labelNoun>
+		<description>An installed fusion arm.</description>
+		<descriptionHyperlinks>
+			<ThingDef>FE_FusionArmThing</ThingDef>
+		</descriptionHyperlinks>
+		<comps>
+			<li Class="HediffCompProperties_VerbGiver">
+				<tools>
+					<li Class="HediffResourceFramework.ToolResource">
+						<label>fist</label>
+						<capacities>
+							<li>Blunt</li>
+						</capacities>
+						<power>12</power>
+						<cooldownTime>2</cooldownTime>
+						<soundMeleeHit>MeleeHit_BionicPunch</soundMeleeHit>
+						<soundMeleeMiss>MeleeMiss_BionicPunch</soundMeleeMiss>
+						<resourceSettings>
+							<li>
+								<hediff>FE_FusionReactor</hediff>
+								<resourcePerUse>4</resourcePerUse>
+								<disableIfMissingHediff>false</disableIfMissingHediff>
+								<disableReason>Insufficient energy.</disableReason>
+								<minimumResourcePerUse>0</minimumResourcePerUse>
+								<postUseDelay>0</postUseDelay>
+							</li>
+						</resourceSettings>
+					</li>
+				</tools>
+			</li>
+		</comps>
+		<spawnThingOnRemoved>FE_FusionArmThing</spawnThingOnRemoved>
+		<addedPartProps>
+			<solid>true</solid>
+			<partEfficiency>1.35</partEfficiency>
+			<betterThanNatural>true</betterThanNatural>
+		</addedPartProps>
+	</HediffDef>
+
+	<ThingDef ParentName="BodyPartArchotechBase">
+		<defName>FE_FusionArmThing</defName>
+		<label>fusion arm</label>
+		<description>An artifical arm that converts kinetic energy into small amounts of fusion energy, allowing physical attacks made with the arm to restore fusion energy with an active fusion reactor present.</description>
+		<descriptionHyperlinks>
+			<RecipeDef>InstallArchotechArm</RecipeDef>
+		</descriptionHyperlinks>
+		<statBases>
+			<MarketValue>2000</MarketValue>
+			<Mass>4</Mass>
+		</statBases>
+		<thingSetMakerTags>
+			<li>RewardStandardHighFreq</li>
+		</thingSetMakerTags>
+	</ThingDef>
+
+	<RecipeDef ParentName="SurgeryInstallBodyPartArtificialBase">
+		<defName>FE_InstallFusionArm</defName>
+		<label>install fusion arm</label>
+		<description>Install a fusion arm.</description>
+		<descriptionHyperlinks>
+			<ThingDef>FE_FusionArmThing</ThingDef>
+			<HediffDef>FE_FusionArmHediff</HediffDef>
+		</descriptionHyperlinks>
+		<jobString>Installing fusion arm.</jobString>
+		<ingredients>
+			<li>
+				<filter>
+					<thingDefs>
+						<li>FE_FusionArmThing</li>
+					</thingDefs>
+				</filter>
+				<count>1</count>
+			</li>
+		</ingredients>
+		<fixedIngredientFilter>
+			<thingDefs>
+				<li>FE_FusionArmThing</li>
+			</thingDefs>
+		</fixedIngredientFilter>
+		<appliedOnFixedBodyParts>
+			<li>Shoulder</li>
+		</appliedOnFixedBodyParts>
+		<addsHediff>FE_FusionArmHediff</addsHediff>
+	</RecipeDef>
+
 </Defs>

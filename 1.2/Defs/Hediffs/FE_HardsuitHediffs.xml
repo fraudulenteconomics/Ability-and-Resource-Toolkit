@@ -264,7 +264,7 @@
 		<keepWhenEmpty>true</keepWhenEmpty>
 		<isBad>false</isBad>
 		<tendable>false</tendable>
-		<lifetimeTicks>3600</lifetimeTicks>
+		<lifetimeTicks>900</lifetimeTicks>
 		<maxResourceCapacity>1</maxResourceCapacity>
 		<makesSickThought>false</makesSickThought>
 		<defaultLabelColor>(0.1,0.9,0.9)</defaultLabelColor>

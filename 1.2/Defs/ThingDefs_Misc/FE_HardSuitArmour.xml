@@ -839,18 +839,10 @@
 						<disableReason>Insufficient energy.</disableReason>
 					</li>
 				</resourceSettings>
-				<targetResourceSettings>
-					<li>
-						<hediff>FE_FusionReactor</hediff>
-						<resourcePerUse>150</resourcePerUse>
-						<addHediffIfMissing>true</addHediffIfMissing>
-					</li>
-				</targetResourceSettings>
-				<verbClass>HediffResourceFramework.Verb_ResourceTarget</verbClass>
+				<verbClass>Verb_Shoot</verbClass>
 				<label>stunner</label>
 				<hasStandardCommand>true</hasStandardCommand>
 				<defaultProjectile>FE_StunnerBullet</defaultProjectile>
-				<!--
 				<warmupTime>0.5</warmupTime>
 				<violent>false</violent>
 				<range>9.9</range>
@@ -867,7 +859,7 @@
 					<canTargetBuildings>false</canTargetBuildings>
 					<canTargetLocations>false</canTargetLocations>
 				</targetParams>
-				<defaultCooldownTime>1.0</defaultCooldownTime> -->
+				<defaultCooldownTime>1.0</defaultCooldownTime>
 			</li>
 		</verbs>
 		<comps>
@@ -968,6 +960,7 @@
 						<resourcePerUse>1</resourcePerUse>
 						<addHediffIfMissing>true</addHediffIfMissing>
 						<resetLifetimeTicks>true</resetLifetimeTicks>
+						<effectRadius>2.9</effectRadius>
 					</li>
 				</targetResourceSettings>
 				<verbClass>HediffResourceFramework.Verb_ResourceTarget</verbClass>
@@ -978,7 +971,7 @@
 				<violent>false</violent>
 				<range>14.9</range>
 				<burstShotCount>1</burstShotCount>
-				<soundCast>Shot_IncendiaryLauncher</soundCast>
+				<soundCast>Message_PositiveEvent</soundCast>
 				<soundCastTail>GunTail_Medium</soundCastTail>
 				<muzzleFlashScale>14</muzzleFlashScale>
 				<onlyManualCast>True</onlyManualCast>
@@ -1017,6 +1010,7 @@
 				<verbClass>HediffResourceFramework.Verb_ResourceSelf</verbClass>
 				<label>self-stim injector</label>
 				<hasStandardCommand>true</hasStandardCommand>
+				<soundCast>Message_PositiveEvent</soundCast>
 				<violent>false</violent>
 				<targetable>false</targetable>
 				<nonInterruptingSelfCast>true</nonInterruptingSelfCast>
