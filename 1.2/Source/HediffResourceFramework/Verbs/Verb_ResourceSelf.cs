@@ -38,6 +38,20 @@ namespace HediffResourceFramework
                     {
                         HRFLog.Message("Giving: " + this.CasterPawn + " - " + hediffOption.hediff + " - " + hediffOption.resourcePerUse);
                         HediffResourceUtils.AdjustResourceAmount(this.CasterPawn, hediffOption.hediff, hediffOption.resourcePerUse, hediffOption.addHediffIfMissing);
+                        if (hediffOption.effectRadius != -1f)
+                        {
+                            foreach (var cell in GenRadial.RadialCellsAround(this.CasterPawn.Position, hediffOption.effectRadius, true))
+                            {
+                                foreach (var pawn in cell.GetThingList(this.CasterPawn.Map).OfType<Pawn>())
+                                {
+                                    if (pawn != this.CasterPawn)
+                                    {
+                                        HediffResourceUtils.AdjustResourceAmount(pawn, hediffOption.hediff, hediffOption.resourcePerUse, hediffOption.addHediffIfMissing);
+                                    }
+                                }
+                            }
+                        }
+
                     }
                 }
                 if (base.EquipmentSource != null)

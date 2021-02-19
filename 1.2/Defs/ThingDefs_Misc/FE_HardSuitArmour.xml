@@ -839,10 +839,19 @@
 						<disableReason>Insufficient energy.</disableReason>
 					</li>
 				</resourceSettings>
+				<targetResourceSettings>
+					<li>
+						<effectRadius>5</effectRadius>
+						<hediff>FE_FusionReactor</hediff>
+						<resourcePerUse>150</resourcePerUse>
+						<addHediffIfMissing>true</addHediffIfMissing>
+					</li>
+				</targetResourceSettings>
 				<verbClass>HediffResourceFramework.Verb_ResourceTarget</verbClass>
 				<label>stunner</label>
 				<hasStandardCommand>true</hasStandardCommand>
 				<defaultProjectile>FE_StunnerBullet</defaultProjectile>
+				<!--
 				<warmupTime>0.5</warmupTime>
 				<violent>false</violent>
 				<range>9.9</range>
@@ -859,7 +868,7 @@
 					<canTargetBuildings>false</canTargetBuildings>
 					<canTargetLocations>false</canTargetLocations>
 				</targetParams>
-				<defaultCooldownTime>1.0</defaultCooldownTime>
+				<defaultCooldownTime>1.0</defaultCooldownTime> -->
 			</li>
 		</verbs>
 		<comps>

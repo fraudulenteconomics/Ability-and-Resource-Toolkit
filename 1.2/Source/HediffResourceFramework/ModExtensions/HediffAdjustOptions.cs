@@ -28,7 +28,7 @@ namespace HediffResourceFramework
         public float disableAboveResource = -1f;
         public bool addHediffIfMissing = false;
         public string disableReason;
-
+        public float effectRadius = -1f;
 
         public bool resetLifetimeTicks;
         public int postUseDelay;

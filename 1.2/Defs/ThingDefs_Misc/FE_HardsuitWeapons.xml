@@ -283,7 +283,7 @@
 			<li>FE_FusionWeapon</li>
 		</weaponTags>
 		<tools>
-			<li>
+			<li Class="HediffResourceFramework.ToolResource">
 				<label>stock</label>
 				<capacities>
 					<li>Blunt</li>
