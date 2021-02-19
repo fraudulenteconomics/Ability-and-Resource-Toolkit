@@ -243,4 +243,41 @@
 			</li>
 		</stages>
 	</HediffResourceFramework.HediffResourceDef>
+	
+	<HediffResourceFramework.HediffResourceDef>
+		<defName>FE_CutterCharge</defName>
+		<label>fusion cutter capacitor</label>
+		<description>A limited charge capacitor that increases the effectiveness of melee attacks using excess energy.</description>
+		<hediffClass>HediffResourceFramework.HediffResource</hediffClass>
+		<keepWhenEmpty>true</keepWhenEmpty>
+		<isBad>false</isBad>
+		<tendable>false</tendable>
+		<makesSickThought>false</makesSickThought>
+		<defaultLabelColor>(0.1,0.9,0.9)</defaultLabelColor>
+	</HediffResourceFramework.HediffResourceDef>
+	
+		<HediffResourceFramework.HediffResourceDef>
+		<defName>FE_FusionSurge</defName>
+		<label>temporary in-fusion</label>
+		<description>A limited charge capacitor that increases the effectiveness of melee attacks using excess energy.</description>
+		<hediffClass>HediffResourceFramework.HediffResource</hediffClass>
+		<keepWhenEmpty>true</keepWhenEmpty>
+		<isBad>false</isBad>
+		<tendable>false</tendable>
+		<lifetimeTicks>3600</lifetimeTicks>
+		<maxResourceCapacity>1</maxResourceCapacity>
+		<makesSickThought>false</makesSickThought>
+		<defaultLabelColor>(0.1,0.9,0.9)</defaultLabelColor>
+		<stages>
+			<li>
+				<capMods>
+					<li>
+						<capacity>Moving</capacity>
+						<offset>0.5</offset>
+					</li>
+				</capMods>
+			</li>
+		</stages>
+	</HediffResourceFramework.HediffResourceDef>
+
 </Defs>

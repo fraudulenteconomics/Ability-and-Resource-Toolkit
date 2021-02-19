@@ -334,4 +334,165 @@
 		</projectile>
 	</ThingDef>
 
+	<ThingDef ParentName="MeleeWeaponUltratech">
+		<defName>FE_FusionCutter</defName>
+		<label>fusion cutter</label>
+		<description>An advanced metal blade that can safely channel excess fusion energy for use as a weapon. Each blow of the blade slightly drains any available fusion energy, but provides a devastating effect in exchange. It is lightweight and very quick to use.</description>
+		<soundInteract>Interact_PlasmaSword</soundInteract>
+		<meleeHitSound>MeleeHit_PlasmaSword</meleeHitSound>
+		<equippedAngleOffset>-65</equippedAngleOffset>
+		<graphicData>
+			<texPath>Things/Item/Equipment/WeaponMelee/PlasmaSword</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<color>(24,244,200)</color>
+		</graphicData>
+		<tools>
+			<li>
+				<label>handle</label>
+				<capacities>
+					<li>Blunt</li>
+				</capacities>
+				<power>12</power>
+				<cooldownTime>2</cooldownTime>
+			</li>
+			<li>
+				<label>point</label>
+				<capacities>
+					<li>Stab</li>
+				</capacities>
+				<power>21</power>
+				<cooldownTime>2.0</cooldownTime>
+				<!-- <resourceSettings>
+						<li>
+							<hediff>FE_FusionReactor</hediff>
+							<resourcePerUse>-3</resourcePerUse>
+							<disableIfMissingHediff>false</disableIfMissingHediff>
+							<disableReason>Insufficient energy.</disableReason>
+							<minimumResourcePerUse>3</minimumResourcePerUse>
+							<postUseDelay>0</postUseDelay>
+						</li>
+					</resourceSettings>
+					<chargeSettings>
+					<li>
+						<hediffResource>FE_CutterCharge</hediffResource>
+						<minimumResourcePerUse>1</minimumResourcePerUse>
+						<resourcePerCharge>1</resourcePerCharge>
+						<damagePerCharge>0.15</damagePerCharge>
+						<damageScaling>Linear</damageScaling>
+					</li>
+				</chargeSettings> -->
+				<extraMeleeDamages>
+					<li>
+						<def>Flame</def>
+						<amount>10</amount>
+						<chance>0.5</chance>
+					</li>
+				</extraMeleeDamages>
+			</li>
+			<li>
+				<label>edge</label>
+				<capacities>
+					<li>Cut</li>
+				</capacities>
+				<power>21</power>
+				<cooldownTime>2.0</cooldownTime>
+				<!-- <resourceSettings>
+						<li>
+							<hediff>FE_FusionReactor</hediff>
+							<resourcePerUse>-3</resourcePerUse>
+							<disableIfMissingHediff>false</disableIfMissingHediff>
+							<disableReason>Insufficient energy.</disableReason>
+							<minimumResourcePerUse>3</minimumResourcePerUse>
+							<postUseDelay>0</postUseDelay>
+						</li>
+					</resourceSettings>
+					<chargeSettings>
+					<li>
+						<hediffResource>FE_CutterCharge</hediffResource>
+						<minimumResourcePerUse>1</minimumResourcePerUse>
+						<resourcePerCharge>1</resourcePerCharge>
+						<damagePerCharge>0.15</damagePerCharge>
+						<damageScaling>Linear</damageScaling>
+					</li>
+				</chargeSettings> -->
+				<extraMeleeDamages>
+					<li>
+						<def>Flame</def>
+						<amount>10</amount>
+						<chance>0.5</chance>
+					</li>
+				</extraMeleeDamages>
+			</li>
+		</tools>
+		<verbs>
+		<li Class="HediffResourceFramework.VerbResourceProps">
+				<resourceSettings>
+					<li>
+						<hediff>FE_FusionReactor</hediff>
+						<resourcePerUse>-25</resourcePerUse>
+						<disableIfMissingHediff>true</disableIfMissingHediff>
+						<disableReason>Insufficient energy.</disableReason>
+						<minimumResourcePerUse>25</minimumResourcePerUse>
+						<postUseDelay>180</postUseDelay>
+					</li>
+				</resourceSettings>
+				<targetResourceSettings>
+					<li>
+						<hediff>FE_FusionSurge</hediff>
+						<resourcePerUse>1</resourcePerUse>
+						<addHediffIfMissing>true</addHediffIfMissing>
+						<resetLifetimeTicks>true</resetLifetimeTicks>
+						<!--<effectRadius>4.9</effectRadius>-->
+					</li>
+				</targetResourceSettings>
+				<verbClass>HediffResourceFramework.Verb_ResourceSelf</verbClass>
+				<label>in-fusion surge</label>
+				<hasStandardCommand>true</hasStandardCommand>
+				<violent>false</violent>
+				<targetable>false</targetable>
+				<nonInterruptingSelfCast>true</nonInterruptingSelfCast>
+				<onlyManualCast>True</onlyManualCast>
+				<defaultCooldownTime>1.0</defaultCooldownTime>
+				<defaultProjectile>FE_StimInjectorBullet</defaultProjectile>
+			</li>
+		</verbs>
+		<comps Inherit="False">
+			<li>
+				<compClass>CompQuality</compClass>
+			</li>
+			<li Class="CompProperties_Forbiddable"/>      
+			<li Class="MVCF.Comps.CompProperties_VerbProps">
+				<compClass>CompEquippable</compClass>
+				<verbProps>
+					<li>
+						<label>in-fusion surge</label>
+						<canBeToggled>false</canBeToggled>
+					</li>
+				</verbProps>
+			</li>
+		<li Class="HediffResourceFramework.CompProperties_WeaponAdjustHediffs">
+				<resourceSettings>
+					<li>
+						<hediff>FE_CutterCharge</hediff>
+						<resourcePerSecond>0.5</resourcePerSecond>
+						<qualityScalesResourcePerSecond>false</qualityScalesResourcePerSecond>
+						<maxResourceCapacityOffset>5</maxResourceCapacityOffset>
+						<qualityScalesCapacityOffset>false</qualityScalesCapacityOffset>
+						<addHediffIfMissing>true</addHediffIfMissing>
+					</li>
+					<li>
+						<hediff>FE_FusionReactor</hediff>
+						<maxResourceCapacityOffset>-15</maxResourceCapacityOffset>
+						<qualityScalesCapacityOffset>false</qualityScalesCapacityOffset>
+						<disallowEquipIfHediffMissing>true</disallowEquipIfHediffMissing>
+						<cannotEquipReason>No available fusion connection.</cannotEquipReason>
+						<dropIfHediffMissing>true</dropIfHediffMissing>
+						<cannotEquipReasonIncompatible>No available fusion connection.</cannotEquipReasonIncompatible>
+					</li>
+
+				</resourceSettings>
+			</li>
+		</comps>
+	</ThingDef>
+
 </Defs>
