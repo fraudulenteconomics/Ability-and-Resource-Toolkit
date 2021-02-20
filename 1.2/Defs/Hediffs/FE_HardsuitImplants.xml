@@ -162,6 +162,59 @@
 			<ThingDef>FE_FusionArmThing</ThingDef>
 		</descriptionHyperlinks>
 		<comps>
+			<li Class="HediffResourceFramework.HediffCompProperties_ChargeResource"/>
+			<li Class="MVCF.Comps.HediffCompProperties_ExtendedVerbGiver">
+				<verbs>
+					<li Class="HediffResourceFramework.VerbResourceProps">
+						<resourceSettings>
+							<li>
+								<hediff>FE_FusionReactor</hediff>
+								<resourcePerUse>-25</resourcePerUse>
+								<disableIfMissingHediff>false</disableIfMissingHediff>
+								<disableReason>Not enough energy</disableReason>
+								<postUseDelay>600</postUseDelay>
+								<minimumResourcePerUse>25</minimumResourcePerUse>
+							</li>
+						</resourceSettings>
+						<targetResourceSettings>
+							<li>
+								<hediff>FE_FusionSurge</hediff>
+								<resourcePerUse>1</resourcePerUse>
+								<addHediffIfMissing>true</addHediffIfMissing>
+								<resetLifetimeTicks>true</resetLifetimeTicks>
+								<effectRadius>2.9</effectRadius>
+								<!--<worksThroughWalls>false</worksThroughWalls>
+								<affectsAllies>true</affectsAllies>
+								<affectsEnemies>false</affectsEnemies>-->
+							</li>
+						</targetResourceSettings>
+						<verbClass>Verb_ResourceTarget</verbClass>
+						<label>surge</label>
+						<hasStandardCommand>true</hasStandardCommand>
+						<defaultProjectile>FE_StimBullet</defaultProjectile>
+						<warmupTime>1.5</warmupTime>
+						<range>24.9</range>
+						<onlyManualCast>true</onlyManualCast>
+						<burstShotCount>1</burstShotCount>
+						<soundCast>Message_PositiveEvent</soundCast>
+						<soundCastTail>GunTail_Medium</soundCastTail>
+						<muzzleFlashScale>9</muzzleFlashScale>
+						<accuracyTouch>1.7</accuracyTouch>
+						<accuracyShort>1.5</accuracyShort>
+						<accuracyMedium>1.45</accuracyMedium>
+						<accuracyLong>1.4</accuracyLong>
+						<defaultCooldownTime>1.5</defaultCooldownTime>
+					</li>
+				</verbs>
+				<verbProps>
+					<li>
+						<label>surge</label>
+						<description>Surges a target with energy.</description>
+						<draw>false</draw>
+						<canBeToggled>true</canBeToggled>
+					</li>
+				</verbProps>
+			</li>
 			<li Class="HediffCompProperties_VerbGiver">
 				<tools>
 					<li Class="HediffResourceFramework.ToolResource">
