@@ -17,7 +17,7 @@ namespace HediffResourceFramework
         void ResourceTick();
         Dictionary<Verb, VerbDisable> PostUseDelayTicks { get; }
         Thing Parent { get; }
-        List<HediffAdjust> ResourceSettings { get; }
+        List<HediffOption> ResourceSettings { get; }
         string DisablePostUse { get; }
         bool TryGetQuality(out QualityCategory qc);
         void Drop();

@@ -9,6 +9,6 @@ namespace HediffResourceFramework
 {
     public class TraitsAdjustHediff : DefModExtension
     {
-        public List<HediffAdjust> resourceSettings;
+        public List<HediffOption> resourceSettings;
     }
 }

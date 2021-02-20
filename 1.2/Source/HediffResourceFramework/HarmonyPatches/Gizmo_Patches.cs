@@ -18,7 +18,7 @@ namespace HediffResourceFramework
 	{
 		private static void Postfix(ref Command_Reloadable __result, Thing gear, Verb verb)
 		{
-			if (__result != null && verb.CasterIsPawn && verb.EquipmentSource != null)
+			if (__result != null && verb.CasterIsPawn)
 			{
 				if (!HediffResourceUtils.IsUsableBy(verb, out string disableReason))
 				{
@@ -33,7 +33,7 @@ namespace HediffResourceFramework
 	{
 		private static void Postfix(Verb verb, ref IEnumerable<Gizmo> __result)
 		{
-			if (verb.CasterIsPawn && verb.EquipmentSource != null)
+			if (verb.CasterIsPawn)
 			{
 				var list = __result.ToList();
 				if (!HediffResourceUtils.IsUsableBy(verb, out string disableReason))
@@ -253,22 +253,37 @@ namespace HediffResourceFramework
 		public static bool TryGetAmmoString(Verb verb, out List<Tuple<HediffOption, HediffResource>> hediffs)
 		{
 			hediffs = new List<Tuple<HediffOption, HediffResource>>();
-			if (verb.CasterIsPawn && verb.verbProps is VerbResourceProps verbResourceProps && verbResourceProps.resourceSettings != null)
+			if (verb.CasterIsPawn)
 			{
-				foreach (var option in verbResourceProps.resourceSettings)
-				{
-					var resourceHediff = verb.CasterPawn.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
-					if (resourceHediff != null)
-					{
-						hediffs.Add(new Tuple<HediffOption, HediffResource>(option, resourceHediff));
+				var resourceProps = GetResourceProps(verb);
+				if (resourceProps != null)
+                {
+					var resourceSettings = resourceProps.ResourceSettings;
+					if (resourceSettings != null)
+                    {
+						foreach (var option in resourceSettings)
+						{
+							var resourceHediff = verb.CasterPawn.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
+							if (resourceHediff != null)
+							{
+								hediffs.Add(new Tuple<HediffOption, HediffResource>(option, resourceHediff));
+							}
+						}
 					}
-				}
+                }
 			}
 			if (hediffs.Count > 0)
             {
 				return true;
             }
 			return false;
+		}
+
+		private static IResourceProps GetResourceProps(Verb verb)
+        {
+			if (verb.verbProps is IResourceProps verbResourceProps) return verbResourceProps;
+			if (verb.tool is IResourceProps toolResourceProps) return toolResourceProps;
+			return null;
 		}
 	}
 }

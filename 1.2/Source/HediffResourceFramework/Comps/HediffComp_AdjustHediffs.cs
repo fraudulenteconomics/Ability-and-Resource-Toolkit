@@ -12,7 +12,7 @@ namespace HediffResourceFramework
 
 	public class HediffCompProperties_AdjustHediffs : HediffCompProperties
 	{
-        public List<HediffAdjust> resourceSettings;
+        public List<HediffOption> resourceSettings;
 
         public string disablePostUse;
         public HediffCompProperties_AdjustHediffs()
@@ -25,7 +25,7 @@ namespace HediffResourceFramework
 	{
         public HediffCompProperties_AdjustHediffs Props => (HediffCompProperties_AdjustHediffs)this.props;
         public Thing Parent => this.Pawn;
-        public List<HediffAdjust> ResourceSettings => Props.resourceSettings;
+        public List<HediffOption> ResourceSettings => Props.resourceSettings;
         public string DisablePostUse => Props.disablePostUse;
 
         private Dictionary<Verb, VerbDisable> postUseDelayTicks;
@@ -81,7 +81,7 @@ namespace HediffResourceFramework
             base.CompPostPostAdd(dinfo);
             Register();
         }
-        public void ResourceTick()
+        public virtual void ResourceTick()
         {
             var pawn = this.Pawn;
             if (pawn != null)

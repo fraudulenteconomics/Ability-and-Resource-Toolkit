@@ -8,30 +8,19 @@ using Verse;
 
 namespace HediffResourceFramework
 {
-    public class CompProperties_AdjustHediffsArea : CompProperties_AdjustHediffs
+    public class HediffCompProperties_AdjustHediffsArea : HediffCompProperties_AdjustHediffs
     {
         public bool stackEffects;
         public int stackMax = -1;
-        public CompProperties_AdjustHediffsArea()
+        public HediffCompProperties_AdjustHediffsArea()
         {
             this.compClass = typeof(CompAdjustHediffsArea);
         }
     }
 
-    public class CompAdjustHediffsArea : CompAdjustHediffs, IAdjustResouceInArea
+    public class HediffCompAdjustHediffsArea : HediffComp_AdjustHediffs, IAdjustResouceInArea
     {
-        private CompPowerTrader powerComp;
-        private CompRefuelable fuelComp;
-        private CompFlickable flickableComp;
-
-        public new CompProperties_AdjustHediffsArea Props => this.props as CompProperties_AdjustHediffsArea;
-        public override void PostSpawnSetup(bool respawningAfterLoad)
-        {
-            base.PostSpawnSetup(respawningAfterLoad);
-            powerComp = this.parent.GetComp<CompPowerTrader>();
-            fuelComp = this.parent.GetComp<CompRefuelable>();
-            flickableComp = this.parent.GetComp<CompFlickable>();
-        }
+        public new HediffCompProperties_AdjustHediffsArea Props => this.props as HediffCompProperties_AdjustHediffsArea;
         public override void ResourceTick()
         {
             if (Active)
@@ -39,19 +28,19 @@ namespace HediffResourceFramework
                 foreach (var option in Props.resourceSettings)
                 {
                     var num = GetResourceGain(option);
-                    var affectedCells = HediffResourceUtils.GetAllCellsAround(option, this.parent);
+                    var affectedCells = HediffResourceUtils.GetAllCellsAround(option, this.Pawn);
                     foreach (var cell in affectedCells)
                     {
-                        foreach (var pawn in cell.GetThingList(this.parent.Map).OfType<Pawn>())
+                        foreach (var pawn in cell.GetThingList(this.Pawn.Map).OfType<Pawn>())
                         {
-                            if (pawn == this.parent && !option.addToCaster) continue;
+                            if (pawn == this.Pawn && !option.addToCaster) continue;
 
-                            if (option.affectsAllies && (pawn.Faction == this.parent.Faction || !pawn.Faction.HostileTo(this.parent.Faction)))
+                            if (option.affectsAllies && (pawn.Faction == this.Pawn.Faction || !pawn.Faction.HostileTo(this.Pawn.Faction)))
                             {
                                 HRFLog.Message($"Ally: {pawn}, resource: {option.hediff}, num to adjust: {num}");
                                 AppendResource(pawn, option, num);
                             }
-                            else if (option.affectsEnemies && pawn.Faction.HostileTo(this.parent.Faction))
+                            else if (option.affectsEnemies && pawn.Faction.HostileTo(this.Pawn.Faction))
                             {
                                 HRFLog.Message($"Enemy: {pawn}, resource: {option.hediff}, num to adjust: {num}");
                                 AppendResource(pawn, option, num);
@@ -62,29 +51,14 @@ namespace HediffResourceFramework
             }
         }
 
-        public bool Active => this.parent.Map != null && IsEnabled();
-        public bool IsEnabled()
-        {
-            if (flickableComp != null && !flickableComp.SwitchIsOn)
-            {
-                return false;
-            }
-            if (powerComp != null && !powerComp.PowerOn)
-            {
-                return false;
-            }
-            if (fuelComp != null && !fuelComp.HasFuel)
-            {
-                return false;
-            }
-            return true;
-        }
+        public bool Active => this.Pawn.Map != null;
+
         public bool InRadiusFor(IntVec3 cell, HediffResourceDef hediffResourceDef)
         {
             if (Active)
             {
                 var option = GetFirstHediffOptionFor(hediffResourceDef);
-                if (option != null && cell.DistanceTo(this.parent.Position) <= option.radius)
+                if (option != null && cell.DistanceTo(this.Pawn.Position) <= option.radius)
                 {
                     return true;
                 }
@@ -130,10 +104,6 @@ namespace HediffResourceFramework
         public float GetResourceGain(HediffOption option)
         {
             float num = option.resourcePerSecond;
-            if (option.qualityScalesResourcePerSecond && this.parent.TryGetQuality(out QualityCategory qc))
-            {
-                num *= HediffResourceUtils.GetQualityMultiplier(qc);
-            }
             return num;
         }
 
@@ -142,30 +112,11 @@ namespace HediffResourceFramework
             if (Active)
             {
                 var option = GetFirstHediffOptionFor(hediffResourceDef);
-                if (option.qualityScalesCapacityOffset && this.parent.TryGetQuality(out QualityCategory qc))
-                {
-                    return option.maxResourceCapacityOffset * HediffResourceUtils.GetQualityMultiplier(qc);
-                }
-                else
-                {
-                    return option.maxResourceCapacityOffset;
-                }
+                return option.maxResourceCapacityOffset;
             }
             return 0f;
         }
- 
-        public override void PostDrawExtraSelectionOverlays()
-        {
-            base.PostDrawExtraSelectionOverlays();
-            if (Active)
-            {
-                foreach (var option in this.Props.resourceSettings)
-                {
-                    GenDraw.DrawFieldEdges(HediffResourceUtils.GetAllCellsAround(option, this.parent).ToList());
-                }
-            }
-        }
-
+        
         public HediffOption GetFirstHediffOptionFor(HediffResourceDef hediffResourceDef)
         {
             return this.Props.resourceSettings.FirstOrDefault(x => x.hediff == hediffResourceDef);

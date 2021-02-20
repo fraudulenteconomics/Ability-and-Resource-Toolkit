@@ -8,42 +8,6 @@ using Verse;
 
 namespace HediffResourceFramework
 {
-    public class HediffAdjust
-    {
-        public HediffAdjust()
-        {
-
-        }
-
-        public HediffResourceDef hediff;
-        public float resourcePerSecond;
-        public bool qualityScalesResourcePerSecond;
-        public float maxResourceCapacityOffset;
-        public bool qualityScalesCapacityOffset;
-
-        public bool disallowEquipIfHediffMissing;
-        public string cannotEquipReason;
-        public List<HediffDef> blackListHediffsPreventEquipping;
-        public List<HediffDef> dropWeaponOrApparelIfBlacklistHediff;
-        public string cannotEquipReasonIncompatible;
-
-        public bool dropIfHediffMissing;
-        public bool addHediffIfMissing = false;
-        public float postDamageDelayMultiplier = 1f;
-        public float postUseDelayMultiplier = 1f;
-
-        public float radius;
-        public bool worksThroughWalls;
-        public bool affectsAllies;
-        public bool affectsEnemies;
-        public bool addToCaster;
-        public bool removeOutsideArea;
-
-        public bool disallowEquipIfOverCapacity;
-        public bool dropIfOverCapacity;
-        public string overCapacityReasonKey;
-    }
-
     public class VerbDisable : IExposable
     {
         public VerbDisable()
@@ -69,7 +33,7 @@ namespace HediffResourceFramework
 
     public class CompProperties_AdjustHediffs : CompProperties
     {
-        public List<HediffAdjust> resourceSettings;
+        public List<HediffOption> resourceSettings;
 
         public string disablePostUse;
     }
@@ -77,7 +41,7 @@ namespace HediffResourceFramework
     {
         public CompProperties_AdjustHediffs Props => (CompProperties_AdjustHediffs)this.props;
         public Thing Parent => this.parent;
-        public virtual List<HediffAdjust> ResourceSettings => Props.resourceSettings;
+        public virtual List<HediffOption> ResourceSettings => Props.resourceSettings;
         public string DisablePostUse => Props.disablePostUse;
 
         private Dictionary<Verb, VerbDisable> postUseDelayTicks;

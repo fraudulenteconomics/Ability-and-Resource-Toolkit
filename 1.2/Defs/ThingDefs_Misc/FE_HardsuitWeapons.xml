@@ -446,7 +446,6 @@
 				<label>in-fusion surge</label>
 				<hasStandardCommand>true</hasStandardCommand>
 				<violent>false</violent>
-				<targetable>false</targetable>
 				<soundCast>Message_PositiveEvent</soundCast>
 				<!--<nonInterruptingSelfCast>true</nonInterruptingSelfCast>-->
 				<warmupTime>1.5</warmupTime>
@@ -486,7 +485,6 @@
 				<label>ex-fusion surge</label>
 				<hasStandardCommand>true</hasStandardCommand>
 				<violent>false</violent>
-				<targetable>false</targetable>
 				<soundCast>Message_PositiveEvent</soundCast>
 				<!--<nonInterruptingSelfCast>true</nonInterruptingSelfCast>-->
 				<warmupTime>1.5</warmupTime>

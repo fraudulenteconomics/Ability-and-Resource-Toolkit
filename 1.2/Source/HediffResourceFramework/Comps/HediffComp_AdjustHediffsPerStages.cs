@@ -12,7 +12,7 @@ namespace HediffResourceFramework
 
 	public class HediffCompProperties_AdjustHediffsPerStages : HediffCompProperties
 	{
-        public List<List<HediffAdjust>> resourceSettingsPerStages;
+        public List<List<HediffOption>> resourceSettingsPerStages;
 
         public string disablePostUse;
         public HediffCompProperties_AdjustHediffsPerStages()
@@ -25,7 +25,7 @@ namespace HediffResourceFramework
 	{
         public HediffCompProperties_AdjustHediffsPerStages Props => (HediffCompProperties_AdjustHediffsPerStages)this.props;
         public Thing Parent => this.Pawn;
-        public List<HediffAdjust> ResourceSettings
+        public List<HediffOption> ResourceSettings
         {
             get
             {

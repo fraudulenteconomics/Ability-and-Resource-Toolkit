@@ -320,9 +320,11 @@ namespace HediffResourceFramework
 
 		public static void TryDropExcessHediffGears(Pawn pawn)
 		{
+			Log.Message("TryDropExcessHediffGears: " + pawn);
 			var comps = GetAllAdjustHediffsComps(pawn);
 			foreach (var comp in comps)
 			{
+				Log.Message("Comp: " + comp.Parent);
 				var resourceSettings = comp.ResourceSettings;
 				if (resourceSettings != null)
 				{
@@ -434,49 +436,72 @@ namespace HediffResourceFramework
 						}
 					}
 				}
-				var verbProps = verb.verbProps as VerbResourceProps;
-				if (verbProps != null && verbProps.resourceSettings != null)
+
+				if (verb.verbProps is IResourceProps props)
                 {
-					foreach (var option in verbProps.resourceSettings)
+					if (!IsUsableForProps(pawn, props, out disableReason))
+                    {
+						return false;
+                    }
+                }
+
+				if (verb.tool is IResourceProps props2)
+                {
+					if (!IsUsableForProps(pawn, props2, out disableReason))
 					{
-						var resourceHediff = pawn.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
-						if (option.disableIfMissingHediff)
-						{
-							bool manaIsEmptyOrNull = resourceHediff != null ? resourceHediff.ResourceAmount <= 0 : true;
-							if (manaIsEmptyOrNull)
-							{
-								disableReason = option.disableReason;
-								return false;
-							}
-						}
+						return false;
+					}
+				}
+			}
 
-						if (option.minimumResourcePerUse != -1f)
-						{
-							if (resourceHediff != null && resourceHediff.ResourceAmount < option.minimumResourcePerUse)
-							{
-								disableReason = option.disableReason;
-								return false;
-							}
-						}
-						if (option.disableAboveResource != -1f)
-						{
-							if (resourceHediff != null && resourceHediff.ResourceAmount > option.disableAboveResource)
-							{
-								disableReason = option.disableReason;
-								return false;
-							}
-						}
+			disableReason = "";
+			return true;
+		}
 
-						if (option.resourcePerUse < 0)
+		private static bool IsUsableForProps(Pawn pawn, IResourceProps props, out string disableReason)
+        {
+			var resourceSettings = props.ResourceSettings;
+			if (resourceSettings != null)
+			{
+				foreach (var option in resourceSettings)
+				{
+					var resourceHediff = pawn.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
+					if (option.disableIfMissingHediff)
+					{
+						bool manaIsEmptyOrNull = resourceHediff != null ? resourceHediff.ResourceAmount <= 0 : true;
+						if (manaIsEmptyOrNull)
 						{
-							if (resourceHediff != null)
+							disableReason = option.disableReason;
+							return false;
+						}
+					}
+
+					if (option.minimumResourcePerUse != -1f)
+					{
+						if (resourceHediff != null && resourceHediff.ResourceAmount < option.minimumResourcePerUse)
+						{
+							disableReason = option.disableReason;
+							return false;
+						}
+					}
+					if (option.disableAboveResource != -1f)
+					{
+						if (resourceHediff != null && resourceHediff.ResourceAmount > option.disableAboveResource)
+						{
+							disableReason = option.disableReason;
+							return false;
+						}
+					}
+
+					if (option.resourcePerUse < 0)
+					{
+						if (resourceHediff != null)
+						{
+							var num = resourceHediff.ResourceAmount - option.resourcePerUse;
+							if (num < 0)
 							{
-								var num = resourceHediff.ResourceAmount - option.resourcePerUse;
-								if (num < 0)
-								{
-									disableReason = option.disableReason;
-									return false;
-								}
+								disableReason = option.disableReason;
+								return false;
 							}
 						}
 					}
@@ -687,6 +712,58 @@ namespace HediffResourceFramework
 			var oldDamage = __result;
 			__result = (int)(__result * (1 + (chargeSettings.damagePerCharge * (resourceAmount - chargeSettings.minimumResourcePerUse) / chargeSettings.resourcePerCharge)));
 			HRFLog.Message("Linear: old damage: " + oldDamage + " - new damage: " + __result);
+		}
+
+		public static HashSet<IntVec3> GetAllCellsAround(HediffOption option, Thing source)
+		{
+			if (option.worksThroughWalls)
+			{
+				return GetAllCellsInRadius(option, source);
+			}
+			else
+			{
+				return GetAffectedCells(option, source);
+			}
+		}
+		public static HashSet<IntVec3> GetAllCellsInRadius(HediffOption option, Thing source)
+		{
+			HashSet<IntVec3> tempCells = new HashSet<IntVec3>();
+			foreach (var cell in source.OccupiedRect().Cells)
+			{
+				foreach (var intVec in GenRadial.RadialCellsAround(cell, option.radius, true))
+				{
+					tempCells.Add(intVec);
+				}
+			}
+			return tempCells;
+		}
+		public static HashSet<IntVec3> GetAffectedCells(HediffOption option, Thing source)
+		{
+			HashSet<IntVec3> affectedCells = new HashSet<IntVec3>();
+			HashSet<IntVec3> tempCells = GetAllCellsInRadius(option, source);
+
+			Predicate<IntVec3> validator = delegate (IntVec3 cell)
+			{
+				if (!tempCells.Contains(cell)) return false;
+				var edifice = cell.GetEdifice(source.Map);
+				var result = edifice == null || edifice.def.passability != Traversability.Impassable || edifice == source;
+				return result;
+			};
+			var centerCell = source.OccupiedRect().CenterCell;
+			source.Map.floodFiller.FloodFill(centerCell, validator, delegate (IntVec3 x)
+			{
+				if (tempCells.Contains(x))
+				{
+					var edifice = x.GetEdifice(source.Map);
+					var result = edifice == null || edifice.def.passability != Traversability.Impassable || edifice == source;
+					if (result && (GenSight.LineOfSight(centerCell, x, source.Map) || centerCell.DistanceTo(x) <= 1.5f))
+					{
+						affectedCells.Add(x);
+					}
+				}
+			}, int.MaxValue, rememberParents: false, (IEnumerable<IntVec3>)null);
+			affectedCells.AddRange(source.OccupiedRect());
+			return affectedCells;
 		}
 	}
 }

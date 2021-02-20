@@ -9,11 +9,11 @@ using Verse.AI;
 
 namespace HediffResourceFramework
 {
-    public class Verb_ResourceTarget : Verb_CastBase
+    public class Verb_ResourceTarget : Verb_ResourceBase
     {
-        public new VerbResourceProps verbProps => base.verbProps as VerbResourceProps;
         protected override bool TryCastShot()
         {
+            base.TryCastShot();
             if (this.currentTarget.Thing is Pawn target)
             {
                 if (verbProps.targetResourceSettings != null)
@@ -26,7 +26,7 @@ namespace HediffResourceFramework
                             HediffResourceUtils.AdjustResourceAmount(target, hediffOption.hediff, hediffOption.resourcePerUse, hediffOption.addHediffIfMissing);
                             if (hediffOption.effectRadius != -1f)
                             {
-                                foreach (var cell in GenRadial.RadialCellsAround(this.CasterPawn.Position, hediffOption.effectRadius, true))
+                                foreach (var cell in HediffResourceUtils.GetAllCellsAround(hediffOption, target))
                                 {
                                     foreach (var pawn in cell.GetThingList(this.CasterPawn.Map).OfType<Pawn>())
                                     {
@@ -39,12 +39,6 @@ namespace HediffResourceFramework
                             }
                         }
                     }
-                }
-
-                if (base.EquipmentSource != null)
-                {
-                    base.EquipmentSource.GetComp<CompChangeableProjectile>()?.Notify_ProjectileLaunched();
-                    base.EquipmentSource.GetComp<CompReloadable>()?.UsedOnce();
                 }
             }
             return true;

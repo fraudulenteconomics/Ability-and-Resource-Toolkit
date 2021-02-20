@@ -32,11 +32,11 @@ namespace HediffResourceFramework
         public Pawn Pawn => this.parent as Pawn;
 
         public static Dictionary<TraitDef, TraitsAdjustHediff> cachedModExtensions = new Dictionary<TraitDef, TraitsAdjustHediff>();
-        public override List<HediffAdjust> ResourceSettings
+        public override List<HediffOption> ResourceSettings
         {
             get
             {
-                var resourceSettings = new List<HediffAdjust>();
+                var resourceSettings = new List<HediffOption>();
                 foreach (var trait in Pawn.story?.traits?.allTraits)
                 {
                     if (!cachedModExtensions.TryGetValue(trait.def, out TraitsAdjustHediff traitAdjustOptions))

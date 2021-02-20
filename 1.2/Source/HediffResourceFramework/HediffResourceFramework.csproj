@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Comps\CompAdjustHediffs.cs" />
+    <Compile Include="Comps\HediffCompAdjustHediffsArea.cs" />
     <Compile Include="Comps\CompAdjustHediffsArea.cs" />
     <Compile Include="Comps\ChargeResource.cs" />
     <Compile Include="Comps\CompTraitsAdjustHediffs.cs" />
@@ -54,8 +55,9 @@
     <Compile Include="Comps\CompChargeResource.cs" />
     <Compile Include="Comps\HediffComp_AdjustHediffsPerStages.cs" />
     <Compile Include="Comps\HediffComp_AdjustHediffs.cs" />
-    <Compile Include="Comps\IChargeResource.cs" />
-    <Compile Include="Comps\IAdjustResource.cs" />
+    <Compile Include="Interfaces\IAdjustResouceInArea.cs" />
+    <Compile Include="Interfaces\IChargeResource.cs" />
+    <Compile Include="Interfaces\IAdjustResource.cs" />
     <Compile Include="Comps\PlaceWorker_ShowHediffAreaRadius.cs" />
     <Compile Include="Comps\HediffComp_ResourcePerSecond.cs" />
     <Compile Include="Comps\IngestionOutcomeDoer_GiveHediffResource.cs" />
@@ -80,10 +82,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StatWorkers\StatWorker_MaxResourceCapacityOffset.cs" />
     <Compile Include="StatWorkers\StatWorker_ResourceOffset.cs" />
-    <Compile Include="Verbs\IResourceProps.cs" />
+    <Compile Include="Interfaces\IResourceProps.cs" />
     <Compile Include="Verbs\ToolResource.cs" />
     <Compile Include="Verbs\Verb_ResourceSelf.cs" />
     <Compile Include="Verbs\VerbResourceProps.cs" />
+    <Compile Include="Verbs\Verb_ResourceBase.cs" />
     <Compile Include="Verbs\Verb_ResourceTarget.cs" />
   </ItemGroup>
   <ItemGroup>

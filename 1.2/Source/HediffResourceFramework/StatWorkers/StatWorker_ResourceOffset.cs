@@ -82,7 +82,7 @@ namespace HediffResourceFramework
 			base.FinalizeValue(req, ref val, applyPostProcess);
 		}
 
-		public float GetValue(HediffAdjust hediffOption, Thing thing)
+		public float GetValue(HediffOption hediffOption, Thing thing)
         {
 			if (hediffOption.qualityScalesResourcePerSecond && thing.TryGetQuality(out QualityCategory qc))
 			{

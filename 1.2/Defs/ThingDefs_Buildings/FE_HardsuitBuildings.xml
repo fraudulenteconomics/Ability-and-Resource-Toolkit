@@ -27,6 +27,8 @@
 		</costList>
 		<comps>
 			<li Class="HediffResourceFramework.CompProperties_AdjustHediffsArea">
+				<stackEffects>true</stackEffects>
+				<stackMax>2</stackMax>
 				<resourceSettings>
 					<li>
 						<hediff>FE_AbsorptionBarrier</hediff>

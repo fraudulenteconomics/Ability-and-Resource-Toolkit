@@ -30,7 +30,35 @@ namespace HediffResourceFramework
         public string disableReason;
         public float effectRadius = -1f;
 
+        public bool worksThroughWalls;
+        public bool affectsAllies;
+        public bool affectsEnemies;
+
         public bool resetLifetimeTicks;
         public int postUseDelay;
+
+        public float resourcePerSecond;
+        public bool qualityScalesResourcePerSecond;
+        public float maxResourceCapacityOffset;
+        public bool qualityScalesCapacityOffset;
+
+        public bool disallowEquipIfHediffMissing;
+        public string cannotEquipReason;
+        public List<HediffDef> blackListHediffsPreventEquipping;
+        public List<HediffDef> dropWeaponOrApparelIfBlacklistHediff;
+        public string cannotEquipReasonIncompatible;
+
+        public bool dropIfHediffMissing;
+        public float postDamageDelayMultiplier = 1f;
+        public float postUseDelayMultiplier = 1f;
+
+        public float radius;
+        public bool addToCaster;
+        public bool removeOutsideArea;
+
+        public bool disallowEquipIfOverCapacity;
+        public bool dropIfOverCapacity;
+        public string overCapacityReasonKey;
+
     }
 }
