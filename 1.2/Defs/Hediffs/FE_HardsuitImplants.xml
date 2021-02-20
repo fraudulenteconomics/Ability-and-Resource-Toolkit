@@ -170,7 +170,7 @@
 							<li>
 								<hediff>FE_FusionReactor</hediff>
 								<resourcePerUse>-25</resourcePerUse>
-								<disableIfMissingHediff>false</disableIfMissingHediff>
+								<disableIfMissingHediff>true</disableIfMissingHediff>
 								<disableReason>Not enough energy</disableReason>
 								<postUseDelay>600</postUseDelay>
 								<minimumResourcePerUse>25</minimumResourcePerUse>
