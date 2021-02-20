@@ -188,7 +188,7 @@
 								<affectsEnemies>false</affectsEnemies>-->
 							</li>
 						</targetResourceSettings>
-						<verbClass>Verb_ResourceTarget</verbClass>
+						<verbClass>HediffResourceFramework.Verb_ResourceTarget</verbClass>
 						<label>surge</label>
 						<hasStandardCommand>true</hasStandardCommand>
 						<defaultProjectile>FE_StimInjectorBullet</defaultProjectile>
