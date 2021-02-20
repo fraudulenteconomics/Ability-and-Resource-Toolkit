@@ -191,7 +191,7 @@
 						<verbClass>Verb_ResourceTarget</verbClass>
 						<label>surge</label>
 						<hasStandardCommand>true</hasStandardCommand>
-						<defaultProjectile>FE_StimBullet</defaultProjectile>
+						<defaultProjectile>FE_StimInjectorBullet</defaultProjectile>
 						<warmupTime>1.5</warmupTime>
 						<range>24.9</range>
 						<onlyManualCast>true</onlyManualCast>
