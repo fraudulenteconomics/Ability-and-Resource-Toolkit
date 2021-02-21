@@ -354,7 +354,7 @@ namespace HediffResourceFramework
 					firstHediffOfDef.ResourceAmount += sevOffset;
 					return firstHediffOfDef;
 				}
-				else if (addHediffIfMissing)
+				else if (addHediffIfMissing && sevOffset >= 0)
 				{
 					firstHediffOfDef = HediffMaker.MakeHediff(hdDef, pawn) as HediffResource;
 					pawn.health.AddHediff(firstHediffOfDef);
@@ -362,7 +362,7 @@ namespace HediffResourceFramework
 					return firstHediffOfDef;
 				}
 			}
-			else if (pawn.health.hediffSet.GetFirstHediffOfDef(hdDef) is null && addHediffIfMissing)
+			else if (pawn.health.hediffSet.GetFirstHediffOfDef(hdDef) is null && addHediffIfMissing && sevOffset >= 0)
 			{
 				var firstHediffOfDef = HediffMaker.MakeHediff(hdDef, pawn) as HediffResource;
 				pawn.health.AddHediff(firstHediffOfDef);

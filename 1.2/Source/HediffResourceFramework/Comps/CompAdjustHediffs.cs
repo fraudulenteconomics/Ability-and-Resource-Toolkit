@@ -83,8 +83,7 @@ namespace HediffResourceFramework
             Scribe_Collections.Look(ref postUseDelayTicks, "postUseDelayTicks", LookMode.Reference, LookMode.Deep, ref hediffResourceKeys, ref hediffResourceDisablesValues);
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
-                var gameComp = Current.Game.GetComponent<HediffResourceManager>();
-                gameComp.RegisterAdjuster(this);
+                Register();
             }
         }
 
