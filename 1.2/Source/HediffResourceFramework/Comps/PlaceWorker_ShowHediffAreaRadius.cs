@@ -40,7 +40,7 @@ namespace HediffResourceFramework
             HashSet<IntVec3> tempCells = new HashSet<IntVec3>();
             foreach (var cell in cellRect.Cells)
             {
-                foreach (var intVec in GenRadial.RadialCellsAround(cell, option.radius, true))
+                foreach (var intVec in GenRadial.RadialCellsAround(cell, option.effectRadius, true))
                 {
                     tempCells.Add(intVec);
                 }

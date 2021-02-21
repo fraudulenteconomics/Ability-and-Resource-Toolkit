@@ -30,21 +30,30 @@ namespace HediffResourceFramework
                 return compEquippable;
             }
         }
-
-        public CompEquippable Equipment => this.parent.GetComp<CompEquippable>();
+        public Pawn Pawn
+        {
+            get
+            {
+                if (CompEquippable.ParentHolder is Pawn_EquipmentTracker equipmentTracker && equipmentTracker.pawn != null)
+                {
+                    return equipmentTracker.pawn;
+                }
+                return null;
+            }
+        }
         public override void Notify_Removed()
         {
             base.Notify_Removed();
-            if (Equipment?.PrimaryVerb?.CasterPawn != null)
+            if (Pawn != null)
             {
-                HediffResourceUtils.RemoveExcessHediffResources(Equipment?.PrimaryVerb?.CasterPawn, this);
+                HediffResourceUtils.RemoveExcessHediffResources(Pawn, this);
             }
         }
 
         public override void Drop()
         {
             base.Drop();
-            var pawn = Equipment?.PrimaryVerb?.CasterPawn;
+            var pawn = Pawn;
             if (pawn != null)
             {
                 if (pawn.Map != null)
@@ -65,7 +74,7 @@ namespace HediffResourceFramework
         public override void ResourceTick()
         {
             base.ResourceTick();
-            var pawn = CompEquippable.PrimaryVerb.CasterPawn;
+            var pawn = Pawn;
             if (pawn != null)
             {
                 if (!this.PostUseDelayTicks?.Values?.Select(x => x.delayTicks).Any(y => y > Find.TickManager.TicksGame) ?? true)

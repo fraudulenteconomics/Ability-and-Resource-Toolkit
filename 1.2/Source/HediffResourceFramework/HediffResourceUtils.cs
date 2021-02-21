@@ -286,9 +286,9 @@ namespace HediffResourceFramework
 		}
 
 		public static void RemoveExcessHediffResources(Pawn pawn, IAdjustResource adjuster)
-        {
+		{
 			List<HediffResourceDef> hediffResourcesToRemove = pawn.health.hediffSet.hediffs.OfType<HediffResource>()
-				.Select(x => x.def).Where(x => adjuster.ResourceSettings?.Any(y => y.hediff == x) ?? false).ToList();
+					.Select(x => x.def).Where(x => adjuster.ResourceSettings?.Any(y => y.hediff == x) ?? false).ToList();
 
 			var comps = GetAllAdjustHediffsComps(pawn);
 			foreach (var comp in comps)
@@ -335,14 +335,15 @@ namespace HediffResourceFramework
 						{
 							comp.Drop();
 							if (!hediffOption.overCapacityReasonKey.NullOrEmpty())
-                            {
+							{
 								Messages.Message(hediffOption.overCapacityReasonKey.Translate(pawn.Named("PAWN"), comp.Parent.Named("THING")), MessageTypeDefOf.CautionInput);
-                            }
+							}
 						}
 					}
 				}
 			}
 		}
+
 		public static HediffResource AdjustResourceAmount(Pawn pawn, HediffResourceDef hdDef, float sevOffset, bool addHediffIfMissing)
 		{
 			if (sevOffset != 0f)
@@ -714,55 +715,54 @@ namespace HediffResourceFramework
 			HRFLog.Message("Linear: old damage: " + oldDamage + " - new damage: " + __result);
 		}
 
-		public static HashSet<IntVec3> GetAllCellsAround(HediffOption option, Thing source)
+		public static HashSet<IntVec3> GetAllCellsAround(HediffOption option, TargetInfo targetInfo, CellRect occupiedCells)
 		{
 			if (option.worksThroughWalls)
 			{
-				return GetAllCellsInRadius(option, source);
+				return GetAllCellsInRadius(option, occupiedCells);
 			}
 			else
 			{
-				return GetAffectedCells(option, source);
+				return GetAffectedCells(option, targetInfo, occupiedCells);
 			}
 		}
-		public static HashSet<IntVec3> GetAllCellsInRadius(HediffOption option, Thing source)
+		public static HashSet<IntVec3> GetAllCellsInRadius(HediffOption option, CellRect occupiedCells)
 		{
 			HashSet<IntVec3> tempCells = new HashSet<IntVec3>();
-			foreach (var cell in source.OccupiedRect().Cells)
+			foreach (var cell in occupiedCells)
 			{
-				foreach (var intVec in GenRadial.RadialCellsAround(cell, option.radius, true))
+				foreach (var intVec in GenRadial.RadialCellsAround(cell, option.effectRadius, true))
 				{
 					tempCells.Add(intVec);
 				}
 			}
 			return tempCells;
 		}
-		public static HashSet<IntVec3> GetAffectedCells(HediffOption option, Thing source)
+		public static HashSet<IntVec3> GetAffectedCells(HediffOption option, TargetInfo targetInfo, CellRect occupiedCells)
 		{
 			HashSet<IntVec3> affectedCells = new HashSet<IntVec3>();
-			HashSet<IntVec3> tempCells = GetAllCellsInRadius(option, source);
-
+			HashSet<IntVec3> tempCells = GetAllCellsInRadius(option, occupiedCells);
 			Predicate<IntVec3> validator = delegate (IntVec3 cell)
 			{
 				if (!tempCells.Contains(cell)) return false;
-				var edifice = cell.GetEdifice(source.Map);
-				var result = edifice == null || edifice.def.passability != Traversability.Impassable || edifice == source;
+				var edifice = cell.GetEdifice(targetInfo.Map);
+				var result = edifice == null || edifice.def.passability != Traversability.Impassable || occupiedCells.Cells.Contains(cell);
 				return result;
 			};
-			var centerCell = source.OccupiedRect().CenterCell;
-			source.Map.floodFiller.FloodFill(centerCell, validator, delegate (IntVec3 x)
+			var centerCell = occupiedCells.CenterCell;
+			targetInfo.Map.floodFiller.FloodFill(centerCell, validator, delegate (IntVec3 x)
 			{
 				if (tempCells.Contains(x))
 				{
-					var edifice = x.GetEdifice(source.Map);
-					var result = edifice == null || edifice.def.passability != Traversability.Impassable || edifice == source;
-					if (result && (GenSight.LineOfSight(centerCell, x, source.Map) || centerCell.DistanceTo(x) <= 1.5f))
+					var edifice = x.GetEdifice(targetInfo.Map);
+					var result = edifice == null || edifice.def.passability != Traversability.Impassable || occupiedCells.Cells.Contains(x);
+					if (result && (GenSight.LineOfSight(centerCell, x, targetInfo.Map) || centerCell.DistanceTo(x) <= 1.5f))
 					{
 						affectedCells.Add(x);
 					}
 				}
 			}, int.MaxValue, rememberParents: false, (IEnumerable<IntVec3>)null);
-			affectedCells.AddRange(source.OccupiedRect());
+			affectedCells.AddRange(occupiedCells.Cells);
 			return affectedCells;
 		}
 	}

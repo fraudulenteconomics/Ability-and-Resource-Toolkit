@@ -52,7 +52,6 @@ namespace HediffResourceFramework
         public float postDamageDelayMultiplier = 1f;
         public float postUseDelayMultiplier = 1f;
 
-        public float radius;
         public bool addToCaster;
         public bool removeOutsideArea;
 

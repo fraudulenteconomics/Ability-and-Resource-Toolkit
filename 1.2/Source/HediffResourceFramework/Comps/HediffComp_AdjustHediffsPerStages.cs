@@ -71,6 +71,7 @@ namespace HediffResourceFramework
         public void Drop()
         {
             this.Pawn.health.RemoveHediff(this.parent);
+            Notify_Removed();
         }
         public void Notify_Removed()
         {

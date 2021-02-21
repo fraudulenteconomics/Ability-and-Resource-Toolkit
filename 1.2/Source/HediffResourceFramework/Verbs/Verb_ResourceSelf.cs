@@ -13,9 +13,10 @@ namespace HediffResourceFramework
     {
         public override bool Available()
         {
-            if (verbProps.targetResourceSettings != null)
+            var targetResourceSettings = this.ResourceProps.TargetResourceSettings;
+            if (targetResourceSettings != null)
             {
-                foreach (var hediffOption in verbProps.targetResourceSettings)
+                foreach (var hediffOption in targetResourceSettings)
                 {
                     var hediffResource = this.CasterPawn.health.hediffSet.GetFirstHediffOfDef(hediffOption.hediff) as HediffResource;
                     if (hediffResource != null && hediffResource.ResourceAmount == hediffResource.ResourceCapacity)
@@ -32,15 +33,17 @@ namespace HediffResourceFramework
             base.TryCastShot();
             if (this.CasterPawn != null)
             {
-                if (verbProps.targetResourceSettings != null)
+                var targetResourceSettings = this.ResourceProps.TargetResourceSettings;
+
+                if (targetResourceSettings != null)
                 {
-                    foreach (var hediffOption in verbProps.targetResourceSettings)
+                    foreach (var hediffOption in targetResourceSettings)
                     {
                         HRFLog.Message("Giving: " + this.CasterPawn + " - " + hediffOption.hediff + " - " + hediffOption.resourcePerUse);
                         HediffResourceUtils.AdjustResourceAmount(this.CasterPawn, hediffOption.hediff, hediffOption.resourcePerUse, hediffOption.addHediffIfMissing);
                         if (hediffOption.effectRadius != -1f)
                         {
-                            foreach (var cell in HediffResourceUtils.GetAllCellsAround(hediffOption, this.CasterPawn))
+                            foreach (var cell in HediffResourceUtils.GetAllCellsAround(hediffOption, new TargetInfo(this.CasterPawn.Position, this.CasterPawn.Map), CellRect.SingleCell(this.CasterPawn.Position)))
                             {
                                 foreach (var pawn in cell.GetThingList(this.CasterPawn.Map).OfType<Pawn>())
                                 {

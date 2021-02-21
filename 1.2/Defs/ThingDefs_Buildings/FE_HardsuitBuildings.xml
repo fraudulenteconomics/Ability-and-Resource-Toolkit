@@ -36,7 +36,7 @@
 						<addHediffIfMissing>false</addHediffIfMissing>
 						<removeOutsideArea>false</removeOutsideArea>
 						<maxResourceCapacityOffset>50</maxResourceCapacityOffset>
-						<radius>6.9</radius> 
+						<effectRadius>6.9</effectRadius> 
 						<worksThroughWalls>false</worksThroughWalls>
 						<affectsAllies>true</affectsAllies>
 						<affectsEnemies>false</affectsEnemies>

@@ -28,7 +28,7 @@ namespace HediffResourceFramework
                 foreach (var option in Props.resourceSettings)
                 {
                     var num = GetResourceGain(option);
-                    var affectedCells = HediffResourceUtils.GetAllCellsAround(option, this.Pawn);
+                    var affectedCells = HediffResourceUtils.GetAllCellsAround(option, this.Pawn, this.Pawn.OccupiedRect());
                     foreach (var cell in affectedCells)
                     {
                         foreach (var pawn in cell.GetThingList(this.Pawn.Map).OfType<Pawn>())
@@ -37,12 +37,10 @@ namespace HediffResourceFramework
 
                             if (option.affectsAllies && (pawn.Faction == this.Pawn.Faction || !pawn.Faction.HostileTo(this.Pawn.Faction)))
                             {
-                                HRFLog.Message($"Ally: {pawn}, resource: {option.hediff}, num to adjust: {num}");
                                 AppendResource(pawn, option, num);
                             }
                             else if (option.affectsEnemies && pawn.Faction.HostileTo(this.Pawn.Faction))
                             {
-                                HRFLog.Message($"Enemy: {pawn}, resource: {option.hediff}, num to adjust: {num}");
                                 AppendResource(pawn, option, num);
                             }
                         }
@@ -58,7 +56,7 @@ namespace HediffResourceFramework
             if (Active)
             {
                 var option = GetFirstHediffOptionFor(hediffResourceDef);
-                if (option != null && cell.DistanceTo(this.Pawn.Position) <= option.radius)
+                if (option != null && cell.DistanceTo(this.Pawn.Position) <= option.effectRadius)
                 {
                     return true;
                 }

@@ -222,6 +222,56 @@ namespace HediffResourceFramework
 						}
 					}
                 }
+
+
+			}
+
+			if (Prefs.DevMode)
+			{
+				Command_Action command_Action = new Command_Action();
+				command_Action.defaultLabel = "Debug: Charge all hediff resources";
+				command_Action.action = delegate
+				{
+					var hediffResources = HediffResourceUtils.GetHediffResourcesFor(__instance);
+					if (hediffResources != null)
+					{
+						foreach (var hediffResource in hediffResources)
+						{
+							hediffResource.ResourceAmount = hediffResource.ResourceCapacity;
+						}
+					}
+				};
+				yield return command_Action;
+
+				Command_Action command_Action2 = new Command_Action();
+				command_Action2.defaultLabel = "Debug: Empty all hediff resources";
+				command_Action2.action = delegate
+				{
+					var hediffResources = HediffResourceUtils.GetHediffResourcesFor(__instance);
+					if (hediffResources != null)
+					{
+						foreach (var hediffResource in hediffResources)
+						{
+							hediffResource.ResourceAmount = 0;
+						}
+					}
+				};
+				yield return command_Action2;
+
+				Command_Action command_Action3 = new Command_Action();
+				command_Action3.defaultLabel = "Debug: Remove all hediff resources";
+				command_Action3.action = delegate
+				{
+					var hediffResources = HediffResourceUtils.GetHediffResourcesFor(__instance);
+					if (hediffResources != null)
+					{
+						foreach (var hediffResource in hediffResources)
+						{
+							hediffResource.pawn.health.RemoveHediff(hediffResource);
+						}
+					}
+				};
+				yield return command_Action3;
 			}
 		}
 	}

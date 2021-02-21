@@ -11,7 +11,20 @@ namespace HediffResourceFramework
 {
     public class Verb_ResourceBase : Verb_CastBase
     {
-        public new VerbResourceProps verbProps => base.verbProps as VerbResourceProps;
+        public IResourceProps ResourceProps
+        {
+            get
+            {
+                if (this.tool is IResourceProps resourceProps)
+                {
+                    return resourceProps;
+                }
+                else
+                {
+                    return base.verbProps as VerbResourceProps;
+                }
+            }
+        }
         protected override bool TryCastShot()
         {
             if (base.EquipmentSource != null)
@@ -33,15 +46,16 @@ namespace HediffResourceFramework
 
         protected void DrawHighlightFieldRadiusAroundTargetCustom(LocalTargetInfo target)
         {
-            if (verbProps.targetResourceSettings != null)
+            var targetResourceSettings = ResourceProps.TargetResourceSettings;
+            if (targetResourceSettings != null)
             {
-                foreach (var hediffOption in verbProps.targetResourceSettings)
+                foreach (var hediffOption in targetResourceSettings)
                 {
                     if (hediffOption.hediff != null)
                     {
                         if (hediffOption.effectRadius != -1f)
                         {
-                            GenDraw.DrawFieldEdges((from x in HediffResourceUtils.GetAllCellsAround(hediffOption, target.Thing)
+                            GenDraw.DrawFieldEdges((from x in HediffResourceUtils.GetAllCellsAround(hediffOption, new TargetInfo(target.Cell, Find.CurrentMap), CellRect.SingleCell(target.Cell))
                                                     where x.InBounds(Find.CurrentMap)
                                                     select x).ToList());
                         }
