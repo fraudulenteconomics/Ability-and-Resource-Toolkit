@@ -42,7 +42,7 @@ namespace HediffResourceFramework
                                         hediffResource = user.health.hediffSet.GetFirstHediffOfDef(statBooster.hediff) as HediffResource;
                                         checkedPawnsResources[user] = hediffResource;
                                     }
-                                    if (hediffResource != null && statBooster.hediff == hediffResource.def && hediffResource.ResourceAmount >= statBooster.resourcePerSecond)
+                                    if (hediffResource != null && statBooster.hediff == hediffResource.def && hediffResource.ResourceAmount >= -statBooster.resourcePerSecond)
                                     {
                                         Log.Message($"1 Due to an user {user} with {statBooster.hediff} - {hediffResource}, {thing} is gaining a bonus to {stat}!");
                                         __result += statModifier.value;
@@ -70,7 +70,7 @@ namespace HediffResourceFramework
                                         hediffResource = user.health.hediffSet.GetFirstHediffOfDef(statBooster.hediff) as HediffResource;
                                         checkedPawnsResources[user] = hediffResource;
                                     }
-                                    if (hediffResource != null && statBooster.hediff == hediffResource.def && hediffResource.ResourceAmount >= statBooster.resourcePerSecond)
+                                    if (hediffResource != null && statBooster.hediff == hediffResource.def && hediffResource.ResourceAmount >= -statBooster.resourcePerSecond)
                                     {
                                         Log.Message($"2 Due to an user {user} with {statBooster.hediff} - {hediffResource}, {thing} is gaining a bonus to {stat}!");
                                         __result *= statModifier.value;

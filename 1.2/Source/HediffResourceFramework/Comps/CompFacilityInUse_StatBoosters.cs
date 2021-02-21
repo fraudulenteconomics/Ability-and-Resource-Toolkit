@@ -10,67 +10,67 @@ using static Verse.AI.ReservationManager;
 namespace HediffResourceFramework
 {
 
-    [StaticConstructorOnStartup]
-    public static class StatBoostersPatch
-    {
-        static StatBoostersPatch()
-        {
-            foreach (var thingDef in DefDatabase<ThingDef>.AllDefs)
-            {
-                if (thingDef.IsBed || thingDef.IsWorkTable)
-                {
-                    var compProps = new CompProperties_FacilityInUse_StatBoosters();
-                    compProps.statBoosters = new List<StatBooster>();
-                    foreach (var hediffResource in DefDatabase<HediffResourceDef>.AllDefs)
-                    {
-                        var statBooster = new StatBooster();
-                        statBooster.hediff = hediffResource;
-                        statBooster.resourcePerSecond = -5;
-                        statBooster.qualityScalesResourcePerSecond = true;
-                        statBooster.addHediffIfMissing = true;
-                        statBooster.statOffsets = new List<StatModifier>()
-                        {
-                            new StatModifier
-                            {
-                                stat = StatDefOf.BedRestEffectiveness,
-                                value = 2f
-                            },
-                            new StatModifier
-                            {
-                                stat = StatDefOf.WorkTableEfficiencyFactor,
-                                value = 2f
-                            },
-                            new StatModifier
-                            {
-                                stat = StatDefOf.WorkTableWorkSpeedFactor,
-                                value = 2f
-                            },
-                        };
-                        statBooster.statFactors = new List<StatModifier>()
-                        {
-                            new StatModifier
-                            {
-                                stat = StatDefOf.BedRestEffectiveness,
-                                value = 2f
-                            },
-                            new StatModifier
-                            {
-                                stat = StatDefOf.WorkTableEfficiencyFactor,
-                                value = 2f
-                            },
-                            new StatModifier
-                            {
-                                stat = StatDefOf.WorkTableWorkSpeedFactor,
-                                value = 2f
-                            },
-                        };
-                        compProps.statBoosters.Add(statBooster);
-                    }
-                    thingDef.comps.Add(compProps);
-                }
-            }
-        }
-    }
+    //[StaticConstructorOnStartup]
+    //public static class StatBoostersPatch
+    //{
+    //    static StatBoostersPatch()
+    //    {
+    //        foreach (var thingDef in DefDatabase<ThingDef>.AllDefs)
+    //        {
+    //            if (thingDef.IsBed || thingDef.IsWorkTable)
+    //            {
+    //                var compProps = new CompProperties_FacilityInUse_StatBoosters();
+    //                compProps.statBoosters = new List<StatBooster>();
+    //                foreach (var hediffResource in DefDatabase<HediffResourceDef>.AllDefs)
+    //                {
+    //                    var statBooster = new StatBooster();
+    //                    statBooster.hediff = hediffResource;
+    //                    statBooster.resourcePerSecond = -5;
+    //                    statBooster.qualityScalesResourcePerSecond = true;
+    //                    statBooster.addHediffIfMissing = true;
+    //                    statBooster.statOffsets = new List<StatModifier>()
+    //                    {
+    //                        new StatModifier
+    //                        {
+    //                            stat = StatDefOf.BedRestEffectiveness,
+    //                            value = 2f
+    //                        },
+    //                        new StatModifier
+    //                        {
+    //                            stat = StatDefOf.WorkTableEfficiencyFactor,
+    //                            value = 2f
+    //                        },
+    //                        new StatModifier
+    //                        {
+    //                            stat = StatDefOf.WorkTableWorkSpeedFactor,
+    //                            value = 2f
+    //                        },
+    //                    };
+    //                    statBooster.statFactors = new List<StatModifier>()
+    //                    {
+    //                        new StatModifier
+    //                        {
+    //                            stat = StatDefOf.BedRestEffectiveness,
+    //                            value = 2f
+    //                        },
+    //                        new StatModifier
+    //                        {
+    //                            stat = StatDefOf.WorkTableEfficiencyFactor,
+    //                            value = 2f
+    //                        },
+    //                        new StatModifier
+    //                        {
+    //                            stat = StatDefOf.WorkTableWorkSpeedFactor,
+    //                            value = 2f
+    //                        },
+    //                    };
+    //                    compProps.statBoosters.Add(statBooster);
+    //                }
+    //                thingDef.comps.Add(compProps);
+    //            }
+    //        }
+    //    }
+    //}
     public class StatBooster
     {
         public HediffResourceDef hediff;
@@ -171,7 +171,8 @@ namespace HediffResourceFramework
         public Thing Parent => this.parent;
         public void ResourceTick()
         {
-            if (InUse(out var claimaints))
+            bool inUse = InUse(out var claimaints);
+            if (inUse)
             {
                 var users = GetActualUsers(claimaints);
                 foreach (var user in users)
@@ -183,12 +184,11 @@ namespace HediffResourceFramework
                         {
                             num *= HediffResourceUtils.GetQualityMultiplier(qc);
                         }
-
                         HediffResourceUtils.AdjustResourceAmount(user, statBooster.hediff, num, statBooster.addHediffIfMissing);
                     }
                 }
             }
-            Log.Message($"{this.parent} - in use: {InUse(out var claimants)}, claimants: {string.Join(", ", claimaints)}, users: {string.Join(", ", GetActualUsers(claimaints))}");
+            Log.Message($"{this.parent} - in use: {inUse}, claimants: {string.Join(", ", claimaints)}, users: {string.Join(", ", GetActualUsers(claimaints))}");
         }
         public void Drop()
         {
