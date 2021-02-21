@@ -28,14 +28,14 @@ namespace HediffResourceFramework
         public List<HediffOption> ResourceSettings => Props.resourceSettings;
         public string DisablePostUse => Props.disablePostUse;
 
-        private Dictionary<Verb, VerbDisable> postUseDelayTicks;
-        public Dictionary<Verb, VerbDisable> PostUseDelayTicks
+        private Dictionary<HediffResource, HediffResouceDisable> postUseDelayTicks;
+        public Dictionary<HediffResource, HediffResouceDisable> PostUseDelayTicks
         {
             get
             {
                 if (postUseDelayTicks is null)
                 {
-                    postUseDelayTicks = new Dictionary<Verb, VerbDisable>();
+                    postUseDelayTicks = new Dictionary<HediffResource, HediffResouceDisable>();
                 }
                 return postUseDelayTicks;
             }
@@ -86,20 +86,21 @@ namespace HediffResourceFramework
             var pawn = this.Pawn;
             if (pawn != null)
             {
-                if (!this.PostUseDelayTicks?.Values?.Select(x => x.delayTicks).Any(y => y > Find.TickManager.TicksGame) ?? true)
+                foreach (var option in Props.resourceSettings)
                 {
-                    foreach (var option in Props.resourceSettings)
+                    var hediffResource = pawn.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
+                    if (PostUseDelayTicks.TryGetValue(hediffResource, out var disable) && (disable.delayTicks > Find.TickManager.TicksGame))
                     {
-                        var hediffResource = pawn.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
-                        if (hediffResource != null && !hediffResource.CanGainResource)
-                        {
-                            continue;
-                        }
-                        else
-                        {
-                            float num = option.resourcePerSecond;
-                            HediffResourceUtils.AdjustResourceAmount(pawn, option.hediff, num, option.addHediffIfMissing);
-                        }
+                        continue;
+                    }
+                    if (hediffResource != null && !hediffResource.CanGainResource)
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        float num = option.resourcePerSecond;
+                        HediffResourceUtils.AdjustResourceAmount(pawn, option.hediff, num, option.addHediffIfMissing);
                     }
                 }
             }
@@ -108,8 +109,7 @@ namespace HediffResourceFramework
         public override void CompExposeData()
         {
             base.CompExposeData();
-            PostUseDelayTicks.RemoveAll(x => x.Key.CasterPawn.DestroyedOrNull());
-            Scribe_Collections.Look(ref postUseDelayTicks, "postUseDelayTicks", LookMode.Reference, LookMode.Deep, ref verbKeys, ref verbDisablesValues);
+            Scribe_Collections.Look(ref postUseDelayTicks, "postUseDelayTicks", LookMode.Reference, LookMode.Deep, ref hediffResourceKeys, ref hediffResourceDisablesValues);
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
                 var gameComp = Current.Game.GetComponent<HediffResourceManager>();
@@ -117,7 +117,7 @@ namespace HediffResourceFramework
             }
         }
 
-        private List<Verb> verbKeys;
-        private List<VerbDisable> verbDisablesValues;
+        private List<HediffResource> hediffResourceKeys;
+        private List<HediffResouceDisable> hediffResourceDisablesValues;
     }
 }

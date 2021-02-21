@@ -83,12 +83,12 @@ namespace HediffResourceFramework
 
         public List<Thing> amplifiers = new List<Thing>();
 
-        public Dictionary<Thing, IAdjustResouceInArea> cachedCompAmplifiers = new Dictionary<Thing, IAdjustResouceInArea>();
+        public Dictionary<Thing, IAdjustResouceInArea> cachedAmplifiers = new Dictionary<Thing, IAdjustResouceInArea>();
 
         public float GetHediffResourceCapacityGainFromAmplifiers()
         {
             float num = 0;
-            foreach (var compAmplifier in GetCompAmplifiers)
+            foreach (var compAmplifier in Amplifiers)
             {
                 num += compAmplifier.GetResourceCapacityGainFor(this.def);
             }
@@ -97,24 +97,35 @@ namespace HediffResourceFramework
         public IAdjustResouceInArea GetCompAmplifierFor(Thing thing)
         {
             IAdjustResouceInArea comp = null;
-            if (!cachedCompAmplifiers.TryGetValue(thing, out comp))
+            if (!cachedAmplifiers.TryGetValue(thing, out comp))
             {
                 comp = thing.TryGetComp<CompAdjustHediffsArea>();
-                cachedCompAmplifiers[thing] = comp;
+                cachedAmplifiers[thing] = comp;
             }
             return comp;
         }
-        public IEnumerable<IAdjustResouceInArea> GetCompAmplifiers
+        public IEnumerable<IAdjustResouceInArea> Amplifiers
         {
             get
             {
                 for (int num = amplifiers.Count - 1; num >= 0; num--)
                 {
                     var amplifier = amplifiers[num];
-                    var comp = GetCompAmplifierFor(amplifier);
-                    if (comp != null && comp.InRadiusFor(this.pawn.Position, this.def))
+                    if (amplifier is null || amplifier.Destroyed)
                     {
-                        yield return comp;
+                        amplifiers.RemoveAt(num);
+                    }
+                    else
+                    {
+                        var comp = GetCompAmplifierFor(amplifier);
+                        if (comp != null && comp.InRadiusFor(this.pawn.Position, this.def))
+                        {
+                            yield return comp;
+                        }
+                        else
+                        {
+                            amplifiers.RemoveAt(num);
+                        }
                     }
                 }
             }
@@ -125,19 +136,19 @@ namespace HediffResourceFramework
             if (!amplifiers.Contains(comp.Parent))
             {
                 amplifiers.Add(comp.Parent);
-                cachedCompAmplifiers[comp.Parent] = comp;
+                cachedAmplifiers[comp.Parent] = comp;
             }
         }
 
         public IEnumerable<IAdjustResouceInArea> GetAmplifiersFor(HediffResourceDef hediffResourceDef)
         {
-            foreach (var comp in cachedCompAmplifiers)
+            foreach (var amplifier in Amplifiers)
             {
-                foreach (var option in comp.Value.ResourceSettings)
+                foreach (var option in amplifier.ResourceSettings)
                 {
                     if (option.hediff == hediffResourceDef)
                     {
-                        yield return comp.Value;
+                        yield return amplifier;
                     }
                 }
             }
@@ -198,11 +209,12 @@ namespace HediffResourceFramework
         
         public bool SourceOnlyAmplifiers()
         {
+            var amplifiers = Amplifiers;
             if (!this.def.keepWhenEmpty && amplifiers.Any())
             {
                 foreach (var amplifier in amplifiers)
                 {
-                    var comp = GetCompAmplifierFor(amplifier);
+                    var comp = GetCompAmplifierFor(amplifier.Parent);
                     if (comp != null && !comp.InRadiusFor(this.pawn.Position, this.def))
                     {
                         var option = comp.GetFirstHediffOptionFor(this.def);
@@ -370,7 +382,7 @@ namespace HediffResourceFramework
             {
                 foreach (var amplifier in amplifiers)
                 {
-                    cachedCompAmplifiers[amplifier] = amplifier.TryGetComp<CompAdjustHediffsArea>();
+                    cachedAmplifiers[amplifier] = amplifier.TryGetComp<CompAdjustHediffsArea>();
                 }
             }
         }

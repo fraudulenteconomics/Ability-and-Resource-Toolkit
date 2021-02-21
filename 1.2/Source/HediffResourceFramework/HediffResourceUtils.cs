@@ -587,8 +587,7 @@ namespace HediffResourceFramework
 			{
 				var hediffResourceManage = Current.Game.GetComponent<HediffResourceManager>();
 
-				var verbPostUseDelay = new List<int>();
-				var verbPostUseDelayMultipliers = new List<float>();
+
 
 				var hediffPostUse = new Dictionary<HediffResource, List<int>>();
 				var hediffPostUseDelayMultipliers = new Dictionary<HediffResource, List<float>>();
@@ -599,6 +598,8 @@ namespace HediffResourceFramework
 				foreach (var option in props.ResourceSettings)
 				{
 					var hediffResource = AdjustResourceAmount(verb.CasterPawn, option.hediff, option.resourcePerUse, option.addHediffIfMissing);
+					var hediffResourcePostUseDelay = new List<int>();
+					var hediffResourcePostUseDelayMultipliers = new List<float>();
 					foreach (var comp in comps)
 					{
 						var compResourseSettings = comp.ResourceSettings?.FirstOrDefault(x => x.hediff == option.hediff);
@@ -606,11 +607,11 @@ namespace HediffResourceFramework
 						{
 							if (option.postUseDelay != 0)
 							{
-								verbPostUseDelay.Add(option.postUseDelay);
+								hediffResourcePostUseDelay.Add(option.postUseDelay);
 								disablePostUseString += comp.DisablePostUse + "\n";
 								if (compResourseSettings.postUseDelayMultiplier != 1)
 								{
-									verbPostUseDelayMultipliers.Add(compResourseSettings.postUseDelayMultiplier);
+									hediffResourcePostUseDelayMultipliers.Add(compResourseSettings.postUseDelayMultiplier);
 								}
 							}
 						}
@@ -638,22 +639,23 @@ namespace HediffResourceFramework
 							}
 						}
 					}
+
+					if (hediffResourcePostUseDelay.Any() && hediffResourcePostUseDelayMultipliers.Any())
+					{
+						foreach (var comp in comps)
+						{
+							comp.PostUseDelayTicks[hediffResource] = new HediffResouceDisable((int)((Find.TickManager.TicksGame + hediffResourcePostUseDelay.Average()) * hediffResourcePostUseDelayMultipliers.Average()), disablePostUseString);
+						}
+					}
+					else if (hediffResourcePostUseDelay.Any())
+					{
+						foreach (var comp in comps)
+						{
+							comp.PostUseDelayTicks[hediffResource] = new HediffResouceDisable((int)((Find.TickManager.TicksGame + hediffResourcePostUseDelay.Average())), disablePostUseString);
+						}
+					}
 				}
 
-				if (verbPostUseDelay.Any() && verbPostUseDelayMultipliers.Any())
-				{
-					foreach (var comp in comps)
-					{
-						comp.PostUseDelayTicks[verb] = new VerbDisable((int)((Find.TickManager.TicksGame + verbPostUseDelay.Average()) * verbPostUseDelayMultipliers.Average()), disablePostUseString);
-					}
-				}
-				else if (verbPostUseDelay.Any())
-				{
-					foreach (var comp in comps)
-					{
-						comp.PostUseDelayTicks[verb] = new VerbDisable((int)((Find.TickManager.TicksGame + verbPostUseDelay.Average())), disablePostUseString);
-					}
-				}
 				foreach (var hediffData in hediffPostUse)
 				{
 					if (hediffData.Key != null && hediffPostUse.TryGetValue(hediffData.Key, out List<int> hediffPostUseList))
@@ -667,6 +669,7 @@ namespace HediffResourceFramework
 						{
 							newDelayTicks = (int)(hediffPostUseList.Average());
 						}
+
 						if (hediffData.Key.CanHaveDelay(newDelayTicks))
 						{
 							hediffData.Key.AddDelay(newDelayTicks);

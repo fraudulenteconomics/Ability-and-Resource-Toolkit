@@ -77,24 +77,25 @@ namespace HediffResourceFramework
             var pawn = Pawn;
             if (pawn != null)
             {
-                if (!this.PostUseDelayTicks?.Values?.Select(x => x.delayTicks).Any(y => y > Find.TickManager.TicksGame) ?? true)
+                foreach (var option in Props.resourceSettings)
                 {
-                    foreach (var option in Props.resourceSettings)
+                    var hediffResource = pawn.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
+                    if (PostUseDelayTicks.TryGetValue(hediffResource, out var disable) && (disable.delayTicks > Find.TickManager.TicksGame))
                     {
-                        var hediffResource = pawn.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
-                        if (hediffResource != null && !hediffResource.CanGainResource)
+                        continue;
+                    }
+                    if (hediffResource != null && !hediffResource.CanGainResource)
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        float num = option.resourcePerSecond;
+                        if (option.qualityScalesResourcePerSecond && this.parent.TryGetQuality(out QualityCategory qc))
                         {
-                            continue;
+                            num *= HediffResourceUtils.GetQualityMultiplier(qc);
                         }
-                        else
-                        {
-                            float num = option.resourcePerSecond;
-                            if (option.qualityScalesResourcePerSecond && this.parent.TryGetQuality(out QualityCategory qc))
-                            {
-                                num *= HediffResourceUtils.GetQualityMultiplier(qc);
-                            }
-                            HediffResourceUtils.AdjustResourceAmount(pawn, option.hediff, num, option.addHediffIfMissing);
-                        }
+                        HediffResourceUtils.AdjustResourceAmount(pawn, option.hediff, num, option.addHediffIfMissing);
                     }
                 }
             }

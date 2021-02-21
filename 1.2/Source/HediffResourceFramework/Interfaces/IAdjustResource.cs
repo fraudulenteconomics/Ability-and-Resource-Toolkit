@@ -15,7 +15,7 @@ namespace HediffResourceFramework
         void Deregister();
         void Notify_Removed();
         void ResourceTick();
-        Dictionary<Verb, VerbDisable> PostUseDelayTicks { get; }
+        Dictionary<HediffResource, HediffResouceDisable> PostUseDelayTicks { get; }
         Thing Parent { get; }
         List<HediffOption> ResourceSettings { get; }
         string DisablePostUse { get; }

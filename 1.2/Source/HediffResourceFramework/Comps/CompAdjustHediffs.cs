@@ -8,14 +8,14 @@ using Verse;
 
 namespace HediffResourceFramework
 {
-    public class VerbDisable : IExposable
+    public class HediffResouceDisable : IExposable
     {
-        public VerbDisable()
+        public HediffResouceDisable()
         {
 
         }
 
-        public VerbDisable(int delayTicks, string disableReason)
+        public HediffResouceDisable(int delayTicks, string disableReason)
         {
             this.delayTicks = delayTicks;
             this.disableReason = disableReason;
@@ -44,14 +44,14 @@ namespace HediffResourceFramework
         public virtual List<HediffOption> ResourceSettings => Props.resourceSettings;
         public string DisablePostUse => Props.disablePostUse;
 
-        private Dictionary<Verb, VerbDisable> postUseDelayTicks;
-        public Dictionary<Verb, VerbDisable> PostUseDelayTicks
+        private Dictionary<HediffResource, HediffResouceDisable> postUseDelayTicks;
+        public Dictionary<HediffResource, HediffResouceDisable> PostUseDelayTicks
         {
             get
             {
                 if (postUseDelayTicks is null)
                 {
-                    postUseDelayTicks = new Dictionary<Verb, VerbDisable>();
+                    postUseDelayTicks = new Dictionary<HediffResource, HediffResouceDisable>();
                 }
                 return postUseDelayTicks;
             }
@@ -80,8 +80,7 @@ namespace HediffResourceFramework
         public override void PostExposeData()
         {
             base.PostExposeData();
-            PostUseDelayTicks.RemoveAll(x => x.Key.CasterPawn.DestroyedOrNull());
-            Scribe_Collections.Look(ref postUseDelayTicks, "postUseDelayTicks", LookMode.Reference, LookMode.Deep, ref verbKeys, ref verbDisablesValues);
+            Scribe_Collections.Look(ref postUseDelayTicks, "postUseDelayTicks", LookMode.Reference, LookMode.Deep, ref hediffResourceKeys, ref hediffResourceDisablesValues);
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
                 var gameComp = Current.Game.GetComponent<HediffResourceManager>();
@@ -89,8 +88,8 @@ namespace HediffResourceFramework
             }
         }
 
-        private List<Verb> verbKeys;
-        private List<VerbDisable> verbDisablesValues;
+        private List<HediffResource> hediffResourceKeys;
+        private List<HediffResouceDisable> hediffResourceDisablesValues;
         public override void PostSpawnSetup(bool respawningAfterLoad)
         {
             base.PostSpawnSetup(respawningAfterLoad);
