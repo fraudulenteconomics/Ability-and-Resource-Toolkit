@@ -22,8 +22,10 @@
 							<li>
 								<hediff>FE_FusionReactor</hediff>
 								<resourcePerSecond>-5</resourcePerSecond>
-								<addHediffIfMissing>false</addHediffIfMissing> <!-- in case if you want to make resourcePerSecond to add resource amount. works only for positive resourcePerSecond fields -->
-								<qualityScalesResourcePerSecond>true</qualityScalesResourcePerSecond> <!-- this will affect only resource consumption (ie masterwork furniture will drain the resource more) -->
+								<addHediffIfMissing>false</addHediffIfMissing>
+								<!-- in case if you want to make resourcePerSecond to add resource amount. works only for positive resourcePerSecond fields -->
+								<qualityScalesResourcePerSecond>true</qualityScalesResourcePerSecond>
+								<!-- this will affect only resource consumption (ie masterwork furniture will drain the resource more) -->
 								<statOffsets>
 									<WorkTableWorkSpeedFactor>0.5</WorkTableWorkSpeedFactor>
 									<WorkTableEfficiencyFactor>0.5</WorkTableEfficiencyFactor>
@@ -32,6 +34,103 @@
 									<WorkTableWorkSpeedFactor>2</WorkTableWorkSpeedFactor>
 									<WorkTableEfficiencyFactor>2</WorkTableEfficiencyFactor>
 								</statFactors>
+
+								<preventUseIfHediffMissing>true</preventUseIfHediffMissing>
+								<cannotUseMessageKey>FE.CannotUseMissingFusionReactor</cannotUseMessageKey>
+								<toggleResourceUse>true</toggleResourceUse>
+								<toggleResourceGizmoTexPath>UI/Designators/Cancel</toggleResourceGizmoTexPath>
+								<toggleResourceLabel>Toggle fusion reactor use</toggleResourceLabel>
+								<toggleResourceDesc>Toggle fusion reactor use</toggleResourceDesc>
+							</li>
+							<li>
+								<hediff>FE_StimHediff</hediff>
+								<resourcePerSecond>-5</resourcePerSecond>
+								<addHediffIfMissing>false</addHediffIfMissing>
+								<!-- in case if you want to make resourcePerSecond to add resource amount. works only for positive resourcePerSecond fields -->
+								<qualityScalesResourcePerSecond>true</qualityScalesResourcePerSecond>
+								<!-- this will affect only resource consumption (ie masterwork furniture will drain the resource more) -->
+								<statOffsets>
+									<WorkTableWorkSpeedFactor>0.5</WorkTableWorkSpeedFactor>
+									<WorkTableEfficiencyFactor>0.5</WorkTableEfficiencyFactor>
+								</statOffsets>
+								<statFactors>
+									<WorkTableWorkSpeedFactor>2</WorkTableWorkSpeedFactor>
+									<WorkTableEfficiencyFactor>2</WorkTableEfficiencyFactor>
+								</statFactors>
+
+								<preventUseIfHediffMissing>true</preventUseIfHediffMissing>
+								<cannotUseMessageKey>FE.CannotUseMissingStim</cannotUseMessageKey>
+								<toggleResourceUse>true</toggleResourceUse>
+								<toggleResourceGizmoTexPath>UI/Designators/Cancel</toggleResourceGizmoTexPath>
+								<toggleResourceLabel>Toggle stim use</toggleResourceLabel>
+								<toggleResourceDesc>Toggle stim use</toggleResourceDesc>
+							</li>
+						</statBoosters>
+					</li>
+				</value>
+			</li>
+
+			<li Class="PatchOperationConditional">
+				<xpath>/Defs/ThingDef[thingClass="Building_WorkTable_HeatPush"]/comps</xpath>
+				<success>Always</success>
+				<nomatch Class="PatchOperationAdd">
+					<xpath>/Defs/ThingDef[thingClass="Building_WorkTable_HeatPush"]</xpath>
+					<value>
+						<comps />
+					</value>
+				</nomatch>
+			</li>
+
+			<li Class="PatchOperationAdd">
+				<xpath>/Defs/ThingDef[thingClass="Building_WorkTable_HeatPush"]/comps</xpath>
+				<value>
+					<li Class="HediffResourceFramework.CompProperties_FacilityInUse_StatBoosters">
+						<statBoosters>
+							<li>
+								<hediff>FE_FusionReactor</hediff>
+								<resourcePerSecond>-5</resourcePerSecond>
+								<addHediffIfMissing>false</addHediffIfMissing>
+								<!-- in case if you want to make resourcePerSecond to add resource amount. works only for positive resourcePerSecond fields -->
+								<qualityScalesResourcePerSecond>true</qualityScalesResourcePerSecond>
+								<!-- this will affect only resource consumption (ie masterwork furniture will drain the resource more) -->
+								<statOffsets>
+									<WorkTableWorkSpeedFactor>0.5</WorkTableWorkSpeedFactor>
+									<WorkTableEfficiencyFactor>0.5</WorkTableEfficiencyFactor>
+								</statOffsets>
+								<statFactors>
+									<WorkTableWorkSpeedFactor>2</WorkTableWorkSpeedFactor>
+									<WorkTableEfficiencyFactor>2</WorkTableEfficiencyFactor>
+								</statFactors>
+
+								<preventUseIfHediffMissing>true</preventUseIfHediffMissing>
+								<cannotUseMessageKey>FE.CannotUseMissingFusionReactor</cannotUseMessageKey>
+								<toggleResourceUse>true</toggleResourceUse>
+								<toggleResourceGizmoTexPath>UI/Designators/Cancel</toggleResourceGizmoTexPath>
+								<toggleResourceLabel>Toggle fusion reactor use</toggleResourceLabel>
+								<toggleResourceDesc>Toggle fusion reactor use</toggleResourceDesc>
+							</li>
+							<li>
+								<hediff>FE_StimHediff</hediff>
+								<resourcePerSecond>-5</resourcePerSecond>
+								<addHediffIfMissing>false</addHediffIfMissing>
+								<!-- in case if you want to make resourcePerSecond to add resource amount. works only for positive resourcePerSecond fields -->
+								<qualityScalesResourcePerSecond>true</qualityScalesResourcePerSecond>
+								<!-- this will affect only resource consumption (ie masterwork furniture will drain the resource more) -->
+								<statOffsets>
+									<WorkTableWorkSpeedFactor>0.5</WorkTableWorkSpeedFactor>
+									<WorkTableEfficiencyFactor>0.5</WorkTableEfficiencyFactor>
+								</statOffsets>
+								<statFactors>
+									<WorkTableWorkSpeedFactor>2</WorkTableWorkSpeedFactor>
+									<WorkTableEfficiencyFactor>2</WorkTableEfficiencyFactor>
+								</statFactors>
+
+								<preventUseIfHediffMissing>true</preventUseIfHediffMissing>
+								<cannotUseMessageKey>FE.CannotUseMissingStim</cannotUseMessageKey>
+								<toggleResourceUse>true</toggleResourceUse>
+								<toggleResourceGizmoTexPath>UI/Designators/Cancel</toggleResourceGizmoTexPath>
+								<toggleResourceLabel>Toggle stim use</toggleResourceLabel>
+								<toggleResourceDesc>Toggle stim use</toggleResourceDesc>
 							</li>
 						</statBoosters>
 					</li>
@@ -57,14 +156,23 @@
 							<li>
 								<hediff>FE_FusionReactor</hediff>
 								<resourcePerSecond>-5</resourcePerSecond>
-								<addHediffIfMissing>false</addHediffIfMissing> <!-- in case if you want to make resourcePerSecond to add resource amount. works only for positive resourcePerSecond fields -->
-								<qualityScalesResourcePerSecond>true</qualityScalesResourcePerSecond> <!-- this will affect only resource consumption (ie masterwork furniture will drain the resource more) -->
+								<addHediffIfMissing>false</addHediffIfMissing>
+								<!-- in case if you want to make resourcePerSecond to add resource amount. works only for positive resourcePerSecond fields -->
+								<qualityScalesResourcePerSecond>true</qualityScalesResourcePerSecond>
+								<!-- this will affect only resource consumption (ie masterwork furniture will drain the resource more) -->
 								<statOffsets>
 									<BedRestEffectiveness>0.5</BedRestEffectiveness>
 								</statOffsets>
 								<statFactors>
 									<BedRestEffectiveness>2</BedRestEffectiveness>
 								</statFactors>
+
+								<preventUseIfHediffMissing>true</preventUseIfHediffMissing>
+								<cannotUseMessageKey>FE.CannotUseMissingFusionReactor</cannotUseMessageKey>
+								<toggleResourceUse>true</toggleResourceUse>
+								<toggleResourceGizmoTexPath>UI/Designators/Cancel</toggleResourceGizmoTexPath>
+								<toggleResourceLabel>Toggle fusion reactor use</toggleResourceLabel>
+								<toggleResourceDesc>Toggle fusion reactor use</toggleResourceDesc>
 							</li>
 						</statBoosters>
 					</li>

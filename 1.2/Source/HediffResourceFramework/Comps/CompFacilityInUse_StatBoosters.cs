@@ -4,76 +4,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 using Verse;
 using static Verse.AI.ReservationManager;
 
 namespace HediffResourceFramework
 {
-
-    //[StaticConstructorOnStartup]
-    //public static class StatBoostersPatch
-    //{
-    //    static StatBoostersPatch()
-    //    {
-    //        foreach (var thingDef in DefDatabase<ThingDef>.AllDefs)
-    //        {
-    //            if (thingDef.IsBed || thingDef.IsWorkTable)
-    //            {
-    //                var compProps = new CompProperties_FacilityInUse_StatBoosters();
-    //                compProps.statBoosters = new List<StatBooster>();
-    //                foreach (var hediffResource in DefDatabase<HediffResourceDef>.AllDefs)
-    //                {
-    //                    var statBooster = new StatBooster();
-    //                    statBooster.hediff = hediffResource;
-    //                    statBooster.resourcePerSecond = -5;
-    //                    statBooster.qualityScalesResourcePerSecond = true;
-    //                    statBooster.addHediffIfMissing = true;
-    //                    statBooster.statOffsets = new List<StatModifier>()
-    //                    {
-    //                        new StatModifier
-    //                        {
-    //                            stat = StatDefOf.BedRestEffectiveness,
-    //                            value = 2f
-    //                        },
-    //                        new StatModifier
-    //                        {
-    //                            stat = StatDefOf.WorkTableEfficiencyFactor,
-    //                            value = 2f
-    //                        },
-    //                        new StatModifier
-    //                        {
-    //                            stat = StatDefOf.WorkTableWorkSpeedFactor,
-    //                            value = 2f
-    //                        },
-    //                    };
-    //                    statBooster.statFactors = new List<StatModifier>()
-    //                    {
-    //                        new StatModifier
-    //                        {
-    //                            stat = StatDefOf.BedRestEffectiveness,
-    //                            value = 2f
-    //                        },
-    //                        new StatModifier
-    //                        {
-    //                            stat = StatDefOf.WorkTableEfficiencyFactor,
-    //                            value = 2f
-    //                        },
-    //                        new StatModifier
-    //                        {
-    //                            stat = StatDefOf.WorkTableWorkSpeedFactor,
-    //                            value = 2f
-    //                        },
-    //                    };
-    //                    compProps.statBoosters.Add(statBooster);
-    //                }
-    //                thingDef.comps.Add(compProps);
-    //            }
-    //        }
-    //    }
-    //}
     public class StatBooster
     {
         public HediffResourceDef hediff;
+        public bool preventUseIfHediffMissing;
+        public string cannotUseMessageKey;
+
+        public bool toggleResourceUse;
+        public string toggleResourceGizmoTexPath;
+        public string toggleResourceLabel;
+        public string toggleResourceDesc;
+
         public float resourcePerSecond;
         public bool addHediffIfMissing;
         public bool qualityScalesResourcePerSecond;
@@ -97,7 +44,6 @@ namespace HediffResourceFramework
         {
             base.PostSpawnSetup(respawningAfterLoad);
             thingBoosters[this.parent] = this;
-
             foreach (var statBooster in Props.statBoosters)
             {
                 if (statBooster.statOffsets != null)
@@ -179,6 +125,10 @@ namespace HediffResourceFramework
                 {
                     foreach (var statBooster in Props.statBoosters)
                     {
+                        if (this.resourceUseToggleStates != null && this.resourceUseToggleStates.TryGetValue(this.Props.statBoosters.IndexOf(statBooster), out var state) && !state)
+                        {
+                            continue;
+                        }
                         float num = statBooster.resourcePerSecond;
                         if (statBooster.qualityScalesResourcePerSecond && this.parent.TryGetQuality(out QualityCategory qc))
                         {
@@ -189,6 +139,40 @@ namespace HediffResourceFramework
                 }
             }
             Log.Message($"{this.parent} - in use: {inUse}, claimants: {string.Join(", ", claimaints)}, users: {string.Join(", ", GetActualUsers(claimaints))}");
+        }
+
+        public Dictionary<int, bool> resourceUseToggleStates = new Dictionary<int, bool>();
+        public override IEnumerable<Gizmo> CompGetGizmosExtra()
+        {
+            foreach (var g in base.CompGetGizmosExtra())
+            {
+                yield return g;
+            }
+            foreach (var statBooster in Props.statBoosters)
+            {
+                if (statBooster.toggleResourceUse)
+                {
+                    var ind = Props.statBoosters.IndexOf(statBooster);
+                    var toggle = new Command_Toggle();
+                    toggle.defaultLabel = statBooster.toggleResourceLabel;
+                    toggle.defaultDesc = statBooster.toggleResourceDesc;
+                    toggle.icon = ContentFinder<Texture2D>.Get(statBooster.toggleResourceGizmoTexPath);
+                    toggle.toggleAction = delegate ()
+                    {
+                        if (resourceUseToggleStates is null) resourceUseToggleStates = new Dictionary<int, bool>();
+                        if (resourceUseToggleStates.ContainsKey(ind))
+                        {
+                            resourceUseToggleStates[ind] = !resourceUseToggleStates[ind];
+                        }
+                        else
+                        {
+                            resourceUseToggleStates[ind] = false;
+                        }
+                    };
+                    toggle.isActive = (() => resourceUseToggleStates is null || resourceUseToggleStates.ContainsKey(ind) ? resourceUseToggleStates[ind] : true);
+                    yield return toggle;
+                }
+            }
         }
         public void Drop()
         {
@@ -221,12 +205,15 @@ namespace HediffResourceFramework
         public override void PostExposeData()
         {
             base.PostExposeData();
+            Scribe_Collections.Look(ref resourceUseToggleStates, "resourceUseStates", LookMode.Value, LookMode.Value, ref intKeys, ref boolValues);
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
                 Register();
             }
         }
 
+        private List<int> intKeys;
+        private List<bool> boolValues;
         public override void PostPostMake()
         {
             base.PostPostMake();

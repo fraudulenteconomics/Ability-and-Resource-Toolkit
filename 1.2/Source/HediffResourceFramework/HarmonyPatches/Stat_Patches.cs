@@ -25,6 +25,10 @@ namespace HediffResourceFramework
                 var oldResult = __result;
                 foreach (var statBooster in comp.Props.statBoosters)
                 {
+                    if (comp.resourceUseToggleStates != null && comp.resourceUseToggleStates.TryGetValue(comp.Props.statBoosters.IndexOf(statBooster), out var state) && !state)
+                    {
+                        continue;
+                    }
                     if (statBooster.statOffsets != null)
                     {
                         foreach (var statModifier in statBooster.statOffsets)
