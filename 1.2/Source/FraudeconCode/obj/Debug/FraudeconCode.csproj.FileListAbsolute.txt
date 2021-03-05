@@ -1,4 +1,0 @@
-c:\GAMES\Rimworld\Mods\HediffResourceFramework\1.2\Assemblies\FraudeconCode.dll
-c:\GAMES\Rimworld\Mods\HediffResourceFramework\1.2\Source\FraudeconCode\obj\Debug\FraudeconCode.csprojAssemblyReference.cache
-c:\GAMES\Rimworld\Mods\HediffResourceFramework\1.2\Source\FraudeconCode\obj\Debug\FraudeconCode.csproj.CoreCompileInputs.cache
-c:\GAMES\Rimworld\Mods\HediffResourceFramework\1.2\Source\FraudeconCode\obj\Debug\FraudeconCode.dll

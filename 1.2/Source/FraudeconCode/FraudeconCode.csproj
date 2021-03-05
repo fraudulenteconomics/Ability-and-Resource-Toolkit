@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>FraudeconCode</RootNamespace>
-    <AssemblyName>FraudeconCode</AssemblyName>
+    <AssemblyName>ZFraudeconCode</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -18,7 +18,8 @@
     <DebugType>none</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>..\..\Assemblies\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>
+    </DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -31,6 +32,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="HediffResourceFramework">
+      <HintPath>..\..\Assemblies\HediffResourceFramework.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -41,6 +45,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="VerbProps.cs" />
+    <Compile Include="Verb_Multishot.cs" />
     <Compile Include="Verb_SpawnFaction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
