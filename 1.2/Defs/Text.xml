@@ -33,14 +33,13 @@
         </recipeMaker>
         <verbs>
             <li Class="FraudeconCode.VerbProps">
-                <verbClass>FraudeconCode.Verb_Multishot</verbClass>
+                <verbClass>FraudeconCode.Verb_Cauterize</verbClass>
                 <hasStandardCommand>true</hasStandardCommand>
                 <defaultProjectile>Arrow_Short</defaultProjectile>
                 <warmupTime>1.35</warmupTime>
                 <range>22.9</range>
                 <soundCast>Bow_Small</soundCast>
-                <multishotRadius>29.9</multishotRadius>
-                <multishotShots>10</multishotShots>
+                <cauterizeDamageDef>Burn</cauterizeDamageDef>
             </li>
         </verbs>
         <tools>

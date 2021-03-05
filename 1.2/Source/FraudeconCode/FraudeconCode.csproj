@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="VerbProps.cs" />
+    <Compile Include="Verb_Cauterize.cs" />
     <Compile Include="Verb_Multishot.cs" />
     <Compile Include="Verb_SpawnFaction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
