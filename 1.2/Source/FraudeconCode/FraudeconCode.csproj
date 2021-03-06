@@ -52,6 +52,7 @@
     <Compile Include="Verb_Fleshletting.cs" />
     <Compile Include="Verb_Graveblossom.cs" />
     <Compile Include="Verb_Harvest.cs" />
+    <Compile Include="Verb_MeteorCall.cs" />
     <Compile Include="Verb_Multishot.cs" />
     <Compile Include="Verb_SpawnFaction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

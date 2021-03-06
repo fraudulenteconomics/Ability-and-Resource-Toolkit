@@ -19,4 +19,8 @@
       <shaderType>TransparentPlant</shaderType>
     </graphicData>
   </ThingDef>
+
+  <ThingDef ParentName="PawnFlyerBase">
+    <defName>PulledPawn</defName>
+  </ThingDef>
 </Defs>

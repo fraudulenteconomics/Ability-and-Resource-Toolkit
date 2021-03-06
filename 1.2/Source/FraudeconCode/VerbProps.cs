@@ -1,4 +1,5 @@
-﻿using HediffResourceFramework;
+﻿using System.Collections.Generic;
+using HediffResourceFramework;
 using RimWorld;
 using Verse;
 
@@ -16,6 +17,8 @@ namespace FraudeconCode
         public float extinguishRadius;
         public float leatherYield = 0.0f;
         public float meatYield = 0.5f;
+        public List<ThingDef> meteorMaterial;
+        public float meteorSize;
         public float multishotRadius;
         public int multishotShots;
         public bool multishotTargetFriendly = false;

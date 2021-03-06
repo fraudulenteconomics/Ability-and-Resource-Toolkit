@@ -1,5 +1,5 @@
 <Defs>
-    <ThingDef ParentName="BaseWeaponNeolithic">
+    <ThingDef ParentName="BaseWeapon">
         <defName>Bow_Short</defName>
         <label>short bow</label>
         <description>A simple short selfbow made from a single piece of wood.</description>
@@ -8,46 +8,37 @@
             <graphicClass>Graphic_Single</graphicClass>
         </graphicData>
         <soundInteract>Bow_Small</soundInteract>
-        <costList>
-            <WoodLog>30</WoodLog>
-        </costList>
         <statBases>
             <WorkToMake>2400</WorkToMake>
             <Mass>0.8</Mass>
-            <AccuracyTouch>0.75</AccuracyTouch>
-            <AccuracyShort>0.65</AccuracyShort>
-            <AccuracyMedium>0.45</AccuracyMedium>
-            <AccuracyLong>0.25</AccuracyLong>
-            <RangedWeapon_Cooldown>1.65</RangedWeapon_Cooldown>
+            <AccuracyTouch>1.00</AccuracyTouch>
+            <AccuracyShort>1.00</AccuracyShort>
+            <AccuracyMedium>1.00</AccuracyMedium>
+            <AccuracyLong>1.00</AccuracyLong>
+            <RangedWeapon_Cooldown>0.5</RangedWeapon_Cooldown>
         </statBases>
-        <weaponTags>
-            <li>NeolithicRangedBasic</li>
-        </weaponTags>
-        <recipeMaker>
-            <recipeUsers>
-                <li>CraftingSpot</li>
-            </recipeUsers>
-            <skillRequirements>
-                <Crafting>2</Crafting>
-            </skillRequirements>
-        </recipeMaker>
         <verbs>
             <li Class="FraudeconCode.VerbProps">
-                <verbClass>FraudeconCode.Verb_ConsumeCorpse</verbClass>
+                <verbClass>FraudeconCode.Verb_MeteorCall</verbClass>
                 <hasStandardCommand>true</hasStandardCommand>
                 <defaultProjectile>Arrow_Short</defaultProjectile>
                 <soundCast>Bow_Small</soundCast>
                 <range>29.9</range>
-                <targetResourceSettings>
-                    <li>
-                        <hediff>FE_FusionSurge</hediff>
-                        <resourcePerUse>1</resourcePerUse>
-                        <addHediffIfMissing>true</addHediffIfMissing>
-                    </li>
-                </targetResourceSettings>
+                <meteorSize>4.9</meteorSize>
+                <meteorMaterial>
+                    <li>MineableSteel</li>
+                    <li>MineableSilver</li>
+                    <li>MineableGold</li>
+                    <li>MineableUranium</li>
+                    <li>MineablePlasteel</li>
+                    <li>MineableJade</li>
+                    <li>MineableComponentsIndustrial</li>
+                </meteorMaterial>
                 <targetParams>
                     <canTargetLocations>true</canTargetLocations>
                 </targetParams>
+                <forcedMissRadius>10</forcedMissRadius>
+                <warmupTime>0.5</warmupTime>
             </li>
         </verbs>
         <tools>
@@ -61,5 +52,6 @@
                 <cooldownTime>2</cooldownTime>
             </li>
         </tools>
+        <techLevel>Neolithic</techLevel>
     </ThingDef>
 </Defs>
