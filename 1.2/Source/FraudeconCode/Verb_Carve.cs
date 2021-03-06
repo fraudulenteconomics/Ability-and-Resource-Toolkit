@@ -12,16 +12,13 @@ namespace FraudeconCode
             if (Props.removeRoofs)
             {
                 var roof = cell.GetRoof(caster.Map);
-                Log.Message("Found roof " + roof + " at " + cell);
                 if (roof != null && roof.isThickRoof)
                 {
-                    Log.Message("Found thick roof at " + cell);
                     var canRemove = false;
                     foreach (var roof2 in GenRadial.RadialCellsAround(cell, 1, false)
                         .Select(pos => pos.GetRoof(caster.Map)))
                         if (roof2 == null || !roof2.isThickRoof)
                             canRemove = true;
-                    Log.Message("Can remove: " + canRemove);
                     if (canRemove) caster.Map.roofGrid.SetRoof(cell, null);
                 }
             }
