@@ -22,5 +22,8 @@
 
   <ThingDef ParentName="PawnFlyerBase">
     <defName>PulledPawn</defName>
+    <thingClass>FraudeconCode.PulledPawn</thingClass>
+    <pawnFlyer>
+    </pawnFlyer>
   </ThingDef>
 </Defs>

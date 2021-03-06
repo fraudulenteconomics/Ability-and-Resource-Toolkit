@@ -19,25 +19,11 @@
         </statBases>
         <verbs>
             <li Class="FraudeconCode.VerbProps">
-                <verbClass>FraudeconCode.Verb_MeteorCall</verbClass>
+                <verbClass>FraudeconCode.Verb_PullTarget</verbClass>
                 <hasStandardCommand>true</hasStandardCommand>
                 <defaultProjectile>Arrow_Short</defaultProjectile>
                 <soundCast>Bow_Small</soundCast>
                 <range>29.9</range>
-                <meteorSize>4.9</meteorSize>
-                <meteorMaterial>
-                    <li>MineableSteel</li>
-                    <li>MineableSilver</li>
-                    <li>MineableGold</li>
-                    <li>MineableUranium</li>
-                    <li>MineablePlasteel</li>
-                    <li>MineableJade</li>
-                    <li>MineableComponentsIndustrial</li>
-                </meteorMaterial>
-                <targetParams>
-                    <canTargetLocations>true</canTargetLocations>
-                </targetParams>
-                <forcedMissRadius>10</forcedMissRadius>
                 <warmupTime>0.5</warmupTime>
             </li>
         </verbs>
