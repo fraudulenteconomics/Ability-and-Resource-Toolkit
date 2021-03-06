@@ -42,12 +42,14 @@
     <Reference Include="System.Net.Http" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="VerbMod.cs" />
     <Compile Include="VerbProps.cs" />
     <Compile Include="Verb_AreaEffect.cs" />
     <Compile Include="Verb_Carve.cs" />
     <Compile Include="Verb_Cauterize.cs" />
     <Compile Include="Verb_Extinguish.cs" />
     <Compile Include="Verb_Fleshletting.cs" />
+    <Compile Include="Verb_Graveblossom.cs" />
     <Compile Include="Verb_Harvest.cs" />
     <Compile Include="Verb_Multishot.cs" />
     <Compile Include="Verb_SpawnFaction.cs" />

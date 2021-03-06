@@ -6,4 +6,17 @@
     <thingClass>FraudeconCode.Extinguishing</thingClass>
     <tickerType>Normal</tickerType>
   </ThingDef>
+
+  <ThingDef ParentName="EtherealThingBase">
+    <defName>Graveblossom</defName>
+    <label>graveblossom</label>
+    <thingClass>FraudeconCode.Graveblossom</thingClass>
+    <drawerType>MapMeshOnly</drawerType>
+    <tickerType>Long</tickerType>
+    <graphicData>
+      <texPath>Things/Apparel/BlastVest/BlastVest</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <shaderType>TransparentPlant</shaderType>
+    </graphicData>
+  </ThingDef>
 </Defs>

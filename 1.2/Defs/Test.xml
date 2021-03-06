@@ -33,15 +33,12 @@
         </recipeMaker>
         <verbs>
             <li Class="FraudeconCode.VerbProps">
-                <verbClass>FraudeconCode.Verb_Fleshletting</verbClass>
+                <verbClass>FraudeconCode.Verb_Graveblossom</verbClass>
                 <hasStandardCommand>true</hasStandardCommand>
                 <defaultProjectile>Arrow_Short</defaultProjectile>
                 <soundCast>Bow_Small</soundCast>
                 <range>29.9</range>
-                <meatYield>1.0</meatYield>
-                <leatherYield>1.0</leatherYield>
-                <applyHediff>Hangover</applyHediff>
-
+                <effectRadius>4.9</effectRadius>
                 <!-- <targetParams>
                     <canTargetLocations>true</canTargetLocations>
                 </targetParams>
