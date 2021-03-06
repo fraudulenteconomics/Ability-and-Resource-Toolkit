@@ -33,6 +33,14 @@ namespace FraudeconCode
             return true;
         }
 
+        public override bool CanHitTarget(LocalTargetInfo targ)
+        {
+            var pawn = targ.Pawn;
+            if (pawn == null) return false;
+            if (pawn.health.hediffSet.HasHediff(Props.applyHediff)) return false;
+            return base.ValidateTarget(targ);
+        }
+
         public override bool ValidateTarget(LocalTargetInfo target)
         {
             var pawn = target.Pawn;
