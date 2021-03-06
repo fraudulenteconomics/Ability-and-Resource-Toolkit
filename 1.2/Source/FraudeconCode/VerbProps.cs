@@ -9,6 +9,7 @@ namespace FraudeconCode
     {
         public bool alwaysGetChunks = true;
         public HediffDef applyHediff;
+        public bool canHarvestTrees;
         public DamageDef cauterizeDamageDef;
         public float effectRadius;
         public float extinguishRadius;

@@ -40,7 +40,7 @@
                 <range>29.9</range>
                 <meatYield>1.0</meatYield>
                 <leatherYield>1.0</leatherYield>
-                <applyHediff>Catatonic</applyHediff>
+                <applyHediff>Hangover</applyHediff>
 
                 <!-- <targetParams>
                     <canTargetLocations>true</canTargetLocations>

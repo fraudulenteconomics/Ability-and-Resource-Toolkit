@@ -13,6 +13,8 @@ namespace FraudeconCode
                 p.def.plant.harvestedThingDef != null && p.HarvestableNow).ToList();
             foreach (var plant in plants)
             {
+                if (!Props.canHarvestTrees && plant.def.defName.Contains("Tree")) continue;
+
                 var thing = ThingMaker.MakeThing(plant.def.plant.harvestedThingDef);
                 thing.stackCount = (int) (plant.YieldNow() * Props.yieldMultiplier);
 
