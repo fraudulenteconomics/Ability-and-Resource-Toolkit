@@ -132,7 +132,7 @@ namespace HediffResourceFramework
                         float num = statBooster.resourcePerSecond;
                         if (statBooster.qualityScalesResourcePerSecond && this.parent.TryGetQuality(out QualityCategory qc))
                         {
-                            num *= HediffResourceUtils.GetQualityMultiplier(qc);
+                            num *= HediffResourceUtils.GetQualityMultiplierInverted(qc);
                         }
                         HediffResourceUtils.AdjustResourceAmount(user, statBooster.hediff, num, statBooster.addHediffIfMissing);
                     }

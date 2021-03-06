@@ -346,26 +346,17 @@ namespace HediffResourceFramework
 
 		public static HediffResource AdjustResourceAmount(Pawn pawn, HediffResourceDef hdDef, float sevOffset, bool addHediffIfMissing)
 		{
-			if (sevOffset != 0f)
+			HediffResource firstHediffOfDef = pawn.health.hediffSet.GetFirstHediffOfDef(hdDef) as HediffResource;
+			if (firstHediffOfDef != null)
 			{
-				HediffResource firstHediffOfDef = pawn.health.hediffSet.GetFirstHediffOfDef(hdDef) as HediffResource;
-				if (firstHediffOfDef != null)
-				{
-					firstHediffOfDef.ResourceAmount += sevOffset;
-					return firstHediffOfDef;
-				}
-				else if (addHediffIfMissing && sevOffset >= 0)
-				{
-					firstHediffOfDef = HediffMaker.MakeHediff(hdDef, pawn) as HediffResource;
-					pawn.health.AddHediff(firstHediffOfDef);
-					firstHediffOfDef.ResourceAmount = sevOffset;
-					return firstHediffOfDef;
-				}
+				firstHediffOfDef.ResourceAmount += sevOffset;
+				return firstHediffOfDef;
 			}
-			else if (pawn.health.hediffSet.GetFirstHediffOfDef(hdDef) is null && addHediffIfMissing && sevOffset >= 0)
+			else if (addHediffIfMissing && (sevOffset >= 0 || hdDef.keepWhenEmpty))
 			{
-				var firstHediffOfDef = HediffMaker.MakeHediff(hdDef, pawn) as HediffResource;
+				firstHediffOfDef = HediffMaker.MakeHediff(hdDef, pawn) as HediffResource;
 				pawn.health.AddHediff(firstHediffOfDef);
+				firstHediffOfDef.ResourceAmount = sevOffset;
 				return firstHediffOfDef;
 			}
 			return null;
@@ -382,6 +373,21 @@ namespace HediffResourceFramework
 				case QualityCategory.Excellent: return 1.3f;
 				case QualityCategory.Masterwork: return 1.55f;
 				case QualityCategory.Legendary: return 1.75f;
+				default: return 1f;
+			}
+		}
+
+		public static float GetQualityMultiplierInverted(QualityCategory qualityCategory)
+		{
+			switch (qualityCategory)
+			{
+				case QualityCategory.Awful: return 1.75f;
+				case QualityCategory.Poor: return 1.55f; 
+				case QualityCategory.Normal: return 1.3f;
+				case QualityCategory.Good: return 1.15f;
+				case QualityCategory.Excellent: return 1f;
+				case QualityCategory.Masterwork: return 0.9f;
+				case QualityCategory.Legendary: return 0.8f; 
 				default: return 1f;
 			}
 		}
