@@ -42,6 +42,7 @@
     <Reference Include="System.Net.Http" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PawnMover.cs" />
     <Compile Include="VerbMod.cs" />
     <Compile Include="VerbProps.cs" />
     <Compile Include="Verb_AreaEffect.cs" />
@@ -52,6 +53,7 @@
     <Compile Include="Verb_Fleshletting.cs" />
     <Compile Include="Verb_Graveblossom.cs" />
     <Compile Include="Verb_Harvest.cs" />
+    <Compile Include="Verb_MeleeCharge.cs" />
     <Compile Include="Verb_MeteorCall.cs" />
     <Compile Include="Verb_Multishot.cs" />
     <Compile Include="Verb_PullTarget.cs" />

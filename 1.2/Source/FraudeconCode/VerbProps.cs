@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using HediffResourceFramework;
 using RimWorld;
+using UnityEngine;
 using Verse;
 
 // ReSharper disable InconsistentNaming
@@ -13,8 +14,15 @@ namespace FraudeconCode
         public HediffDef applyHediff;
         public bool canHarvestTrees;
         public DamageDef cauterizeDamageDef;
+        public float chargeDamageAmount;
+        public DamageDef chargeDamageDef;
+        public GraphicData chargeGraphic;
+        public Color chargeGraphicColor = new Color(0, 0, 0, 0);
+        public float chargeWidth;
         public float effectRadius;
         public float extinguishRadius;
+        public DamageDef landingDamageDef;
+        public float landingEffectRadius;
         public float leatherYield = 0.0f;
         public float meatYield = 0.5f;
         public List<ThingDef> meteorMaterial;
