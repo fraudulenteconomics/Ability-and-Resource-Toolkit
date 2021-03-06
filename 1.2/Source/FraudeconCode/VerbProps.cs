@@ -1,4 +1,5 @@
 ﻿using HediffResourceFramework;
+using RimWorld;
 using Verse;
 
 // ReSharper disable InconsistentNaming
@@ -19,6 +20,7 @@ namespace FraudeconCode
         public int multishotShots;
         public bool multishotTargetFriendly = false;
         public bool removeRoofs = true;
+        public RotStage? requireRotStage;
         public float yieldMultiplier = 1f;
     }
 }

@@ -33,16 +33,21 @@
         </recipeMaker>
         <verbs>
             <li Class="FraudeconCode.VerbProps">
-                <verbClass>FraudeconCode.Verb_Graveblossom</verbClass>
+                <verbClass>FraudeconCode.Verb_ConsumeCorpse</verbClass>
                 <hasStandardCommand>true</hasStandardCommand>
                 <defaultProjectile>Arrow_Short</defaultProjectile>
                 <soundCast>Bow_Small</soundCast>
                 <range>29.9</range>
-                <effectRadius>4.9</effectRadius>
-                <!-- <targetParams>
+                <targetResourceSettings>
+                    <li>
+                        <hediff>FE_FusionSurge</hediff>
+                        <resourcePerUse>1</resourcePerUse>
+                        <addHediffIfMissing>true</addHediffIfMissing>
+                    </li>
+                </targetResourceSettings>
+                <targetParams>
                     <canTargetLocations>true</canTargetLocations>
                 </targetParams>
-                <requireLineOfSight>false</requireLineOfSight> -->
             </li>
         </verbs>
         <tools>

@@ -47,6 +47,7 @@
     <Compile Include="Verb_AreaEffect.cs" />
     <Compile Include="Verb_Carve.cs" />
     <Compile Include="Verb_Cauterize.cs" />
+    <Compile Include="Verb_ConsumeCorpse.cs" />
     <Compile Include="Verb_Extinguish.cs" />
     <Compile Include="Verb_Fleshletting.cs" />
     <Compile Include="Verb_Graveblossom.cs" />
