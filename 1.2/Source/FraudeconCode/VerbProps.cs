@@ -17,7 +17,11 @@ namespace FraudeconCode
         public DamageDef chargeDamageDef;
         public GraphicData chargeGraphic;
         public float chargeWidth;
+        public float effectDamageAmount;
+        public DamageDef effectDamageDef;
+        public float effectDuration;
         public float effectRadius;
+        public float effectRate;
         public float extinguishRadius;
         public DamageDef landingDamageDef;
         public float landingEffectRadius;

@@ -26,11 +26,18 @@
     <pawnFlyer>
     </pawnFlyer>
   </ThingDef>
-  
+
   <ThingDef ParentName="PawnFlyerBase">
     <defName>ChargingPawn</defName>
     <thingClass>FraudeconCode.ChargingPawn</thingClass>
     <pawnFlyer>
     </pawnFlyer>
+  </ThingDef>
+  
+  <ThingDef ParentName="EtherealThingBase">
+    <defName>Puller</defName>
+    <label>puller</label>
+    <thingClass>FraudeconCode.Puller</thingClass>
+    <tickerType>Normal</tickerType>
   </ThingDef>
 </Defs>

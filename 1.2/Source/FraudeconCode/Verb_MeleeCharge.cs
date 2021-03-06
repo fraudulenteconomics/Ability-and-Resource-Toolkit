@@ -34,6 +34,9 @@ namespace FraudeconCode
         {
             base.ExposeData();
             Scribe_Collections.Look(ref hitTargets, "hitTargets");
+            Scribe_Deep.Look(ref Props, "props");
+            Scribe_Deep.Look(ref Params, "params");
+            Scribe_Defs.Look(ref Weapon, "weapon");
         }
 
         public override void AffectCell(IntVec3 cell)

@@ -19,6 +19,14 @@ namespace FraudeconCode
             }
         }
 
+        public void End()
+        {
+            if (FlyingPawn == null) Destroy();
+            Position = IntVec3.FromVector3(effectivePos);
+            RespawnPawn();
+            Destroy();
+        }
+
         public override void Tick()
         {
             base.Tick();
