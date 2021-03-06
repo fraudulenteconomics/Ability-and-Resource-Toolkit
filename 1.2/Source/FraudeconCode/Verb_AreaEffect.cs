@@ -1,4 +1,5 @@
-﻿using Verse;
+﻿using System.Linq;
+using Verse;
 using Verse.AI;
 
 namespace FraudeconCode
@@ -9,7 +10,8 @@ namespace FraudeconCode
 
         protected override bool TryCastShot()
         {
-            foreach (var cell in GenRadial.RadialCellsAround(currentTarget.Cell, Props.effectRadius, true))
+            foreach (var cell in GenRadial.RadialCellsAround(currentTarget.Cell, Props.effectRadius, true)
+                .Where(cell => cell.InBounds(caster.Map)))
                 AffectCell(cell);
             return true;
         }

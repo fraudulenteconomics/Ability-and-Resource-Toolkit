@@ -38,12 +38,14 @@
                 <defaultProjectile>Arrow_Short</defaultProjectile>
                 <soundCast>Bow_Small</soundCast>
                 <range>29.9</range>
-                <effectRadius>3.9</effectRadius>
-                <yieldMultiplier>2</yieldMultiplier>
-                <targetParams>
+                <meatYield>1.0</meatYield>
+                <leatherYield>1.0</leatherYield>
+                <applyHediff>Catatonic</applyHediff>
+
+                <!-- <targetParams>
                     <canTargetLocations>true</canTargetLocations>
                 </targetParams>
-                <requireLineOfSight>false</requireLineOfSight>
+                <requireLineOfSight>false</requireLineOfSight> -->
             </li>
         </verbs>
         <tools>
