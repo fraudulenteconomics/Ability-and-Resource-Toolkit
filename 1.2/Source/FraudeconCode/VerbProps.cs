@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using HediffResourceFramework;
 using RimWorld;
-using UnityEngine;
 using Verse;
 
 // ReSharper disable InconsistentNaming
@@ -17,7 +16,6 @@ namespace FraudeconCode
         public float chargeDamageAmount;
         public DamageDef chargeDamageDef;
         public GraphicData chargeGraphic;
-        public Color chargeGraphicColor = new Color(0, 0, 0, 0);
         public float chargeWidth;
         public float effectRadius;
         public float extinguishRadius;
