@@ -138,7 +138,7 @@ namespace HediffResourceFramework
                     }
                 }
             }
-            Log.Message($"{this.parent} - in use: {inUse}, claimants: {string.Join(", ", claimaints)}, users: {string.Join(", ", GetActualUsers(claimaints))}");
+            //Log.Message($"{this.parent} - in use: {inUse}, claimants: {string.Join(", ", claimaints)}, users: {string.Join(", ", GetActualUsers(claimaints))}");
         }
 
         public Dictionary<int, bool> resourceUseToggleStates = new Dictionary<int, bool>();
