@@ -33,7 +33,7 @@
         </recipeMaker>
         <verbs>
             <li Class="FraudeconCode.VerbProps">
-                <verbClass>FraudeconCode.Verb_Carve</verbClass>
+                <verbClass>FraudeconCode.Verb_Fleshletting</verbClass>
                 <hasStandardCommand>true</hasStandardCommand>
                 <defaultProjectile>Arrow_Short</defaultProjectile>
                 <soundCast>Bow_Small</soundCast>
