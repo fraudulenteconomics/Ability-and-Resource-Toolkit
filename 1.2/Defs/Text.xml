@@ -33,13 +33,17 @@
         </recipeMaker>
         <verbs>
             <li Class="FraudeconCode.VerbProps">
-                <verbClass>FraudeconCode.Verb_Cauterize</verbClass>
+                <verbClass>FraudeconCode.Verb_Carve</verbClass>
                 <hasStandardCommand>true</hasStandardCommand>
                 <defaultProjectile>Arrow_Short</defaultProjectile>
-                <warmupTime>1.35</warmupTime>
-                <range>22.9</range>
                 <soundCast>Bow_Small</soundCast>
-                <cauterizeDamageDef>Burn</cauterizeDamageDef>
+                <range>29.9</range>
+                <effectRadius>3.9</effectRadius>
+                <yieldMultiplier>2</yieldMultiplier>
+                <targetParams>
+                    <canTargetLocations>true</canTargetLocations>
+                </targetParams>
+                <requireLineOfSight>false</requireLineOfSight>
             </li>
         </verbs>
         <tools>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <ThingDef ParentName="EtherealThingBase">
+    <defName>Extinguishing</defName>
+    <label>extinguishing</label>
+    <thingClass>FraudeconCode.Extinguishing</thingClass>
+    <tickerType>Normal</tickerType>
+  </ThingDef>
+</Defs>
