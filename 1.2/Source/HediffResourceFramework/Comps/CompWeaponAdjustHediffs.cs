@@ -80,7 +80,8 @@ namespace HediffResourceFramework
                 foreach (var option in Props.resourceSettings)
                 {
                     var hediffResource = pawn.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
-                    if (hediffResource != null && (PostUseDelayTicks.TryGetValue(hediffResource, out var disable) && (disable.delayTicks > Find.TickManager.TicksGame)
+
+                    if (hediffResource != null && (PostUseDelayTicks.TryGetValue(hediffResource, out var disable) && (disable.delayTicks > Find.TickManager.TicksGame) 
                         || !hediffResource.CanGainResource))
                     {
                         continue;

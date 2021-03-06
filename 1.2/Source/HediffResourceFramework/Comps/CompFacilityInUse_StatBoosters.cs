@@ -132,13 +132,13 @@ namespace HediffResourceFramework
                         float num = statBooster.resourcePerSecond;
                         if (statBooster.qualityScalesResourcePerSecond && this.parent.TryGetQuality(out QualityCategory qc))
                         {
-                            num *= HediffResourceUtils.GetQualityMultiplier(qc);
+                            num *= HediffResourceUtils.GetQualityMultiplierInverted(qc);
                         }
                         HediffResourceUtils.AdjustResourceAmount(user, statBooster.hediff, num, statBooster.addHediffIfMissing);
                     }
                 }
             }
-            Log.Message($"{this.parent} - in use: {inUse}, claimants: {string.Join(", ", claimaints)}, users: {string.Join(", ", GetActualUsers(claimaints))}");
+            //Log.Message($"{this.parent} - in use: {inUse}, claimants: {string.Join(", ", claimaints)}, users: {string.Join(", ", GetActualUsers(claimaints))}");
         }
 
         public Dictionary<int, bool> resourceUseToggleStates = new Dictionary<int, bool>();
