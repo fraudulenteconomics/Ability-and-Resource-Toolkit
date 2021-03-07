@@ -83,7 +83,8 @@ namespace HediffResourceFramework
                 {
                     foreach (var statBooster in comp.Props.statBoosters)
                     {
-                        if (statBooster.preventUseIfHediffMissing && pawn.health.hediffSet.GetFirstHediffOfDef(statBooster.hediff) is null)
+                        
+                        if (statBooster.preventUseIfHediffMissing && pawn.health.hediffSet.GetFirstHediffOfDef(statBooster.hediff) is null && comp.StatBoosterIsEnabled(statBooster))
                         {
                             FloatMenuOption floatMenuOption = opts.FirstOrDefault((FloatMenuOption x) => x.Label.ToLower().Contains(t.Label.ToLower()));
                             if (floatMenuOption != null)

@@ -53,13 +53,13 @@ namespace HediffResourceFramework
         }
         public void Register()
         {
-            var gameComp = Current.Game.GetComponent<HediffResourceManager>();
+            var gameComp = HediffResourceUtils.HediffResourceManager;
             gameComp.RegisterAdjuster(this);
         }
 
         public void Deregister()
         {
-            var gameComp = Current.Game.GetComponent<HediffResourceManager>();
+            var gameComp = HediffResourceUtils.HediffResourceManager;
             gameComp.RegisterAdjuster(this);
         }
         public bool TryGetQuality(out QualityCategory qc)
@@ -125,7 +125,7 @@ namespace HediffResourceFramework
             Scribe_Collections.Look(ref postUseDelayTicks, "postUseDelayTicks", LookMode.Reference, LookMode.Deep, ref hediffResourceKeys, ref hediffResourceDisablesValues);
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
-                var gameComp = Current.Game.GetComponent<HediffResourceManager>();
+                var gameComp = HediffResourceUtils.HediffResourceManager;
                 gameComp.RegisterAdjuster(this);
             }
         }

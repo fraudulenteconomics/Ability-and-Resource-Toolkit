@@ -67,13 +67,13 @@ namespace HediffResourceFramework
         }
         public void Register()
         {
-            var gameComp = Current.Game.GetComponent<HediffResourceManager>();
+            var gameComp = HediffResourceUtils.HediffResourceManager;
             gameComp.RegisterAdjuster(this);
         }
 
         public void Deregister()
         {
-            var gameComp = Current.Game.GetComponent<HediffResourceManager>();
+            var gameComp = HediffResourceUtils.HediffResourceManager;
             gameComp.DeregisterAdjuster(this);
         }
 

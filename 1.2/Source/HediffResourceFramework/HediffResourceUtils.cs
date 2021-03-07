@@ -55,6 +55,20 @@ namespace HediffResourceFramework
 	[StaticConstructorOnStartup]
 	public static class HediffResourceUtils
 	{
+		public static HediffResourceManager HediffResourceManager
+		{
+			get
+			{
+				if (manager == null)
+				{
+					manager = Current.Game.GetComponent<HediffResourceManager>();
+					return manager;
+				}
+				return manager;
+			}
+		}
+		private static HediffResourceManager manager;
+
 		public static bool CanDrink(Pawn pawn, Thing potion, out string reason)
 		{
 			var comp = potion.def?.ingestible?.outcomeDoers?.OfType<IngestionOutcomeDoer_GiveHediffResource>().FirstOrDefault();
@@ -591,7 +605,7 @@ namespace HediffResourceFramework
 
 			if (props.ResourceSettings != null)
 			{
-				var hediffResourceManage = Current.Game.GetComponent<HediffResourceManager>();
+				var hediffResourceManage = HediffResourceUtils.HediffResourceManager;
 
 				var hediffPostUse = new Dictionary<HediffResource, List<int>>();
 				var hediffPostUseDelayMultipliers = new Dictionary<HediffResource, List<float>>();

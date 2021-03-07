@@ -26,7 +26,14 @@ namespace HediffResourceFramework
         public bool qualityScalesResourcePerSecond;
         public List<StatModifier> statOffsets;
         public List<StatModifier> statFactors;
+
+        public int increaseQuality = -1;
+        public QualityCategory increaseQualityCeiling = QualityCategory.Legendary;
+
+        public List<StatBonus> outputStatOffsets;
+        public List<StatBonus> outputStatFactors;
     }
+
     public class CompProperties_FacilityInUse_StatBoosters : CompProperties
     {
         public List<StatBooster> statBoosters;
@@ -40,6 +47,16 @@ namespace HediffResourceFramework
         public static Dictionary<Thing, CompFacilityInUse_StatBoosters> thingBoosters = new Dictionary<Thing, CompFacilityInUse_StatBoosters>();
 
         public static HashSet<StatDef> statsWithBoosters = new HashSet<StatDef> { };
+
+        public bool StatBoosterIsEnabled(StatBooster statBooster)
+        {
+            var ind = this.Props.statBoosters.IndexOf(statBooster);
+            if (resourceUseToggleStates != null && resourceUseToggleStates.TryGetValue(ind, out bool state) && !state)
+            {
+                return false;
+            }
+            return true;
+        }
         public override void PostSpawnSetup(bool respawningAfterLoad)
         {
             base.PostSpawnSetup(respawningAfterLoad);
@@ -192,13 +209,13 @@ namespace HediffResourceFramework
 
         public void Register()
         {
-            var gameComp = Current.Game.GetComponent<HediffResourceManager>();
+            var gameComp = HediffResourceUtils.HediffResourceManager;
             gameComp.RegisterAdjuster(this);
         }
 
         public void Deregister()
         {
-            var gameComp = Current.Game.GetComponent<HediffResourceManager>();
+            var gameComp = HediffResourceUtils.HediffResourceManager;
             gameComp.DeregisterAdjuster(this);
         }
 
