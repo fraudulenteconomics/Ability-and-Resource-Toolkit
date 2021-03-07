@@ -42,6 +42,7 @@
     <Reference Include="System.Net.Http" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DamageWorker_AddInternalInjury.cs" />
     <Compile Include="PawnMover.cs" />
     <Compile Include="VerbMod.cs" />
     <Compile Include="VerbProps.cs" />
