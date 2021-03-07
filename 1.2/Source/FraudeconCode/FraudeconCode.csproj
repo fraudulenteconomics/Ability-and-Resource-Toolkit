@@ -46,6 +46,7 @@
     <Compile Include="VerbMod.cs" />
     <Compile Include="VerbProps.cs" />
     <Compile Include="Verb_AreaEffect.cs" />
+    <Compile Include="Verb_Avatar.cs" />
     <Compile Include="Verb_Carve.cs" />
     <Compile Include="Verb_Cauterize.cs" />
     <Compile Include="Verb_ConsumeCorpse.cs" />

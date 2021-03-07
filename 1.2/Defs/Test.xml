@@ -19,20 +19,27 @@
         </statBases>
         <verbs>
             <li Class="FraudeconCode.VerbProps">
-                <verbClass>FraudeconCode.Verb_PullToLocation</verbClass>
+                <verbClass>FraudeconCode.Verb_Avatar</verbClass>
                 <hasStandardCommand>true</hasStandardCommand>
                 <defaultProjectile>Arrow_Short</defaultProjectile>
                 <soundCast>Bow_Small</soundCast>
                 <range>29.9</range>
                 <warmupTime>0.5</warmupTime>
-                <effectRadius>10.9</effectRadius>
-                <effectDuration>600</effectDuration>
-                <effectRate>60</effectRate>
-                <effectDamageDef>Blunt</effectDamageDef>
-                <effectDamageAmount>10</effectDamageAmount>
+                <effectRadius>3.9</effectRadius>
+                <maxTargets>4</maxTargets>
+                <effectCount>
+                    <li>
+                        <minCount>1</minCount>
+                        <spawnDef>Turret_Autocannon</spawnDef>
+                    </li>
+                    <li>
+                        <minCount>4</minCount>
+                        <pawnKindDef>Mercenary_Gunner</pawnKindDef>
+                    </li>
+                </effectCount>
+                <effectHediff>AlcoholHigh</effectHediff>
                 <targetParams>
                     <canTargetLocations>true</canTargetLocations>
-                    <canTargetBuildings>true</canTargetBuildings>
                 </targetParams>
             </li>
         </verbs>

@@ -17,15 +17,18 @@ namespace FraudeconCode
         public DamageDef chargeDamageDef;
         public GraphicData chargeGraphic;
         public float chargeWidth;
+        public List<MinCountDef> effectCount;
         public float effectDamageAmount;
         public DamageDef effectDamageDef;
         public float effectDuration;
+        public HediffDef effectHediff;
         public float effectRadius;
         public float effectRate;
         public float extinguishRadius;
         public DamageDef landingDamageDef;
         public float landingEffectRadius;
         public float leatherYield = 0.0f;
+        public int maxTargets;
         public float meatYield = 0.5f;
         public List<ThingDef> meteorMaterial;
         public float meteorSize;
@@ -35,5 +38,12 @@ namespace FraudeconCode
         public bool removeRoofs = true;
         public RotStage? requireRotStage;
         public float yieldMultiplier = 1f;
+    }
+
+    public struct MinCountDef
+    {
+        public int minCount;
+        public string spawnDef;
+        public string pawnKindDef;
     }
 }
