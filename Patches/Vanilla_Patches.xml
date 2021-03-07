@@ -41,6 +41,15 @@
 								<toggleResourceGizmoTexPath>UI/Designators/Cancel</toggleResourceGizmoTexPath>
 								<toggleResourceLabel>Toggle fusion reactor use</toggleResourceLabel>
 								<toggleResourceDesc>Toggle fusion reactor use</toggleResourceDesc>
+								<increaseQuality>6</increaseQuality>
+								<increaseQualityCeiling>Legendary</increaseQualityCeiling>
+								
+								<outputStatOffsets>
+									<Beauty>5</Beauty>
+								</outputStatOffsets>
+								<outputStatFactors>
+									<Beauty>2</Beauty>
+								</outputStatFactors>
 							</li>
 							<li>
 								<hediff>FE_StimHediff</hediff>
@@ -64,6 +73,15 @@
 								<toggleResourceGizmoTexPath>UI/Designators/Cancel</toggleResourceGizmoTexPath>
 								<toggleResourceLabel>Toggle stim use</toggleResourceLabel>
 								<toggleResourceDesc>Toggle stim use</toggleResourceDesc>
+								<increaseQuality>6</increaseQuality>
+								<increaseQualityCeiling>Legendary</increaseQualityCeiling>
+								
+								<outputStatOffsets>
+									<Beauty>5</Beauty>
+								</outputStatOffsets>
+								<outputStatFactors>
+									<Beauty>2</Beauty>
+								</outputStatFactors>
 							</li>
 						</statBoosters>
 					</li>
@@ -108,6 +126,16 @@
 								<toggleResourceGizmoTexPath>UI/Designators/Cancel</toggleResourceGizmoTexPath>
 								<toggleResourceLabel>Toggle fusion reactor use</toggleResourceLabel>
 								<toggleResourceDesc>Toggle fusion reactor use</toggleResourceDesc>
+								<increaseQuality>6</increaseQuality>
+								<increaseQualityCeiling>Legendary</increaseQualityCeiling>
+								
+								<outputStatOffsets>
+									<Beauty>5</Beauty>
+								</outputStatOffsets>
+								<outputStatFactors>
+									<Beauty>2</Beauty>
+								</outputStatFactors>
+								
 							</li>
 							<li>
 								<hediff>FE_StimHediff</hediff>
@@ -131,6 +159,15 @@
 								<toggleResourceGizmoTexPath>UI/Designators/Cancel</toggleResourceGizmoTexPath>
 								<toggleResourceLabel>Toggle stim use</toggleResourceLabel>
 								<toggleResourceDesc>Toggle stim use</toggleResourceDesc>
+								<increaseQuality>6</increaseQuality>
+								<increaseQualityCeiling>Legendary</increaseQualityCeiling>
+								
+								<outputStatOffsets>
+									<Beauty>5</Beauty>
+								</outputStatOffsets>
+								<outputStatFactors>
+									<Beauty>2</Beauty>
+								</outputStatFactors>
 							</li>
 						</statBoosters>
 					</li>
@@ -173,6 +210,7 @@
 								<toggleResourceGizmoTexPath>UI/Designators/Cancel</toggleResourceGizmoTexPath>
 								<toggleResourceLabel>Toggle fusion reactor use</toggleResourceLabel>
 								<toggleResourceDesc>Toggle fusion reactor use</toggleResourceDesc>
+								
 							</li>
 						</statBoosters>
 					</li>

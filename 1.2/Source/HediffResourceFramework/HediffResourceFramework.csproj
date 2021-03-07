@@ -57,7 +57,7 @@
     <Compile Include="Comps\HediffComp_AdjustHediffsPerStages.cs" />
     <Compile Include="Comps\HediffComp_AdjustHediffs.cs" />
     <Compile Include="HarmonyPatches\ForbidAndReservations_Patches.cs" />
-    <Compile Include="HarmonyPatches\Stat_Patches.cs" />
+    <Compile Include="HarmonyPatches\QualityAndStats_Patches.cs" />
     <Compile Include="Interfaces\IAdjustResouceInArea.cs" />
     <Compile Include="Interfaces\IChargeResource.cs" />
     <Compile Include="Interfaces\IAdjustResource.cs" />
