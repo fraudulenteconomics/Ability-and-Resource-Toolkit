@@ -437,9 +437,9 @@
 						<addHediffIfMissing>true</addHediffIfMissing>
 						<resetLifetimeTicks>true</resetLifetimeTicks>
 						<effectRadius>4.9</effectRadius>
-						<worksThroughWalls>false</worksThroughWalls>
+						<!--<worksThroughWalls>false</worksThroughWalls>
 						<affectsAllies>true</affectsAllies>
-						<affectsEnemies>false</affectsEnemies>
+						<affectsEnemies>false</affectsEnemies> -->
 					</li>
 				</targetResourceSettings>
 				<verbClass>HediffResourceFramework.Verb_ResourceSelf</verbClass>
@@ -477,9 +477,9 @@
 						<addHediffIfMissing>true</addHediffIfMissing>
 						<resetLifetimeTicks>true</resetLifetimeTicks>
 						<effectRadius>2.9</effectRadius>
-						<worksThroughWalls>false</worksThroughWalls>
+						<!-- <worksThroughWalls>false</worksThroughWalls>
 						<affectsAllies>true</affectsAllies>
-						<affectsEnemies>false</affectsEnemies>
+						<affectsEnemies>false</affectsEnemies> -->
 					</li>
 				</targetResourceSettings>
 				<verbClass>HediffResourceFramework.Verb_ResourceTarget</verbClass>
@@ -526,7 +526,7 @@
 				<resourceSettings>
 					<li>
 						<hediff>FE_CutterCharge</hediff>
-						<resourcePerSecond>-0.5</resourcePerSecond>
+						<resourcePerSecond>0</resourcePerSecond>
 						<qualityScalesResourcePerSecond>false</qualityScalesResourcePerSecond>
 						<maxResourceCapacityOffset>5</maxResourceCapacityOffset>
 						<qualityScalesCapacityOffset>false</qualityScalesCapacityOffset>
