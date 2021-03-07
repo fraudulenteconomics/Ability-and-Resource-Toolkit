@@ -9,6 +9,7 @@ namespace FraudeconCode
         {
             var harm = new Harmony("fradulenteconomics.verbs");
             GraveblossomHelpers.DoPatches(harm);
+            IndestructibleHediffs.DoPatches(harm);
         }
     }
 }

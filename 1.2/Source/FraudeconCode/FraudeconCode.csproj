@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DamageWorker_AddInternalInjury.cs" />
+    <Compile Include="HediffComp_Indestructible.cs" />
     <Compile Include="PawnMover.cs" />
     <Compile Include="VerbMod.cs" />
     <Compile Include="VerbProps.cs" />
