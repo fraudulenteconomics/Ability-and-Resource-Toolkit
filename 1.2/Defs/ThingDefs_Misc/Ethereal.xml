@@ -40,4 +40,11 @@
     <thingClass>FraudeconCode.Puller</thingClass>
     <tickerType>Normal</tickerType>
   </ThingDef>
+
+  <ThingDef ParentName="EtherealThingBase">
+    <defName>TeleportMarker</defName>
+    <label>teleport marker</label>
+    <thingClass>FraudeconCode.TeleMarker</thingClass>
+    <tickerType>Normal</tickerType>
+  </ThingDef>
 </Defs>

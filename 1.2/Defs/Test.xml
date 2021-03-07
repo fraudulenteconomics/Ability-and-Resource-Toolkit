@@ -19,25 +19,12 @@
         </statBases>
         <verbs>
             <li Class="FraudeconCode.VerbProps">
-                <verbClass>FraudeconCode.Verb_Avatar</verbClass>
+                <verbClass>FraudeconCode.Verb_Multishot</verbClass>
                 <hasStandardCommand>true</hasStandardCommand>
                 <defaultProjectile>Arrow_Short</defaultProjectile>
                 <soundCast>Bow_Small</soundCast>
                 <range>29.9</range>
                 <warmupTime>0.5</warmupTime>
-                <effectRadius>3.9</effectRadius>
-                <maxTargets>4</maxTargets>
-                <effectCount>
-                    <li>
-                        <minCount>1</minCount>
-                        <spawnDef>Turret_Autocannon</spawnDef>
-                    </li>
-                    <li>
-                        <minCount>4</minCount>
-                        <pawnKindDef>Mercenary_Gunner</pawnKindDef>
-                    </li>
-                </effectCount>
-                <effectHediff>AlcoholHigh</effectHediff>
                 <targetParams>
                     <canTargetLocations>true</canTargetLocations>
                 </targetParams>
@@ -56,4 +43,17 @@
         </tools>
         <techLevel>Neolithic</techLevel>
     </ThingDef>
+  <ThingDef ParentName="BaseProjectileNeolithic">
+    <defName>Arrow_Short</defName>
+    <label>shortbow arrow</label>
+    <graphicData>
+      <texPath>Things/Projectile/Arrow_Small</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+    </graphicData>
+    <projectile>
+      <damageDef>Arrow</damageDef>
+      <damageAmountBase>11</damageAmountBase>
+      <speed>44</speed>
+    </projectile>
+  </ThingDef>
 </Defs>
