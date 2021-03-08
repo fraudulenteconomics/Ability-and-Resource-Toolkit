@@ -30,6 +30,30 @@
 		<letterType>PositiveEvent</letterType>
 		<letterTitleKey>FE.FusionReactorGainedTitle</letterTitleKey>
 		<letterMessageKey>FE.FusionReactorGainedMessage</letterMessageKey>
+	</HediffResourceFramework.HediffResourceDef>
+	
+	<HediffResourceFramework.HediffResourceDef>
+		<defName>FE_ArchotechJump</defName>
+		<label>arhotech jump</label>
+		<description>Energy from a spacer personal fusion reactor. Used to power compatible devices.</description>
+		<hediffClass>HediffResourceFramework.HediffResource</hediffClass>
+		<keepWhenEmpty>false</keepWhenEmpty>
+		<isBad>false</isBad>
+		<tendable>false</tendable>
+		<makesSickThought>false</makesSickThought>
+		<defaultLabelColor>(0.2,0.8,0.8)</defaultLabelColor>
+		<showResourceBar>true</showResourceBar>
+		<sendLetterWhenGained>true</sendLetterWhenGained>
+		<letterType>PositiveEvent</letterType>
+		<letterTitleKey>FE.FE_ArchotechJumpGainedTitle</letterTitleKey>
+		<letterMessageKey>FE.FE_ArchotechJumpGainedMessage</letterMessageKey>
+		<requiredHediffs>
+			<li>
+				<hediff>ArchotechLeg</hediff>
+				<minCount>2</minCount>
+				<minSeverity>0</minSeverity>
+			</li>
+		</requiredHediffs>
 	</HediffResourceFramework.HediffResourceDef>	
 
 	<HediffResourceFramework.HediffResourceDef>

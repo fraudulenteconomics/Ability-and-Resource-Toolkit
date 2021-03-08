@@ -21,7 +21,8 @@ namespace HediffResourceFramework
         public string toggleResourceLabel;
         public string toggleResourceDesc;
 
-        public float resourcePerSecond;
+        public float resourcePerSecond = -1f;
+        public float resourceOnComplete = -1f;
         public bool addHediffIfMissing;
         public bool qualityScalesResourcePerSecond;
         public List<StatModifier> statOffsets;
@@ -142,20 +143,19 @@ namespace HediffResourceFramework
                 {
                     foreach (var statBooster in Props.statBoosters)
                     {
-                        if (this.resourceUseToggleStates != null && this.resourceUseToggleStates.TryGetValue(this.Props.statBoosters.IndexOf(statBooster), out var state) && !state)
+                        if (statBooster.resourcePerSecond != -1f && this.StatBoosterIsEnabled(statBooster))
                         {
-                            continue;
+                            float num = statBooster.resourcePerSecond;
+                            if (statBooster.qualityScalesResourcePerSecond && this.parent.TryGetQuality(out QualityCategory qc))
+                            {
+                                num *= HediffResourceUtils.GetQualityMultiplierInverted(qc);
+                            }
+                            HediffResourceUtils.AdjustResourceAmount(user, statBooster.hediff, num, statBooster.addHediffIfMissing);
                         }
-                        float num = statBooster.resourcePerSecond;
-                        if (statBooster.qualityScalesResourcePerSecond && this.parent.TryGetQuality(out QualityCategory qc))
-                        {
-                            num *= HediffResourceUtils.GetQualityMultiplierInverted(qc);
-                        }
-                        HediffResourceUtils.AdjustResourceAmount(user, statBooster.hediff, num, statBooster.addHediffIfMissing);
+
                     }
                 }
             }
-            //Log.Message($"{this.parent} - in use: {inUse}, claimants: {string.Join(", ", claimaints)}, users: {string.Join(", ", GetActualUsers(claimaints))}");
         }
 
         public Dictionary<int, bool> resourceUseToggleStates = new Dictionary<int, bool>();

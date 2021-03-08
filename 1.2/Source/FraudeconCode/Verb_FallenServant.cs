@@ -1,12 +1,11 @@
 ﻿using System.Linq;
-using HediffResourceFramework;
 using RimWorld;
 using Verse;
 using Verse.AI;
 
 namespace FraudeconCode
 {
-    internal class Verb_ConsumeCorpse : Verb_CastBase
+    internal class Verb_FallenServant : Verb_CastBase
     {
         public VerbProps Props => verbProps as VerbProps;
 
@@ -20,13 +19,14 @@ namespace FraudeconCode
         {
             var corpse = GetCorpse(currentTarget);
             if (corpse == null) return false;
-            foreach (var option in Props.TargetResourceSettings)
-                HediffResourceUtils.AdjustResourceAmount(CasterPawn,
-                    option.hediff, option.resourcePerUse,
-                    option.addHediffIfMissing);
-
+            var pawn = PawnGenerator.GeneratePawn(Props.servantDef, caster.Faction);
+            pawn.drafter = pawn.drafter ?? new Pawn_DraftController(pawn);
+            GenSpawn.Spawn(pawn, currentTarget.Cell, caster.Map);
+            var tracker =
+                (RemovalTracker) GenSpawn.Spawn(ThingDef.Named("RemovalTracker"), caster.Position, caster.Map);
+            tracker.ToTrack = pawn;
+            tracker.RemoveTick = Find.TickManager.TicksGame + Props.servantDuration;
             corpse.Destroy();
-
             return true;
         }
 

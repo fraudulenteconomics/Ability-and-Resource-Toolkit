@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using RimWorld;
 using Verse;
 using Verse.AI;
@@ -24,7 +25,12 @@ namespace FraudeconCode
             GenSpawn.Spawn(thing, CurrentTarget.Cell, caster.Map);
             thing.SetFaction(caster.Faction);
             if (thing is Pawn pwn) pwn.drafter = pwn.drafter ?? new Pawn_DraftController(pwn);
-            foreach (var pawn in pawns) pawn.health.AddHediff(Props.effectHediff);
+            var tracker =
+                (RemovalTracker) GenSpawn.Spawn(ThingDef.Named("RemovalTracker"), caster.Position, caster.Map);
+            tracker.ToTrack = thing;
+            tracker.ToRemove = pawns.Select(pawn => pawn.health.AddHediff(Props.effectHediff)).ToList();
+            tracker.ToApply = Props.feedbackHediff;
+            tracker.RemoveTick = Find.TickManager.TicksGame + Props.avatarDuration;
             return true;
         }
 
@@ -32,6 +38,58 @@ namespace FraudeconCode
         {
             base.DrawHighlight(target);
             GenDraw.DrawRadiusRing(caster.Position, Props.effectRadius);
+        }
+    }
+
+    public class RemovalTracker : Thing
+    {
+        private bool reachedTime;
+        public int RemoveTick;
+        public HediffDef ToApply;
+        public List<Hediff> ToRemove;
+        public Thing ToTrack;
+
+        public override void Tick()
+        {
+            if (ToTrack is Pawn p && p.Dead)
+            {
+                p.Corpse.Destroy();
+                ToTrack.Destroy();
+            }
+
+            if (Find.TickManager.TicksGame >= RemoveTick)
+            {
+                ToTrack.Destroy();
+                reachedTime = true;
+            }
+
+            if (!ToTrack.Spawned || ToTrack.Destroyed) OnRemove();
+        }
+
+        private void OnRemove()
+        {
+            var pawns = new List<Pawn>();
+            if (ToRemove != null)
+                foreach (var hediff in ToRemove)
+                {
+                    pawns.Add(hediff.pawn);
+                    hediff.pawn.health.RemoveHediff(hediff);
+                }
+
+            if (ToApply != null)
+                foreach (var pawn in pawns)
+                    pawn.health.AddHediff(ToApply);
+
+            Destroy();
+        }
+
+        public override void ExposeData()
+        {
+            base.ExposeData();
+            Scribe_Values.Look(ref RemoveTick, "removeTick");
+            Scribe_Values.Look(ref reachedTime, "reachedTime");
+            Scribe_References.Look(ref ToTrack, "toTrack");
+            Scribe_Collections.Look(ref ToRemove, "toRemove", LookMode.Reference);
         }
     }
 }

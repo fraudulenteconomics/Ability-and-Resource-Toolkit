@@ -11,6 +11,8 @@ namespace FraudeconCode
     {
         public bool alwaysGetChunks = true;
         public HediffDef applyHediff;
+        public int avatarDuration = 12000;
+        public float blinkDuration;
         public bool canHarvestTrees;
         public DamageDef cauterizeDamageDef;
         public float chargeDamageAmount;
@@ -25,6 +27,7 @@ namespace FraudeconCode
         public float effectRadius;
         public float effectRate;
         public float extinguishRadius;
+        public HediffDef feedbackHediff;
         public DamageDef landingDamageDef;
         public float landingEffectRadius;
         public float leatherYield = 0.0f;
@@ -37,6 +40,8 @@ namespace FraudeconCode
         public bool multishotTargetFriendly = false;
         public bool removeRoofs = true;
         public RotStage? requireRotStage;
+        public PawnKindDef servantDef;
+        public int servantDuration;
         public float yieldMultiplier = 1f;
     }
 
