@@ -19,13 +19,15 @@
         </statBases>
         <verbs>
             <li Class="FraudeconCode.VerbProps">
-                <verbClass>FraudeconCode.Verb_Blinkstrike</verbClass>
+                <verbClass>FraudeconCode.Verb_FallenServant</verbClass>
                 <hasStandardCommand>true</hasStandardCommand>
                 <defaultProjectile>Arrow_Short</defaultProjectile>
                 <soundCast>Bow_Small</soundCast>
                 <range>29.9</range>
                 <warmupTime>0.5</warmupTime>
-                <blinkDuration>10</blinkDuration>
+                <servantDef>Mercenary_Gunner</servantDef>
+                <servantDuration>600</servantDuration>
+                <requireRotStage>Fresh</requireRotStage>
                 <targetParams>
                     <canTargetLocations>true</canTargetLocations>
                 </targetParams>

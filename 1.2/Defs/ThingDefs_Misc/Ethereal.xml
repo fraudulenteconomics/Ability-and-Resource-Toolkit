@@ -47,4 +47,11 @@
     <thingClass>FraudeconCode.TeleMarker</thingClass>
     <tickerType>Normal</tickerType>
   </ThingDef>
+
+  <ThingDef ParentName="EtherealThingBase">
+    <defName>RemovalTracker</defName>
+    <label>removal tracker</label>
+    <thingClass>FraudeconCode.RemovalTracker</thingClass>
+    <tickerType>Normal</tickerType>
+  </ThingDef>
 </Defs>
