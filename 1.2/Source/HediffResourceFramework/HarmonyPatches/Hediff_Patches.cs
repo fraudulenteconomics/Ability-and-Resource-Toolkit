@@ -25,23 +25,17 @@ namespace HediffResourceFramework
 				{
 					if (hediffDef.requiredHediffs != null)
 					{
-						Log.Message($"Checking {hediffDef}");
 						foreach (var requiredHediff in hediffDef.requiredHediffs)
 						{
-							Log.Message($"requiredHediff.hediff: {requiredHediff.hediff}");
-							Log.Message($"requiredHediff.minCount: {requiredHediff.minCount} ");
-							Log.Message($"pawn.health.hediffSet.hediffs.Where(x => x.def == requiredHediff.hediff).Count(): {pawn.health.hediffSet.hediffs.Where(x => x.def == requiredHediff.hediff).Count()}");
 							while (requiredHediff.minCount > pawn.health.hediffSet.hediffs.Where(x => x.def == requiredHediff.hediff).Count())
 							{
 								var oldHediff = pawn.health.hediffSet.GetFirstHediffOfDef(hediffDef);
 								if (oldHediff != null)
 								{
-									Log.Message($"Removing old hediff {oldHediff}");
 									pawn.health.RemoveHediff(oldHediff);
 								}
 								else
 								{
-									Log.Message("Stopping");
 									break;
 								}
 							}
