@@ -11,6 +11,7 @@ namespace FraudeconCode
     {
         public bool alwaysGetChunks = true;
         public HediffDef applyHediff;
+        public float blinkDuration;
         public bool canHarvestTrees;
         public DamageDef cauterizeDamageDef;
         public float chargeDamageAmount;

@@ -10,7 +10,8 @@ namespace FraudeconCode
             var cell = CurrentTarget.HasThing ? CurrentTarget.Thing.RandomAdjacentCellCardinal() : CurrentTarget.Cell;
             var marker = (TeleMarker) GenSpawn.Spawn(ThingDef.Named("TeleportMarker"), caster.Position, caster.Map);
             marker.Target = caster;
-            marker.EndTick = Find.TickManager.TicksGame + 300;
+            marker.EndTick = Find.TickManager.TicksGame +
+                             ((verbProps as VerbProps)?.blinkDuration.SecondsToTicks() ?? 300);
             caster.Position = cell;
             if (CasterIsPawn) CasterPawn.Notify_Teleported();
             return true;
