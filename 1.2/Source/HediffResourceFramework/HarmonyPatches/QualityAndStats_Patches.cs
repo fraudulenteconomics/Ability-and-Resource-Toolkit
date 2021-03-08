@@ -26,6 +26,18 @@ namespace HediffResourceFramework
                 {
                     if (comp.StatBoosterIsEnabled(statBooster))
                     {
+                        if (statBooster.resourceOnComplete != -1f)
+                        {
+                            var hediffResouce = worker.health.hediffSet.GetFirstHediffOfDef(statBooster.hediff) as HediffResource;
+                            if (hediffResouce is null || hediffResouce.ResourceAmount < -statBooster.resourceOnComplete)
+                            {
+                                continue;
+                            }
+                            else
+                            {
+                                hediffResouce.ResourceAmount += statBooster.resourceOnComplete;
+                            }
+                        }
                         if (statBooster.outputStatOffsets != null)
                         {
                             foreach (var statModifier in statBooster.outputStatOffsets)
