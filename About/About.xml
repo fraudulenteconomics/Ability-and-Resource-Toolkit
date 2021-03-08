@@ -1,6 +1,6 @@
 <ModMetaData>
 	<name>Hediff Resource Framework</name>
-	<author>FraudulentEconomics</author>
+	<author>FraudulentEconomics, Taranchuk</author>
 	<supportedVersions>
       <li>1.2</li>
    </supportedVersions>
@@ -10,5 +10,15 @@
 		<li>Ludeon.RimWorld</li>
 		<li>Ludeon.RimWorld.Royalty</li>
 	</loadAfter>
-	<description></description>
+	<modDependencies>
+		<li>
+			<packageId>brrainz.harmony</packageId>
+			<displayName>Harmony</displayName>
+			<downloadUrl>https://github.com/pardeike/HarmonyRimWorld/releases/latest</downloadUrl>
+			<steamWorkshopUrl>https://steamcommunity.com/workshop/filedetails/?id=2009463077</steamWorkshopUrl>
+		</li>
+	</modDependencies>
+	<description>Hediff Resource Framework adds a variety of functionality and features to hediffs using a new custom hediff class, HediffResourceDef. This framework does nothing by itself, but when combined with a mod that is configured to use its features, it is capable of a number of new features and mechanics. You can find a wiki highlighting all of the added mechanics and fields here:
+	
+	</description>
 </ModMetaData>
