@@ -43,6 +43,13 @@ namespace HediffResourceFramework
 			}
 		}
 	}
+
+	public class RequiredHediff
+    {
+		public HediffDef hediff;
+		public int minCount;
+		public float minSeverity;
+	}
     public class HediffResourceDef : HediffDef
     {
         public float maxResourceCapacity;
@@ -64,5 +71,7 @@ namespace HediffResourceFramework
 		public LetterDef letterType;
 		public string letterTitleKey;
 		public string letterMessageKey;
+
+		public List<RequiredHediff> requiredHediffs;
 	}
 }
