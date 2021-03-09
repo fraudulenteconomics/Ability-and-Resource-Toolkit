@@ -19,18 +19,25 @@
         </statBases>
         <verbs>
             <li Class="FraudeconCode.VerbProps">
-                <verbClass>FraudeconCode.Verb_FallenServant</verbClass>
+                <verbClass>FraudeconCode.Verb_TerminusChain</verbClass>
                 <hasStandardCommand>true</hasStandardCommand>
                 <defaultProjectile>Arrow_Short</defaultProjectile>
                 <soundCast>Bow_Small</soundCast>
                 <range>29.9</range>
                 <warmupTime>0.5</warmupTime>
-                <servantDef>Mercenary_Gunner</servantDef>
-                <servantDuration>600</servantDuration>
-                <requireRotStage>Fresh</requireRotStage>
-                <targetParams>
-                    <canTargetLocations>true</canTargetLocations>
-                </targetParams>
+                <bounceCount>5</bounceCount>
+                <allowRepeat>false</allowRepeat>
+                <bounceRange>46.9</bounceRange>
+                <bouncePriority>Near</bouncePriority>
+                <bounceDelay>60</bounceDelay>
+                <impactRadius>3.9</impactRadius>
+                <impactDamageDef>Bomb</impactDamageDef>
+                <impactDamageAmount>10</impactDamageAmount>
+                <terminusChainGraphic>
+                    <texPath>Things/Lightning</texPath>
+                    <graphicClass>Graphic_Flicker</graphicClass>
+                    <shaderType>TransparentPostLight</shaderType>
+                </terminusChainGraphic>
             </li>
         </verbs>
         <tools>

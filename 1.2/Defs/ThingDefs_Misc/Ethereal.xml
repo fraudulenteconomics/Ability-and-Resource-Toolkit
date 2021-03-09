@@ -54,4 +54,12 @@
     <thingClass>FraudeconCode.RemovalTracker</thingClass>
     <tickerType>Normal</tickerType>
   </ThingDef>
+
+  <ThingDef ParentName="EtherealThingBase">
+    <defName>TerminusChain</defName>
+    <label>terminus chain</label>
+    <thingClass>FraudeconCode.TerminusChain</thingClass>
+    <drawerType>RealtimeOnly</drawerType>
+    <tickerType>Normal</tickerType>
+  </ThingDef>
 </Defs>

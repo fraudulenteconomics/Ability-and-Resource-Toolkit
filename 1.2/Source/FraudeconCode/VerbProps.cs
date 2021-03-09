@@ -9,10 +9,16 @@ namespace FraudeconCode
 {
     public class VerbProps : VerbResourceProps
     {
+        public bool allowRepeat;
         public bool alwaysGetChunks = true;
         public HediffDef applyHediff;
         public int avatarDuration = 12000;
         public float blinkDuration;
+        public int bounceCount;
+        public float bounceDamageMultiplier = 1f;
+        public int bounceDelay;
+        public BouncePriority bouncePriority;
+        public float bounceRange;
         public bool canHarvestTrees;
         public DamageDef cauterizeDamageDef;
         public float chargeDamageAmount;
@@ -28,6 +34,9 @@ namespace FraudeconCode
         public float effectRate;
         public float extinguishRadius;
         public HediffDef feedbackHediff;
+        public float impactDamageAmount;
+        public DamageDef impactDamageDef;
+        public float impactRadius;
         public DamageDef landingDamageDef;
         public float landingEffectRadius;
         public float leatherYield = 0.0f;
@@ -42,7 +51,16 @@ namespace FraudeconCode
         public RotStage? requireRotStage;
         public PawnKindDef servantDef;
         public int servantDuration;
+        public bool targetFriendly;
+        public GraphicData terminusChainGraphic;
         public float yieldMultiplier = 1f;
+    }
+
+    public enum BouncePriority
+    {
+        Near,
+        Far,
+        Random
     }
 
     public struct MinCountDef
