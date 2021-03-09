@@ -19,25 +19,28 @@
         </statBases>
         <verbs>
             <li Class="FraudeconCode.VerbProps">
-                <verbClass>FraudeconCode.Verb_TerminusChain</verbClass>
+                <verbClass>FraudeconCode.Verb_MeteorCall</verbClass>
                 <hasStandardCommand>true</hasStandardCommand>
                 <defaultProjectile>Arrow_Short</defaultProjectile>
                 <soundCast>Bow_Small</soundCast>
                 <range>29.9</range>
+                <meteorSize>4.9</meteorSize>
+                <meteorMaterial>
+                    <li>MineableSteel</li>
+                    <li>MineableSilver</li>
+                    <li>MineableGold</li>
+                    <li>MineableUranium</li>
+                    <li>MineablePlasteel</li>
+                    <li>MineableJade</li>
+                    <li>MineableComponentsIndustrial</li>
+                </meteorMaterial>
+                <targetParams>
+                    <canTargetLocations>true</canTargetLocations>
+                </targetParams>
+                <forcedMissRadius>10</forcedMissRadius>
                 <warmupTime>0.5</warmupTime>
-                <bounceCount>5</bounceCount>
-                <allowRepeat>false</allowRepeat>
-                <bounceRange>46.9</bounceRange>
-                <bouncePriority>Near</bouncePriority>
-                <bounceDelay>60</bounceDelay>
-                <impactRadius>3.9</impactRadius>
-                <impactDamageDef>Bomb</impactDamageDef>
-                <impactDamageAmount>10</impactDamageAmount>
-                <terminusChainGraphic>
-                    <texPath>Things/Lightning</texPath>
-                    <graphicClass>Graphic_Flicker</graphicClass>
-                    <shaderType>TransparentPostLight</shaderType>
-                </terminusChainGraphic>
+                <allowCrushingRocks>false</allowCrushingRocks>
+                <spawnRocks>true</spawnRocks>
             </li>
         </verbs>
         <tools>

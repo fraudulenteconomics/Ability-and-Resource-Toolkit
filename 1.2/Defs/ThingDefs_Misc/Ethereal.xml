@@ -62,4 +62,24 @@
     <drawerType>RealtimeOnly</drawerType>
     <tickerType>Normal</tickerType>
   </ThingDef>
+
+  <ThingDef ParentName="SkyfallerBase">
+    <defName>MeteorIncoming</defName>
+    <label>meteor (incoming)</label>
+    <size>(2, 2)</size>
+    <thingClass>FraudeconCode.MeteorIncoming</thingClass>
+    <graphicData>
+      <texPath>Things/Skyfaller/Meteorite</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <shaderType>Transparent</shaderType>
+      <drawSize>(10, 10)</drawSize>
+    </graphicData>
+    <skyfaller>
+      <shadowSize>(3, 3)</shadowSize>
+      <explosionRadius>4</explosionRadius>
+      <explosionDamage>Bomb</explosionDamage>
+      <rotateGraphicTowardsDirection>true</rotateGraphicTowardsDirection>
+      <speed>1.2</speed>
+    </skyfaller>
+  </ThingDef>
 </Defs>

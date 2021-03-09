@@ -9,6 +9,7 @@ namespace FraudeconCode
 {
     public class VerbProps : VerbResourceProps
     {
+        public bool allowCrushingRocks;
         public bool allowRepeat;
         public bool alwaysGetChunks = true;
         public HediffDef applyHediff;
@@ -51,6 +52,7 @@ namespace FraudeconCode
         public RotStage? requireRotStage;
         public PawnKindDef servantDef;
         public int servantDuration;
+        public bool spawnRocks;
         public bool targetFriendly;
         public GraphicData terminusChainGraphic;
         public float yieldMultiplier = 1f;

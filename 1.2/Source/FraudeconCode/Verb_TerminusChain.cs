@@ -66,6 +66,7 @@ namespace FraudeconCode
             Scribe_Values.Look(ref ticksTillBounce, "ticksTillBounce");
             Scribe_Values.Look(ref numBounces, "numBounces");
             Scribe_Collections.Look(ref prevTargets, "prevTargets", LookMode.Reference);
+            Scribe_Deep.Look(ref Props, "props");
         }
 
         public void FireAt(Thing target)
