@@ -330,6 +330,27 @@ namespace HediffResourceFramework
 					pawn.health.RemoveHediff(hediff);
 				}
 			}
+
+			if (adjuster.ResourceSettings != null)
+            {
+				foreach (var resourceSettings in adjuster.ResourceSettings)
+                {
+					if (resourceSettings.removeHediffsOnDrop != null)
+                    {
+						foreach (var hediffDef in resourceSettings.removeHediffsOnDrop)
+                        {
+							while (pawn.health.hediffSet.GetFirstHediffOfDef(hediffDef) != null)
+                            {
+								var hediff = pawn.health.hediffSet.GetFirstHediffOfDef(hediffDef);
+								if (hediff != null)
+								{
+									pawn.health.hediffSet.hediffs.Remove(hediff);
+								}
+							}
+						}
+                    }
+                }
+            }
 		}
 
 		public static void TryDropExcessHediffGears(Pawn pawn)
@@ -439,6 +460,7 @@ namespace HediffResourceFramework
 						if (hediff.def.shieldProperties.cannotUseVerbType == VerbType.Both)
 						{
 							disableReason = "HRF.ShieldPreventAllAttack".Translate();
+							Log.Message(" - IsUsableBy - return false; - 7", true);
 							return false;
 						}
 						else if (hediff.def.shieldProperties.cannotUseVerbType == VerbType.None)
@@ -448,28 +470,32 @@ namespace HediffResourceFramework
 						else if (verb.IsMeleeAttack && hediff.def.shieldProperties.cannotUseVerbType == VerbType.Melee)
 						{
 							disableReason = "HRF.ShieldPreventMeleeAttack".Translate();
+							Log.Message(" - IsUsableBy - return false; - 12", true);
 							return false;
 						}
 						else if (hediff.def.shieldProperties.cannotUseVerbType == VerbType.Range)
 						{
 							disableReason = "HRF.ShieldPreventRangeAttack".Translate();
+							Log.Message(" - IsUsableBy - return false; - 15", true);
 							return false;
 						}
 					}
 				}
 
 				if (verb.verbProps is IResourceProps props)
-                {
+				{
 					if (!IsUsableForProps(pawn, props, out disableReason))
-                    {
+					{
+						Log.Message(" - IsUsableBy - return false; - 18", true);
 						return false;
-                    }
-                }
+					}
+				}
 
 				if (verb.tool is IResourceProps props2)
-                {
+				{
 					if (!IsUsableForProps(pawn, props2, out disableReason))
 					{
+						Log.Message(" - IsUsableBy - return false; - 21", true);
 						return false;
 					}
 				}
@@ -480,49 +506,56 @@ namespace HediffResourceFramework
 		}
 
 		private static bool IsUsableForProps(Pawn pawn, IResourceProps props, out string disableReason)
-        {
+		{
 			var resourceSettings = props.ResourceSettings;
 			if (resourceSettings != null)
 			{
 				foreach (var option in resourceSettings)
 				{
-					var resourceHediff = pawn.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
-					if (option.disableIfMissingHediff)
-					{
-						bool manaIsEmptyOrNull = resourceHediff != null ? resourceHediff.ResourceAmount <= 0 : true;
-						if (manaIsEmptyOrNull)
+					if (option.requiredForUse)
+                    {
+						var resourceHediff = pawn.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
+						if (option.disableIfMissingHediff)
 						{
-							disableReason = option.disableReason;
-							return false;
-						}
-					}
-
-					if (option.minimumResourcePerUse != -1f)
-					{
-						if (resourceHediff != null && resourceHediff.ResourceAmount < option.minimumResourcePerUse)
-						{
-							disableReason = option.disableReason;
-							return false;
-						}
-					}
-					if (option.disableAboveResource != -1f)
-					{
-						if (resourceHediff != null && resourceHediff.ResourceAmount > option.disableAboveResource)
-						{
-							disableReason = option.disableReason;
-							return false;
-						}
-					}
-
-					if (option.resourcePerUse < 0)
-					{
-						if (resourceHediff != null)
-						{
-							var num = resourceHediff.ResourceAmount - option.resourcePerUse;
-							if (num < 0)
+							bool hediffResourceIsEmptyOrNull = resourceHediff != null ? resourceHediff.ResourceAmount <= 0 : true;
+							if (hediffResourceIsEmptyOrNull)
 							{
 								disableReason = option.disableReason;
+								Log.Message(" - IsUsableForProps - return false; - 32", true);
 								return false;
+							}
+						}
+
+						if (option.minimumResourcePerUse != -1f)
+						{
+							if (resourceHediff != null && resourceHediff.ResourceAmount < option.minimumResourcePerUse)
+							{
+								disableReason = option.disableReason;
+								Log.Message(" - IsUsableForProps - return false; - 36", true);
+								return false;
+							}
+						}
+						if (option.disableAboveResource != -1f)
+						{
+							if (resourceHediff != null && resourceHediff.ResourceAmount > option.disableAboveResource)
+							{
+								disableReason = option.disableReason;
+								Log.Message(" - IsUsableForProps - return false; - 40", true);
+								return false;
+							}
+						}
+
+						if (option.resourcePerUse < 0)
+						{
+							if (resourceHediff != null)
+							{
+								var num = resourceHediff.ResourceAmount - option.resourcePerUse;
+								if (num < 0)
+								{
+									disableReason = option.disableReason;
+									Log.Message(" - IsUsableForProps - return false; - 46", true);
+									return false;
+								}
 							}
 						}
 					}
@@ -532,6 +565,7 @@ namespace HediffResourceFramework
 			disableReason = "";
 			return true;
 		}
+
 
 		public static void DisableGizmo(Gizmo gizmo, string disableReason)
 		{

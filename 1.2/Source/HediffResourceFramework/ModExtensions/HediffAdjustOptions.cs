@@ -59,5 +59,8 @@ namespace HediffResourceFramework
         public bool dropIfOverCapacity;
         public string overCapacityReasonKey;
 
+        public List<HediffDef> removeHediffsOnDrop;
+        public bool requiredForUse = true;
+
     }
 }

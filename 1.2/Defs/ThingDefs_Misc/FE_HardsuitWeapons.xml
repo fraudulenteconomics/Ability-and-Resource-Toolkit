@@ -137,6 +137,9 @@
 						<maxResourceCapacityOffset>100</maxResourceCapacityOffset>
 						<qualityScalesCapacityOffset>false</qualityScalesCapacityOffset>
 						<addHediffIfMissing>true</addHediffIfMissing>
+						<removeHediffsOnDrop>
+							<li>FE_RepulsorRifle</li>
+						</removeHediffsOnDrop>
 					</li>
 					<li>
 						<hediff>FE_FusionReactor</hediff>
