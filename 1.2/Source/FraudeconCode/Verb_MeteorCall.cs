@@ -13,16 +13,16 @@ namespace FraudeconCode
         protected override bool TryCastShot()
         {
             var cell = CurrentTarget.Cell;
-            // if (verbProps.forcedMissRadius > 0.5f)
-            // {
-            //     var num = VerbUtility.CalculateAdjustedForcedMiss(verbProps.forcedMissRadius,
-            //         currentTarget.Cell - caster.Position);
-            //     if (num > 0.5f)
-            //     {
-            //         var num2 = Rand.Range(0, GenRadial.NumCellsInRadius(num));
-            //         if (num2 > 0) cell += GenRadial.RadialPattern[num2];
-            //     }
-            // }
+            if (verbProps.forcedMissRadius > 0.5f)
+            {
+                var num = VerbUtility.CalculateAdjustedForcedMiss(verbProps.forcedMissRadius,
+                    currentTarget.Cell - caster.Position);
+                if (num > 0.5f)
+                {
+                    var num2 = Rand.Range(0, GenRadial.NumCellsInRadius(num));
+                    if (num2 > 0) cell += GenRadial.RadialPattern[num2];
+                }
+            }
 
             var things = Enumerable.Repeat(Props.meteorMaterial.RandomElement(),
                 GenRadial.NumCellsInRadius(Props.meteorSize)).Select(def => ThingMaker.MakeThing(def));
