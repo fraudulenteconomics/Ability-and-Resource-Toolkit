@@ -26,10 +26,11 @@ namespace FraudeconCode
         public DamageDef chargeDamageDef;
         public GraphicData chargeGraphic;
         public float chargeWidth;
+        public Behavior effectBehavior;
         public List<MinCountDef> effectCount;
         public float effectDamageAmount;
         public DamageDef effectDamageDef;
-        public float effectDuration;
+        public int effectDuration;
         public HediffDef effectHediff;
         public float effectRadius;
         public float effectRate;
@@ -38,6 +39,7 @@ namespace FraudeconCode
         public float impactDamageAmount;
         public DamageDef impactDamageDef;
         public float impactRadius;
+        public float inwardSpeed;
         public DamageDef landingDamageDef;
         public float landingEffectRadius;
         public float leatherYield = 0.0f;
@@ -52,6 +54,7 @@ namespace FraudeconCode
         public bool multishotTargetFriendly = false;
         public bool removeRoofs = true;
         public RotStage? requireRotStage;
+        public float rotationSpeed;
         public PawnKindDef servantDef;
         public int servantDuration;
         public bool spawnRocks;
@@ -72,5 +75,12 @@ namespace FraudeconCode
         public int minCount;
         public string spawnDef;
         public string pawnKindDef;
+    }
+
+    public enum Behavior
+    {
+        Pull,
+        Spin,
+        Hold
     }
 }

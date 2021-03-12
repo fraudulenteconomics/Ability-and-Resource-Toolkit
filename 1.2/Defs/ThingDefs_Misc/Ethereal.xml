@@ -41,6 +41,13 @@
     <tickerType>Normal</tickerType>
   </ThingDef>
 
+  <ThingDef ParentName="PawnFlyerBase">
+    <defName>SpinnedPawn</defName>
+    <thingClass>FraudeconCode.PawnSpinner</thingClass>
+    <pawnFlyer>
+    </pawnFlyer>
+  </ThingDef>
+
   <ThingDef ParentName="EtherealThingBase">
     <defName>TeleportMarker</defName>
     <label>teleport marker</label>

@@ -22,6 +22,7 @@ namespace FraudeconCode
         public void End()
         {
             if (FlyingPawn == null) Destroy();
+            RecomputePosition();
             Position = IntVec3.FromVector3(effectivePos);
             RespawnPawn();
             Destroy();
@@ -43,12 +44,17 @@ namespace FraudeconCode
         {
         }
 
-        // Token: 0x06005226 RID: 21030 RVA: 0x001BB260 File Offset: 0x001B9460
-        private void RecomputePosition()
+        protected bool CheckRecompute()
         {
-            if (positionLastComputedTick == ticksFlying) return;
+            if (positionLastComputedTick == ticksFlying) return false;
 
             positionLastComputedTick = ticksFlying;
+            return true;
+        }
+
+        protected virtual void RecomputePosition()
+        {
+            if (CheckRecompute()) return;
             effectivePos = Vector3.Lerp(startVec, DestinationPos, ticksFlying / (float) ticksFlightTime);
         }
 
