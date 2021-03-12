@@ -3,11 +3,10 @@ using System.Linq;
 using RimWorld;
 using UnityEngine;
 using Verse;
-using Verse.AI;
 
 namespace FraudeconCode
 {
-    public class Verb_MeleeCharge : Verb_CastBase
+    public class Verb_MeleeCharge : BaseVerb
     {
         protected override bool TryCastShot()
         {

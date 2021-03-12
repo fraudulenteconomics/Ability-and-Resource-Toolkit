@@ -2,11 +2,10 @@
 using System.Linq;
 using RimWorld;
 using Verse;
-using Verse.AI;
 
 namespace FraudeconCode
 {
-    public class Verb_Avatar : Verb_CastBase
+    public class Verb_Avatar : BaseVerb
     {
         public VerbProps Props => verbProps as VerbProps;
 

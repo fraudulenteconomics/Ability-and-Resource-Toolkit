@@ -1,11 +1,10 @@
 ﻿using System.Linq;
 using RimWorld;
 using Verse;
-using Verse.AI;
 
 namespace FraudeconCode
 {
-    internal class Verb_FallenServant : Verb_CastBase
+    internal class Verb_FallenServant : BaseVerb
     {
         public VerbProps Props => verbProps as VerbProps;
 

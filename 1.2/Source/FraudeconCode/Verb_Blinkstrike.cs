@@ -1,9 +1,8 @@
 ﻿using Verse;
-using Verse.AI;
 
 namespace FraudeconCode
 {
-    public class Verb_Blinkstrike : Verb_CastBase
+    public class Verb_Blinkstrike : BaseVerb
     {
         protected override bool TryCastShot()
         {

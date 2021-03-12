@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
 using Verse;
-using Verse.AI;
 
 namespace FraudeconCode
 {
-    public class Verb_Cauterize : Verb_CastBase
+    public class Verb_Cauterize : BaseVerb
     {
         private static readonly List<Hediff_Injury> injuries = new List<Hediff_Injury>();
         public VerbProps Props => verbProps as VerbProps;

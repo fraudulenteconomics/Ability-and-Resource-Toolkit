@@ -3,11 +3,10 @@ using System.Linq;
 using RimWorld;
 using UnityEngine;
 using Verse;
-using Verse.AI;
 
 namespace FraudeconCode
 {
-    public class Verb_Extinguish : Verb_CastBase
+    public class Verb_Extinguish : BaseVerb
     {
         protected override int ShotsPerBurst => verbProps.burstShotCount;
 

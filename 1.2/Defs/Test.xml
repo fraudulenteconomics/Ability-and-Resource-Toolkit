@@ -25,6 +25,8 @@
                 <soundCast>Bow_Small</soundCast>
                 <range>29.9</range>
                 <meteorSize>4.9</meteorSize>
+                <burstShotCount>5</burstShotCount>
+                <ticksBetweenBurstShots>10</ticksBetweenBurstShots>
                 <meteorMaterial>
                     <li>MineableSteel</li>
                     <li>MineableSilver</li>

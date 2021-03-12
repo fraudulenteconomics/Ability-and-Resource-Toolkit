@@ -1,10 +1,9 @@
 ﻿using RimWorld;
 using Verse;
-using Verse.AI;
 
 namespace FraudeconCode
 {
-    public class Verb_PullTarget : Verb_CastBase
+    public class Verb_PullTarget : BaseVerb
     {
         protected override bool TryCastShot()
         {

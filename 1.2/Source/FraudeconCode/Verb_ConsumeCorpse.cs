@@ -2,11 +2,10 @@
 using HediffResourceFramework;
 using RimWorld;
 using Verse;
-using Verse.AI;
 
 namespace FraudeconCode
 {
-    internal class Verb_ConsumeCorpse : Verb_CastBase
+    internal class Verb_ConsumeCorpse : BaseVerb
     {
         public VerbProps Props => verbProps as VerbProps;
 

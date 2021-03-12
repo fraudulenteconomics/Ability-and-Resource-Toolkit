@@ -1,10 +1,9 @@
 ﻿using RimWorld;
 using Verse;
-using Verse.AI;
 
 namespace FraudeconCode
 {
-    internal class Verb_Fleshletting : Verb_CastBase
+    internal class Verb_Fleshletting : BaseVerb
     {
         public VerbProps Props => verbProps as VerbProps;
 

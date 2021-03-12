@@ -2,11 +2,10 @@
 using RimWorld;
 using UnityEngine;
 using Verse;
-using Verse.AI;
 
 namespace FraudeconCode
 {
-    public class Verb_MeteorCall : Verb_CastBase
+    public class Verb_MeteorCall : BaseVerb
     {
         public VerbProps Props => verbProps as VerbProps;
 
