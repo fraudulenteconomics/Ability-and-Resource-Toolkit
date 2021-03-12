@@ -43,6 +43,9 @@
                 <warmupTime>0.5</warmupTime>
                 <allowCrushingRocks>false</allowCrushingRocks>
                 <spawnRocks>true</spawnRocks>
+                <meteorDamageDef>Flame</meteorDamageDef>
+                <meteorDamageAmount>100</meteorDamageAmount>
+                <stopBurstWithoutLos>false</stopBurstWithoutLos>
             </li>
         </verbs>
         <tools>

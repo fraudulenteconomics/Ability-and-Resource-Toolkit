@@ -43,6 +43,8 @@ namespace FraudeconCode
         public float leatherYield = 0.0f;
         public int maxTargets;
         public float meatYield = 0.5f;
+        public float meteorDamageAmount;
+        public DamageDef meteorDamageDef;
         public List<ThingDef> meteorMaterial;
         public float meteorSize;
         public float multishotRadius;

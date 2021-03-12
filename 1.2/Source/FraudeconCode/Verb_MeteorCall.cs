@@ -28,6 +28,8 @@ namespace FraudeconCode
             var meteor = (MeteorIncoming) SkyfallerMaker.SpawnSkyfaller(ThingDef.Named("MeteorIncoming"), things, cell,
                 caster.Map);
             meteor.Props = Props;
+            meteor.def.skyfaller.explosionDamage = Props.meteorDamageDef;
+            meteor.def.skyfaller.explosionDamageFactor = Props.meteorDamageDef.defaultDamage / Props.meteorDamageAmount;
             return true;
         }
 
