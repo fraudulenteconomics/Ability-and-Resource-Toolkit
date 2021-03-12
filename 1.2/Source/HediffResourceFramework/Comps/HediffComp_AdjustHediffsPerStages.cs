@@ -130,6 +130,11 @@ namespace HediffResourceFramework
             }
         }
 
+        public void Update()
+        {
+            throw new NotImplementedException();
+        }
+
         private List<HediffResource> hediffResourceKeys;
         private List<HediffResouceDisable> hediffResourceDisablesValues;
     }

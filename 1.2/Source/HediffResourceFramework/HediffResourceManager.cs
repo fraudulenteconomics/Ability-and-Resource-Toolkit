@@ -56,7 +56,9 @@ namespace HediffResourceFramework
     public class HediffResourceManager : GameComponent
     {
         private List<IAdjustResource> resourceAdjusters = new List<IAdjustResource>();
+        private List<IAdjustResource> resourceAdjustersToUpdate = new List<IAdjustResource>();
         public Dictionary<Thing, StatBonuses> thingsWithBonuses = new Dictionary<Thing, StatBonuses>();
+        public bool dirtyUpdate;
         public HediffResourceManager(Game game)
         {
 
@@ -70,12 +72,36 @@ namespace HediffResourceFramework
                 resourceAdjusters.Add(adjuster);
             }
         }
+
         public void DeregisterAdjuster(IAdjustResource adjuster)
         {
             if (resourceAdjusters.Contains(adjuster))
             {
                 HRFLog.Message("Deregistering: " + adjuster);
                 resourceAdjusters.Remove(adjuster);
+            }
+        }
+
+        public void UpdateAdjuster(IAdjustResource adjuster)
+        {
+            if (!resourceAdjustersToUpdate.Contains(adjuster))
+            {
+                HRFLog.Message("Update: " + adjuster);
+                resourceAdjustersToUpdate.Add(adjuster);
+                dirtyUpdate = true;
+            }
+        }
+        public override void GameComponentUpdate()
+        {
+            base.GameComponentUpdate();
+            if (dirtyUpdate)
+            {
+                foreach (var adjuster in resourceAdjustersToUpdate)
+                {
+                    adjuster.Update();
+                }
+                resourceAdjustersToUpdate.Clear();
+                dirtyUpdate = false;
             }
         }
         private void PreInit()
@@ -95,6 +121,16 @@ namespace HediffResourceFramework
             PreInit();
             base.StartedNewGame();
         }
+
+        private List<CompFacilityInUse_StatBoosters> facilities = new List<CompFacilityInUse_StatBoosters>();
+
+        public void RegisterFacilityInUse(CompFacilityInUse_StatBoosters comp)
+        {
+            if (!facilities.Contains(comp))
+            {
+                facilities.Add(comp);
+            }
+        }
         public override void GameComponentTick()
         {
             base.GameComponentTick();
@@ -112,6 +148,21 @@ namespace HediffResourceFramework
                 else
                 {
                     resourceAdjusters.RemoveAt(num);
+                }
+            }
+            for (int num = facilities.Count - 1; num >= 0; num--)
+            {
+                var facility = facilities[num];
+                if (facility.compPower != null)
+                {
+                    if (facility.compGlower is null && facility.compPower.PowerOn)
+                    {
+                        facility.UpdateGraphics();
+                    }
+                    else if (facility.compGlower != null && !facility.compPower.PowerOn)
+                    {
+                        facility.UpdateGraphics();
+                    }
                 }
             }
         }

@@ -24,6 +24,7 @@
 								<resourcePerSecond>-5</resourcePerSecond>
 								<resourceOnComplete>-150</resourceOnComplete>
 								<addHediffIfMissing>false</addHediffIfMissing>
+								<defaultToggleState>true</defaultToggleState>
 								<!-- in case if you want to make resourcePerSecond to add resource amount. works only for positive resourcePerSecond fields -->
 								<qualityScalesResourcePerSecond>true</qualityScalesResourcePerSecond>
 								<!-- this will affect only resource consumption (ie masterwork furniture will drain the resource more) -->
@@ -35,7 +36,15 @@
 									<WorkTableWorkSpeedFactor>2</WorkTableWorkSpeedFactor>
 									<WorkTableEfficiencyFactor>2</WorkTableEfficiencyFactor>
 								</statFactors>
-
+								<texPathToggledOn>Things/Building/Production/TableStoveElectric</texPathToggledOn>
+								
+								<glowOnlyPowered>true</glowOnlyPowered>
+								<glowerOptions>
+									<glowRadius>10</glowRadius>
+									<glowColor>(52,87,13,0)</glowColor>
+									<overlightRadius>0</overlightRadius>
+								</glowerOptions>
+								
 								<preventUseIfHediffMissing>true</preventUseIfHediffMissing>
 								<cannotUseMessageKey>FE.CannotUseMissingFusionReactor</cannotUseMessageKey>
 								<toggleResourceUse>true</toggleResourceUse>
@@ -57,6 +66,8 @@
 								<resourcePerSecond>-5</resourcePerSecond>
 								<resourceOnComplete>-150</resourceOnComplete>
 								<addHediffIfMissing>false</addHediffIfMissing>
+								<defaultToggleState>false</defaultToggleState>
+
 								<!-- in case if you want to make resourcePerSecond to add resource amount. works only for positive resourcePerSecond fields -->
 								<qualityScalesResourcePerSecond>true</qualityScalesResourcePerSecond>
 								<!-- this will affect only resource consumption (ie masterwork furniture will drain the resource more) -->
@@ -110,6 +121,8 @@
 								<hediff>FE_FusionReactor</hediff>
 								<resourcePerSecond>-5</resourcePerSecond>
 								<resourceOnComplete>-150</resourceOnComplete>
+								<texPathToggledOn>Things/Building/Production/TableStoveElectric</texPathToggledOn>
+								<defaultToggleState>false</defaultToggleState>
 								<addHediffIfMissing>false</addHediffIfMissing>
 								<!-- in case if you want to make resourcePerSecond to add resource amount. works only for positive resourcePerSecond fields -->
 								<qualityScalesResourcePerSecond>true</qualityScalesResourcePerSecond>
@@ -122,7 +135,12 @@
 									<WorkTableWorkSpeedFactor>2</WorkTableWorkSpeedFactor>
 									<WorkTableEfficiencyFactor>2</WorkTableEfficiencyFactor>
 								</statFactors>
-
+								<glowOnlyPowered>true</glowOnlyPowered>
+								<glowerOptions>
+									<glowRadius>10</glowRadius>
+									<glowColor>(52,87,13,0)</glowColor>
+									<overlightRadius>0</overlightRadius>
+								</glowerOptions>
 								<preventUseIfHediffMissing>true</preventUseIfHediffMissing>
 								<cannotUseMessageKey>FE.CannotUseMissingFusionReactor</cannotUseMessageKey>
 								<toggleResourceUse>true</toggleResourceUse>
@@ -197,7 +215,7 @@
 							<li>
 								<hediff>FE_FusionReactor</hediff>
 								<resourcePerSecond>-5</resourcePerSecond>
-
+								<defaultToggleState>false</defaultToggleState>
 								<addHediffIfMissing>false</addHediffIfMissing>
 								<!-- in case if you want to make resourcePerSecond to add resource amount. works only for positive resourcePerSecond fields -->
 								<qualityScalesResourcePerSecond>true</qualityScalesResourcePerSecond>
@@ -229,7 +247,6 @@
 							<li>
 								<hediff>FE_FusionReactor</hediff>
 								<resourcePerSecond>-5</resourcePerSecond>
-
 								<addHediffIfMissing>false</addHediffIfMissing>
 								<!-- in case if you want to make resourcePerSecond to add resource amount. works only for positive resourcePerSecond fields -->
 								<qualityScalesResourcePerSecond>true</qualityScalesResourcePerSecond>

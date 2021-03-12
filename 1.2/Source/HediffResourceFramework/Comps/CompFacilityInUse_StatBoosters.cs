@@ -1,4 +1,5 @@
-﻿using RimWorld;
+﻿using HarmonyLib;
+using RimWorld;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,12 @@ using static Verse.AI.ReservationManager;
 
 namespace HediffResourceFramework
 {
+    public class GlowerOptions
+    {
+        public ColorInt glowColor;
+        public float glowRadius;
+        public float overlightRadius;
+    }
     public class StatBooster
     {
         public HediffResourceDef hediff;
@@ -20,7 +27,9 @@ namespace HediffResourceFramework
         public string toggleResourceGizmoTexPath;
         public string toggleResourceLabel;
         public string toggleResourceDesc;
-
+        public string texPathToggledOn;
+        public GlowerOptions glowerOptions;
+        public bool glowOnlyPowered;
         public float resourcePerSecond = -1f;
         public float resourceOnComplete = -1f;
         public BodyPartDef applyToPart;
@@ -34,6 +43,7 @@ namespace HediffResourceFramework
 
         public List<StatBonus> outputStatOffsets;
         public List<StatBonus> outputStatFactors;
+        public bool defaultToggleState;
     }
 
     public class CompProperties_FacilityInUse_StatBoosters : CompProperties
@@ -50,6 +60,8 @@ namespace HediffResourceFramework
 
         public static HashSet<StatDef> statsWithBoosters = new HashSet<StatDef> { };
 
+        public CompPowerTrader compPower;
+        public CompGlower compParentGlower;
         public bool StatBoosterIsEnabled(StatBooster statBooster)
         {
             var ind = this.Props.statBoosters.IndexOf(statBooster);
@@ -62,6 +74,15 @@ namespace HediffResourceFramework
         public override void PostSpawnSetup(bool respawningAfterLoad)
         {
             base.PostSpawnSetup(respawningAfterLoad);
+            if (!respawningAfterLoad)
+            {
+                resourceUseToggleStates = new Dictionary<int, bool>();
+                foreach (var statBooster in Props.statBoosters)
+                {
+                    var ind = Props.statBoosters.IndexOf(statBooster);
+                    resourceUseToggleStates[ind] = statBooster.defaultToggleState;
+                }
+            }
             thingBoosters[this.parent] = this;
             foreach (var statBooster in Props.statBoosters)
             {
@@ -81,8 +102,13 @@ namespace HediffResourceFramework
                     }
                 }
             }
-
             Register();
+            var gameComp = HediffResourceUtils.HediffResourceManager;
+            gameComp.UpdateAdjuster(this);
+            this.compPower = this.parent.TryGetComp<CompPowerTrader>();
+            this.compParentGlower = this.parent.TryGetComp<CompGlower>();
+            gameComp.RegisterFacilityInUse(this);
+
         }
         public bool InUse(out IEnumerable<Pawn> claimants)
         {
@@ -91,7 +117,7 @@ namespace HediffResourceFramework
             {
                 foreach (var claimant in claimants)
                 {
-                    if (!claimant.pather.MovingNow && claimant.CurJobDef == JobDefOf.FinishFrame 
+                    if (!claimant.pather.MovingNow && claimant.CurJobDef == JobDefOf.FinishFrame
                         && claimant.CurJob.targetA.Thing == this.parent
                         && this.parent.OccupiedRect().Cells.Any(x => x.DistanceTo(claimant.Position) <= 1.5f))
                     {
@@ -113,7 +139,6 @@ namespace HediffResourceFramework
 
             return false;
         }
-
         public IEnumerable<Pawn> GetActualUsers(IEnumerable<Pawn> claimants)
         {
             if (this.parent is Frame)
@@ -158,7 +183,7 @@ namespace HediffResourceFramework
                 return cachedClaimants;
             }
         }
-            
+
         public CompProperties_FacilityInUse_StatBoosters Props => (CompProperties_FacilityInUse_StatBoosters)this.props;
         public List<HediffOption> ResourceSettings => throw new NotImplementedException();
         public Dictionary<HediffResource, HediffResouceDisable> PostUseDelayTicks => throw new NotImplementedException();
@@ -167,7 +192,6 @@ namespace HediffResourceFramework
         public void ResourceTick()
         {
             bool inUse = InUse(out var claimaints);
-            Log.Message(this + ", inUse: " + inUse + " - claimaints: " + claimaints.Count());
             if (inUse)
             {
                 var users = GetActualUsers(claimaints);
@@ -208,7 +232,6 @@ namespace HediffResourceFramework
                     toggle.icon = ContentFinder<Texture2D>.Get(statBooster.toggleResourceGizmoTexPath);
                     toggle.toggleAction = delegate ()
                     {
-                        if (resourceUseToggleStates is null) resourceUseToggleStates = new Dictionary<int, bool>();
                         if (resourceUseToggleStates.ContainsKey(ind))
                         {
                             resourceUseToggleStates[ind] = !resourceUseToggleStates[ind];
@@ -217,12 +240,133 @@ namespace HediffResourceFramework
                         {
                             resourceUseToggleStates[ind] = false;
                         }
+                        UpdateGraphics();
                     };
                     toggle.isActive = (() => resourceUseToggleStates is null || resourceUseToggleStates.ContainsKey(ind) ? resourceUseToggleStates[ind] : true);
                     yield return toggle;
                 }
             }
         }
+
+        public void UpdateGraphics()
+        {
+            bool changedGraphics = false;
+            bool changedGlower = false;
+
+            if (base.parent.Map != null)
+            {
+                if (resourceUseToggleStates is null)
+                {
+                    foreach (var statBooster in Props.statBoosters)
+                    {
+                        if (!changedGraphics && !statBooster.texPathToggledOn.NullOrEmpty())
+                        {
+                            ChangeGraphic(statBooster.texPathToggledOn);
+                            changedGraphics = true;
+                        }
+
+                        if (!changedGlower && statBooster.glowerOptions != null)
+                        {
+                            if (!statBooster.glowOnlyPowered || this.parent.TryGetComp<CompPowerTrader>().PowerOn)
+                            {
+                                UpdateGlower(statBooster.glowerOptions);
+                                changedGlower = true;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    foreach (var statBooster in Props.statBoosters)
+                    {
+                        if (StatBoosterIsEnabled(statBooster))
+                        {
+                            var ind = Props.statBoosters.IndexOf(statBooster);
+                            if (!changedGraphics && !statBooster.texPathToggledOn.NullOrEmpty() && resourceUseToggleStates.ContainsKey(ind) && resourceUseToggleStates[ind])
+                            {
+                                ChangeGraphic(statBooster.texPathToggledOn);
+                                changedGraphics = true;
+                            }
+
+                            if (!changedGlower && statBooster.glowerOptions != null)
+                            {
+                                if (!statBooster.glowOnlyPowered || this.parent.TryGetComp<CompPowerTrader>().PowerOn)
+                                {
+                                    UpdateGlower(statBooster.glowerOptions);
+                                    changedGlower = true;
+                                }
+                            }
+                        }
+
+                    }
+                }
+
+
+                if (!changedGraphics && (!parent.def.graphicData?.texPath.NullOrEmpty() ?? false))
+                {
+                    ChangeGraphic(parent.def.graphicData.texPath);
+                }
+
+                if (!changedGlower)
+                {
+                    if (this.compGlower != null)
+                    {
+                        base.parent.Map.glowGrid.DeRegisterGlower(this.compGlower);
+                        this.compGlower = null;
+                    }
+
+                    if (compParentGlower != null)
+                    {
+                        base.parent.Map.glowGrid.RegisterGlower(compParentGlower);
+                    }
+                }
+            }
+        }
+
+        public void ChangeGraphic(string texPath)
+        {
+            var graphicData = new GraphicData();
+            graphicData.graphicClass = this.parent.def.graphicData.graphicClass;
+            graphicData.texPath = texPath;
+            graphicData.shaderType = this.parent.def.graphicData.shaderType;
+            graphicData.drawSize = this.parent.def.graphicData.drawSize;
+            graphicData.color = this.parent.def.graphicData.color;
+            graphicData.colorTwo = this.parent.def.graphicData.colorTwo;
+
+            var newGraphic = graphicData.GraphicColoredFor(this.parent);
+            Traverse.Create(this.parent).Field("graphicInt").SetValue(newGraphic);
+            base.parent.Map.mapDrawer.MapMeshDirty(this.parent.Position, MapMeshFlag.Things);
+        }
+
+        public CompGlower compGlower;
+        public void RemoveGlower()
+        {
+            if (this.compGlower != null)
+            {
+                base.parent.Map.glowGrid.DeRegisterGlower(this.compGlower);
+                this.compGlower = null;
+            }
+            var parentGlower = this.parent.TryGetComp<CompGlower>();
+            if (parentGlower != null)
+            {
+                base.parent.Map.glowGrid.DeRegisterGlower(parentGlower);
+            }
+        }
+        public void UpdateGlower(GlowerOptions glowerOptions)
+        {
+            RemoveGlower();
+            this.compGlower = new CompGlower();
+            this.compGlower.parent = this.parent;
+            this.compGlower.Initialize(new CompProperties_Glower()
+            {
+                glowColor = glowerOptions.glowColor,
+                glowRadius = glowerOptions.glowRadius,
+                overlightRadius = glowerOptions.overlightRadius
+            });
+            base.parent.Map.mapDrawer.MapMeshDirty(base.parent.Position, MapMeshFlag.Things);
+            base.parent.Map.glowGrid.RegisterGlower(this.compGlower);
+        }
+
         public void Drop()
         {
             throw new NotImplementedException();
@@ -237,7 +381,6 @@ namespace HediffResourceFramework
         {
             return this.parent.TryGetQuality(out qc);
         }
-
 
         public void Register()
         {
@@ -273,6 +416,11 @@ namespace HediffResourceFramework
         {
             base.PostPostMake();
             Register();
+        }
+
+        public void Update()
+        {
+            UpdateGraphics();
         }
     }
 }

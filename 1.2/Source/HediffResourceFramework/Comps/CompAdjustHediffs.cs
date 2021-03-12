@@ -110,5 +110,10 @@ namespace HediffResourceFramework
         {
 
         }
+
+        public void Update()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
