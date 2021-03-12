@@ -21,9 +21,13 @@ namespace HediffResourceFramework
             {
                 foreach (var statBooster in comp.Props.statBoosters)
                 {
-                    if (comp.StatBoosterIsEnabled(statBooster) && statBooster.preventUseIfHediffMissing && pawn.health.hediffSet.GetFirstHediffOfDef(statBooster.hediff) is null)
+                    if (comp.StatBoosterIsEnabled(statBooster) && statBooster.preventUseIfHediffMissing)
                     {
-                        return false;
+                        var hediffResource = pawn.health.hediffSet.GetFirstHediffOfDef(statBooster.hediff) as HediffResource;
+                        if (hediffResource is null || !hediffResource.CanApplyStatBooster(statBooster))
+                        {
+                            return false;
+                        }
                     }
                 }
             }

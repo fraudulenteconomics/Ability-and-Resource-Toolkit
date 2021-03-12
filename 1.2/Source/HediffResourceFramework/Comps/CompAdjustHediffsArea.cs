@@ -116,7 +116,7 @@ namespace HediffResourceFramework
                         }
                     }
                 }
-                hediffResource = HediffResourceUtils.AdjustResourceAmount(pawn, option.hediff, num, option.addHediffIfMissing);
+                hediffResource = HediffResourceUtils.AdjustResourceAmount(pawn, option.hediff, num, option.addHediffIfMissing, option.applyToPart);
                 if (hediffResource != null)
                 {
                     Log.Message(this.parent + " is affecting " + pawn + " - " + option.hediff);

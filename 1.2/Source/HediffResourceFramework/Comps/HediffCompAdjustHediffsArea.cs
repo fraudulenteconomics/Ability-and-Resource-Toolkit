@@ -63,9 +63,9 @@ namespace HediffResourceFramework
             }
             return false;
         }
-        public void AppendResource(Pawn pawn, HediffOption option, float num)
+        public void AppendResource(Pawn pawn, HediffOption hediffOption, float num)
         {
-            var hediffResource = pawn.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
+            var hediffResource = pawn.health.hediffSet.GetFirstHediffOfDef(hediffOption.hediff) as HediffResource;
             if (hediffResource != null && !hediffResource.CanGainResource)
             {
                 return;
@@ -74,7 +74,7 @@ namespace HediffResourceFramework
             {
                 if (hediffResource != null)
                 {
-                    var amplifiers = hediffResource.GetAmplifiersFor(option.hediff);
+                    var amplifiers = hediffResource.GetAmplifiersFor(hediffOption.hediff);
                     if (!this.Props.stackEffects)
                     {
                         if (amplifiers.Count() > 0 && amplifiers.Any(x => x != this))
@@ -90,10 +90,10 @@ namespace HediffResourceFramework
                         }
                     }
                 }
-                hediffResource = HediffResourceUtils.AdjustResourceAmount(pawn, option.hediff, num, option.addHediffIfMissing);
+                hediffResource = HediffResourceUtils.AdjustResourceAmount(pawn, hediffOption.hediff, num, hediffOption.addHediffIfMissing, hediffOption.applyToPart);
                 if (hediffResource != null)
                 {
-                    Log.Message(this.parent + " is affecting " + pawn + " - " + option.hediff);
+                    Log.Message(this.parent + " is affecting " + pawn + " - " + hediffOption.hediff);
                     hediffResource.TryAddAmplifier(this);
                 }
             }

@@ -13,10 +13,9 @@ using Verse.AI;
 
 namespace HediffResourceFramework
 {
-	[StaticConstructorOnStartup]
-	internal static class HarmonyInit
+	public class HediffResourceFrameworkMod : Mod
 	{
-		static HarmonyInit()
+		public HediffResourceFrameworkMod(ModContentPack content) : base(content)
 		{
 			Harmony harmony = new Harmony("Fraudecon.HediffResourceFramework");
 			harmony.PatchAll();

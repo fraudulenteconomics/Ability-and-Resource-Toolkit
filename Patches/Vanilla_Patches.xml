@@ -44,7 +44,7 @@
 								<toggleResourceDesc>Toggle fusion reactor use</toggleResourceDesc>
 								<increaseQuality>6</increaseQuality>
 								<increaseQualityCeiling>Legendary</increaseQualityCeiling>
-								
+
 								<outputStatOffsets>
 									<Beauty>5</Beauty>
 								</outputStatOffsets>
@@ -55,6 +55,7 @@
 							<li>
 								<hediff>FE_StimHediff</hediff>
 								<resourcePerSecond>-5</resourcePerSecond>
+								<resourceOnComplete>-150</resourceOnComplete>
 								<addHediffIfMissing>false</addHediffIfMissing>
 								<!-- in case if you want to make resourcePerSecond to add resource amount. works only for positive resourcePerSecond fields -->
 								<qualityScalesResourcePerSecond>true</qualityScalesResourcePerSecond>
@@ -76,7 +77,7 @@
 								<toggleResourceDesc>Toggle stim use</toggleResourceDesc>
 								<increaseQuality>6</increaseQuality>
 								<increaseQualityCeiling>Legendary</increaseQualityCeiling>
-								
+
 								<outputStatOffsets>
 									<Beauty>5</Beauty>
 								</outputStatOffsets>
@@ -109,7 +110,6 @@
 								<hediff>FE_FusionReactor</hediff>
 								<resourcePerSecond>-5</resourcePerSecond>
 								<resourceOnComplete>-150</resourceOnComplete>
-
 								<addHediffIfMissing>false</addHediffIfMissing>
 								<!-- in case if you want to make resourcePerSecond to add resource amount. works only for positive resourcePerSecond fields -->
 								<qualityScalesResourcePerSecond>true</qualityScalesResourcePerSecond>
@@ -131,18 +131,19 @@
 								<toggleResourceDesc>Toggle fusion reactor use</toggleResourceDesc>
 								<increaseQuality>6</increaseQuality>
 								<increaseQualityCeiling>Legendary</increaseQualityCeiling>
-								
+
 								<outputStatOffsets>
 									<Beauty>5</Beauty>
 								</outputStatOffsets>
 								<outputStatFactors>
 									<Beauty>2</Beauty>
 								</outputStatFactors>
-								
+
 							</li>
 							<li>
 								<hediff>FE_StimHediff</hediff>
 								<resourcePerSecond>-5</resourcePerSecond>
+								<resourceOnComplete>-150</resourceOnComplete>
 								<addHediffIfMissing>false</addHediffIfMissing>
 								<!-- in case if you want to make resourcePerSecond to add resource amount. works only for positive resourcePerSecond fields -->
 								<qualityScalesResourcePerSecond>true</qualityScalesResourcePerSecond>
@@ -164,7 +165,7 @@
 								<toggleResourceDesc>Toggle stim use</toggleResourceDesc>
 								<increaseQuality>6</increaseQuality>
 								<increaseQualityCeiling>Legendary</increaseQualityCeiling>
-								
+
 								<outputStatOffsets>
 									<Beauty>5</Beauty>
 								</outputStatOffsets>
@@ -214,9 +215,60 @@
 								<toggleResourceGizmoTexPath>UI/Designators/Cancel</toggleResourceGizmoTexPath>
 								<toggleResourceLabel>Toggle fusion reactor use</toggleResourceLabel>
 								<toggleResourceDesc>Toggle fusion reactor use</toggleResourceDesc>
-								
+
 							</li>
 						</statBoosters>
+					</li>
+				</value>
+			</li>
+			<li Class="PatchOperationAddModExtension">
+				<xpath>/Defs/ThingDef[thingClass="Building_Bed"]</xpath>
+				<value>
+					<li Class="HediffResourceFramework.FacilityInProgress">
+						<statBoosters>
+							<li>
+								<hediff>FE_FusionReactor</hediff>
+								<resourcePerSecond>-5</resourcePerSecond>
+
+								<addHediffIfMissing>false</addHediffIfMissing>
+								<!-- in case if you want to make resourcePerSecond to add resource amount. works only for positive resourcePerSecond fields -->
+								<qualityScalesResourcePerSecond>true</qualityScalesResourcePerSecond>
+								<!-- this will affect only resource consumption (ie masterwork furniture will drain the resource more) -->
+								<statOffsets>
+									<BedRestEffectiveness>0.5</BedRestEffectiveness>
+								</statOffsets>
+								<statFactors>
+									<BedRestEffectiveness>2</BedRestEffectiveness>
+								</statFactors>
+
+								<preventUseIfHediffMissing>true</preventUseIfHediffMissing>
+								<cannotUseMessageKey>FE.CannotUseMissingFusionReactor</cannotUseMessageKey>
+								<toggleResourceUse>true</toggleResourceUse>
+								<toggleResourceGizmoTexPath>UI/Designators/Cancel</toggleResourceGizmoTexPath>
+								<toggleResourceLabel>Toggle fusion reactor use</toggleResourceLabel>
+								<toggleResourceDesc>Toggle fusion reactor use</toggleResourceDesc>
+
+							</li>
+						</statBoosters>
+					</li>
+				</value>
+			</li>
+			<li Class="PatchOperationAddModExtension">
+				<xpath>/Defs/ThingDef[thingClass="Building_Bed"]</xpath>
+				<value>
+					<li Class="HediffResourceFramework.BuildingSpawnOptions">
+						<materialReplaces>
+							<li>
+								<floorDef>Soil</floorDef>
+								<replaceWithThingDef>DoubleBed</replaceWithThingDef>
+								<replaceWithStuffDef>Gold</replaceWithStuffDef>
+							</li>
+							<li>
+								<floorDef>Gravel</floorDef>
+								<replaceWithThingDef>Bed</replaceWithThingDef>
+								<replaceWithStuffDef>Plasteel</replaceWithStuffDef>
+							</li>
+						</materialReplaces>
 					</li>
 				</value>
 			</li>

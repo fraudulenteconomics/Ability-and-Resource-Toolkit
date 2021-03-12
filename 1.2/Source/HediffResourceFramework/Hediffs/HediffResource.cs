@@ -68,6 +68,19 @@ namespace HediffResourceFramework
             }
         }
 
+        public bool CanApplyStatBooster(StatBooster statBooster)
+        {
+            if (statBooster.resourceOnComplete != -1f && this.ResourceAmount < -statBooster.resourceOnComplete)
+            {
+                return false;
+            }
+            else if (statBooster.resourcePerSecond != -1 && this.ResourceAmount < -statBooster.resourcePerSecond)
+            {
+                return false;
+            }
+            return true;
+        }
+
         public float ResourceCapacity
         {
             get

@@ -379,7 +379,7 @@ namespace HediffResourceFramework
 			}
 		}
 
-		public static HediffResource AdjustResourceAmount(Pawn pawn, HediffResourceDef hdDef, float sevOffset, bool addHediffIfMissing)
+		public static HediffResource AdjustResourceAmount(Pawn pawn, HediffResourceDef hdDef, float sevOffset, bool addHediffIfMissing, BodyPartDef bodyPartDef, bool applyToDamagedPart = false)
 		{
 			HediffResource firstHediffOfDef = pawn.health.hediffSet.GetFirstHediffOfDef(hdDef) as HediffResource;
 			if (firstHediffOfDef != null)
@@ -389,7 +389,16 @@ namespace HediffResourceFramework
 			}
 			else if (addHediffIfMissing && (sevOffset >= 0 || hdDef.keepWhenEmpty))
 			{
-				firstHediffOfDef = HediffMaker.MakeHediff(hdDef, pawn) as HediffResource;
+				BodyPartRecord bodyPartRecord = null;
+				if (bodyPartDef != null)
+				{
+					bodyPartRecord = pawn.health.hediffSet.GetNotMissingParts().FirstOrDefault((BodyPartRecord x) => x.def == bodyPartDef);
+					if (pawn.health.hediffSet.GetPartHealth(bodyPartRecord) <= 0f && !applyToDamagedPart)
+                    {
+						return null;
+					}
+				}
+				firstHediffOfDef = HediffMaker.MakeHediff(hdDef, pawn, bodyPartRecord) as HediffResource;
 				pawn.health.AddHediff(firstHediffOfDef);
 				firstHediffOfDef.ResourceAmount = sevOffset;
 				return firstHediffOfDef;
@@ -649,7 +658,7 @@ namespace HediffResourceFramework
 
 				foreach (var option in props.ResourceSettings)
 				{
-					var hediffResource = AdjustResourceAmount(verb.CasterPawn, option.hediff, option.resourcePerUse, option.addHediffIfMissing);
+					var hediffResource = AdjustResourceAmount(verb.CasterPawn, option.hediff, option.resourcePerUse, option.addHediffIfMissing, option.applyToPart);
 					if (hediffResource != null)
                     {
 						var hediffResourcePostUseDelay = new List<int>();

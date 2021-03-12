@@ -27,6 +27,7 @@ namespace HediffResourceFramework
         public float minimumResourcePerUse = -1f;
         public float disableAboveResource = -1f;
         public bool addHediffIfMissing = false;
+        public BodyPartDef applyToPart;
         public string disableReason;
         public float effectRadius = -1f;
 

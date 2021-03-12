@@ -77,7 +77,6 @@ namespace HediffResourceFramework
 				}
 			}
 		}
-
 	}
 
 	[HarmonyPatch(typeof(PawnRenderer), "RenderPawnInternal", new Type[] 
@@ -109,7 +108,8 @@ namespace HediffResourceFramework
 			{
 				foreach (var resourceEffect in effectOnImpactOptions.resourceEffects)
 				{
-					var hediffResource = HediffResourceUtils.AdjustResourceAmount(__instance, resourceEffect.hediffDef, resourceEffect.adjustTargetResource, resourceEffect.addHediffIfMissing);
+					var hediffResource = HediffResourceUtils.AdjustResourceAmount(__instance, resourceEffect.hediffDef, 
+						resourceEffect.adjustTargetResource, resourceEffect.addHediffIfMissing, resourceEffect.applyToPart);
 					if (hediffResource != null && resourceEffect.delayTargetOnDamage != IntRange.zero)
 					{
 						hediffResource.AddDelay(resourceEffect.delayTargetOnDamage.RandomInRange);

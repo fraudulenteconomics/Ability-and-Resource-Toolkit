@@ -56,7 +56,9 @@
     <Compile Include="Comps\CompChargeResource.cs" />
     <Compile Include="Comps\HediffComp_AdjustHediffsPerStages.cs" />
     <Compile Include="Comps\HediffComp_AdjustHediffs.cs" />
+    <Compile Include="HarmonyPatches\Building_Patches.cs" />
     <Compile Include="HarmonyPatches\ForbidAndReservations_Patches.cs" />
+    <Compile Include="HarmonyPatches\ThingDefGenerator_Patches.cs" />
     <Compile Include="HarmonyPatches\QualityAndStats_Patches.cs" />
     <Compile Include="Interfaces\IAdjustResouceInArea.cs" />
     <Compile Include="Interfaces\IChargeResource.cs" />
@@ -78,6 +80,8 @@
     <Compile Include="HediffResourceUtils.cs" />
     <Compile Include="Hediffs\HediffResource.cs" />
     <Compile Include="Hediffs\HediffResourceDef.cs" />
+    <Compile Include="ModExtensions\BuildingSpawnOptions.cs" />
+    <Compile Include="ModExtensions\FacilityInProgress.cs" />
     <Compile Include="ModExtensions\TraitsAdjustHediff.cs" />
     <Compile Include="ModExtensions\EffectOnImpact.cs" />
     <Compile Include="ModExtensions\StatWorkerExtender.cs" />

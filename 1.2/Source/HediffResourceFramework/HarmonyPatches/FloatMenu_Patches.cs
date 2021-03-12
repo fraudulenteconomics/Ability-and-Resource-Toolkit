@@ -83,14 +83,17 @@ namespace HediffResourceFramework
                 {
                     foreach (var statBooster in comp.Props.statBoosters)
                     {
-                        
-                        if (statBooster.preventUseIfHediffMissing && pawn.health.hediffSet.GetFirstHediffOfDef(statBooster.hediff) is null && comp.StatBoosterIsEnabled(statBooster))
+                        if (comp.StatBoosterIsEnabled(statBooster) && statBooster.preventUseIfHediffMissing)
                         {
-                            FloatMenuOption floatMenuOption = opts.FirstOrDefault((FloatMenuOption x) => x.Label.ToLower().Contains(t.Label.ToLower()));
-                            if (floatMenuOption != null)
+                            var hediffResource = pawn.health.hediffSet.GetFirstHediffOfDef(statBooster.hediff) as HediffResource;
+                            if (hediffResource is null || !hediffResource.CanApplyStatBooster(statBooster))
                             {
-                                floatMenuOption.action = null;
-                                floatMenuOption.Label = statBooster.cannotUseMessageKey.Translate(t);
+                                FloatMenuOption floatMenuOption = opts.FirstOrDefault((FloatMenuOption x) => x.Label.ToLower().Contains(t.Label.ToLower()));
+                                if (floatMenuOption != null)
+                                {
+                                    floatMenuOption.action = null;
+                                    floatMenuOption.Label = statBooster.cannotUseMessageKey.Translate(t);
+                                }
                             }
                         }
                     }

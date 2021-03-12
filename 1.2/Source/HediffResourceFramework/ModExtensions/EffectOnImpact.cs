@@ -14,6 +14,8 @@ namespace HediffResourceFramework
         public IntRange delayTargetOnDamage = IntRange.zero;
         public bool addHediffIfMissing;
         public float severityPerDamage;
+        public BodyPartDef applyToPart;
+        public bool applyToDamagedPart;
     }
     public class EffectOnImpact : DefModExtension
     {

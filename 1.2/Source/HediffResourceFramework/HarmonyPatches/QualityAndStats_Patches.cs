@@ -28,14 +28,14 @@ namespace HediffResourceFramework
                     {
                         if (statBooster.resourceOnComplete != -1f)
                         {
-                            var hediffResouce = worker.health.hediffSet.GetFirstHediffOfDef(statBooster.hediff) as HediffResource;
-                            if (hediffResouce is null || hediffResouce.ResourceAmount < -statBooster.resourceOnComplete)
+                            var hediffResource = worker.health.hediffSet.GetFirstHediffOfDef(statBooster.hediff) as HediffResource;
+                            if (hediffResource != null && hediffResource.CanApplyStatBooster(statBooster))
                             {
-                                continue;
+                                hediffResource.ResourceAmount += statBooster.resourceOnComplete;
                             }
                             else
                             {
-                                hediffResouce.ResourceAmount += statBooster.resourceOnComplete;
+                                continue;
                             }
                         }
                         if (statBooster.outputStatOffsets != null)
@@ -44,7 +44,7 @@ namespace HediffResourceFramework
                             {
                                 if (statValues.ContainsKey(statModifier.stat))
                                 {
-                                    statValues[statModifier.stat].statOffset = statModifier.value;
+                                    statValues[statModifier.stat].statOffset += statModifier.value;
                                 }
                                 else
                                 {
@@ -59,7 +59,7 @@ namespace HediffResourceFramework
                             {
                                 if (statValues.ContainsKey(statModifier.stat))
                                 {
-                                    statValues[statModifier.stat].statFactor = statModifier.value;
+                                    statValues[statModifier.stat].statFactor += statModifier.value;
                                 }
                                 else
                                 {
@@ -86,8 +86,8 @@ namespace HediffResourceFramework
 
                     for (var i = 0; i < list.Count; i++)
                     {
-                        while (list[i].stackCount > list[i].def.stackLimit) // with HRF we can get overstacked things when resource in use is active. 
-                                                                            // when the game does that, it creates new things in place of overstacked things and then we can't tract them. 
+                        while (list[i].stackCount > list[i].def.stackLimit) // with HRF we can get overstacked things when resource in use is active.
+                                                                            // when the game does that, it creates new things in place of overstacked things and then we can't tract them.
                                                                             // this is a workaround to solve it.
                         {
                             var thing = list[i].SplitOff(list[i].def.stackLimit);
@@ -126,7 +126,7 @@ namespace HediffResourceFramework
                     if (comp.StatBoosterIsEnabled(statBooster) && statBooster.increaseQuality != -1 && __result < statBooster.increaseQualityCeiling)
                     {
                         var hediffResource = pawn.health.hediffSet.GetFirstHediffOfDef(statBooster.hediff) as HediffResource;
-                        if (hediffResource != null && hediffResource.ResourceAmount >= statBooster.resourcePerSecond)
+                        if (hediffResource != null && hediffResource.CanApplyStatBooster(statBooster))
                         {
                             var result = (int)__result + (int)statBooster.increaseQuality;
                             if (result > (int)QualityCategory.Legendary)
@@ -161,7 +161,7 @@ namespace HediffResourceFramework
             if (CompFacilityInUse_StatBoosters.thingBoosters.TryGetValue(thing, out var comp) && comp.InUse(out var claimants))
             {
                 IEnumerable<Pawn> users = null;
-                Dictionary<Pawn, HediffResource> checkedPawnsResources = new Dictionary<Pawn, HediffResource>();
+                Dictionary<Pawn, Dictionary<StatBooster, HediffResource>> checkedPawnsResources = new Dictionary<Pawn, Dictionary<StatBooster, HediffResource>>();
                 var oldResult = __result;
                 foreach (var statBooster in comp.Props.statBoosters)
                 {
@@ -181,16 +181,23 @@ namespace HediffResourceFramework
                                 }
                                 foreach (var user in users)
                                 {
-                                    if (!checkedPawnsResources.TryGetValue(user, out var hediffResource))
+                                    if (!checkedPawnsResources.TryGetValue(user, out var hediffResourceDict))
                                     {
-                                        hediffResource = user.health.hediffSet.GetFirstHediffOfDef(statBooster.hediff) as HediffResource;
-                                        checkedPawnsResources[user] = hediffResource;
+                                        if (hediffResourceDict is null)
+                                        {
+                                            hediffResourceDict = new Dictionary<StatBooster, HediffResource>();
+                                        }
+                                        hediffResourceDict[statBooster] = user.health.hediffSet.GetFirstHediffOfDef(statBooster.hediff) as HediffResource;
+                                        checkedPawnsResources[user] = hediffResourceDict;
                                     }
-                                    if (hediffResource != null && statBooster.hediff == hediffResource.def && hediffResource.ResourceAmount >= -statBooster.resourcePerSecond)
+                                    if (hediffResourceDict != null && hediffResourceDict.TryGetValue(statBooster, out HediffResource hediffResource))
                                     {
-                                        //Log.Message($"1 Due to an user {user} with {statBooster.hediff} - {hediffResource}, {thing} is gaining a bonus to {stat}!");
-                                        __result += statModifier.value;
-                                        break;
+                                        if (hediffResource.CanApplyStatBooster(statBooster))
+                                        {
+                                            Log.Message($"1 Due to an user {user} with {statBooster.hediff} - {hediffResource}, {thing} is gaining a bonus to {stat}!");
+                                            __result += statModifier.value;
+                                            break;
+                                        }
                                     }
                                 }
                             }
@@ -209,30 +216,29 @@ namespace HediffResourceFramework
                                 }
                                 foreach (var user in users)
                                 {
-                                    if (!checkedPawnsResources.TryGetValue(user, out var hediffResource))
+                                    if (!checkedPawnsResources.TryGetValue(user, out var hediffResourceDict))
                                     {
-                                        hediffResource = user.health.hediffSet.GetFirstHediffOfDef(statBooster.hediff) as HediffResource;
-                                        checkedPawnsResources[user] = hediffResource;
+                                        if (hediffResourceDict is null)
+                                        {
+                                            hediffResourceDict = new Dictionary<StatBooster, HediffResource>();
+                                        }
+                                        hediffResourceDict[statBooster] = user.health.hediffSet.GetFirstHediffOfDef(statBooster.hediff) as HediffResource;
+                                        checkedPawnsResources[user] = hediffResourceDict;
                                     }
-                                    if (hediffResource != null && statBooster.hediff == hediffResource.def && hediffResource.ResourceAmount >= -statBooster.resourcePerSecond)
+                                    if (hediffResourceDict != null && hediffResourceDict.TryGetValue(statBooster, out HediffResource hediffResource))
                                     {
-                                        //Log.Message($"2 Due to an user {user} with {statBooster.hediff} - {hediffResource}, {thing} is gaining a bonus to {stat}!");
-                                        __result *= statModifier.value;
-                                        break;
+                                        if (hediffResource.CanApplyStatBooster(statBooster))
+                                        {
+                                            Log.Message($"2 Due to an user {user} with {statBooster.hediff} - {hediffResource}, {thing} is gaining a bonus to {stat}!");
+                                            __result *= statModifier.value;
+                                            break;
+                                        }
                                     }
                                 }
                             }
                         }
                     }
                 }
-
-                //if (__result != oldResult && (users?.Any() ?? false))
-                //{
-                //    foreach (var user in users)
-                //    {
-                //        Log.Message($"{thing} is giving stat boosts {stat} - {__result} to {user}");
-                //    }
-                //}
             }
         }
     }

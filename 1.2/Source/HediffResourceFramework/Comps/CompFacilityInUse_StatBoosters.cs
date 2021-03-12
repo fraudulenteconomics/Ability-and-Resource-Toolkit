@@ -23,6 +23,7 @@ namespace HediffResourceFramework
 
         public float resourcePerSecond = -1f;
         public float resourceOnComplete = -1f;
+        public BodyPartDef applyToPart;
         public bool addHediffIfMissing;
         public bool qualityScalesResourcePerSecond;
         public List<StatModifier> statOffsets;
@@ -86,26 +87,56 @@ namespace HediffResourceFramework
         public bool InUse(out IEnumerable<Pawn> claimants)
         {
             claimants = Claimants;
-            foreach (var claimant in claimants)
+            if (this.parent is Frame)
             {
-                var pawnPosition = claimant.Position;
-                if (pawnPosition == this.parent.Position || pawnPosition == this.parent.InteractionCell)
+                foreach (var claimant in claimants)
                 {
-                    return true;
+                    if (!claimant.pather.MovingNow && claimant.CurJobDef == JobDefOf.FinishFrame 
+                        && claimant.CurJob.targetA.Thing == this.parent
+                        && this.parent.OccupiedRect().Cells.Any(x => x.DistanceTo(claimant.Position) <= 1.5f))
+                    {
+                        return true;
+                    }
                 }
             }
+            else
+            {
+                foreach (var claimant in claimants)
+                {
+                    var pawnPosition = claimant.Position;
+                    if (pawnPosition == this.parent.Position || pawnPosition == this.parent.InteractionCell)
+                    {
+                        return true;
+                    }
+                }
+            }
+
             return false;
         }
 
-        public IEnumerable<Pawn> GetActualUsers(IEnumerable<Pawn> claimaints)
+        public IEnumerable<Pawn> GetActualUsers(IEnumerable<Pawn> claimants)
         {
-            foreach (var claimant in claimaints)
+            if (this.parent is Frame)
             {
-                var pawnPosition = claimant.Position;
-
-                if (pawnPosition == this.parent.Position || pawnPosition == this.parent.InteractionCell)
+                foreach (var claimant in claimants)
                 {
-                    yield return claimant;
+                    if (!claimant.pather.MovingNow && claimant.CurJobDef == JobDefOf.FinishFrame
+                        && claimant.CurJob.targetA.Thing == this.parent
+                        && this.parent.OccupiedRect().Cells.Any(x => x.DistanceTo(claimant.Position) <= 1.5f))
+                    {
+                        yield return claimant;
+                    }
+                }
+            }
+            else
+            {
+                foreach (var claimant in claimants)
+                {
+                    var pawnPosition = claimant.Position;
+                    if (pawnPosition == this.parent.Position || pawnPosition == this.parent.InteractionCell)
+                    {
+                        yield return claimant;
+                    }
                 }
             }
         }
@@ -136,6 +167,7 @@ namespace HediffResourceFramework
         public void ResourceTick()
         {
             bool inUse = InUse(out var claimaints);
+            Log.Message(this + ", inUse: " + inUse + " - claimaints: " + claimaints.Count());
             if (inUse)
             {
                 var users = GetActualUsers(claimaints);
@@ -150,7 +182,7 @@ namespace HediffResourceFramework
                             {
                                 num *= HediffResourceUtils.GetQualityMultiplierInverted(qc);
                             }
-                            HediffResourceUtils.AdjustResourceAmount(user, statBooster.hediff, num, statBooster.addHediffIfMissing);
+                            HediffResourceUtils.AdjustResourceAmount(user, statBooster.hediff, num, statBooster.addHediffIfMissing, statBooster.applyToPart);
                         }
 
                     }
@@ -217,6 +249,12 @@ namespace HediffResourceFramework
         {
             var gameComp = HediffResourceUtils.HediffResourceManager;
             gameComp.DeregisterAdjuster(this);
+        }
+
+        public override void PostDestroy(DestroyMode mode, Map previousMap)
+        {
+            Deregister();
+            base.PostDestroy(mode, previousMap);
         }
 
         public override void PostExposeData()

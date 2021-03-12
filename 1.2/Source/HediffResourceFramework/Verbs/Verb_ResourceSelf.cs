@@ -40,7 +40,7 @@ namespace HediffResourceFramework
                     foreach (var hediffOption in targetResourceSettings)
                     {
                         HRFLog.Message("Giving: " + this.CasterPawn + " - " + hediffOption.hediff + " - " + hediffOption.resourcePerUse);
-                        HediffResourceUtils.AdjustResourceAmount(this.CasterPawn, hediffOption.hediff, hediffOption.resourcePerUse, hediffOption.addHediffIfMissing);
+                        HediffResourceUtils.AdjustResourceAmount(this.CasterPawn, hediffOption.hediff, hediffOption.resourcePerUse, hediffOption.addHediffIfMissing, hediffOption.applyToPart);
                         if (hediffOption.effectRadius != -1f)
                         {
                             foreach (var cell in HediffResourceUtils.GetAllCellsAround(hediffOption, new TargetInfo(this.CasterPawn.Position, this.CasterPawn.Map), CellRect.SingleCell(this.CasterPawn.Position)))
@@ -49,7 +49,7 @@ namespace HediffResourceFramework
                                 {
                                     if (pawn != this.CasterPawn)
                                     {
-                                        HediffResourceUtils.AdjustResourceAmount(pawn, hediffOption.hediff, hediffOption.resourcePerUse, hediffOption.addHediffIfMissing);
+                                        HediffResourceUtils.AdjustResourceAmount(pawn, hediffOption.hediff, hediffOption.resourcePerUse, hediffOption.addHediffIfMissing, hediffOption.applyToPart);
                                     }
                                 }
                             }

@@ -15,7 +15,7 @@ namespace HediffResourceFramework
         public float resourceAdjust = 0f;
 
         public float resourcePercent = -1f;
-
+        public BodyPartDef applyToPart;
         public List<HediffResourceDef> blacklistHediffsPreventAdd;
         public HediffDef blacklistHediffPoison;
         public string blacklistHediffPoisonMessage;
@@ -50,7 +50,13 @@ namespace HediffResourceFramework
             HediffResource hediff = pawn.health.hediffSet.GetFirstHediffOfDef(hediffDef) as HediffResource;
             if (hediff is null && addHediffIfMissing)
             {
-                hediff = HediffMaker.MakeHediff(hediffDef, pawn) as HediffResource;
+                BodyPartRecord bodyPartRecord = null;
+                if (applyToPart != null)
+                {
+                    bodyPartRecord = pawn.health.hediffSet.GetNotMissingParts().FirstOrDefault((BodyPartRecord x) => x.def == applyToPart);
+                }
+
+                hediff = HediffMaker.MakeHediff(hediffDef, pawn, bodyPartRecord) as HediffResource;
                 pawn.health.AddHediff(hediff);
             }
             if (hediff != null)
