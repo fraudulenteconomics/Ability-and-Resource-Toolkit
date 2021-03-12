@@ -23,9 +23,7 @@ namespace FraudeconCode
                 }
             }
 
-            var things = Enumerable.Repeat(Props.meteorMaterial.RandomElement(),
-                GenRadial.NumCellsInRadius(Props.meteorSize)).Select(def => ThingMaker.MakeThing(def));
-            var meteor = (MeteorIncoming) SkyfallerMaker.SpawnSkyfaller(ThingDef.Named("MeteorIncoming"), things, cell,
+            var meteor = (MeteorIncoming) SkyfallerMaker.SpawnSkyfaller(ThingDef.Named("MeteorIncoming"), cell,
                 caster.Map);
             meteor.Props = Props;
             meteor.def.skyfaller.explosionDamage = Props.meteorDamageDef;
@@ -52,18 +50,40 @@ namespace FraudeconCode
 
         protected override void SpawnThings()
         {
-            if (!Props.allowCrushingRocks || !Props.spawnRocks)
+            if (Props.spawnRocks)
+                foreach (var c in GenRadial.RadialCellsAround(Position, Props.meteorSize + 1, true))
+                {
+                    if (!Rand.Chance((Props.meteorSize - 1) / c.DistanceTo(Position))) continue;
+                    SpawnThingAt(c);
+                }
+            else
                 foreach (var pawn in GenRadial.RadialDistinctThingsAround(Position, Map, Props.meteorSize, true)
                     .OfType<Pawn>())
                 {
-                    var theta = Position.ToVector3().AngleToFlat(pawn.Position.ToVector3()) * Mathf.Deg2Rad;
+                    var theta = Position.ToVector3().AngleToFlat(pawn.Position.ToVector3());
                     var radius = Mathf.CeilToInt(Props.meteorSize + 1);
-                    pawn.Position = Position + IntVec3.FromVector3((Vector3.up * radius).RotatedBy(theta));
+                    pawn.Position = Position + IntVec3.FromVector3(new Vector3(radius, 0, 0).RotatedBy(theta));
                     pawn.stances.stunner.StunFor_NewTmp(60, this);
                     pawn.Notify_Teleported(false, false);
                 }
+        }
 
-            if (Props.spawnRocks) base.SpawnThings();
+        private void SpawnThingAt(IntVec3 c)
+        {
+            var thingDef = Props.meteorMaterial.RandomElement();
+            var thing = ThingMaker.MakeThing(thingDef);
+            foreach (var t in c.GetThingList(Map).ListFullCopy().Where(t => !(t is Pawn)).Where(t =>
+                t.def.Fillage != FillCategory.None && thingDef.Fillage == FillCategory.Full)) t.Destroy();
+
+            GenSpawn.Spawn(thing, c, Map);
+
+            if (Props.allowCrushingRocks)
+                PawnUtility.RecoverFromUnwalkablePositionOrKill(thing.Position, thing.Map);
+
+            if (thing.def.Fillage == FillCategory.Full && def.skyfaller.CausesExplosion &&
+                def.skyfaller.explosionDamage.isExplosive &&
+                thing.Position.InHorDistOf(Position, def.skyfaller.explosionRadius))
+                Map.terrainGrid.Notify_TerrainDestroyed(thing.Position);
         }
     }
 }

@@ -25,8 +25,8 @@
                 <soundCast>Bow_Small</soundCast>
                 <range>29.9</range>
                 <meteorSize>4.9</meteorSize>
-                <burstShotCount>5</burstShotCount>
-                <ticksBetweenBurstShots>10</ticksBetweenBurstShots>
+                <!-- <burstShotCount>5</burstShotCount>
+                <ticksBetweenBurstShots>10</ticksBetweenBurstShots> -->
                 <meteorMaterial>
                     <li>MineableSteel</li>
                     <li>MineableSilver</li>
@@ -39,10 +39,10 @@
                 <targetParams>
                     <canTargetLocations>true</canTargetLocations>
                 </targetParams>
-                <forcedMissRadius>10</forcedMissRadius>
+                <!-- <forcedMissRadius>10</forcedMissRadius> -->
                 <warmupTime>0.5</warmupTime>
                 <allowCrushingRocks>false</allowCrushingRocks>
-                <spawnRocks>true</spawnRocks>
+                <spawnRocks>false</spawnRocks>
                 <meteorDamageDef>Flame</meteorDamageDef>
                 <meteorDamageAmount>100</meteorDamageAmount>
                 <stopBurstWithoutLos>false</stopBurstWithoutLos>
