@@ -49,6 +49,7 @@ namespace FraudeconCode
                     Props.chargeDamageDef.defaultArmorPenetration, effectivePos.AngleToFlat(thing.DrawPos), FlyingPawn,
                     null, Weapon);
                 var log = new BattleLogEntry_RangedImpact(FlyingPawn, thing, thing, Weapon, def, null);
+                Find.BattleLog.Add(log);
                 thing.TakeDamage(dinfo).AssociateWithLog(log);
                 hitTargets.Add(thing);
             }

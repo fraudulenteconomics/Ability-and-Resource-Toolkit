@@ -87,6 +87,7 @@ namespace FraudeconCode
                 Projectile.projectile.GetArmorPenetration(Weapon), Holder.DrawPos.AngleToFlat(Target.DrawPos),
                 Caster, null, Weapon?.def);
             var log = new BattleLogEntry_RangedImpact(Caster, Target, Target, Weapon?.def, Projectile, null);
+            Find.BattleLog.Add(log);
             Target.TakeDamage(dinfo).AssociateWithLog(log);
             if (Props.impactRadius > 0f)
                 GenExplosion.DoExplosion(Target.Position, Map, Props.impactRadius, Props.impactDamageDef,

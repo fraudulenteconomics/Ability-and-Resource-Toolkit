@@ -58,6 +58,7 @@ namespace FraudeconCode
                         Weapon);
                     var log = new BattleLogEntry_RangedImpact(Caster, mover.FlyingPawn, mover.FlyingPawn, Weapon, def,
                         null);
+                    Find.BattleLog.Add(log);
                     mover.FlyingPawn.TakeDamage(dinfo).AssociateWithLog(log);
                 });
             }
