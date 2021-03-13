@@ -117,7 +117,7 @@ namespace HediffResourceFramework
 
         public bool InUse(out IEnumerable<Pawn> claimants)
         {
-            if (boolValueCache.updateTick > Find.TickManager.TicksGame + 60)
+            if (Find.TickManager.TicksGame + 60 > boolValueCache.updateTick)
             {
                 boolValueCache.Value = InUseInt(out IEnumerable<Pawn> pawns);
                 boolValueCache.pawns = pawns;

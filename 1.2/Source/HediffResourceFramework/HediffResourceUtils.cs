@@ -420,6 +420,7 @@ namespace HediffResourceFramework
 					bodyPartRecord = pawn.health.hediffSet.GetNotMissingParts().FirstOrDefault((BodyPartRecord x) => x.def == bodyPartDef);
 					if (pawn.health.hediffSet.GetPartHealth(bodyPartRecord) <= 0f && !applyToDamagedPart)
                     {
+						Log.Message("Can't adjust " + hdDef + " to " + pawn);
 						return null;
 					}
 				}
@@ -428,6 +429,7 @@ namespace HediffResourceFramework
 				firstHediffOfDef.ResourceAmount = sevOffset;
 				return firstHediffOfDef;
 			}
+			Log.Message("2 Can't adjust " + hdDef + " to " + pawn);
 			return null;
 		}
 
