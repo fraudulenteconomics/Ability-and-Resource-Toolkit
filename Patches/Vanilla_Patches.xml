@@ -36,7 +36,6 @@
 									<WorkTableWorkSpeedFactor>2</WorkTableWorkSpeedFactor>
 									<WorkTableEfficiencyFactor>2</WorkTableEfficiencyFactor>
 								</statFactors>
-								<texPathToggledOn>Things/Building/Production/TableStoveElectric</texPathToggledOn>
 								
 								<glowOnlyPowered>true</glowOnlyPowered>
 								<glowerOptions>

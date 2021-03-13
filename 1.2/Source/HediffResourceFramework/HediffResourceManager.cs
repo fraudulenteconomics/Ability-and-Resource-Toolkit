@@ -155,12 +155,16 @@ namespace HediffResourceFramework
                 var facility = facilities[num];
                 if (facility.compPower != null)
                 {
-                    if (facility.compGlower is null && facility.compPower.PowerOn)
+                    if (facility.compGlower is null && !facility.powerIsOn && facility.compPower.PowerOn)
                     {
+                        facility.powerIsOn = true;
+                        Log.Message("1 update");
                         facility.UpdateGraphics();
                     }
-                    else if (facility.compGlower != null && !facility.compPower.PowerOn)
+                    else if (facility.compGlower != null && facility.powerIsOn && !facility.compPower.PowerOn)
                     {
+                        facility.powerIsOn = false;
+                        Log.Message("2 update");
                         facility.UpdateGraphics();
                     }
                 }

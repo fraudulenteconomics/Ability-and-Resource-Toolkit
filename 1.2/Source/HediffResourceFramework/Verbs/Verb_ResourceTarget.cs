@@ -25,9 +25,9 @@ namespace HediffResourceFramework
                 {
                     if (hediffOption.hediff != null)
                     {
-                        if (currentTarget.Thing is Pawn target)
+                        Pawn target = currentTarget.Thing as Pawn;
+                        if (target != null)
                         {
-                            HRFLog.Message("1 Giving: " + target + " - " + hediffOption.hediff + " - " + hediffOption.resourcePerUse);
                             HediffResourceUtils.AdjustResourceAmount(target, hediffOption.hediff, hediffOption.resourcePerUse, hediffOption.addHediffIfMissing, hediffOption.applyToPart);
                         }
                         if (hediffOption.effectRadius != -1f)
@@ -36,8 +36,17 @@ namespace HediffResourceFramework
                             {
                                 foreach (var pawn in cell.GetThingList(this.CasterPawn.Map).OfType<Pawn>())
                                 {
-                                    HRFLog.Message("2 Giving: " + pawn + " - " + hediffOption.hediff + " - " + hediffOption.resourcePerUse);
-                                    HediffResourceUtils.AdjustResourceAmount(pawn, hediffOption.hediff, hediffOption.resourcePerUse, hediffOption.addHediffIfMissing, hediffOption.applyToPart);
+                                    if (pawn != target)
+                                    {
+                                        if (hediffOption.affectsAllies && (pawn.Faction == this.CasterPawn.Faction || !pawn.Faction.HostileTo(this.CasterPawn.Faction)))
+                                        {
+                                            HediffResourceUtils.AdjustResourceAmount(pawn, hediffOption.hediff, hediffOption.resourcePerUse, hediffOption.addHediffIfMissing, hediffOption.applyToPart);
+                                        }
+                                        else if (hediffOption.affectsEnemies && pawn.Faction.HostileTo(this.CasterPawn.Faction))
+                                        {
+                                            HediffResourceUtils.AdjustResourceAmount(pawn, hediffOption.hediff, hediffOption.resourcePerUse, hediffOption.addHediffIfMissing, hediffOption.applyToPart);
+                                        }
+                                    }
                                 }
                             }
                         }
