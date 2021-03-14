@@ -5,10 +5,8 @@ using Verse;
 
 namespace FraudeconCode
 {
-    internal class Verb_ConsumeCorpse : BaseVerb
+    public class Verb_ConsumeCorpse : BaseVerb
     {
-        public VerbProps Props => verbProps as VerbProps;
-
         private Corpse GetCorpse(LocalTargetInfo target)
         {
             return target.Cell.GetThingList(caster.Map).OfType<Corpse>().FirstOrDefault(c =>
@@ -22,7 +20,7 @@ namespace FraudeconCode
             foreach (var option in Props.TargetResourceSettings)
                 HediffResourceUtils.AdjustResourceAmount(CasterPawn,
                     option.hediff, option.resourcePerUse,
-                    option.addHediffIfMissing);
+                    option.addHediffIfMissing, null);
 
             corpse.Destroy();
 

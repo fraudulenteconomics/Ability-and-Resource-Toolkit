@@ -7,8 +7,6 @@ namespace FraudeconCode
 {
     public class Verb_MeteorCall : BaseVerb
     {
-        public VerbProps Props => verbProps as VerbProps;
-
         protected override bool TryCastShot()
         {
             var cell = CurrentTarget.Cell;

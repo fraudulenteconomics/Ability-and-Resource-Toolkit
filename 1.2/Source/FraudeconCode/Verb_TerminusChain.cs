@@ -7,7 +7,7 @@ using Verse;
 
 namespace FraudeconCode
 {
-    internal class Verb_TerminusChain : Verb_LaunchProjectile
+    public class Verb_TerminusChain : Verb_LaunchProjectile
     {
         public VerbProps Props => verbProps as VerbProps;
 

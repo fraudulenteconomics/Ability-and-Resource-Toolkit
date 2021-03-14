@@ -6,7 +6,6 @@ namespace FraudeconCode
     public class Verb_Cauterize : BaseVerb
     {
         private static readonly List<Hediff_Injury> injuries = new List<Hediff_Injury>();
-        public VerbProps Props => verbProps as VerbProps;
 
         protected override bool TryCastShot()
         {

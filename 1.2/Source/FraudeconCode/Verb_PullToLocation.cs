@@ -9,8 +9,6 @@ namespace FraudeconCode
 {
     public class Verb_PullToLocation : BaseVerb
     {
-        public VerbProps Props => verbProps as VerbProps;
-
         protected override bool TryCastShot()
         {
             if (CurrentTarget.Cell.GetFirstThing<Puller>(caster.Map) != null) return false;

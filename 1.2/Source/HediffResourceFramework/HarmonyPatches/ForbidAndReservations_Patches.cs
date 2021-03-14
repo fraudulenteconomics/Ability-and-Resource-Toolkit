@@ -17,7 +17,7 @@ namespace HediffResourceFramework
     {
         public static bool PawnCanUseIt(Pawn pawn, Thing thing)
         {
-            if (CompFacilityInUse_StatBoosters.thingBoosters.TryGetValue(thing, out var comp))
+            if (CompFacilityInUse.thingBoosters.TryGetValue(thing, out var comp))
             {
                 foreach (var statBooster in comp.Props.statBoosters)
                 {

@@ -7,6 +7,7 @@ namespace FraudeconCode
     public abstract class BaseVerb : Verb
     {
         public override bool MultiSelect => true;
+        public VerbProps Props => verbProps as VerbProps;
 
         public override void OnGUI(LocalTargetInfo target)
         {
