@@ -62,6 +62,8 @@ namespace HediffResourceFramework
 
         public CompPowerTrader compPower;
         public CompGlower compParentGlower;
+
+        public bool powerIsOn;
         public bool StatBoosterIsEnabled(StatBooster statBooster)
         {
             var ind = this.Props.statBoosters.IndexOf(statBooster);
@@ -108,9 +110,22 @@ namespace HediffResourceFramework
             this.compPower = this.parent.TryGetComp<CompPowerTrader>();
             this.compParentGlower = this.parent.TryGetComp<CompGlower>();
             gameComp.RegisterFacilityInUse(this);
-
+            boolValueCache = new BoolPawnsValueCache(InUseInt(out IEnumerable<Pawn> claimants), claimants);
         }
+
+        private BoolPawnsValueCache boolValueCache;
+
         public bool InUse(out IEnumerable<Pawn> claimants)
+        {
+            if (Find.TickManager.TicksGame + 60 > boolValueCache.updateTick)
+            {
+                boolValueCache.Value = InUseInt(out IEnumerable<Pawn> pawns);
+                boolValueCache.pawns = pawns;
+            }
+            claimants = boolValueCache.pawns;
+            return boolValueCache.value;
+        }
+        private bool InUseInt(out IEnumerable<Pawn> claimants)
         {
             claimants = Claimants;
             if (this.parent is Frame)
@@ -252,7 +267,6 @@ namespace HediffResourceFramework
         {
             bool changedGraphics = false;
             bool changedGlower = false;
-
             if (base.parent.Map != null)
             {
                 if (resourceUseToggleStates is null)
@@ -267,10 +281,14 @@ namespace HediffResourceFramework
 
                         if (!changedGlower && statBooster.glowerOptions != null)
                         {
-                            if (!statBooster.glowOnlyPowered || this.parent.TryGetComp<CompPowerTrader>().PowerOn)
+                            if (!statBooster.glowOnlyPowered || (this.parent.TryGetComp<CompPowerTrader>()?.PowerOn ?? false))
                             {
                                 UpdateGlower(statBooster.glowerOptions);
                                 changedGlower = true;
+                            }
+                            else
+                            {
+                                Log.Message("Can't update glower");
                             }
                         }
                     }
@@ -290,17 +308,19 @@ namespace HediffResourceFramework
 
                             if (!changedGlower && statBooster.glowerOptions != null)
                             {
-                                if (!statBooster.glowOnlyPowered || this.parent.TryGetComp<CompPowerTrader>().PowerOn)
+                                if (statBooster.glowOnlyPowered && (this.parent.TryGetComp<CompPowerTrader>()?.PowerOn ?? false))
                                 {
                                     UpdateGlower(statBooster.glowerOptions);
                                     changedGlower = true;
                                 }
+                                else
+                                {
+                                    Log.Message("Can't update glower");
+                                }
                             }
                         }
-
                     }
                 }
-
 
                 if (!changedGraphics && (!parent.def.graphicData?.texPath.NullOrEmpty() ?? false))
                 {
@@ -309,6 +329,7 @@ namespace HediffResourceFramework
 
                 if (!changedGlower)
                 {
+                    Log.Message("Updating glower: " + this);
                     if (this.compGlower != null)
                     {
                         base.parent.Map.glowGrid.DeRegisterGlower(this.compGlower);
