@@ -3,10 +3,8 @@ using Verse;
 
 namespace FraudeconCode
 {
-    internal class Verb_Fleshletting : BaseVerb
+    public class Verb_Fleshletting : BaseVerb
     {
-        public VerbProps Props => verbProps as VerbProps;
-
         protected override bool TryCastShot()
         {
             var pawn = currentTarget.Pawn;

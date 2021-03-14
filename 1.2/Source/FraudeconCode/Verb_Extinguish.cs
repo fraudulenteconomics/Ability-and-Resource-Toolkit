@@ -10,10 +10,6 @@ namespace FraudeconCode
     {
         protected override int ShotsPerBurst => verbProps.burstShotCount;
 
-        public VerbProps Props => verbProps as VerbProps;
-
-        // public override bool MultiSelect => true;
-
         protected override bool TryCastShot()
         {
             (GenSpawn.Spawn(ThingDef.Named("Extinguishing"), caster.Position, caster.Map) as Extinguishing)?.Start(

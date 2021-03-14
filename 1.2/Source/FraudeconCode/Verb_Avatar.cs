@@ -7,8 +7,6 @@ namespace FraudeconCode
 {
     public class Verb_Avatar : BaseVerb
     {
-        public VerbProps Props => verbProps as VerbProps;
-
         protected override bool TryCastShot()
         {
             var pawns = GenRadial.RadialDistinctThingsAround(caster.Position, caster.Map, Props.effectRadius, true)
