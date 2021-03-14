@@ -33,7 +33,7 @@ namespace HediffResourceFramework
 		protected override IEnumerable<Toil> MakeNewToils()
 		{
 			this.FailOnDespawnedOrNull(TargetIndex.A);
-			this.FailOn(() => !this.CompMaintainable.CanMaintain(pawn));
+			this.FailOn(() => !this.CompMaintainable.CanMaintain(pawn, out string failReason));
 			yield return Toils_Goto.GotoThing(TargetIndex.A, PathEndMode.Touch);
 			Toil toil = Toils_General.Wait(180);
 			toil.WithProgressBarToilDelay(TargetIndex.A);

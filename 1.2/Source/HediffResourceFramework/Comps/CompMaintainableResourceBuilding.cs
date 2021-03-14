@@ -56,7 +56,7 @@ namespace HediffResourceFramework
 			}
 		}
 
-		public bool CanMaintain(Pawn pawn)
+		public bool CanMaintain(Pawn pawn, out string failReason)
         {
 			if (compFacilityInUse != null)
             {
@@ -66,16 +66,19 @@ namespace HediffResourceFramework
                     {
 						if (!compFacilityInUse.StatBoosterIsEnabled(statBooster))
                         {
+							failReason = statBooster.cannotUseMessageKey;
 							return false;
                         }
 						var hediff = pawn.health.hediffSet.GetFirstHediffOfDef(statBooster.hediff) as HediffResource;
-						if (hediff is null || hediff.ResourceAmount < statBooster.resourceOnComplete)
+						if (hediff is null || hediff.ResourceAmount < -statBooster.resourceOnComplete)
                         {
+							failReason = statBooster.cannotUseMessageKey;
 							return false;
                         }
 					}
                 }
             }
+			failReason = "";
 			return true;
         }
 
@@ -127,10 +130,11 @@ namespace HediffResourceFramework
 					if (statBooster.resourceOnComplete != -1)
 					{
 						var hediff = maintainer.health.hediffSet.GetFirstHediffOfDef(statBooster.hediff) as HediffResource;
-						hediff.ResourceAmount -= statBooster.resourceOnComplete;
+						hediff.ResourceAmount -= -statBooster.resourceOnComplete;
 					}
 				}
 			}
+			this.parent.HitPoints = this.parent.MaxHitPoints;
 		}
 
 		public override string CompInspectStringExtra()

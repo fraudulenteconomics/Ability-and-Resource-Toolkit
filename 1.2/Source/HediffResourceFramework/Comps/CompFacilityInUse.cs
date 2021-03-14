@@ -67,7 +67,7 @@ namespace HediffResourceFramework
         public bool StatBoosterIsEnabled(StatBooster statBooster)
         {
             var ind = this.Props.statBoosters.IndexOf(statBooster);
-            if (resourceUseToggleStates != null && resourceUseToggleStates.TryGetValue(ind, out bool state) && !state)
+            if (statBooster.toggleResourceUse && resourceUseToggleStates != null && resourceUseToggleStates.TryGetValue(ind, out bool state) && !state)
             {
                 return false;
             }
