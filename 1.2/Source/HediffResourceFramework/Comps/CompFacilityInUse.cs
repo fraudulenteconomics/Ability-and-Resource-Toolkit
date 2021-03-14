@@ -51,12 +51,12 @@ namespace HediffResourceFramework
         public List<StatBooster> statBoosters;
         public CompProperties_FacilityInUse_StatBoosters()
         {
-            this.compClass = typeof(CompFacilityInUse_StatBoosters);
+            this.compClass = typeof(CompFacilityInUse);
         }
     }
-    public class CompFacilityInUse_StatBoosters : ThingComp, IAdjustResource
+    public class CompFacilityInUse : ThingComp, IAdjustResource
     {
-        public static Dictionary<Thing, CompFacilityInUse_StatBoosters> thingBoosters = new Dictionary<Thing, CompFacilityInUse_StatBoosters>();
+        public static Dictionary<Thing, CompFacilityInUse> thingBoosters = new Dictionary<Thing, CompFacilityInUse>();
 
         public static HashSet<StatDef> statsWithBoosters = new HashSet<StatDef> { };
 

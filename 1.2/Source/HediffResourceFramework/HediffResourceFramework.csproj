@@ -46,7 +46,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Comps\CompFacilityInUse_StatBoosters.cs" />
+    <Compile Include="Comps\CompMaintainableResourceBuilding.cs" />
+    <Compile Include="Comps\CompFacilityInUse.cs" />
     <Compile Include="Comps\CompAdjustHediffs.cs" />
     <Compile Include="Comps\HediffCompAdjustHediffsArea.cs" />
     <Compile Include="Comps\CompAdjustHediffsArea.cs" />
@@ -80,6 +81,8 @@
     <Compile Include="HediffResourceUtils.cs" />
     <Compile Include="Hediffs\HediffResource.cs" />
     <Compile Include="Hediffs\HediffResourceDef.cs" />
+    <Compile Include="Jobs\JobDriver_MaintainResourceBuilding.cs" />
+    <Compile Include="Jobs\WorkGiver_MaintainResourceBuildings.cs" />
     <Compile Include="ModExtensions\BuildingSpawnOptions.cs" />
     <Compile Include="ModExtensions\FacilityInProgress.cs" />
     <Compile Include="ModExtensions\TraitsAdjustHediff.cs" />

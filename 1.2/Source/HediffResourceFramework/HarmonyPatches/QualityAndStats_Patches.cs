@@ -18,7 +18,7 @@ namespace HediffResourceFramework
     {
         private static void Postfix(ref IEnumerable<Thing> __result, RecipeDef recipeDef, Pawn worker, List<Thing> ingredients, Thing dominantIngredient, IBillGiver billGiver)
         {
-            if (billGiver is Thing workBench && CompFacilityInUse_StatBoosters.thingBoosters.TryGetValue(workBench, out var comp))
+            if (billGiver is Thing workBench && CompFacilityInUse.thingBoosters.TryGetValue(workBench, out var comp))
             {
                 var list = __result.ToList();
                 Dictionary<StatDef, StatBonus> statValues = new Dictionary<StatDef, StatBonus>();
@@ -119,7 +119,7 @@ namespace HediffResourceFramework
     {
         private static void Postfix(ref QualityCategory __result, Pawn pawn, SkillDef relevantSkill)
         {
-            if (pawn.CurJobDef == JobDefOf.DoBill && CompFacilityInUse_StatBoosters.thingBoosters.TryGetValue(pawn.CurJob.targetA.Thing, out var comp))
+            if (pawn.CurJobDef == JobDefOf.DoBill && CompFacilityInUse.thingBoosters.TryGetValue(pawn.CurJob.targetA.Thing, out var comp))
             {
                 foreach (var statBooster in comp.Props.statBoosters)
                 {
@@ -158,7 +158,7 @@ namespace HediffResourceFramework
                     __result *= statBonus.statFactor;
                 }
             }
-            if (CompFacilityInUse_StatBoosters.thingBoosters.TryGetValue(thing, out var comp) && comp.InUse(out var claimants))
+            if (CompFacilityInUse.thingBoosters.TryGetValue(thing, out var comp) && comp.InUse(out var claimants))
             {
                 IEnumerable<Pawn> users = null;
                 Dictionary<Pawn, Dictionary<StatBooster, HediffResource>> checkedPawnsResources = new Dictionary<Pawn, Dictionary<StatBooster, HediffResource>>();

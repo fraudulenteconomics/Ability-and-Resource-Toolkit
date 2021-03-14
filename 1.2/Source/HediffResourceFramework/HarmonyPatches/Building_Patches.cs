@@ -30,28 +30,28 @@ namespace HediffResourceFramework
                         {
 							if (__instance.def != materialReplace.replaceWithThingDef)
                             {
-								var map = __instance.Map;
-								var position = __instance.Position;
-								var rotation = __instance.Rotation;
 								var stuff = materialReplace.replaceWithStuffDef != null ? materialReplace.replaceWithStuffDef : GenStuff.DefaultStuffFor(materialReplace.replaceWithThingDef);
-								var newBuilding = ThingMaker.MakeThing(materialReplace.replaceWithThingDef, stuff);
-								__instance.Destroy();
-								GenPlace.TryPlaceThing(newBuilding, position, map, ThingPlaceMode.Direct, null, null, rotation);
+								SpawnInsteadOf(__instance, materialReplace.replaceWithThingDef, stuff);
 							}
 							else if (__instance.Stuff != null && materialReplace.replaceWithStuffDef != null && __instance.Stuff != materialReplace.replaceWithStuffDef)
                             {
-								var map = __instance.Map;
-								var position = __instance.Position;
-								var rotation = __instance.Rotation;
-								var stuff = materialReplace.replaceWithStuffDef;
-								var newBuilding = ThingMaker.MakeThing(__instance.def, stuff);
-								__instance.Destroy();
-								GenPlace.TryPlaceThing(newBuilding, position, map, ThingPlaceMode.Direct, null, null, rotation);
+								SpawnInsteadOf(__instance, __instance.def, materialReplace.replaceWithStuffDef);
 							}
                         }
                     }
                 }
 			}
+		}
+
+		private static void SpawnInsteadOf(Building oldBuilding, ThingDef newBuildingDef, ThingDef stuff)
+        {
+			var map = oldBuilding.Map;
+			var position = oldBuilding.Position;
+			var rotation = oldBuilding.Rotation;
+			var newBuilding = ThingMaker.MakeThing(newBuildingDef, stuff);
+			newBuilding.SetFaction(oldBuilding.Faction);
+			oldBuilding.Destroy();
+			GenPlace.TryPlaceThing(newBuilding, position, map, ThingPlaceMode.Direct, null, null, rotation);
 		}
 	}
 }

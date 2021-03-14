@@ -122,9 +122,9 @@ namespace HediffResourceFramework
             base.StartedNewGame();
         }
 
-        private List<CompFacilityInUse_StatBoosters> facilities = new List<CompFacilityInUse_StatBoosters>();
+        private List<CompFacilityInUse> facilities = new List<CompFacilityInUse>();
 
-        public void RegisterFacilityInUse(CompFacilityInUse_StatBoosters comp)
+        public void RegisterFacilityInUse(CompFacilityInUse comp)
         {
             if (!facilities.Contains(comp))
             {

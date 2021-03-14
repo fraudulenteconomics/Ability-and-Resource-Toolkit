@@ -79,7 +79,7 @@ namespace HediffResourceFramework
             for (int i = 0; i < thingList.Count; i++)
             {
                 var t = thingList[i];
-                if (CompFacilityInUse_StatBoosters.thingBoosters.TryGetValue(t, out var comp))
+                if (CompFacilityInUse.thingBoosters.TryGetValue(t, out var comp))
                 {
                     foreach (var statBooster in comp.Props.statBoosters)
                     {
