@@ -22,7 +22,7 @@ namespace FraudeconCode
             foreach (var option in Props.TargetResourceSettings)
                 HediffResourceUtils.AdjustResourceAmount(CasterPawn,
                     option.hediff, option.resourcePerUse,
-                    option.addHediffIfMissing);
+                    option.addHediffIfMissing, null);
 
             corpse.Destroy();
 
