@@ -1,48 +1,13 @@
 <Defs>
-    <ThingDef ParentName="BaseWeapon">
-        <defName>Bow_Short</defName>
-        <label>short bow</label>
-        <description>A simple short selfbow made from a single piece of wood.</description>
-        <graphicData>
-            <texPath>Things/Item/Equipment/WeaponRanged/BowShort</texPath>
-            <graphicClass>Graphic_Single</graphicClass>
-        </graphicData>
-        <soundInteract>Bow_Small</soundInteract>
-        <statBases>
-            <WorkToMake>2400</WorkToMake>
-            <Mass>0.8</Mass>
-            <AccuracyTouch>1.00</AccuracyTouch>
-            <AccuracyShort>1.00</AccuracyShort>
-            <AccuracyMedium>1.00</AccuracyMedium>
-            <AccuracyLong>1.00</AccuracyLong>
-            <RangedWeapon_Cooldown>0.5</RangedWeapon_Cooldown>
-        </statBases>
-        <verbs>
-            <li Class="FraudeconCode.VerbProps">
-                <verbClass>FraudeconCode.Verb_Blinkstrike</verbClass>
-                <hasStandardCommand>true</hasStandardCommand>
-                <defaultProjectile>Arrow_Short</defaultProjectile>
-                <soundCast>Bow_Small</soundCast>
-                <range>29.9</range>
-                <warmupTime>0.5</warmupTime>
-                <blinkDuration>60</blinkDuration>
-                <targetParams>
-                    <canTargetLocations>true</canTargetLocations>
-                    <canTargetSelf>true</canTargetSelf>
-                </targetParams>
-            </li>
-        </verbs>
-        <tools>
+    <HediffDef>
+        <defName>Invincible</defName>
+        <label>invincible</label>
+        <description>a</description>
+        <hediffClass>HediffWithComps</hediffClass>
+        <comps>
             <li>
-                <label>limb</label>
-                <capacities>
-                    <li>Blunt</li>
-                    <li>Poke</li>
-                </capacities>
-                <power>9</power>
-                <cooldownTime>2</cooldownTime>
+                <compClass>FraudeconCode.HediffComp_Indestructible</compClass>
             </li>
-        </tools>
-        <techLevel>Neolithic</techLevel>
-    </ThingDef>
+        </comps>
+    </HediffDef>
 </Defs>

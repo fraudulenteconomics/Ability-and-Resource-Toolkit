@@ -24,7 +24,8 @@ namespace FraudeconCode
             if (__result == null) return;
             var toRemove = new HashSet<Hediff>();
             foreach (var hediff in from hediff in __result
-                from hediff1 in __instance.hediffSet.hediffs.Where(h => h.Part == hediff.Part)
+                from hediff1 in __instance.hediffSet.hediffs.Where(h =>
+                    h.Part == hediff.Part || hediff.Part.GetAllParentParts().Contains(h.Part) || h.Part == null)
                 where hediff1.TryGetComp<HediffComp_Indestructible>() != null
                 select hediff)
             {
@@ -38,8 +39,11 @@ namespace FraudeconCode
 
         public static void FixPartHealth(ref float __result, HediffSet __instance, BodyPartRecord part)
         {
+            var parents = part.GetAllParentParts().ToList();
             if (__result == 0f &&
-                __instance.hediffs.Any(hd => hd.Part == part && hd.TryGetComp<HediffComp_Indestructible>() != null))
+                __instance.hediffs.Any(hd =>
+                    (hd.Part == part || parents.Contains(hd.Part) || hd.Part == null) &&
+                    hd.TryGetComp<HediffComp_Indestructible>() != null))
                 __result = 1f;
         }
 
@@ -47,8 +51,17 @@ namespace FraudeconCode
         {
             var parts = new List<BodyPartRecord> {record};
             foreach (var childPart in record.GetDirectChildParts()) parts.AddRange(childPart.GetAllChildParts());
-
             return parts;
+        }
+
+        public static IEnumerable<BodyPartRecord> GetAllParentParts(this BodyPartRecord record)
+        {
+            var part = record.parent;
+            while (part != null)
+            {
+                yield return part;
+                part = part.parent;
+            }
         }
     }
 }
