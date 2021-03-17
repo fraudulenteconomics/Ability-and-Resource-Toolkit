@@ -98,7 +98,6 @@ namespace HediffResourceFramework
         {
             if (!resourceAdjusters.Contains(adjuster))
             {
-                HRFLog.Message("Registering: " + adjuster);
                 resourceAdjusters.Add(adjuster);
             }
         }
@@ -107,7 +106,6 @@ namespace HediffResourceFramework
         {
             if (resourceAdjusters.Contains(adjuster))
             {
-                HRFLog.Message("Deregistering: " + adjuster);
                 resourceAdjusters.Remove(adjuster);
             }
         }
@@ -230,16 +228,18 @@ namespace HediffResourceFramework
         {
             base.ExposeData();
             Scribe_Collections.Look(ref thingsWithBonuses, "thingsWithBonuses", LookMode.Reference, LookMode.Deep, ref thingKeys, ref thingStatsValues);
+            Scribe_Collections.Look(ref hediffResourcesPolicies, "hediffResourcesPolicies", LookMode.Reference, LookMode.Deep, ref pawnKeys, ref hediffResourcePolicyValues);
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
-                if (thingsWithBonuses is null)
-                {
-                    thingsWithBonuses = new Dictionary<Thing, StatBonuses>();
-                }
+                PreInit();
             }
         }
 
         private List<Thing> thingKeys;
         private List<StatBonuses> thingStatsValues;
+
+        private List<Pawn> pawnKeys;
+        private List<HediffResourcePolicy> hediffResourcePolicyValues;
+
     }
 }

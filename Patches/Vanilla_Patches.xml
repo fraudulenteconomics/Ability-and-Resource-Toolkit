@@ -2,14 +2,17 @@
 <Patch>
 	<Operation Class="PatchOperationSequence">
 		<operations>
-		
-			<li Class="PatchOperationInsert">
-				<xpath>*/ThinkTreeDef[defName = "SatisfyBasicNeeds"]/thinkRoot[@Class="ThinkNode_Tagger"]/subNodes/li[@Class="ThinkNode_PrioritySorter"]/subNodes//li[2]</xpath>
+			<li Class="PatchOperationTest">
+				<xpath>/Defs/ThinkTreeDef[defName='MainColonistBehaviorCore']/thinkRoot[@Class='ThinkNode_Tagger']/subNodes/li[@Class='ThinkNode_PrioritySorter']/subNodes</xpath>
+			</li>
+			<li Class="PatchOperationAdd">
+				<xpath>/Defs/ThinkTreeDef[defName='MainColonistBehaviorCore']/thinkRoot[@Class='ThinkNode_Tagger']/subNodes/li[@Class='ThinkNode_PrioritySorter']/subNodes</xpath>
+				<order>Prepend</order>
 				<value>
 					<li Class="HediffResourceFramework.JobGiver_RefillResource"/>
 				</value>
 			</li>
-		
+
 			<li Class="PatchOperationConditional">
 				<xpath>/Defs/ThingDef[thingClass="Building_WorkTable"]/comps</xpath>
 				<success>Always</success>
@@ -43,14 +46,14 @@
 									<WorkTableWorkSpeedFactor>2</WorkTableWorkSpeedFactor>
 									<WorkTableEfficiencyFactor>2</WorkTableEfficiencyFactor>
 								</statFactors>
-								
+
 								<glowOnlyPowered>true</glowOnlyPowered>
 								<glowerOptions>
 									<glowRadius>10</glowRadius>
 									<glowColor>(52,87,13,0)</glowColor>
 									<overlightRadius>0</overlightRadius>
 								</glowerOptions>
-								
+
 								<preventUseIfHediffMissing>true</preventUseIfHediffMissing>
 								<cannotUseMessageKey>FE.CannotUseMissingFusionReactor</cannotUseMessageKey>
 								<toggleResourceUse>true</toggleResourceUse>
