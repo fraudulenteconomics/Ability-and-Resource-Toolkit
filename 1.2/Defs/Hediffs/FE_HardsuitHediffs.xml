@@ -30,6 +30,7 @@
 		<letterType>PositiveEvent</letterType>
 		<letterTitleKey>FE.FusionReactorGainedTitle</letterTitleKey>
 		<letterMessageKey>FE.FusionReactorGainedMessage</letterMessageKey>
+		<showInResourceTab>true</showInResourceTab>
 	</HediffResourceFramework.HediffResourceDef>
 	
 	<HediffResourceFramework.HediffResourceDef>

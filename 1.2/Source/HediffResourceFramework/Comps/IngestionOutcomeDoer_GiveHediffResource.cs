@@ -21,7 +21,6 @@ namespace HediffResourceFramework
         public string blacklistHediffPoisonMessage;
         public string cannotDrinkReason;
         public bool addHediffIfMissing;
-
         protected override void DoIngestionOutcomeSpecial(Pawn pawn, Thing ingested)
         {
             if (blacklistHediffsPreventAdd != null)

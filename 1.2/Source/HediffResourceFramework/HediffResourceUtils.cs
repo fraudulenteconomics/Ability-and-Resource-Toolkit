@@ -80,6 +80,13 @@ namespace HediffResourceFramework
 	[StaticConstructorOnStartup]
 	public static class HediffResourceUtils
 	{
+		static HediffResourceUtils()
+        {
+			foreach (var thingDef in DefDatabase<ThingDef>.AllDefs.Where(x => x.race?.Humanlike ?? false))
+            {
+				thingDef.inspectorTabsResolved.Add(InspectTabManager.GetSharedInstance(typeof(ITab_Pawn_Resource)));
+			}
+		}
 		public static HediffResourceManager HediffResourceManager
 		{
 			get
@@ -675,7 +682,7 @@ namespace HediffResourceFramework
 
 			if (props.ResourceSettings != null)
 			{
-				var hediffResourceManage = HediffResourceUtils.HediffResourceManager;
+				var hediffResourceManage = HediffResourceManager;
 
 				var hediffPostUse = new Dictionary<HediffResource, List<int>>();
 				var hediffPostUseDelayMultipliers = new Dictionary<HediffResource, List<float>>();

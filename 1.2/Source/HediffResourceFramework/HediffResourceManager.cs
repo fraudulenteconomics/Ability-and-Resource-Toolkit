@@ -9,6 +9,35 @@ using Verse;
 
 namespace HediffResourceFramework
 {
+    public class HediffResourceSatisfyPolicy : IExposable
+    {
+        public FloatRange resourceSeekingThreshold;
+        public bool seekingIsEnabled;
+        public HediffResourceSatisfyPolicy()
+        {
+
+        }
+        public void ExposeData()
+        {
+            Scribe_Values.Look(ref resourceSeekingThreshold, "resourceSeekingThreshold");
+            Scribe_Values.Look(ref seekingIsEnabled, "seekingIsEnabled");
+        }
+    }
+
+    public class HediffResourcePolicy : IExposable
+    {
+        public HediffResourcePolicy()
+        {
+
+        }
+
+        public Dictionary<HediffResourceDef, HediffResourceSatisfyPolicy> satisfyPolicies;
+        public void ExposeData()
+        {
+            Scribe_Collections.Look(ref satisfyPolicies, "satisfyPolicies");
+        }
+    }
+
     public class StatBonus : IExposable
     {
         public StatDef stat;
@@ -55,6 +84,7 @@ namespace HediffResourceFramework
     }
     public class HediffResourceManager : GameComponent
     {
+        public Dictionary<Pawn, HediffResourcePolicy> hediffResourcesPolicies = new Dictionary<Pawn, HediffResourcePolicy>();
         private List<IAdjustResource> resourceAdjusters = new List<IAdjustResource>();
         private List<IAdjustResource> resourceAdjustersToUpdate = new List<IAdjustResource>();
         public Dictionary<Thing, StatBonuses> thingsWithBonuses = new Dictionary<Thing, StatBonuses>();
@@ -108,6 +138,7 @@ namespace HediffResourceFramework
         {
             if (resourceAdjusters is null) resourceAdjusters = new List<IAdjustResource>();
             if (thingsWithBonuses is null) thingsWithBonuses = new Dictionary<Thing, StatBonuses>();
+            if (hediffResourcesPolicies is null) hediffResourcesPolicies = new Dictionary<Pawn, HediffResourcePolicy>();
         }
 
         public override void LoadedGame()
@@ -129,6 +160,30 @@ namespace HediffResourceFramework
             if (!facilities.Contains(comp))
             {
                 facilities.Add(comp);
+            }
+        }
+
+        public void RegisterAndRecheckForPolicies(Pawn pawn)
+        {
+            if (!this.hediffResourcesPolicies.TryGetValue(pawn, out var policy))
+            {
+                policy = new HediffResourcePolicy();
+                policy.satisfyPolicies = new Dictionary<HediffResourceDef, HediffResourceSatisfyPolicy>();
+                foreach (var hediffResourceDef in DefDatabase<HediffResourceDef>.AllDefs.Where(x => x.showInResourceTab))
+                {
+                    policy.satisfyPolicies[hediffResourceDef] = new HediffResourceSatisfyPolicy();
+                }
+                HediffResourceUtils.HediffResourceManager.hediffResourcesPolicies[pawn] = policy;
+            }
+            else
+            {
+                foreach (var hediffResourceDef in DefDatabase<HediffResourceDef>.AllDefs.Where(x => x.showInResourceTab))
+                {
+                    if (!policy.satisfyPolicies.ContainsKey(hediffResourceDef))
+                    {
+                        policy.satisfyPolicies[hediffResourceDef] = new HediffResourceSatisfyPolicy();
+                    }
+                }
             }
         }
         public override void GameComponentTick()

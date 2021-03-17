@@ -73,5 +73,7 @@ namespace HediffResourceFramework
 		public string letterMessageKey;
 
 		public List<RequiredHediff> requiredHediffs;
+
+		public bool showInResourceTab;
 	}
 }

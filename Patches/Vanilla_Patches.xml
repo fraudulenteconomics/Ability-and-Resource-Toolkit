@@ -3,6 +3,13 @@
 	<Operation Class="PatchOperationSequence">
 		<operations>
 		
+			<li Class="PatchOperationInsert">
+				<xpath>*/ThinkTreeDef[defName = "SatisfyBasicNeeds"]/thinkRoot[@Class="ThinkNode_Tagger"]/subNodes/li[@Class="ThinkNode_PrioritySorter"]/subNodes//li[2]</xpath>
+				<value>
+					<li Class="HediffResourceFramework.JobGiver_RefillResource"/>
+				</value>
+			</li>
+		
 			<li Class="PatchOperationConditional">
 				<xpath>/Defs/ThingDef[thingClass="Building_WorkTable"]/comps</xpath>
 				<success>Always</success>

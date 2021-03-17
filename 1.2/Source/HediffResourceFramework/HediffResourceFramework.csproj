@@ -59,6 +59,7 @@
     <Compile Include="Comps\HediffComp_AdjustHediffs.cs" />
     <Compile Include="HarmonyPatches\Building_Patches.cs" />
     <Compile Include="HarmonyPatches\ForbidAndReservations_Patches.cs" />
+    <Compile Include="HarmonyPatches\Pawn_Patches.cs" />
     <Compile Include="HarmonyPatches\ThingDefGenerator_Patches.cs" />
     <Compile Include="HarmonyPatches\QualityAndStats_Patches.cs" />
     <Compile Include="Interfaces\IAdjustResouceInArea.cs" />
@@ -82,6 +83,7 @@
     <Compile Include="Hediffs\HediffResource.cs" />
     <Compile Include="Hediffs\HediffResourceDef.cs" />
     <Compile Include="Jobs\JobDriver_MaintainResourceBuilding.cs" />
+    <Compile Include="Jobs\JobGiver_RefillResource.cs" />
     <Compile Include="Jobs\WorkGiver_MaintainResourceBuildings.cs" />
     <Compile Include="ModExtensions\BuildingSpawnOptions.cs" />
     <Compile Include="ModExtensions\FacilityInProgress.cs" />
@@ -89,6 +91,7 @@
     <Compile Include="ModExtensions\EffectOnImpact.cs" />
     <Compile Include="ModExtensions\StatWorkerExtender.cs" />
     <Compile Include="ModExtensions\HediffAdjustOptions.cs" />
+    <Compile Include="Policies\ITab_Pawn_Resource.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StatWorkers\StatWorker_MaxResourceCapacityOffset.cs" />
     <Compile Include="StatWorkers\StatWorker_ResourceOffset.cs" />

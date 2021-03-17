@@ -10,4 +10,9 @@
 	<HRF.ManaPotionHediffPoisonMessage>{PAWN_nameDef} drank {INGESTED_label}</HRF.ManaPotionHediffPoisonMessage>
 	
 	<HRF.FusionReactorOverCapacityReason>{PAWN_nameDef} has insufficient max energy, {THING_label} has been removed.</HRF.FusionReactorOverCapacityReason>
+	
+	<HRF.TabResource>Resource</HRF.TabResource>
+	<HRF.NeedThreshold>When the resource is below the bottom value, pawns will try to restore it to the upper value if able.</HRF.NeedThreshold>
+	<HRF.ActiveSeekSatisfy>Active Seek Satisfy</HRF.ActiveSeekSatisfy>
+	<HRF.MissingHediff>Missing hediff</HRF.MissingHediff>
 </LanguageData>
