@@ -13,18 +13,6 @@ using Verse.AI;
 
 namespace HediffResourceFramework
 {
-	[HarmonyPatch(typeof(Pawn), "SpawnSetup")]
-	public static class Patch_SpawnSetup
-	{
-		private static void Postfix(Pawn __instance)
-		{
-			if (__instance?.Faction == Faction.OfPlayer && __instance.RaceProps.Humanlike)
-            {
-				HediffResourceUtils.HediffResourceManager.RegisterAndRecheckForPolicies(__instance);
-			}
-		}
-	}
-
 	[HarmonyPatch(typeof(Pawn), "SetFaction")]
 	public static class Patch_SetFaction
 	{
@@ -34,6 +22,34 @@ namespace HediffResourceFramework
 			{
 				HediffResourceUtils.HediffResourceManager.RegisterAndRecheckForPolicies(__instance);
 			}
+		}
+	}
+
+	[HarmonyPatch(typeof(Pawn), "SpawnSetup")]
+	public static class Patch_SpawnSetup
+	{
+		private static void Postfix(Pawn __instance)
+		{
+			if (__instance?.Faction == Faction.OfPlayer && __instance.RaceProps.Humanlike)
+			{
+				HediffResourceUtils.HediffResourceManager.RegisterAndRecheckForPolicies(__instance);
+			}
+			if (__instance.skills?.skills != null)
+            {
+				foreach (var skill in __instance.skills.skills)
+				{
+					HediffResourceUtils.TryAssignNewSkillRelatedHediffs(skill, __instance);
+				}
+			}
+		}
+	}
+
+	[HarmonyPatch(typeof(SkillRecord), "Learn")]
+	public static class Patch_Learn
+	{
+		private static void Postfix(SkillRecord __instance, Pawn ___pawn)
+		{
+			HediffResourceUtils.TryAssignNewSkillRelatedHediffs(__instance, ___pawn);
 		}
 	}
 }

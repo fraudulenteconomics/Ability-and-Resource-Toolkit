@@ -87,6 +87,7 @@
     <Compile Include="Jobs\WorkGiver_MaintainResourceBuildings.cs" />
     <Compile Include="ModExtensions\BuildingSpawnOptions.cs" />
     <Compile Include="ModExtensions\FacilityInProgress.cs" />
+    <Compile Include="ModExtensions\SkillHediffGrantOptions.cs" />
     <Compile Include="ModExtensions\TraitsAdjustHediff.cs" />
     <Compile Include="ModExtensions\EffectOnImpact.cs" />
     <Compile Include="ModExtensions\StatWorkerExtender.cs" />

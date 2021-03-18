@@ -100,7 +100,45 @@ namespace HediffResourceFramework
 			}
 		}
 		private static HediffResourceManager manager;
+		public static void TryAssignNewSkillRelatedHediffs(SkillRecord skillRecord, Pawn pawn)
+		{
+			var options = skillRecord.def.GetModExtension<SkillHediffGrantOptions>();
+			if (options != null)
+			{
+				foreach (var skillGrantOption in options.hediffGrantRequirements)
+				{
+					var hediff = pawn.health.hediffSet.GetFirstHediffOfDef(skillGrantOption.hediff);
+					if (skillGrantOption.minLevel >= skillRecord.Level && skillGrantOption.minPassion >= skillRecord.passion && HasRequiredSkills(pawn, skillGrantOption))
+					{
+						if (hediff is null)
+						{
+							hediff = HediffMaker.MakeHediff(skillGrantOption.hediff, pawn);
+							pawn.health.AddHediff(hediff);
+						}
+					}
+					else if (hediff != null && !HasRequiredSkills(pawn, skillGrantOption))
+					{
+						pawn.health.RemoveHediff(hediff);
+					}
+				}
+			}
+		}
 
+		private static bool HasRequiredSkills(Pawn pawn, SkillBonusRequirement skillBonusRequirement)
+		{
+			if (skillBonusRequirement.requiredSkills != null)
+			{
+				foreach (var requiredSkill in skillBonusRequirement.requiredSkills)
+				{
+					var skillRecord = pawn.skills.GetSkill(requiredSkill.skill);
+					if (skillRecord.Level < requiredSkill.minLevel || skillRecord.passion < requiredSkill.minPassion)
+					{
+						return false;
+					}
+				}
+			}
+			return true;
+		}
 		public static bool CanDrink(Pawn pawn, Thing potion, out string reason)
 		{
 			var comp = potion.def?.ingestible?.outcomeDoers?.OfType<IngestionOutcomeDoer_GiveHediffResource>().FirstOrDefault();

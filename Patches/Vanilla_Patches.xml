@@ -298,6 +298,33 @@
 					</li>
 				</value>
 			</li>
+			
+			<li Class="PatchOperationAddModExtension">
+				<xpath>/Defs/SkillDef[defName="Shooting"]</xpath>
+				<value>
+					<li Class="HediffResourceFramework.SkillHediffGrantOptions">
+						<hediffGrantRequirements>
+							<li>
+								<minLevel>5</minLevel>
+								<minPassion>None</minPassion>
+								<hediff>Carcinoma</hediff>
+								<requiredSkills>
+									<li>
+										<skill>Melee</skill>
+										<minLevel>1</minLevel>
+										<minPassion>None</minPassion>
+									</li>
+									<li>
+										<skill>Construction</skill>
+										<minLevel>1</minLevel>
+										<minPassion>None</minPassion>
+									</li>
+								</requiredSkills>
+							</li>
+						</hediffGrantRequirements>
+					</li>
+				</value>
+			</li>
 		</operations>
 	</Operation>
 </Patch>
