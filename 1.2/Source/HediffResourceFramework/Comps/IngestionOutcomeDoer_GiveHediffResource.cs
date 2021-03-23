@@ -21,6 +21,9 @@ namespace HediffResourceFramework
         public string blacklistHediffPoisonMessage;
         public string cannotDrinkReason;
         public bool addHediffIfMissing;
+
+        public ChemicalDef toleranceChemical;
+
         protected override void DoIngestionOutcomeSpecial(Pawn pawn, Thing ingested)
         {
             if (blacklistHediffsPreventAdd != null)
@@ -62,11 +65,20 @@ namespace HediffResourceFramework
             {
                 if (resourceAdjust != 0f)
                 {
+                    if (toleranceChemical != null)
+                    {
+                        AddictionUtility.ModifyChemicalEffectForToleranceAndBodySize(pawn, toleranceChemical, ref resourceAdjust);
+                    }
                     hediff.ResourceAmount += resourceAdjust;
                 }
                 if (resourcePercent != -1f)
                 {
-                    hediff.ResourceAmount += hediff.ResourceCapacity * resourcePercent;
+                    var resourceAmount = hediff.ResourceCapacity * resourcePercent;
+                    if (toleranceChemical != null)
+                    {
+                        AddictionUtility.ModifyChemicalEffectForToleranceAndBodySize(pawn, toleranceChemical, ref resourceAmount);
+                    }
+                    hediff.ResourceAmount += resourceAdjust;
                 }
             }
         }
