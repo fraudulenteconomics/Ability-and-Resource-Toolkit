@@ -298,7 +298,7 @@
 					</li>
 				</value>
 			</li>
-			
+
 			<li Class="PatchOperationAddModExtension">
 				<xpath>/Defs/SkillDef[defName="Shooting"]</xpath>
 				<value>
@@ -325,6 +325,89 @@
 					</li>
 				</value>
 			</li>
+
+			<!-- <li Class="PatchOperationAdd">
+				<xpath>/Defs/ThingDef[defName="Plant_Healroot"]</xpath>
+				<value>
+					<comps>
+						<li Class="HediffResourceFramework.CompProperties_PlantResource">
+							<statBoosters>
+								<li>
+									<hediff>FE_ToxicFumes</hediff>
+									<addHediffIfMissing>true</addHediffIfMissing>
+									<resourceOnSow>1</resourceOnSow>
+									<resourceOnHarvest>3</resourceOnHarvest>
+									<scaleWithGrowthRate>true</scaleWithGrowthRate>
+								</li>
+								<li>
+									<hediff>FE_FusionReactor</hediff>
+									<addHediffIfMissing>false</addHediffIfMissing>
+									<requireResource>true</requireResource>
+									<resourceOnSow>-2</resourceOnSow>
+									<resourceOnHarvest>-5</resourceOnHarvest>
+									<scaleWithGrowthRate>false</scaleWithGrowthRate>
+									<harvestYieldAdjust>0.5</harvestYieldAdjust>
+								</li>
+							</statBoosters>
+						</li>
+					</comps>
+				</value>
+			</li> -->
+
+			<!-- <li Class="PatchOperationAdd">
+				<xpath>/Defs/ThingDef[defName="RockBase"]</xpath>
+				<value>
+					<comps>
+						<li Class="HediffResourceFramework.CompProperties_MiningResource">
+							<statBoosters>
+								<li>
+									<hediff>FE_ToxicFumes</hediff>
+									<addHediffIfMissing>true</addHediffIfMissing>
+									<resourceOnStrike>0.5</resourceOnStrike>
+									<resourceOnComplete>2.5</resourceOnComplete>
+								</li>
+								<li>
+									<hediff>FE_FusionReactor</hediff>
+									<addHediffIfMissing>false</addHediffIfMissing>
+									<requireResource>true</requireResource>
+									<resourceOnStrike>-2</resourceOnStrike>
+									<resourceOnComplete>-10</resourceOnComplete>
+									<miningYieldAdjust>1.0</miningYieldAdjust>
+								</li>
+							</statBoosters>
+						</li>
+					</comps>
+				</value>
+			</li> -->
+			
+			<!-- <li Class="PatchOperationAdd">
+				<xpath>/Defs/ThingDef[defName="Muffalo"]/comps</xpath>
+				<value>
+						<li Class="HediffResourceFramework.CompProperties_AnimalResource">
+							<statBoosters>
+								<li>
+									<hediff>FE_FusionReactor</hediff>
+									<addHediffIfMissing>false</addHediffIfMissing>
+									<requireResource>true</requireResource>
+									<resourceOnTaming>-2</resourceOnTaming>
+									<tamingChanceAdjust>0.25</tamingChanceAdjust>
+									<resourceOnTraining>-2</resourceOnTraining>
+									<trainingChanceAdjust>0.25</trainingChanceAdjust>
+									<resourceOnGather>-5</resourceOnHarvest>
+									<animalYieldAdjust>0.5</animalYieldAdjust>
+								</li>
+								<li>
+									<hediff>FE_ToxicFumes</hediff>
+									<addHediffIfMissing>true</addHediffIfMissing>
+									<requireResource>false</requireResource>
+									<resourceOnTaming>2</resourceOnTaming>
+									<resourceOnTraining>2</resourceOnTraining>
+									<resourceOnGather>5</resourceOnHarvest>
+								</li>
+							</statBoosters>
+						</li>
+				</value>
+			</li> -->
 		</operations>
 	</Operation>
 </Patch>

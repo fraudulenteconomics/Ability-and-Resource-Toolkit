@@ -99,11 +99,126 @@
 						<qualityScalesCapacityOffset>true</qualityScalesCapacityOffset>
 						<disallowEquipIfHediffMissing>false</disallowEquipIfHediffMissing>
 						<dropIfHediffMissing>false</dropIfHediffMissing>
+						<!-- <keepResourceAmount>true</keepResourceAmount>
+						<initialResourceAmount>true</initialResourceAmount>
+						<destroyWhenEmpty>false</destroyWhenEmpty>
+						<dropWhenEmpty>false</dropWhenEmpty> -->
 					</li>
 				</resourceSettings>
 			</li>
 		</comps>
 	</ThingDef>
+
+	<ThingDef ParentName="ApparelBase">
+		<defName>FE_MakeshiftHardsuit</defName>
+		<label>makeshift hardsuit</label>
+		<description>A slapshod recreation of a Fusion Hardsuit. Woefully inefficient and completely worthless once all energy has been used up. Regardless, it will function with all modules. Once the suit is out of energy, it will fall off the user and need to be recharged at a fusion injection unit. The only redeeming factor is that these hardsuits are incredibly easy and cheap to produce.</description>
+		<graphicData>
+			<texPath>Things/Apparel/BlastVest/BlastVest</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+		</graphicData>
+		<tickerType>Normal</tickerType>
+		<statBases>
+			<Mass>7.5</Mass>
+			<WorkToMake>16000</WorkToMake>
+			<Flammability>0.0</Flammability>
+			<EquipDelay>10</EquipDelay>
+		</statBases>
+		<equippedStatOffsets>
+			<WorkSpeedGlobal>0.1</WorkSpeedGlobal>
+			<MoveSpeed>0.2</MoveSpeed>
+		</equippedStatOffsets>
+		<thingSetMakerTags>
+			<li>RewardStandardMidFreq</li>
+			<li>RewardStandardQualitySuper</li>
+		</thingSetMakerTags>
+		<costList>
+			<ComponentSpacer>1</ComponentSpacer>
+			<Plasteel>30</Plasteel>
+			<Uranium>15</Uranium>
+		</costList>
+		<recipeMaker>
+			<unfinishedThingDef>UnfinishedTechArmor</unfinishedThingDef>
+			<researchPrerequisite>FE_FusionTechnology</researchPrerequisite>
+			<skillRequirements>
+				<Crafting>7</Crafting>
+			</skillRequirements>
+			<recipeUsers Inherit="False">
+				<li>FabricationBench</li>
+			</recipeUsers>
+			<workSpeedStat>GeneralLaborSpeed</workSpeedStat>
+			<workSkill>Crafting</workSkill>
+			<effectWorking>Smith</effectWorking>
+			<soundWorking>Recipe_Machining</soundWorking>
+			<useIngredientsForColor>false</useIngredientsForColor>
+		</recipeMaker>
+		<thingCategories>
+			<li>ApparelUtility</li>
+		</thingCategories>
+		<apparel>
+			<scoreOffset>4</scoreOffset>
+			<wornGraphicPath>Things/Apparel/BlastVest/BlastVest</wornGraphicPath>
+			<careIfWornByCorpse>true</careIfWornByCorpse>
+			<careIfDamaged>true</careIfDamaged>
+			<wearPerDay>0</wearPerDay>
+			<bodyPartGroups>
+				<li>Neck</li>
+				<li>Torso</li>
+				<li>Shoulders</li>
+				<li>Arms</li>
+				<li>Legs</li>
+			</bodyPartGroups>
+			<layers>
+				<li>Shell</li>
+			</layers>
+			<tags>
+				<li>FE_FusionHardsuitBase</li>
+			</tags>
+		</apparel>
+		<colorGenerator Class="ColorGenerator_Options">
+			<options>
+				<li>
+					<weight>10</weight>
+					<only>(0.33,0.33,0.33,1)</only>
+				</li>
+				<li>
+					<weight>10</weight>
+					<only>(0.65,0.65,0.65,1)</only>
+				</li>
+				<li>
+					<weight>6</weight>
+					<min>(0.3,0.3,0.3,1)</min>
+					<max>(0.5,0.5,0.5,1)</max>
+				</li>
+				<li>
+					<weight>10</weight>
+					<only>(0.9,0.9,0.9,1)</only>
+				</li>
+			</options>
+		</colorGenerator>
+		<comps>
+			<li Class="HediffResourceFramework.CompProperties_ApparelAdjustHediffs">
+				<resourceSettings>
+					<li>
+						<hediff>FE_FusionReactor</hediff>
+						<resourcePerSecond>0</resourcePerSecond>
+						<qualityScalesResourcePerSecond>false</qualityScalesResourcePerSecond>
+						<addHediffIfMissing>true</addHediffIfMissing>
+						<maxResourceCapacityOffset>100</maxResourceCapacityOffset>
+						<qualityScalesCapacityOffset>true</qualityScalesCapacityOffset>
+						<disallowEquipIfHediffMissing>false</disallowEquipIfHediffMissing>
+						<dropIfHediffMissing>false</dropIfHediffMissing>
+						<!-- <keepResourceAmount>true</keepResourceAmount>
+						<initialResourceAmount>true</initialResourceAmount>
+						<destroyWhenEmpty>false</destroyWhenEmpty>
+						<dropWhenEmpty>true</dropWhenEmpty>
+						<disallowEquipWhenEmpty>true</disallowEquipWhenEmpty> -->
+					</li>
+				</resourceSettings>
+			</li>
+		</comps>
+	</ThingDef>
+
 
 	<ThingDef Name="FE_FusionArmorBase" ParentName="ArmorMachineableBase" Abstract="True">
 		<techLevel>Spacer</techLevel>

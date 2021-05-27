@@ -32,7 +32,7 @@
 		<letterMessageKey>FE.FusionReactorGainedMessage</letterMessageKey>
 		<showInResourceTab>true</showInResourceTab>
 	</HediffResourceFramework.HediffResourceDef>
-	
+
 	<HediffResourceFramework.HediffResourceDef>
 		<defName>FE_ArchotechJump</defName>
 		<label>arhotech jump</label>
@@ -268,7 +268,7 @@
 			</li>
 		</stages>
 	</HediffResourceFramework.HediffResourceDef>
-	
+
 	<HediffResourceFramework.HediffResourceDef>
 		<defName>FE_CutterCharge</defName>
 		<label>fusion cutter capacitor</label>
@@ -280,8 +280,8 @@
 		<makesSickThought>false</makesSickThought>
 		<defaultLabelColor>(0.1,0.9,0.9)</defaultLabelColor>
 	</HediffResourceFramework.HediffResourceDef>
-	
-		<HediffResourceFramework.HediffResourceDef>
+
+	<HediffResourceFramework.HediffResourceDef>
 		<defName>FE_FusionSurge</defName>
 		<label>temporary in-fusion</label>
 		<description>A limited charge capacitor that increases the effectiveness of melee attacks using excess energy.</description>
@@ -304,5 +304,225 @@
 			</li>
 		</stages>
 	</HediffResourceFramework.HediffResourceDef>
+
+	<HediffResourceFramework.HediffResourceDef>
+		<defName>FE_PulseBattery</defName>
+		<label>pulse battery</label>
+		<description>Remaining battery charge for a disposable pulse rifle.</description>
+		<hediffClass>HediffResourceFramework.HediffResource</hediffClass>
+		<keepWhenEmpty>true</keepWhenEmpty>
+		<isBad>false</isBad>
+		<tendable>false</tendable>
+		<makesSickThought>false</makesSickThought>
+		<defaultLabelColor>(0.1,0.9,0.5)</defaultLabelColor>
+	</HediffResourceFramework.HediffResourceDef>
+
+	<HediffResourceFramework.HediffResourceDef>
+		<defName>FE_Synthesizer</defName>
+		<label>synthesizer</label>
+		<description>A temporary nanite infusion that slowly restores needs over time.</description>
+		<hediffClass>HediffResourceFramework.HediffResource</hediffClass>
+		<keepWhenEmpty>true</keepWhenEmpty>
+		<isBad>false</isBad>
+		<tendable>false</tendable>
+		<makesSickThought>false</makesSickThought>
+		<defaultLabelColor>(0.5,0.1,0.5)</defaultLabelColor>
+		<lifetimeTicks>1800</lifetimeTicks>
+		<maxResourceCapacity>1</maxResourceCapacity>
+		<!-- <adjustRestPerSecond>0.25</adjustRestPerSecond>
+		<adjustFoodPerSecond>0.25</adjustFoodPerSecond>
+		<adjustJoyPerSecond>0.25</adjustJoyPerSecond> -->
+	</HediffResourceFramework.HediffResourceDef>
+
+	<HediffResourceFramework.HediffResourceDef>
+		<defName>FE_ToxicFumes</defName>
+		<label>toxic fumes</label>
+		<description>Noxious and toxic fumes from certain organic and inorganic materials.</description>
+		<hediffClass>HediffResourceFramework.HediffResource</hediffClass>
+		<keepWhenEmpty>false</keepWhenEmpty>
+		<isBad>true</isBad>
+		<tendable>false</tendable>
+		<makesSickThought>true</makesSickThought>
+		<defaultLabelColor>(0.1,0.6,0.1)</defaultLabelColor>
+		<maxResourceCapacity>50</maxResourceCapacity>
+		<hideResourceAmount>true</hideResourceAmount>
+		<!-- <useAbsoluteSeverity>true</useAbsoluteSeverity> -->
+		<stages>
+			<li>
+				<minSeverity>0.01</minSeverity>
+				<label>trace</label>
+				<capMods>
+					<li>
+						<capacity>Moving</capacity>
+						<offset>-0.05</offset>
+					</li>
+				</capMods>
+			</li>
+			<li>
+				<minSeverity>0.25</minSeverity>
+				<label>minor</label>
+				<capMods>
+					<li>
+						<capacity>Moving</capacity>
+						<offset>-0.15</offset>
+					</li>
+					<li>
+						<capacity>Consciousness</capacity>
+						<setMax>0.9</setMax>
+					</li>
+				</capMods>
+			</li>
+			<li>
+				<minSeverity>0.55</minSeverity>
+				<label>major</label>
+				<capMods>
+					<li>
+						<capacity>Moving</capacity>
+						<offset>-0.25</offset>
+					</li>
+					<li>
+						<capacity>Consciousness</capacity>
+						<setMax>0.8</setMax>
+					</li>
+				</capMods>
+			</li>
+			<li>
+				<minSeverity>0.85</minSeverity>
+				<label>acute</label>
+				<capMods>
+					<li>
+						<capacity>Moving</capacity>
+						<offset>-0.65</offset>
+					</li>
+					<li>
+						<capacity>Consciousness</capacity>
+						<setMax>0.5</setMax>
+					</li>
+				</capMods>
+			</li>
+		</stages>
+		<comps>
+			<li Class="HediffResourceFramework.HediffCompProperties_AdjustHediffsPerStages">
+				<resourceSettingsPerStages>
+					<li>
+						<li>
+							<hediff>FE_ToxicWrapper</hediff>
+							<resourcePerSecond>0.01</resourcePerSecond>
+							<addHediffIfMissing>true</addHediffIfMissing>
+						</li>
+					</li>
+					<li>
+						<li>
+							<hediff>FE_ToxicWrapper</hediff>
+							<resourcePerSecond>0.03</resourcePerSecond>
+							<addHediffIfMissing>true</addHediffIfMissing>
+						</li>
+					</li>
+					<li>
+						<li>
+							<hediff>FE_ToxicWrapper</hediff>
+							<resourcePerSecond>0.05</resourcePerSecond>
+							<addHediffIfMissing>true</addHediffIfMissing>
+						</li>
+					</li>
+					<li>
+						<li>
+							<hediff>FE_ToxicWrapper</hediff>
+							<resourcePerSecond>0.1</resourcePerSecond>
+							<addHediffIfMissing>true</addHediffIfMissing>
+						</li>
+					</li>
+				</resourceSettingsPerStages>
+			</li>
+		</comps>
+	</HediffResourceFramework.HediffResourceDef>
+
+	<HediffResourceFramework.HediffResourceDef>
+		<defName>FE_ToxicWrapper</defName>
+		<label>toxin keeper</label>
+		<description>Hidden toxic wrapper hediffresource for absolute severity.</description>
+		<hediffClass>HediffResourceFramework.HediffResource</hediffClass>
+		<keepWhenEmpty>true</keepWhenEmpty>
+		<isBad>false</isBad>
+		<tendable>false</tendable>
+		<makesSickThought>false</makesSickThought>
+		<defaultLabelColor>(0.1,0.9,0.5)</defaultLabelColor>
+		<maxResourceCapacity>200</maxResourceCapacity>
+		<stages>
+			<li>
+				<minSeverity>0</minSeverity>
+				<label>initial</label>
+				<becomeVisible>false</becomeVisible>
+			</li>
+			<li>
+				<minSeverity>50</minSeverity>
+				<label>lesser</label>
+				<becomeVisible>false</becomeVisible>
+			</li>
+			<li>
+				<minSeverity>100</minSeverity>
+				<label>resistant</label>
+				<becomeVisible>false</becomeVisible>
+			</li>
+			<li>
+				<minSeverity>150</minSeverity>
+				<label>potent</label>
+				<becomeVisible>false</becomeVisible>
+			</li>
+			<li>
+				<minSeverity>200</minSeverity>
+				<label>fortified</label>
+				<becomeVisible>false</becomeVisible>
+			</li>
+		</stages>
+		<comps>
+			<li Class="HediffResourceFramework.HediffCompProperties_AdjustHediffsPerStages">
+				<resourceSettingsPerStages>
+					<li>
+						<li>
+							<hediff>FE_ToxicFumes</hediff>
+							<resourcePerSecond>-0.2</resourcePerSecond>
+							<addHediffIfMissing>false</addHediffIfMissing>
+							<maxResourceCapacityOffset>50</maxResourceCapacityOffset>
+						</li>
+					</li>
+					<li>
+						<li>
+							<hediff>FE_ToxicFumes</hediff>
+							<resourcePerSecond>-0.35</resourcePerSecond>
+							<addHediffIfMissing>false</addHediffIfMissing>
+							<maxResourceCapacityOffset>100</maxResourceCapacityOffset>
+						</li>
+					</li>
+					<li>
+						<li>
+							<hediff>FE_ToxicFumes</hediff>
+							<resourcePerSecond>-0.5</resourcePerSecond>
+							<addHediffIfMissing>false</addHediffIfMissing>
+							<maxResourceCapacityOffset>150</maxResourceCapacityOffset>
+						</li>
+					</li>
+					<li>
+						<li>
+							<hediff>FE_ToxicFumes</hediff>
+							<resourcePerSecond>-0.7</resourcePerSecond>
+							<addHediffIfMissing>false</addHediffIfMissing>
+							<maxResourceCapacityOffset>200</maxResourceCapacityOffset>
+						</li>
+					</li>
+					<li>
+						<li>
+							<hediff>FE_ToxicFumes</hediff>
+							<resourcePerSecond>-1</resourcePerSecond>
+							<addHediffIfMissing>false</addHediffIfMissing>
+							<maxResourceCapacityOffset>250</maxResourceCapacityOffset>
+						</li>
+					</li>
+				</resourceSettingsPerStages>
+			</li>
+		</comps>
+
+	</HediffResourceFramework.HediffResourceDef>
+
 
 </Defs>

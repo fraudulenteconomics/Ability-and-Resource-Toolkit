@@ -105,4 +105,76 @@
 		</tradeTags>
 	</ThingDef>
 
+	<ThingDef ParentName="FurnitureWithQualityBase">
+		<defName>FE_FusionCharger</defName>
+		<label>fusion recharging station</label>
+		<description>A mechanical shelf that can refill an empty makeshift hardsuit's power core. The process takes some time and uses a substantial amount of power.</description>
+		<thingClass>Building_Storage</thingClass>
+		<graphicData>
+			<texPath>Things/Building/Furniture/Shelf</texPath>
+			<graphicClass>Graphic_Multi</graphicClass>
+			<drawSize>(3,2)</drawSize>
+		</graphicData>
+		<altitudeLayer>Building</altitudeLayer>
+		<passability>PassThroughOnly</passability>
+		<fillPercent>0.4</fillPercent>
+		<castEdgeShadows>true</castEdgeShadows>
+		<pathCost>50</pathCost>
+		<costList>
+			<Plasteel>40</Plasteel>
+			<Uranium>20</Uranium>
+			<ComponentSpacer>2</ComponentSpacer>
+		</costList>
+		<statBases>
+			<MaxHitPoints>100</MaxHitPoints>
+			<Mass>8</Mass>
+			<WorkToBuild>6000</WorkToBuild>
+			<Flammability>1.0</Flammability>
+			<Beauty>0.5</Beauty>
+		</statBases>
+		<size>(2,1)</size>
+		<defaultPlacingRot>South</defaultPlacingRot>
+		<building>
+			<preventDeteriorationOnTop>true</preventDeteriorationOnTop>
+			<ignoreStoredThingsBeauty>true</ignoreStoredThingsBeauty>
+			<defaultStorageSettings>
+				<priority>Important</priority>
+				<filter>
+					<thingDefs>
+						<li>FE_MakeshiftHardsuit</li>
+					</thingDefs>
+				</filter>
+			</defaultStorageSettings>
+		</building>
+		<inspectorTabs>
+			<li>ITab_Storage</li>
+		</inspectorTabs>
+		<designationHotKey>Misc12</designationHotKey>
+		<staticSunShadowHeight>0.5</staticSunShadowHeight>
+		<surfaceType>Item</surfaceType>
+		<canOverlapZones>false</canOverlapZones>
+		<researchPrerequisites>
+			<li>FE_FusionTechnology</li>
+		</researchPrerequisites>
+		<comps>
+			<!-- <li Class="HediffResourceFramework.CompProperties_StorageResource">
+				<resourceSettings>
+					<li>
+						<hediff>FE_FusionReactor</hediff>
+						<storedResourceAdjust>1</storedResourceAdjust>
+						<unforbidWhenFull>true</unforbidWhenFull>
+					</li>
+				</resourceSettings>
+			</li> -->
+			<li Class="CompProperties_Power">
+				<compClass>CompPowerTrader</compClass>
+				<basePowerConsumption>850</basePowerConsumption>
+			</li>
+			<li Class="CompProperties_Breakdownable"/>
+			<li Class="CompProperties_Flickable"/>
+		</comps>
+		<tickerType>Normal</tickerType>
+	</ThingDef>
+
+
 </Defs>

@@ -550,4 +550,117 @@
 		</comps>
 	</ThingDef>
 
+	<ThingDef ParentName="BaseHumanMakeableGun">
+		<defName>FE_DisposablePulseRifle</defName>
+		<label>Pulse Rifle</label>
+		<description>A spacer pulse rifle that contains an independent battery. Incredibly cheap to manufacture, however the weapon will be rendered completely useless once it runs out of energy, literally disintegrating whenever it's internal battery is empty. Regardless, it is accurate, powerful, and does not require any external power.</description>
+		<graphicData>
+			<texPath>Things/Item/Equipment/WeaponRanged/ChargeRifle</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+		</graphicData>
+		<soundInteract>Interact_Rifle</soundInteract>
+		<recipeMaker>
+			<researchPrerequisite>FE_FusionTechnology</researchPrerequisite>
+			<skillRequirements>
+				<Crafting>6</Crafting>
+			</skillRequirements>
+			<recipeUsers Inherit="False">
+				<li>FabricationBench</li>
+			</recipeUsers>
+		</recipeMaker>
+		<statBases>
+			<WorkToMake>18000</WorkToMake>
+			<Mass>2.5</Mass>
+			<AccuracyTouch>0.80</AccuracyTouch>
+			<AccuracyShort>0.88</AccuracyShort>
+			<AccuracyMedium>0.95</AccuracyMedium>
+			<AccuracyLong>0.86</AccuracyLong>
+			<RangedWeapon_Cooldown>2.25</RangedWeapon_Cooldown>
+		</statBases>
+		<costList>
+			<Plasteel>40</Plasteel>
+			<ComponentSpacer>1</ComponentSpacer>
+			<Uranium>25</Uranium>
+		</costList>
+		<tickerType>Normal</tickerType>
+		<verbs>
+			<li Class="HediffResourceFramework.VerbResourceProps">
+				<resourceSettings>
+					<li>
+						<hediff>FE_PulseBattery</hediff>
+						<resourcePerUse>-1.0</resourcePerUse>
+						<disableIfMissingHediff>false</disableIfMissingHediff>
+						<disableReason>Insufficient energy.</disableReason>
+						<minimumResourcePerUse>0</minimumResourcePerUse>
+					</li>
+				</resourceSettings>
+				<verbClass>Verb_Shoot</verbClass>
+				<label>pulse rifle</label>
+				<hasStandardCommand>true</hasStandardCommand>
+				<defaultProjectile>FE_Bullet_PoweredLMG</defaultProjectile>
+				<warmupTime>1.75</warmupTime>
+				<range>37.9</range>
+				<burstShotCount>4</burstShotCount>
+				<soundCast>Shot_Minigun</soundCast>
+				<soundCastTail>GunTail_Medium</soundCastTail>
+				<muzzleFlashScale>9</muzzleFlashScale>
+			</li>
+		</verbs>
+		<weaponTags>
+			<li>FE_FusionWeapon</li>
+		</weaponTags>
+		<tools>
+			<li Class="HediffResourceFramework.ToolResource">
+				<label>stock</label>
+				<capacities>
+					<li>Blunt</li>
+				</capacities>
+				<power>11</power>
+				<cooldownTime>2</cooldownTime>
+			</li>
+			<li>
+				<label>barrel</label>
+				<capacities>
+					<li>Blunt</li>
+					<li>Poke</li>
+				</capacities>
+				<power>11</power>
+				<cooldownTime>2</cooldownTime>
+			</li>
+		</tools>
+		<comps>
+			<li Class="HediffResourceFramework.CompProperties_WeaponAdjustHediffs"> 
+				<resourceSettings>
+					<li>
+						<hediff>FE_PulseBattery</hediff>
+						<maxResourceCapacityOffset>200</maxResourceCapacityOffset>
+						<qualityScalesCapacityOffset>true</qualityScalesCapacityOffset>
+						<disallowEquipIfHediffMissing>false</disallowEquipIfHediffMissing>
+						<!-- <keepResourceAmount>true</keepResourceAmount>
+						<initialResourceAmount>true</initialResourceAmount>
+						<destroyWhenEmpty>true</destroyWhenEmpty>
+						<showBar>true</showBar> -->
+					</li>
+				</resourceSettings>
+			</li>
+		</comps>
+	</ThingDef>
+
+	<ThingDef ParentName="BaseBullet">
+		<defName>FE_Bullet_PulseRifle</defName>
+		<label>pulse rifle bullet</label>
+		<graphicData>
+			<texPath>Things/Projectile/Bullet_Small</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<color>(58, 254, 158)</color>
+		</graphicData>
+		<projectile>
+			<damageDef>Bullet</damageDef>
+			<damageAmountBase>9</damageAmountBase>
+			<stoppingPower>0.5</stoppingPower>
+			<speed>96</speed>
+		</projectile>
+	</ThingDef>
+
+
 </Defs>
