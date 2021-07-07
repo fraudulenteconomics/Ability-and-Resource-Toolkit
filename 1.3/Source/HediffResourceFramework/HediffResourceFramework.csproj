@@ -63,6 +63,7 @@
     <Compile Include="HarmonyPatches\ThingDefGenerator_Patches.cs" />
     <Compile Include="HarmonyPatches\QualityAndStats_Patches.cs" />
     <Compile Include="Interfaces\IAdjustResouceInArea.cs" />
+    <Compile Include="Interfaces\IResourceStorage.cs" />
     <Compile Include="Interfaces\IResourceGenerator.cs" />
     <Compile Include="Interfaces\IChargeResource.cs" />
     <Compile Include="Interfaces\IAdjustResource.cs" />

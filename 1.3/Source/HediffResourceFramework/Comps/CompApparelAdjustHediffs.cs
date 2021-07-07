@@ -69,7 +69,24 @@ namespace HediffResourceFramework
                         {
                             num *= HediffResourceUtils.GetQualityMultiplier(qc);
                         }
-                        HediffResourceUtils.AdjustResourceAmount(pawn, hediffOption.hediff, num, hediffOption.addHediffIfMissing, hediffOption.applyToPart);
+                        if (this.IsStorageFor(hediffOption, out var resourceStorage))
+                        {
+                            if (hediffOption.addHediffIfMissing && pawn.health.hediffSet.GetFirstHediffOfDef(hediffOption.hediff) is null)
+                            {
+                                BodyPartRecord bodyPartRecord = null;
+                                if (hediffOption.applyToPart != null)
+                                {
+                                    bodyPartRecord = pawn.health.hediffSet.GetNotMissingParts().FirstOrDefault((BodyPartRecord x) => x.def == hediffOption.applyToPart);
+                                }
+                                var hediff = HediffMaker.MakeHediff(hediffOption.hediff, pawn, bodyPartRecord) as HediffResource;
+                                pawn.health.AddHediff(hediff);
+                            }
+                            resourceStorage.ResourceAmount += num;
+                        }
+                        else
+                        {
+                            HediffResourceUtils.AdjustResourceAmount(pawn, hediffOption.hediff, num, hediffOption.addHediffIfMissing, hediffOption.applyToPart);
+                        }
                     }
                 }
             }

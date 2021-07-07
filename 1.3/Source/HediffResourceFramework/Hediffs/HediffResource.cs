@@ -16,42 +16,171 @@ namespace HediffResourceFramework
         private float resourceAmount;
         public int duration;
         public int delayTicks;
+
+        public IEnumerable<Tuple<CompAdjustHediffs, HediffOption, ResourceStorage>> GetResourceTupleStorages()
+        {
+            foreach (var adjustResource in this.pawn.GetAllAdjustHediffsComps())
+            {
+                if (adjustResource is CompAdjustHediffs comp)
+                {
+                    foreach (var pair in comp.GetResourceStoragesFor(this.def))
+                    {
+                        yield return new Tuple<CompAdjustHediffs, HediffOption, ResourceStorage>(comp, pair.First, pair.Second);
+                    }
+                }
+            }
+        }
+        public float ResourceStorage
+        {
+            get
+            {
+                var storageAmount = 0f;
+                foreach (var tuple in GetResourceTupleStorages())
+                {
+                    storageAmount += tuple.Item3.ResourceAmount;
+                }
+                return storageAmount;
+            }
+        }
+
         public float ResourceAmount
         {
             get
             {
-                return resourceAmount;
+                return resourceAmount + ResourceStorage;
             }
             set
             {
                 resourceAmount = value;
-                Log.Message(this.def + " setting resourceAmount to " + value);
-                if (resourceAmount > ResourceCapacity)
+                var storages = GetResourceTupleStorages();
+                var totalValue = resourceAmount + ResourceStorage;
+                if (totalValue > ResourceCapacityInt)
                 {
-                    resourceAmount = ResourceCapacity;
+                    var toExtract = totalValue - ResourceCapacityInt;
+                    while (toExtract >= 1)
+                    {
+                        bool extracted = false;
+                        foreach (var storage in storages)
+                        {
+                            if (!extracted && toExtract >= 1)
+                            {
+                                if (storage.Item3.ResourceAmount >= 1)
+                                {
+                                    storage.Item3.ResourceAmount--;
+                                    toExtract--;
+                                    Log.Message("totalValue: " + totalValue + " - ResourceCapacityInt: " + ResourceCapacityInt +" - storage.Item3.ResourceAmount: " + storage.Item3.ResourceAmount + " - toExtract: " + toExtract);
+                                    extracted = true;
+                                    break;
+                                }
+                            }
+                        }
+                        if (!extracted && toExtract >= 1)
+                        {
+                            if (this.resourceAmount >= 1)
+                            {
+                                this.resourceAmount--;
+                                Log.Message("totalValue: " + totalValue + " - ResourceCapacityInt: " + ResourceCapacityInt + " - this.resourceAmount: " + this.resourceAmount + " - toExtract: " + toExtract);
+                                extracted = true;
+                                toExtract--;
+                            }
+                        }
+
+                        if (!extracted)
+                        {
+                            break;
+                        }
+                    }
                 }
 
                 if (resourceAmount < 0)
                 {
+                    var diff = Math.Abs(resourceAmount);
+                    foreach (var storage in storages)
+                    {
+                        if (diff > 0)
+                        {
+                            var freeSpace = storage.Item3.ResourceCapacity - storage.Item3.ResourceCapacity;
+                            var toTake = freeSpace > diff ? diff : diff - freeSpace;
+                            storage.Item3.ResourceAmount -= toTake;
+                            diff -= toTake;
+                        }
+                    }
                     resourceAmount = 0;
                 }
 
-                if (resourceAmount <= 0 && !this.def.keepWhenEmpty)
+                var storagesToDestroy = new List<CompAdjustHediffs>();
+                foreach (var storage in storages)
+                {
+                    if (storage.Item2.destroyWhenEmpty && storage.Item3.ResourceAmount <= 0 ||
+                        storage.Item2.destroyWhenFull && storage.Item3.ResourceAmount >= storage.Item3.ResourceCapacity)
+                    {
+                        storagesToDestroy.Add(storage.Item1);
+                    }
+                }
+                foreach (var comp in storagesToDestroy)
+                {
+                    comp.parent.Destroy();
+                }
+
+                var storagesToDrop = new List<CompAdjustHediffs>();
+                foreach (var storage in storages)
+                {
+                    if (storage.Item2.dropWhenEmpty && storage.Item3.ResourceAmount <= 0 ||
+                        storage.Item2.dropWhenFull && storage.Item3.ResourceAmount >= storage.Item3.ResourceCapacity)
+                    {
+                        storagesToDrop.Add(storage.Item1);
+                    }
+                }
+
+                foreach (var comp in storagesToDrop)
+                {
+                    comp.Drop();
+                }
+
+                var storagesToUnforbid = new List<CompAdjustHediffs>();
+                foreach (var storage in storages)
+                {
+                    if (storage.Item2.unforbidWhenEmpty && storage.Item3.ResourceAmount <= 0 ||
+                        storage.Item2.unforbidWhenFull && storage.Item3.ResourceAmount >= storage.Item3.ResourceCapacity)
+                    {
+                        storagesToUnforbid.Add(storage.Item1);
+                    }
+                }
+                
+                foreach (var comp in storagesToUnforbid)
+                {
+                    comp.parent.SetForbidden(false);
+                }
+
+                if (resourceAmount <= 0 && ResourceStorage <= 0 && !this.def.keepWhenEmpty)
                 {
                     this.pawn.health.RemoveHediff(this);
                 }
                 else
                 {
-                    this.Severity = resourceAmount;
+                    this.Severity = ResourceAmount;
                 }
             }
         }
         public bool CanGainResource => Find.TickManager.TicksGame > this.delayTicks;
-        public float ResourceCapacity
+
+        private float ResourceCapacityInt
         {
             get
             {
                 return this.def.maxResourceCapacity + HediffResourceUtils.GetHediffResourceCapacityGainFor(this.pawn, def) + GetHediffResourceCapacityGainFromAmplifiers();
+            }
+        }
+        public float ResourceCapacity
+        {
+            get
+            {
+                var value = ResourceCapacityInt;
+                if (this.ResourceAmount > value)
+                {
+                    this.ResourceAmount = value;
+                }
+                return value;
             }
         }
 
@@ -104,8 +233,7 @@ namespace HediffResourceFramework
         }
         public IAdjustResouceInArea GetCompAmplifierFor(Thing thing)
         {
-            IAdjustResouceInArea comp = null;
-            if (!cachedAmplifiers.TryGetValue(thing, out comp))
+            if (!cachedAmplifiers.TryGetValue(thing, out IAdjustResouceInArea comp))
             {
                 comp = thing.TryGetComp<CompAdjustHediffsArea>();
                 cachedAmplifiers[thing] = comp;
@@ -168,7 +296,7 @@ namespace HediffResourceFramework
                 var label = base.Label;
                 if (!def.hideResourceAmount)
                 {
-                    label += ": " + this.ResourceAmount.ToStringDecimalIfSmall() + " / " + this.ResourceCapacity.ToStringDecimalIfSmall();
+                    label += ": " + this.resourceAmount.ToStringDecimalIfSmall() + " ("+ ResourceStorage + " stored) / " + this.ResourceCapacity.ToStringDecimalIfSmall();
                 }
                 if (this.def.lifetimeTicks != -1)
                 {

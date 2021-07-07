@@ -37,30 +37,73 @@ namespace HediffResourceFramework
 
         public string disablePostUse;
     }
-    public class CompAdjustHediffs : ThingComp, IAdjustResource
+    public class CompAdjustHediffs : ThingComp, IAdjustResource, IResourceStorage
     {
         public CompProperties_AdjustHediffs Props => (CompProperties_AdjustHediffs)this.props;
         public Thing Parent => this.parent;
         public virtual List<HediffOption> ResourceSettings => Props.resourceSettings;
         public string DisablePostUse => Props.disablePostUse;
+        public bool IsStorageFor(HediffOption hediffOption, out ResourceStorage resourceStorages)
+        {
+            resourceStorages = GetResourceStoragesFor(hediffOption).FirstOrDefault().Second;
+            return resourceStorages != null;
+        }
 
         private Dictionary<int, ResourceStorage> resourceStorages;
         public Dictionary<int, ResourceStorage> ResourceStorages
         {
             get
             {
-                if (ResourceStorages is null)
+                if (resourceStorages is null)
                 {
                     resourceStorages = new Dictionary<int, ResourceStorage>();
                 }
-                for (var i = 0; i < Props.resourceSettings.Count; i++)
+
+                if (Props.resourceSettings != null)
                 {
-                    if (!resourceStorages.ContainsKey(i))
+                    for (var i = 0; i < Props.resourceSettings.Count; i++)
                     {
-                        resourceStorages[i] = new ResourceStorage(Props.resourceSettings[i]);
+                        if (Props.resourceSettings[i].maxResourceStorageAmount > 0 && !resourceStorages.ContainsKey(i))
+                        {
+                            resourceStorages[i] = new ResourceStorage(Props.resourceSettings[i]);
+                            if (Props.resourceSettings[i].initialResourceAmount != 0)
+                            {
+                                resourceStorages[i].ResourceAmount = Props.resourceSettings[i].initialResourceAmount;
+                            }
+                        }
                     }
                 }
-                return ResourceStorages;
+
+                return resourceStorages;
+            }
+        }
+
+        public IEnumerable<Pair<HediffOption, ResourceStorage>> GetResourceStoragesFor(HediffResourceDef hediffDef)
+        {
+            var resourceStorages = ResourceStorages;
+            if (Props.resourceSettings != null)
+            {
+                for (var i = 0; i < Props.resourceSettings.Count; i++)
+                {
+                    if (Props.resourceSettings[i].maxResourceStorageAmount > 0 && Props.resourceSettings[i].hediff == hediffDef)
+                    {
+                        yield return new Pair<HediffOption, ResourceStorage>(Props.resourceSettings[i], resourceStorages[i]);
+                    }
+                }
+            }
+        }
+        public IEnumerable<Pair<HediffOption, ResourceStorage>> GetResourceStoragesFor(HediffOption hediffOption)
+        {
+            var resourceStorages = ResourceStorages;
+            if (Props.resourceSettings != null)
+            {
+                for (var i = 0; i < Props.resourceSettings.Count; i++)
+                {
+                    if (Props.resourceSettings[i].maxResourceStorageAmount > 0 && Props.resourceSettings[i] == hediffOption)
+                    {
+                        yield return new Pair<HediffOption, ResourceStorage>(Props.resourceSettings[i], resourceStorages[i]);
+                    }
+                }
             }
         }
 
@@ -106,6 +149,10 @@ namespace HediffResourceFramework
             {
                 Register();
                 var resourceSettings = Props.resourceSettings;
+                if (resourceStorages is null)
+                {
+                    resourceStorages = new Dictionary<int, ResourceStorage>();
+                }
                 foreach (var data in resourceStorages)
                 {
                     if (resourceSettings.Count - 1 <= data.Key)

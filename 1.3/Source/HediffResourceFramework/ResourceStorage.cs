@@ -13,12 +13,13 @@ namespace HediffResourceFramework
     {
         private float resourceAmount;
 
+        public IResourceStorage parent;
+
         public HediffOption hediffOption;
         public ResourceStorage()
         {
 
         }
-
         public ResourceStorage(HediffOption hediffOption)
         {
             this.hediffOption = hediffOption;
@@ -42,6 +43,7 @@ namespace HediffResourceFramework
                 {
                     resourceAmount = 0;
                 }
+
             }
         }
         public bool CanGainResource => true;

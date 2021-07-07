@@ -70,8 +70,6 @@ namespace HediffResourceFramework
         public bool dropWhenFull;
         public bool dropWhenEmpty;
         public bool disallowEquipWhenEmpty;
-        public bool showBar;
-        public float storedResourceAdjust;
         public bool unforbidWhenFull;
         public bool unforbidWhenEmpty;
     }

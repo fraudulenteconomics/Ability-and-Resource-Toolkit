@@ -93,7 +93,14 @@ namespace HediffResourceFramework
                         {
                             num *= HediffResourceUtils.GetQualityMultiplier(qc);
                         }
-                        HediffResourceUtils.AdjustResourceAmount(pawn, hediffOption.hediff, num, hediffOption.addHediffIfMissing, hediffOption.applyToPart);
+                        if (this.IsStorageFor(hediffOption, out var resourceStorage))
+                        {
+                            resourceStorage.ResourceAmount += num;
+                        }
+                        else
+                        {
+                            HediffResourceUtils.AdjustResourceAmount(pawn, hediffOption.hediff, num, hediffOption.addHediffIfMissing, hediffOption.applyToPart);
+                        }
                     }
                 }
             }

@@ -242,7 +242,7 @@ namespace HediffResourceFramework
 		}
 
 		private static Dictionary<Pawn, AdjustResourcesCache> resourceCache = new Dictionary<Pawn, AdjustResourcesCache>();
-		public static List<IAdjustResource> GetAllAdjustHediffsComps(Pawn pawn)
+		public static List<IAdjustResource> GetAllAdjustHediffsComps(this Pawn pawn)
 		{
 			if (resourceCache.TryGetValue(pawn, out AdjustResourcesCache adjustResourcesCache))
             {
@@ -362,6 +362,7 @@ namespace HediffResourceFramework
 							{
 								result += option.maxResourceCapacityOffset;
 							}
+							Log.Message("Result: " + result + " - " + comp);
 						}
 					}
 				}
@@ -474,7 +475,6 @@ namespace HediffResourceFramework
 				firstHediffOfDef.ResourceAmount = sevOffset;
 				return firstHediffOfDef;
 			}
-			Log.Message("2 Can't adjust " + hdDef + " to " + pawn);
 			return null;
 		}
 
