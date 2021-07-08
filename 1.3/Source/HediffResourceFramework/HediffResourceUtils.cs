@@ -241,6 +241,17 @@ namespace HediffResourceFramework
 			return pawn.health.hediffSet.hediffs.Any(x => x is HediffResource);
 		}
 
+
+		private static Dictionary<Thing, CompAdjustHediffs> cachedComps = new Dictionary<Thing, CompAdjustHediffs>();
+		public static bool TryGetCompAdjustHediffs(this Thing thing, out CompAdjustHediffs comp)
+		{
+			if (!cachedComps.TryGetValue(thing, out comp))
+            {
+				comp = thing.TryGetComp<CompAdjustHediffs>();
+            }
+			return comp != null;
+		}
+
 		private static Dictionary<Pawn, AdjustResourcesCache> resourceCache = new Dictionary<Pawn, AdjustResourcesCache>();
 		public static List<IAdjustResource> GetAllAdjustHediffsComps(this Pawn pawn)
 		{

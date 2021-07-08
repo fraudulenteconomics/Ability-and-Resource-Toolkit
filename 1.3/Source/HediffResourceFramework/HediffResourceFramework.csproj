@@ -49,6 +49,7 @@
     <Compile Include="Comps\CompMaintainableResourceBuilding.cs" />
     <Compile Include="Comps\CompFacilityInUse.cs" />
     <Compile Include="Comps\CompAdjustHediffs.cs" />
+    <Compile Include="Comps\CompBuildingStorageAdjustHediffs.cs" />
     <Compile Include="Comps\HediffCompAdjustHediffsArea.cs" />
     <Compile Include="Comps\CompAdjustHediffsArea.cs" />
     <Compile Include="Comps\ChargeResource.cs" />

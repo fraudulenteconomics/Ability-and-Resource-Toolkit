@@ -45,7 +45,7 @@ namespace HediffResourceFramework
         public string DisablePostUse => Props.disablePostUse;
         public bool IsStorageFor(HediffOption hediffOption, out ResourceStorage resourceStorages)
         {
-            resourceStorages = GetResourceStoragesFor(hediffOption).FirstOrDefault().Second;
+            resourceStorages = GetResourceStoragesFor(hediffOption).FirstOrDefault().Item3;
             return resourceStorages != null;
         }
 
@@ -78,7 +78,7 @@ namespace HediffResourceFramework
             }
         }
 
-        public IEnumerable<Pair<HediffOption, ResourceStorage>> GetResourceStoragesFor(HediffResourceDef hediffDef)
+        public IEnumerable<Tuple<CompAdjustHediffs, HediffOption, ResourceStorage>> GetResourceStoragesFor(HediffResourceDef hediffDef)
         {
             var resourceStorages = ResourceStorages;
             if (Props.resourceSettings != null)
@@ -87,12 +87,12 @@ namespace HediffResourceFramework
                 {
                     if (Props.resourceSettings[i].maxResourceStorageAmount > 0 && Props.resourceSettings[i].hediff == hediffDef)
                     {
-                        yield return new Pair<HediffOption, ResourceStorage>(Props.resourceSettings[i], resourceStorages[i]);
+                        yield return new Tuple<CompAdjustHediffs, HediffOption, ResourceStorage>(this, Props.resourceSettings[i], resourceStorages[i]);
                     }
                 }
             }
         }
-        public IEnumerable<Pair<HediffOption, ResourceStorage>> GetResourceStoragesFor(HediffOption hediffOption)
+        public IEnumerable<Tuple<CompAdjustHediffs, HediffOption, ResourceStorage>> GetResourceStoragesFor(HediffOption hediffOption)
         {
             var resourceStorages = ResourceStorages;
             if (Props.resourceSettings != null)
@@ -101,7 +101,7 @@ namespace HediffResourceFramework
                 {
                     if (Props.resourceSettings[i].maxResourceStorageAmount > 0 && Props.resourceSettings[i] == hediffOption)
                     {
-                        yield return new Pair<HediffOption, ResourceStorage>(Props.resourceSettings[i], resourceStorages[i]);
+                        yield return new Tuple<CompAdjustHediffs, HediffOption, ResourceStorage>(this, Props.resourceSettings[i], resourceStorages[i]);
                     }
                 }
             }

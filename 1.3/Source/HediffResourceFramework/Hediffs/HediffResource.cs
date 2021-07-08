@@ -25,7 +25,7 @@ namespace HediffResourceFramework
                 {
                     foreach (var pair in comp.GetResourceStoragesFor(this.def))
                     {
-                        yield return new Tuple<CompAdjustHediffs, HediffOption, ResourceStorage>(comp, pair.First, pair.Second);
+                        yield return new Tuple<CompAdjustHediffs, HediffOption, ResourceStorage>(comp, pair.Item2, pair.Item3);
                     }
                 }
             }
