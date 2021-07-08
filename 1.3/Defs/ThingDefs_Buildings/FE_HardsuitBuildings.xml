@@ -157,15 +157,15 @@
 			<li>FE_FusionTechnology</li>
 		</researchPrerequisites>
 		<comps>
-			<!-- <li Class="HediffResourceFramework.CompProperties_StorageResource">
+			<li Class="HediffResourceFramework.CompProperties_BuildingStorageAdjustHediffs">
 				<resourceSettings>
 					<li>
 						<hediff>FE_FusionReactor</hediff>
-						<storedResourceAdjust>1</storedResourceAdjust>
+						<resourcePerSecond>1</resourcePerSecond>
 						<unforbidWhenFull>true</unforbidWhenFull>
 					</li>
 				</resourceSettings>
-			</li> -->
+			</li>
 			<li Class="CompProperties_Power">
 				<compClass>CompPowerTrader</compClass>
 				<basePowerConsumption>850</basePowerConsumption>
