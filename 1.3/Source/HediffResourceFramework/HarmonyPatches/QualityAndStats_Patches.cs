@@ -194,7 +194,7 @@ namespace HediffResourceFramework
                                     {
                                         if (hediffResource.CanApplyStatBooster(statBooster))
                                         {
-                                            Log.Message($"1 Due to an user {user} with {statBooster.hediff} - {hediffResource}, {thing} is gaining a bonus to {stat}!");
+                                            HRFLog.Message($"1 Due to an user {user} with {statBooster.hediff} - {hediffResource}, {thing} is gaining a bonus to {stat}!");
                                             __result += statModifier.value;
                                             break;
                                         }
@@ -229,7 +229,7 @@ namespace HediffResourceFramework
                                     {
                                         if (hediffResource.CanApplyStatBooster(statBooster))
                                         {
-                                            Log.Message($"2 Due to an user {user} with {statBooster.hediff} - {hediffResource}, {thing} is gaining a bonus to {stat}!");
+                                            HRFLog.Message($"2 Due to an user {user} with {statBooster.hediff} - {hediffResource}, {thing} is gaining a bonus to {stat}!");
                                             __result *= statModifier.value;
                                             break;
                                         }

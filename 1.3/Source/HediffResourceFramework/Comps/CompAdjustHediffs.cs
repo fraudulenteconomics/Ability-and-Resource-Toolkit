@@ -45,7 +45,7 @@ namespace HediffResourceFramework
         public string DisablePostUse => Props.disablePostUse;
         public bool IsStorageFor(HediffOption hediffOption, out ResourceStorage resourceStorages)
         {
-            resourceStorages = GetResourceStoragesFor(hediffOption).FirstOrDefault().Item3;
+            resourceStorages = GetResourceStoragesFor(hediffOption).FirstOrDefault()?.Item3;
             return resourceStorages != null;
         }
 

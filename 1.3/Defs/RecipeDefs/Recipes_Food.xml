@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <RecipeDef>
+    <defName>HRF_Make_Kibble</defName>
+    <label>HRF make kibble</label>
+    <description>Make animal kibble by combining raw meat and plants.</description>
+    <jobString>Making kibble.</jobString>
+    <workAmount>450</workAmount>
+    <workSpeedStat>CookSpeed</workSpeedStat>
+    <effectWorking>Cook</effectWorking>
+    <soundWorking>Recipe_CookMeal</soundWorking>
+    <products>
+      <Kibble>50</Kibble>
+    </products>
+    <workSkill>Cooking</workSkill>
+	<modExtensions>
+		<li Class="HediffResourceFramework.RecipeResourceIngredients">
+			<recourseCostList>
+				<FE_FusionReactor>50</FE_FusionReactor>
+				<FE_AbsorptionBarrier>10</FE_AbsorptionBarrier>
+			</recourseCostList>
+		</li>
+	</modExtensions>
+  </RecipeDef>
+
+  <RecipeDef>
+    <defName>HRF_Make_Pemmican</defName>
+    <label>HRF make pemmican</label>
+    <description>Make pemmican, a preserved combination of meat and plant food. It doesn't taste amazing, but lasts a long time without refrigeration.</description>
+    <jobString>Making pemmican.</jobString>
+    <workAmount>700</workAmount>
+    <workSpeedStat>CookSpeed</workSpeedStat>
+    <requiredGiverWorkType>Cooking</requiredGiverWorkType>
+    <effectWorking>Cook</effectWorking>
+    <soundWorking>Recipe_CookMeal</soundWorking>
+    <products>
+      <Pemmican>16</Pemmican>
+    </products>
+    <workSkill>Cooking</workSkill>
+	<modExtensions>
+		<li Class="HediffResourceFramework.RecipeResourceIngredients">
+			<recourseCostList>
+				<FE_FusionReactor>50</FE_FusionReactor>
+				<FE_AbsorptionBarrier>10</FE_AbsorptionBarrier>
+			</recourseCostList>
+		</li>
+	</modExtensions>
+  </RecipeDef>
+
+  <RecipeDef>
+    <defName>HRF_Make_PemmicanBulk</defName>
+    <label>HRF make pemmican x4</label>
+    <description>Make bulk pemmican, a preserved combination of meat and plant food. It doesn't taste amazing, but lasts a long time without refrigeration.</description>
+    <jobString>Making bulk pemmican.</jobString>
+    <workAmount>2800</workAmount>
+    <workSpeedStat>CookSpeed</workSpeedStat>
+    <requiredGiverWorkType>Cooking</requiredGiverWorkType>
+    <effectWorking>Cook</effectWorking>
+    <soundWorking>Recipe_CookMeal</soundWorking>
+    <products>
+      <Pemmican>64</Pemmican>
+    </products>
+    <workSkill>Cooking</workSkill>
+	<modExtensions>
+		<li Class="HediffResourceFramework.RecipeResourceIngredients">
+			<recourseCostList>
+				<FE_FusionReactor>150</FE_FusionReactor>
+				<FE_AbsorptionBarrier>100</FE_AbsorptionBarrier>
+			</recourseCostList>
+		</li>
+	</modExtensions>
+  </RecipeDef>
+
+</Defs>

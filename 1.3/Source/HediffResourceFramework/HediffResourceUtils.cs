@@ -373,7 +373,7 @@ namespace HediffResourceFramework
 							{
 								result += option.maxResourceCapacityOffset;
 							}
-							Log.Message("Result: " + result + " - " + comp);
+							HRFLog.Message("Result: " + result + " - " + comp);
 						}
 					}
 				}

@@ -11,12 +11,12 @@ namespace HediffResourceFramework
 {
 	public static class HRFLog
 	{
-		private static bool enabled = true;
+		private static bool enabled = false;
 		public static void Message(string message, bool limit = true)
         {
 			if (enabled)
             {
-				Log.Message(message, limit);
+				Log.Message(message);
             }
         }
 	}

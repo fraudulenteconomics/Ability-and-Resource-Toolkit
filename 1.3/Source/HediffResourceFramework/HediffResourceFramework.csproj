@@ -60,6 +60,7 @@
     <Compile Include="Comps\HediffComp_AdjustHediffs.cs" />
     <Compile Include="HarmonyPatches\Building_Patches.cs" />
     <Compile Include="HarmonyPatches\ForbidAndReservations_Patches.cs" />
+    <Compile Include="HarmonyPatches\Recipe_Patches.cs" />
     <Compile Include="HarmonyPatches\Pawn_Patches.cs" />
     <Compile Include="HarmonyPatches\ThingDefGenerator_Patches.cs" />
     <Compile Include="HarmonyPatches\QualityAndStats_Patches.cs" />
@@ -90,13 +91,17 @@
     <Compile Include="Jobs\WorkGiver_MaintainResourceBuildings.cs" />
     <Compile Include="ModExtensions\BuildingSpawnOptions.cs" />
     <Compile Include="ModExtensions\FacilityInProgress.cs" />
+    <Compile Include="ModExtensions\ResourceCost.cs" />
     <Compile Include="ModExtensions\SkillHediffGrantOptions.cs" />
+    <Compile Include="ModExtensions\RecipeResourceIngredients.cs" />
     <Compile Include="ModExtensions\TraitsAdjustHediff.cs" />
     <Compile Include="ModExtensions\EffectOnImpact.cs" />
     <Compile Include="ModExtensions\StatWorkerExtender.cs" />
     <Compile Include="ModExtensions\HediffAdjustOptions.cs" />
     <Compile Include="Policies\ITab_Pawn_Resource.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Recipes\Bill_ResourceWithUft.cs" />
+    <Compile Include="Recipes\Bill_Resource.cs" />
     <Compile Include="ResourceStorage.cs" />
     <Compile Include="StatWorkers\StatWorker_MaxResourceCapacityOffset.cs" />
     <Compile Include="StatWorkers\StatWorker_ResourceOffset.cs" />
@@ -109,10 +114,10 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Krafs.Rimworld.Ref">
-      <Version>1.3.3051-beta</Version>
+      <Version>1.3.3132-beta</Version>
     </PackageReference>
     <PackageReference Include="Lib.Harmony">
-      <Version>2.1.0</Version>
+      <Version>2.1.1</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup />

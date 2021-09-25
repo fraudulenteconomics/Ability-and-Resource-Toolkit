@@ -24,7 +24,6 @@ namespace HediffResourceFramework
 				var props = new CompProperties_FacilityInUse_StatBoosters();
 				props.statBoosters = options.statBoosters;
 				__result.comps.Add(props);
-				Log.Message("Adding CompProperties_FacilityInUse_StatBoosters to " + __result);
 			}
 		}
 	}

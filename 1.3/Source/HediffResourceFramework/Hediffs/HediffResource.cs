@@ -68,7 +68,7 @@ namespace HediffResourceFramework
                                 {
                                     storage.Item3.ResourceAmount--;
                                     toExtract--;
-                                    Log.Message("totalValue: " + totalValue + " - ResourceCapacityInt: " + ResourceCapacityInt +" - storage.Item3.ResourceAmount: " + storage.Item3.ResourceAmount + " - toExtract: " + toExtract);
+                                    HRFLog.Message("totalValue: " + totalValue + " - ResourceCapacityInt: " + ResourceCapacityInt +" - storage.Item3.ResourceAmount: " + storage.Item3.ResourceAmount + " - toExtract: " + toExtract);
                                     extracted = true;
                                     break;
                                 }
@@ -79,7 +79,7 @@ namespace HediffResourceFramework
                             if (this.resourceAmount >= 1)
                             {
                                 this.resourceAmount--;
-                                Log.Message("totalValue: " + totalValue + " - ResourceCapacityInt: " + ResourceCapacityInt + " - this.resourceAmount: " + this.resourceAmount + " - toExtract: " + toExtract);
+                                HRFLog.Message("totalValue: " + totalValue + " - ResourceCapacityInt: " + ResourceCapacityInt + " - this.resourceAmount: " + this.resourceAmount + " - toExtract: " + toExtract);
                                 extracted = true;
                                 toExtract--;
                             }

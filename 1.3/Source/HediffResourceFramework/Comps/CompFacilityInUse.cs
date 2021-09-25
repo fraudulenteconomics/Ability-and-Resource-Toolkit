@@ -128,29 +128,33 @@ namespace HediffResourceFramework
         private bool InUseInt(out IEnumerable<Pawn> claimants)
         {
             claimants = Claimants;
-            if (this.parent is Frame)
+            if (claimants != null)
             {
-                foreach (var claimant in claimants)
+                if (this.parent is Frame)
                 {
-                    if (!claimant.pather.MovingNow && claimant.CurJobDef == JobDefOf.FinishFrame
-                        && claimant.CurJob.targetA.Thing == this.parent
-                        && this.parent.OccupiedRect().Cells.Any(x => x.DistanceTo(claimant.Position) <= 1.5f))
+                    foreach (var claimant in claimants)
                     {
-                        return true;
+                        if (!claimant.pather.MovingNow && claimant.CurJobDef == JobDefOf.FinishFrame
+                            && claimant.CurJob.targetA.Thing == this.parent
+                            && this.parent.OccupiedRect().Cells.Any(x => x.DistanceTo(claimant.Position) <= 1.5f))
+                        {
+                            return true;
+                        }
+                    }
+                }
+                else
+                {
+                    foreach (var claimant in claimants)
+                    {
+                        var pawnPosition = claimant.Position;
+                        if (pawnPosition == this.parent.Position || pawnPosition == this.parent.InteractionCell)
+                        {
+                            return true;
+                        }
                     }
                 }
             }
-            else
-            {
-                foreach (var claimant in claimants)
-                {
-                    var pawnPosition = claimant.Position;
-                    if (pawnPosition == this.parent.Position || pawnPosition == this.parent.InteractionCell)
-                    {
-                        return true;
-                    }
-                }
-            }
+
 
             return false;
         }
@@ -190,7 +194,7 @@ namespace HediffResourceFramework
             get
             {
                 var curTicks = Find.TickManager.TicksGame;
-                if (curTicks > lastClaimantCacheTick + 60)
+                if (curTicks > lastClaimantCacheTick + 60 || cachedClaimants is null)
                 {
                     cachedClaimants = Reservations.Select(x => x.Claimant);
                     lastClaimantCacheTick = curTicks;
