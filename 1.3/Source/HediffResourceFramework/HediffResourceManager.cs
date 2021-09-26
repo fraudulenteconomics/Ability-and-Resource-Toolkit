@@ -167,7 +167,7 @@ namespace HediffResourceFramework
             {
                 policy = new HediffResourcePolicy();
                 policy.satisfyPolicies = new Dictionary<HediffResourceDef, HediffResourceSatisfyPolicy>();
-                foreach (var hediffResourceDef in DefDatabase<HediffResourceDef>.AllDefs.Where(x => x.showInResourceTab))
+                foreach (var hediffResourceDef in DefDatabase<HediffResourceDef>.AllDefs)
                 {
                     policy.satisfyPolicies[hediffResourceDef] = new HediffResourceSatisfyPolicy();
                 }
@@ -175,7 +175,7 @@ namespace HediffResourceFramework
             }
             else
             {
-                foreach (var hediffResourceDef in DefDatabase<HediffResourceDef>.AllDefs.Where(x => x.showInResourceTab))
+                foreach (var hediffResourceDef in DefDatabase<HediffResourceDef>.AllDefs)
                 {
                     if (!policy.satisfyPolicies.ContainsKey(hediffResourceDef))
                     {
@@ -183,6 +183,8 @@ namespace HediffResourceFramework
                     }
                 }
             }
+
+
         }
         public override void GameComponentTick()
         {

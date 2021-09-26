@@ -8,6 +8,7 @@
 					<li>HRF_Make_Kibble</li>
 					<li>HRF_Make_Pemmican</li>
 					<li>HRF_Make_PemmicanBulk</li>
+					<li>HRF_Convert_PemmicanBulk</li>
 				</value>
 			</li>
 

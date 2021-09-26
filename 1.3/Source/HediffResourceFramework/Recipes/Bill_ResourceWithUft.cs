@@ -32,6 +32,13 @@ namespace HediffResourceFramework
             base.Notify_PawnDidWork(p);
             Bill_Resource.DoWork(this.recipe, p, Extension, consumedResources);
         }
+
+        public override void Notify_IterationCompleted(Pawn billDoer, List<Thing> ingredients)
+        {
+            base.Notify_IterationCompleted(billDoer, ingredients);
+            consumedResources.Clear();
+        }
+
         public override void ExposeData()
         {
             base.ExposeData();

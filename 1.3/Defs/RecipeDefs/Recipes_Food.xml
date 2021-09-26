@@ -53,7 +53,7 @@
     <label>HRF make pemmican x4</label>
     <description>Make bulk pemmican, a preserved combination of meat and plant food. It doesn't taste amazing, but lasts a long time without refrigeration.</description>
     <jobString>Making bulk pemmican.</jobString>
-    <workAmount>2800</workAmount>
+    <workAmount>80</workAmount>
     <workSpeedStat>CookSpeed</workSpeedStat>
     <requiredGiverWorkType>Cooking</requiredGiverWorkType>
     <effectWorking>Cook</effectWorking>
@@ -72,4 +72,44 @@
 	</modExtensions>
   </RecipeDef>
 
+  <RecipeDef>
+    <defName>HRF_Convert_PemmicanBulk</defName>
+    <label>HRF convert pemmican x4</label>
+    <description>Make bulk pemmican, a preserved combination of meat and plant food. It doesn't taste amazing, but lasts a long time without refrigeration.</description>
+    <jobString>Making bulk pemmican.</jobString>
+    <workAmount>80</workAmount>
+    <ingredients>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>Pemmican</li>
+          </thingDefs>
+        </filter>
+        <count>64</count>
+      </li>
+    </ingredients>
+    <fixedIngredientFilter>
+      <thingDefs>
+        <li>Pemmican</li>
+      </thingDefs>
+    </fixedIngredientFilter>
+    <defaultIngredientFilter>
+      <thingDefs>
+        <li>Pemmican</li>
+      </thingDefs>
+    </defaultIngredientFilter>
+    <workSpeedStat>CookSpeed</workSpeedStat>
+    <requiredGiverWorkType>Cooking</requiredGiverWorkType>
+    <effectWorking>Cook</effectWorking>
+    <soundWorking>Recipe_CookMeal</soundWorking>
+    <workSkill>Cooking</workSkill>
+	<modExtensions>
+		<li Class="HediffResourceFramework.RecipeResourceIngredients">
+			<recourseCostList>
+				<FE_FusionReactor>-150</FE_FusionReactor>
+				<FE_AbsorptionBarrier>-100</FE_AbsorptionBarrier>
+			</recourseCostList>
+		</li>
+	</modExtensions>
+  </RecipeDef>
 </Defs>

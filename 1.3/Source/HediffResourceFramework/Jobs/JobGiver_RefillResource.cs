@@ -14,26 +14,16 @@ namespace HediffResourceFramework
     {
         public override float GetPriority(Pawn pawn)
         {
-            if (pawn.RaceProps.Humanlike)
+            if (pawn.RaceProps.Humanlike && pawn.Faction == Faction.OfPlayer)
             {
                 if (HediffResourceUtils.HediffResourceManager.hediffResourcesPolicies.ContainsKey(pawn))
                 {
-                    Log.Message("JobGiver_RefillResource : ThinkNode_JobGiver - GetPriority - if (pawn.health?.hediffSet.hediffs.OfType<HediffResource>().Any() ?? false) - 2", true);
                     if (pawn.health?.hediffSet.hediffs.OfType<HediffResource>().Any() ?? false)
                     {
-                        Log.Message("JobGiver_RefillResource : ThinkNode_JobGiver - GetPriority - return 8f; - 3", true);
                         return 8f;
                     }
                 }
-                else
-                {
-                    foreach (var data in HediffResourceUtils.HediffResourceManager.hediffResourcesPolicies)
-                    {
-                        Log.Message(pawn + " - " + data.Key + " - " + data.Value);
-                    }
-                }
             }
-
             return 0f;
         }
         protected override Job TryGiveJob(Pawn pawn)
