@@ -13,6 +13,8 @@ namespace HediffResourceFramework
     {
         private float resourceAmount;
 
+        public int lastChargedTick;
+
         public IResourceStorage parent;
 
         public HediffOption hediffOption;
@@ -46,7 +48,6 @@ namespace HediffResourceFramework
 
             }
         }
-        public bool CanGainResource => true;
         public float ResourceCapacity
         {
             get
@@ -102,6 +103,7 @@ namespace HediffResourceFramework
         public void ExposeData()
         {
             Scribe_Values.Look(ref resourceAmount, "resourceAmount");
+            Scribe_Values.Look(ref lastChargedTick, "lastChargedTick");
         }
 
         public int CompareTo(object obj)

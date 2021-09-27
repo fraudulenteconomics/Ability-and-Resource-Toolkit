@@ -243,9 +243,9 @@ namespace HediffResourceFramework
 				};
 				yield return command_Action;
 
-				Command_Action command_Action2 = new Command_Action();
-				command_Action2.defaultLabel = "Debug: Empty all hediff resources";
-				command_Action2.action = delegate
+				Command_Action command_Empty = new Command_Action();
+				command_Empty.defaultLabel = "Debug: Empty all hediff resources";
+				command_Empty.action = delegate
 				{
 					var hediffResources = HediffResourceUtils.GetHediffResourcesFor(__instance);
 					if (hediffResources != null)
@@ -256,7 +256,37 @@ namespace HediffResourceFramework
 						}
 					}
 				};
-				yield return command_Action2;
+				yield return command_Empty;
+
+				Command_Action command_ReduceBy10 = new Command_Action();
+				command_ReduceBy10.defaultLabel = "Debug: Reduce all hediff resources by 10";
+				command_ReduceBy10.action = delegate
+				{
+					var hediffResources = HediffResourceUtils.GetHediffResourcesFor(__instance);
+					if (hediffResources != null)
+					{
+						foreach (var hediffResource in hediffResources)
+						{
+							hediffResource.ResourceAmount -= 10;
+						}
+					}
+				};
+				yield return command_ReduceBy10;
+
+				Command_Action command_AddBy10 = new Command_Action();
+				command_AddBy10.defaultLabel = "Debug: Add all hediff resources by 10";
+				command_AddBy10.action = delegate
+				{
+					var hediffResources = HediffResourceUtils.GetHediffResourcesFor(__instance);
+					if (hediffResources != null)
+					{
+						foreach (var hediffResource in hediffResources)
+						{
+							hediffResource.ResourceAmount += 10;
+						}
+					}
+				};
+				yield return command_AddBy10;
 
 				Command_Action command_Action3 = new Command_Action();
 				command_Action3.defaultLabel = "Debug: Remove all hediff resources";

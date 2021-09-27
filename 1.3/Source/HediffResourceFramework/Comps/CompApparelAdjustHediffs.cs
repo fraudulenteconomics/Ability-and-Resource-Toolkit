@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 using Verse;
 
 namespace HediffResourceFramework
@@ -60,6 +61,7 @@ namespace HediffResourceFramework
                     if (hediffResource != null && (PostUseDelayTicks.TryGetValue(hediffResource, out var disable) && (disable.delayTicks > Find.TickManager.TicksGame)
                         || !hediffResource.CanGainResource))
                     {
+                        Log.Message("Can't gain resource: " + hediffResource);
                         continue;
                     }
                     else
@@ -81,7 +83,11 @@ namespace HediffResourceFramework
                                 var hediff = HediffMaker.MakeHediff(hediffOption.hediff, pawn, bodyPartRecord) as HediffResource;
                                 pawn.health.AddHediff(hediff);
                             }
-                            resourceStorage.ResourceAmount += num;
+                            var toRefill = Mathf.Min(num, resourceStorage.ResourceCapacity - resourceStorage.ResourceAmount);
+                            if (resourceStorage.ResourceAmount < resourceStorage.ResourceCapacity)
+                            {
+                                resourceStorage.ResourceAmount += toRefill;
+                            }
                         }
                         else
                         {

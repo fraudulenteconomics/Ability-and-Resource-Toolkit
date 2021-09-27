@@ -17,6 +17,12 @@ namespace HediffResourceFramework
     }
     public class CompBuildingStorageAdjustHediffs : CompAdjustHediffs
     {
+        public CompPowerTrader compPower;
+        public override void PostSpawnSetup(bool respawningAfterLoad)
+        {
+            base.PostSpawnSetup(respawningAfterLoad);
+            compPower = this.parent.TryGetComp<CompPowerTrader>();
+        }
         public IEnumerable<CompAdjustHediffs> StoredItems
         {
             get
@@ -36,8 +42,12 @@ namespace HediffResourceFramework
         public override void ResourceTick()
         {
             base.ResourceTick();
-            var comps = StoredItems;
-            foreach (var comp in comps)
+            if (compPower != null && !compPower.PowerOn)
+            {
+                return;
+            }
+            var storedThingComps = StoredItems;
+            foreach (var storedThingComp in storedThingComps)
             {
                 foreach (var hediffOption in Props.resourceSettings)
                 {
@@ -47,10 +57,15 @@ namespace HediffResourceFramework
                         num *= HediffResourceUtils.GetQualityMultiplier(qc);
                     }
 
-                    var storage = comp.GetResourceStoragesFor(hediffOption.hediff).FirstOrDefault();
+                    var storage = storedThingComp.GetResourceStoragesFor(hediffOption.hediff).FirstOrDefault();
                     if (storage != null)
                     {
-                        storage.Item3.ResourceAmount += num;
+                        if (storage.Item3.ResourceAmount < storage.Item3.ResourceCapacity)
+                        {
+                            storage.Item3.ResourceAmount += num;
+                            storage.Item3.lastChargedTick = Find.TickManager.TicksGame;
+                        }
+
                         if (hediffOption.unforbidWhenEmpty && storage.Item3.ResourceAmount <= 0 ||
                             hediffOption.unforbidWhenFull && storage.Item3.ResourceAmount >= storage.Item3.ResourceCapacity)
                         {

@@ -99,12 +99,39 @@ namespace HediffResourceFramework
             {
                 for (var i = 0; i < Props.resourceSettings.Count; i++)
                 {
-                    if (Props.resourceSettings[i].maxResourceStorageAmount > 0 && Props.resourceSettings[i] == hediffOption)
+                    if (Props.resourceSettings[i].maxResourceStorageAmount > 0 && Props.resourceSettings[i].isBattery && Props.resourceSettings[i] == hediffOption)
                     {
                         yield return new Tuple<CompAdjustHediffs, HediffOption, ResourceStorage>(this, Props.resourceSettings[i], resourceStorages[i]);
                     }
                 }
             }
+        }
+
+        public override string CompInspectStringExtra()
+        {
+            var sb = new StringBuilder(base.CompInspectStringExtra());
+            var resourceStorages = ResourceStorages;
+            if (Props.resourceSettings != null)
+            {
+                for (var i = 0; i < Props.resourceSettings.Count; i++)
+                {
+                    if (Props.resourceSettings[i].maxResourceStorageAmount > 0)
+                    {
+                        foreach (var resourceStorage in GetResourceStoragesFor(Props.resourceSettings[i]).ToList())
+                        {
+                            if ((Find.TickManager.TicksGame - resourceStorage.Item3.lastChargedTick) <= 60)
+                            {
+                                sb.AppendLine("HRF.StoredAmountCharged".Translate(resourceStorage.Item3.ResourceAmount, Props.resourceSettings[i].maxResourceStorageAmount));
+                            }
+                            else
+                            {
+                                sb.AppendLine("HRF.StoredAmount".Translate(resourceStorage.Item3.ResourceAmount, Props.resourceSettings[i].maxResourceStorageAmount));
+                            }
+                        }
+                    }
+                }
+            }
+            return sb.ToString().TrimEndNewlines();
         }
 
         private Dictionary<HediffResource, HediffResouceDisable> postUseDelayTicks;

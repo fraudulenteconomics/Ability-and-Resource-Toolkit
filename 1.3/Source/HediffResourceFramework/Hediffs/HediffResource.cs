@@ -51,61 +51,67 @@ namespace HediffResourceFramework
             }
             set
             {
-                resourceAmount = value;
                 var storages = GetResourceTupleStorages();
                 var totalValue = resourceAmount + ResourceStorage;
-                if (totalValue > ResourceCapacityInt)
+                var toChange = value - totalValue;
+                if (toChange > 0)
                 {
-                    var toExtract = totalValue - ResourceCapacityInt;
-                    while (toExtract >= 1)
+                    var toAdd = Mathf.Min(toChange, ResourceCapacityInt - resourceAmount);
+                    toChange -= toAdd;
+                    resourceAmount += toAdd;
+                    while (toChange > 0)
                     {
-                        bool extracted = false;
+                        bool changed = false;
                         foreach (var storage in storages)
                         {
-                            if (!extracted && toExtract >= 1)
+                            if (storage.Item2.hediff == this.def)
                             {
-                                if (storage.Item3.ResourceAmount >= 1)
+                                toAdd = Mathf.Min(toChange, storage.Item3.ResourceCapacity - storage.Item3.ResourceAmount);
+                                if (toAdd > 0)
                                 {
-                                    storage.Item3.ResourceAmount--;
-                                    toExtract--;
-                                    HRFLog.Message("totalValue: " + totalValue + " - ResourceCapacityInt: " + ResourceCapacityInt +" - storage.Item3.ResourceAmount: " + storage.Item3.ResourceAmount + " - toExtract: " + toExtract);
-                                    extracted = true;
+                                    changed = true;
+                                    storage.Item3.ResourceAmount += toAdd;
+                                    toChange -= toAdd;
+                                }
+                                else
+                                {
                                     break;
                                 }
                             }
                         }
-                        if (!extracted && toExtract >= 1)
-                        {
-                            if (this.resourceAmount >= 1)
-                            {
-                                this.resourceAmount--;
-                                HRFLog.Message("totalValue: " + totalValue + " - ResourceCapacityInt: " + ResourceCapacityInt + " - this.resourceAmount: " + this.resourceAmount + " - toExtract: " + toExtract);
-                                extracted = true;
-                                toExtract--;
-                            }
-                        }
-
-                        if (!extracted)
+                        if (!changed)
                         {
                             break;
                         }
                     }
                 }
 
-                if (resourceAmount < 0)
+                if (toChange < 0)
                 {
-                    var diff = Math.Abs(resourceAmount);
-                    foreach (var storage in storages)
+                    var toSubtract = resourceAmount >= Math.Abs(toChange) ? toChange : -resourceAmount;
+                    toChange -= toSubtract;
+                    resourceAmount += toSubtract;
+                    while (toChange < 0)
                     {
-                        if (diff > 0)
+                        bool changed = false;
+                        foreach (var storage in storages)
                         {
-                            var freeSpace = storage.Item3.ResourceCapacity - storage.Item3.ResourceCapacity;
-                            var toTake = freeSpace > diff ? diff : diff - freeSpace;
-                            storage.Item3.ResourceAmount -= toTake;
-                            diff -= toTake;
+                            if (storage.Item2.hediff == this.def)
+                            {
+                                toSubtract = storage.Item3.ResourceAmount >= Math.Abs(toChange) ? toChange : -storage.Item3.ResourceAmount;
+                                if (toSubtract < 0)
+                                {
+                                    changed = true;
+                                    storage.Item3.ResourceAmount += toSubtract;
+                                    toChange -= toSubtract;
+                                }
+                            }
+                        }
+                        if (!changed)
+                        {
+                            break;
                         }
                     }
-                    resourceAmount = 0;
                 }
 
                 var storagesToDestroy = new List<CompAdjustHediffs>();
@@ -176,10 +182,6 @@ namespace HediffResourceFramework
             get
             {
                 var value = ResourceCapacityInt;
-                if (this.ResourceAmount > value)
-                {
-                    this.ResourceAmount = value;
-                }
                 return value;
             }
         }

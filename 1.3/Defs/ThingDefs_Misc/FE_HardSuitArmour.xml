@@ -99,8 +99,9 @@
 						<qualityScalesCapacityOffset>true</qualityScalesCapacityOffset>
 						<disallowEquipIfHediffMissing>false</disallowEquipIfHediffMissing>
 						<dropIfHediffMissing>false</dropIfHediffMissing>
-						<!-- <keepResourceAmount>true</keepResourceAmount>
-						<initialResourceAmount>true</initialResourceAmount>
+						<isBattery>true</isBattery>
+						<maxResourceStorageAmount>50</maxResourceStorageAmount>
+						<!--
 						<destroyWhenEmpty>false</destroyWhenEmpty>
 						<dropWhenEmpty>false</dropWhenEmpty> -->
 					</li>
@@ -466,7 +467,7 @@
 						<resourcePerSecond>1</resourcePerSecond>
 						<qualityScalesResourcePerSecond>false</qualityScalesResourcePerSecond>
 						<addHediffIfMissing>false</addHediffIfMissing>
-						<maxResourceCapacityOffset>-30</maxResourceCapacityOffset>
+						<maxResourceCapacityOffset>300</maxResourceCapacityOffset>
 						<qualityScalesCapacityOffset>false</qualityScalesCapacityOffset>
 						<cannotEquipReason>No available fusion connection.</cannotEquipReason>
 						<disallowEquipIfHediffMissing>true</disallowEquipIfHediffMissing>
