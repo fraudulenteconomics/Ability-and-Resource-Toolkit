@@ -202,11 +202,11 @@
 				<resourceSettings>
 					<li>
 						<hediff>FE_FusionReactor</hediff>
-						<resourcePerSecond>1</resourcePerSecond>
+						<resourcePerSecond>0</resourcePerSecond>
 						<qualityScalesResourcePerSecond>false</qualityScalesResourcePerSecond>
 						<addHediffIfMissing>true</addHediffIfMissing>
-						<maxResourceCapacityOffset>100</maxResourceCapacityOffset>
-						<qualityScalesCapacityOffset>true</qualityScalesCapacityOffset>
+						<maxResourceCapacityOffset>0</maxResourceCapacityOffset>
+						<qualityScalesCapacityOffset>false</qualityScalesCapacityOffset>
 						<disallowEquipIfHediffMissing>false</disallowEquipIfHediffMissing>
 						<dropIfHediffMissing>false</dropIfHediffMissing>
 
