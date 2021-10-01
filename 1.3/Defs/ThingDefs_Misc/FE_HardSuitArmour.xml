@@ -432,6 +432,62 @@
 	</ThingDef>
 
 	<ThingDef ParentName="FE_ModuleBase">
+		<defName>FE_AuxillaryBattery</defName>
+		<label>module (core) - auxilliary battery</label>
+		<description>A core module for a fusion hardsuit. Contains an oversized uranium battery that is discarded when it runs out of capacity.</description>
+		<graphicData>
+			<texPath>Things/Item/Health/HealthItem</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<color>(180,180, 50)</color>
+		</graphicData>
+		<apparel>
+			<bodyPartGroups>
+				<li>Waist</li>
+			</bodyPartGroups>
+			<layers>
+				<li>FE_Core_Module</li>
+			</layers>
+			<tags>
+				<li>FusionArmor</li>
+			</tags>
+			<defaultOutfitTags>
+				<li>Soldier</li>
+			</defaultOutfitTags>
+		</apparel>
+		<costList>
+			<ComponentSpacer>2</ComponentSpacer>
+			<Plasteel>50</Plasteel>
+			<Uranium>20</Uranium>
+		</costList>
+		<comps>
+			<li Class="HediffResourceFramework.CompProperties_ApparelAdjustHediffs">
+				<resourceSettings>
+					<li>
+						<hediff>FE_FusionReactor</hediff>
+						<resourcePerSecond>0</resourcePerSecond>
+						<qualityScalesResourcePerSecond>false</qualityScalesResourcePerSecond>
+						<addHediffIfMissing>false</addHediffIfMissing>
+						<maxResourceCapacityOffset>0</maxResourceCapacityOffset>
+						<qualityScalesCapacityOffset>true</qualityScalesCapacityOffset>
+						<cannotEquipReason>No available fusion connection.</cannotEquipReason>
+						<disallowEquipIfHediffMissing>false</disallowEquipIfHediffMissing>
+						<dropIfHediffMissing>true</dropIfHediffMissing>
+						<blackListHediffsPreventEquipping>
+						</blackListHediffsPreventEquipping>
+						<dropWeaponOrApparelIfBlacklistHediff>
+						</dropWeaponOrApparelIfBlacklistHediff>
+						<maxResourceStorageAmount>300</maxResourceStorageAmount>
+						<initialResourceAmount>300</initialResourceAmount>
+						<destroyWhenEmpty>true</destroyWhenEmpty>
+						<dropWhenEmpty>true</dropWhenEmpty>
+						<disallowEquipWhenEmpty>true</disallowEquipWhenEmpty>
+					</li>
+				</resourceSettings>
+			</li>
+		</comps>
+	</ThingDef>
+	
+	<ThingDef ParentName="FE_ModuleBase">
 		<defName>FE_ActiveReactor</defName>
 		<label>module (core) - active reactor</label>
 		<description>A core module for a fusion hardsuit. Contains an advanced capacitor designed to charge energy in a more efficient manner, increasing the rate at which the fusion reactor generates energy but reducing the maximum capacity. This also reduces the recharge delay incurred from certain modules by 40%.</description>
@@ -818,8 +874,8 @@
 	</ThingDef>
 
 	<ThingDef ParentName="FE_ModuleBase">
-		<defName>FE_AuxiliaryBattery</defName>
-		<label>module (back) - auxiliary battery</label>
+		<defName>FE_ExtraBattery</defName>
+		<label>module (back) - extra battery</label>
 		<description>A back module for a fusion hardsuit. Contains 5 uranium fueled energy injectors that can immediately restore 150 energy each. The unit is incredibly heavy and slows the user down considerably. Requires 10 uranium per battery charge to refuel./n/nCan be used by non-violent pawns.</description>
 		<graphicData>
 			<texPath>Things/Item/Health/HealthItem</texPath>
