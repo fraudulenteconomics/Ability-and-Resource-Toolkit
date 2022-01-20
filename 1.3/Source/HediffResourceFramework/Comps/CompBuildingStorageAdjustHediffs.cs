@@ -51,12 +51,7 @@ namespace HediffResourceFramework
             {
                 foreach (var hediffOption in Props.resourceSettings)
                 {
-                    float num = hediffOption.resourcePerSecond;
-                    if (hediffOption.qualityScalesResourcePerSecond && this.parent.TryGetQuality(out QualityCategory qc))
-                    {
-                        num *= HediffResourceUtils.GetQualityMultiplier(qc);
-                    }
-
+                    float num = hediffOption.GetResourceGain(this);
                     var storage = storedThingComp.GetResourceStoragesFor(hediffOption.hediff).FirstOrDefault();
                     if (storage != null)
                     {

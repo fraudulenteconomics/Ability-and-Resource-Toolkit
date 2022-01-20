@@ -4,52 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Xml;
 using UnityEngine;
 using Verse;
 
 namespace HediffResourceFramework
 {
-	public enum VerbType
-    {
-		None,
-		Both,
-		Range,
-		Melee
-    }
-	public class ShieldProperties
-	{
-		public bool absorbMeleeDamage;
-		public bool absorbRangeDamage;
-
-		public int? maxAbsorb;
-		public int? resourceConsumptionPerDamage;
-		public float? damageAbsorbedPerResource;
-		public int? postDamageDelay;
-		public Color shieldColor = Color.white;
-		public VerbType cannotUseVerbType;
-	}
-    public class ResourceGainPerDamage
-    {
-		public Dictionary<string, float> resourceGainOffsets = new Dictionary<string, float>();
-		public void LoadDataFromXmlCustom(XmlNode xmlRoot)
-		{
-			foreach (XmlNode childNode in xmlRoot.ChildNodes)
-			{
-				if (!(childNode is XmlComment))
-				{
-					resourceGainOffsets[childNode.Name] = float.Parse(childNode.InnerText);
-				}
-			}
-		}
-	}
-
-	public class RequiredHediff
-    {
-		public HediffDef hediff;
-		public int minCount;
-		public float minSeverity;
-	}
     public class HediffResourceDef : HediffDef
     {
         public float maxResourceCapacity;
@@ -75,5 +34,19 @@ namespace HediffResourceFramework
 		public List<RequiredHediff> requiredHediffs;
 
 		public bool showInResourceTab;
+		public float resourcePerSecondFactor = 1f;
+
+		public bool ShieldIsActive(Pawn pawn)
+        {
+			if (shieldProperties != null)
+            {
+				if (shieldProperties.activeWithHediffs != null && pawn.health.hediffSet.hediffs.Any())
+                {
+					return pawn.health.hediffSet.hediffs.All(x => shieldProperties.activeWithHediffs.Contains(x.def));
+				}
+				return true;
+            }
+			return false;
+        }
 	}
 }

@@ -112,6 +112,7 @@
 			<li>
 				<compClass>CompQuality</compClass>
 			</li>
+      			<li Class="CompProperties_Styleable"></li>
 			<li Class="CompProperties_Forbiddable"/>      
 			<li Class="MVCF.Comps.CompProperties_VerbProps">
 				<compClass>CompEquippable</compClass>
@@ -150,8 +151,17 @@
 						<dropIfHediffMissing>true</dropIfHediffMissing>
 						<cannotEquipReasonIncompatible>No available fusion connection.</cannotEquipReasonIncompatible>
 					</li>
-
 				</resourceSettings>
+			</li>
+			<li Class="HediffResourceFramework.CompProperties_ResourceOnAction">
+				<resourcesOnAction>
+					<li>
+						<hediffApplied>FE_FusionReactor</hediffApplied>
+						<adjustResource>666</adjustResource>
+						<onSelf>False</onSelf>
+						<applyChance>1</applyChance>
+					</li>
+				</resourcesOnAction>
 			</li>
 		</comps>
 	</ThingDef>

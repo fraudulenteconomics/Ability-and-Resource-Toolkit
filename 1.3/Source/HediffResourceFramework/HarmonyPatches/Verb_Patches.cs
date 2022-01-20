@@ -43,35 +43,38 @@ namespace HediffResourceFramework
     {
         private static void Postfix(ref IEnumerable<DamageInfo> __result, Verb __instance, LocalTargetInfo target)
         {
-            Log.Message("Patch_DamageInfosToApply - Postfix - if (__instance.tool is IResourceProps props && props.ChargeSettings != null && __instance.CasterPawn != null) - 1", true);
             if (__instance.tool is IResourceProps props && props.ChargeSettings != null && __instance.CasterPawn != null)
             {
-                Log.Message("Patch_DamageInfosToApply - Postfix - var list = __result.ToList(); - 2", true);
                 var list = __result.ToList();
-                Log.Message("Patch_DamageInfosToApply - Postfix - foreach (var chargeSettings in props.ChargeSettings) - 3", true);
                 foreach (var chargeSettings in props.ChargeSettings)
                 {
-                    Log.Message("chargeSettings: " + chargeSettings.resourcePerCharge);
-                    Log.Message("Patch_DamageInfosToApply - Postfix - var hediffResource = __instance.CasterPawn.health.hediffSet.GetFirstHediffOfDef(chargeSettings.hediffResource) as HediffResource; - 4", true);
                     var hediffResource = __instance.CasterPawn.health.hediffSet.GetFirstHediffOfDef(chargeSettings.hediffResource) as HediffResource;
-                    Log.Message("Patch_DamageInfosToApply - Postfix - foreach (var damageInfo in list) - 5", true);
                     foreach (var damageInfo in list)
                     {
                         var chargeResources = new ChargeResources();
                         chargeResources.chargeResources = new List<ChargeResource> { new ChargeResource(hediffResource.ResourceAmount, chargeSettings) };
-                        Log.Message("Patch_DamageInfosToApply - Postfix - var chargeResources = new ChargeResources(); - 6", true);
-                        Log.Message("Patch_DamageInfosToApply - Postfix - chargeResources.chargeResources = new List<ChargeResource> { new ChargeResource(hediffResource.ResourceAmount, chargeSettings) }; - 7", true);
-                        Log.Message("Patch_DamageInfosToApply - Postfix - var amount = damageInfo.Amount; - 8", true);
                         var amount = damageInfo.Amount;
-                        Log.Message("Patch_DamageInfosToApply - Postfix - HediffResourceUtils.ApplyChargeResource(ref amount, chargeResources); - 9", true);
                         HediffResourceUtils.ApplyChargeResource(ref amount, chargeResources);
-                        Log.Message("Patch_DamageInfosToApply - Postfix - if (amount != damageInfo.Amount) - 10", true);
                         if (amount != damageInfo.Amount)
                         {
-                            Log.Message("Patch_DamageInfosToApply - Postfix - damageInfo.SetAmount(amount); - 11", true);
                             damageInfo.SetAmount(amount);
                             hediffResource.ResourceAmount = 0;
                         }
+                    }
+                }
+            }
+            var comp = __instance.EquipmentSource?.TryGetComp<CompResourceOnAction>();
+            if (comp != null)
+            {
+                foreach (var resourceOnAction in comp.Props.resourcesOnAction)
+                {
+                    if (resourceOnAction.onSelf)
+                    {
+                        resourceOnAction.TryApplyOn(__instance.CasterPawn);
+                    }
+                    else if (target.Pawn != null)
+                    {
+                        resourceOnAction.TryApplyOn(target.Pawn);
                     }
                 }
             }
@@ -109,19 +112,26 @@ namespace HediffResourceFramework
 
         private static void Postfix(Verb __instance, bool __state)
         {
-            Log.Message(" - Postfix - if (__state && __instance.CasterIsPawn) - 1", true);
             if (__state && __instance.CasterIsPawn)
             {
-                Log.Message(" - Postfix - if (__instance.verbProps is IResourceProps verbProps) - 2", true);
                 if (__instance.verbProps is IResourceProps verbProps)
                 {
-                    Log.Message(" - Postfix - HediffResourceUtils.ApplyResourceSettings(__instance, verbProps); - 3", true);
-                    HediffResourceUtils.ApplyResourceSettings(__instance, verbProps);
+                    HediffResourceUtils.ApplyResourceSettings(__instance.CurrentTarget.Thing, __instance.CasterPawn, verbProps);
                 }
                 else if (__instance.tool is IResourceProps toolProps)
                 {
-                    Log.Message(" - Postfix - HediffResourceUtils.ApplyResourceSettings(__instance, toolProps); - 5", true);
-                    HediffResourceUtils.ApplyResourceSettings(__instance, toolProps);
+                    HediffResourceUtils.ApplyResourceSettings(__instance.CurrentTarget.Thing, __instance.CasterPawn, toolProps);
+                }
+                var comp = __instance.EquipmentSource?.TryGetComp<CompResourceOnAction>();
+                if (comp != null)
+                {
+                    foreach (var resourceOnAction in comp.Props.resourcesOnAction)
+                    {
+                        if (resourceOnAction.onSelf)
+                        {
+                            resourceOnAction.TryApplyOn(__instance.CasterPawn);
+                        }
+                    }
                 }
             }
         }

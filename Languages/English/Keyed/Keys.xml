@@ -19,4 +19,8 @@
 	<HRF.StoredAmount>Stored amount: {0}/{1}</HRF.StoredAmount>
 	<HRF.StoredAmountCharged>Stored amount: {0}/{1} (charging)</HRF.StoredAmountCharged>
 	<HRF.Stored>stored</HRF.Stored>
+	<HRF.WillBeDisabledIfMissingResource>Will be disabled if {0} resource is missing.</HRF.WillBeDisabledIfMissingResource>
+	<HRF.RequiresResource>Requires minimum {0} of {1} resource.</HRF.RequiresResource>
+	<HRF.WillBeDisabledWhenResourceAbove>Will be disabled if {0} is above {1}.</HRF.WillBeDisabledWhenResourceAbove>
+	<HRF.ConsumesPerUse>Consumes {0} of {1} per use.</HRF.ConsumesPerUse>
 </LanguageData>

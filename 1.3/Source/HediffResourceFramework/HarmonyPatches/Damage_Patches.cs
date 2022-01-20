@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using Verse;
 using Verse.AI;
+using static UnityEngine.GraphicsBuffer;
 
 namespace HediffResourceFramework
 {
@@ -21,11 +22,26 @@ namespace HediffResourceFramework
 	{
 		public static void Postfix(Projectile __instance, Thing launcher, Vector3 origin, LocalTargetInfo usedTarget, LocalTargetInfo intendedTarget, ProjectileHitFlags hitFlags, Thing equipment = null, ThingDef targetCoverDef = null)
 		{
+			if (equipment != null)
+            {
+				var comp = equipment.TryGetComp<CompResourceOnAction>();
+				if (comp != null)
+				{
+					foreach (var resourceOnAction in comp.Props.resourcesOnAction)
+					{
+						if (!resourceOnAction.onSelf)
+						{
+							HediffResourceManager.Instance.firedProjectilesByEquipments[__instance] = equipment;
+						}
+					}
+				}
+			}
+
 			if (launcher is Pawn pawn && Patch_TryCastShot.verbSource != null)
 			{
 				var compCharge = GetChargeSourceFrom(Patch_TryCastShot.verbSource, pawn);
 				if (compCharge != null)
-                {
+				{
 					var verbProps = Patch_TryCastShot.verbSource.GetVerb.verbProps as VerbResourceProps;
 					if (verbProps?.chargeSettings != null)
 					{
@@ -34,7 +50,6 @@ namespace HediffResourceFramework
 							var hediffResource = pawn.health.hediffSet.GetFirstHediffOfDef(chargeSettings.hediffResource) as HediffResource;
 							if (hediffResource != null && chargeSettings.damageScaling.HasValue)
 							{
-								HRFLog.Message("Should do charging damage: " + __instance + " - " + hediffResource);
 								if (compCharge.ProjectilesWithChargedResource.ContainsKey(__instance))
 								{
 									compCharge.ProjectilesWithChargedResource[__instance].chargeResources.Add(new ChargeResource(hediffResource.ResourceAmount, chargeSettings));
@@ -53,11 +68,11 @@ namespace HediffResourceFramework
 		}
 
 		private static IChargeResource GetChargeSourceFrom(Verb verb, Pawn pawn)
-        {
+		{
 			if (verb.EquipmentSource != null) return verb.EquipmentSource.GetComp<CompChargeResource>();
 			if (verb.HediffCompSource != null) return verb.HediffSource.TryGetComp<HediffCompChargeResource>();
 			return null;
-        }
+		}
 	}
 
 	[HarmonyPatch(typeof(Projectile), "DamageAmount", MethodType.Getter)]
@@ -79,22 +94,27 @@ namespace HediffResourceFramework
 		}
 	}
 
-	[HarmonyPatch(typeof(PawnRenderer), "RenderPawnInternal", new Type[] 
+	[HarmonyPatch(typeof(Projectile), "Impact")]
+	internal static class Impact_Patch
 	{
-		typeof(Vector3), typeof(float), typeof(bool), typeof(Rot4), typeof(RotDrawMode), typeof(PawnRenderFlags)
-	})]
-	public static class Patch_RenderPawnInternal
-    {
-		public static void Postfix(Pawn ___pawn)
+		private static void Prefix(Projectile __instance, Thing hitThing)
 		{
-			foreach (var hediff in HediffResourceUtils.GetHediffResourcesFor(___pawn))
-			{
-				hediff.Draw();
+			if (hitThing is Pawn target && HediffResourceManager.Instance.firedProjectilesByEquipments.TryGetValue(__instance, out var equipment))
+            {
+				var comp = equipment.TryGetComp<CompResourceOnAction>();
+				if (comp != null)
+				{
+					foreach (var resourceOnAction in comp.Props.resourcesOnAction)
+					{
+						if (!resourceOnAction.onSelf)
+						{
+							resourceOnAction.TryApplyOn(target);
+						}
+					}
+				}
 			}
 		}
 	}
-
-
 
 	[HarmonyPatch(typeof(Pawn), "PreApplyDamage")]
 	public static class Patch_PreApplyDamage
@@ -107,7 +127,7 @@ namespace HediffResourceFramework
 			{
 				foreach (var resourceEffect in effectOnImpactOptions.resourceEffects)
 				{
-					var hediffResource = HediffResourceUtils.AdjustResourceAmount(__instance, resourceEffect.hediffDef, 
+					var hediffResource = HediffResourceUtils.AdjustResourceAmount(__instance, resourceEffect.hediffDef,
 						resourceEffect.adjustTargetResource, resourceEffect.addHediffIfMissing, resourceEffect.applyToPart);
 					if (hediffResource != null && resourceEffect.delayTargetOnDamage != IntRange.zero)
 					{
@@ -118,11 +138,11 @@ namespace HediffResourceFramework
 
 			var hediffResources = __instance?.health?.hediffSet?.hediffs?.OfType<HediffResource>().ToList();
 			if (hediffResources != null)
-            {
+			{
 				for (int num = hediffResources.Count - 1; num >= 0; num--)
-                {
+				{
 					var hediff = hediffResources[num];
-					if (dinfo.Amount > 0 && hediff.def.shieldProperties != null)
+					if (dinfo.Amount > 0 && hediff.def.ShieldIsActive(__instance))
 					{
 						var shieldProps = hediff.def.shieldProperties;
 						if (shieldProps.absorbRangeDamage && (dinfo.Weapon?.IsRangedWeapon ?? false))
@@ -197,11 +217,8 @@ namespace HediffResourceFramework
 							{
 								var newDelayTicks = (int)(shieldProps.postDamageDelay.Value * hediffOption.postDamageDelayMultiplier);
 								var hediffResource = pawn.health.hediffSet.GetFirstHediffOfDef(hediffOption.hediff) as HediffResource;
-								HRFLog.Message(apparel + " - hediffResource: " + hediffResource);
-								HRFLog.Message(apparel + " - hediffResource.CanHaveDelay(newDelayTicks): " + hediffResource?.CanHaveDelay(newDelayTicks));
 								if (hediffResource != null && hediffResource.CanHaveDelay(newDelayTicks))
 								{
-									HRFLog.Message(" - ProcessDamage - hediffResource.AddDelay(newDelayTicks);; - 32", true);
 									hediffResource.AddDelay(newDelayTicks);
 								}
 							}
@@ -214,20 +231,15 @@ namespace HediffResourceFramework
 				{
 					foreach (var equipment in equipments)
 					{
-						HRFLog.Message(" - ProcessDamage - var hediffComp = equipment.GetComp<CompAdjustHediffs>(); - 37", true);
 						var hediffComp = equipment.GetComp<CompAdjustHediffs>();
-						HRFLog.Message(" - ProcessDamage - if (hediffComp != null && hediffComp.Props.hediffOptions != null) - 38", true);
 						if (hediffComp != null && hediffComp.Props.resourceSettings != null)
 						{
-							HRFLog.Message(" - ProcessDamage - foreach (var hediffOption in hediffComp.Props.hediffOptions) - 40", true);
 							foreach (var hediffOption in hediffComp.Props.resourceSettings)
 							{
 								var newDelayTicks = (int)(shieldProps.postDamageDelay.Value * hediffOption.postDamageDelayMultiplier);
-								HRFLog.Message(" - ProcessDamage - var hediffResource = pawn.health.hediffSet.GetFirstHediffOfDef(hediffOption.hediff) as HediffResource; - 41", true);
 								var hediffResource = pawn.health.hediffSet.GetFirstHediffOfDef(hediffOption.hediff) as HediffResource;
 								if (hediffResource != null && hediffResource.CanHaveDelay(newDelayTicks))
 								{
-									HRFLog.Message(" - ProcessDamage - hediffResource.AddDelay(newDelayTicks);; - 42", true);
 									hediffResource.AddDelay(newDelayTicks);
 								}
 							}

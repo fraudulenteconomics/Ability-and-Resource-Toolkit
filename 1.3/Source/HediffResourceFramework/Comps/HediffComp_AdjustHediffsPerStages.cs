@@ -10,10 +10,12 @@ using Verse;
 namespace HediffResourceFramework
 {
 
+    public class HediffResourceStage : HediffStage
+    {
+        public List<HediffOption> resourceSettings;
+    }
 	public class HediffCompProperties_AdjustHediffsPerStages : HediffCompProperties
 	{
-        public List<List<HediffOption>> resourceSettingsPerStages;
-
         public string disablePostUse;
         public HediffCompProperties_AdjustHediffsPerStages()
 		{
@@ -29,10 +31,9 @@ namespace HediffResourceFramework
         {
             get
             {
-                var stageInd = this.parent.CurStageIndex;
-                if (Props.resourceSettingsPerStages.Count > stageInd)
+                if (this.parent.CurStage is HediffResourceStage hediffResourceStage)
                 {
-                    return Props.resourceSettingsPerStages[stageInd];
+                    return hediffResourceStage.resourceSettings;
                 }
                 return null;
             }
@@ -109,7 +110,7 @@ namespace HediffResourceFramework
                         }
                         else
                         {
-                            float num = hediffOption.resourcePerSecond;
+                            float num = hediffOption.GetResourceGain();
                             HediffResourceUtils.AdjustResourceAmount(pawn, hediffOption.hediff, num, hediffOption.addHediffIfMissing, hediffOption.applyToPart);
                         }
                     }

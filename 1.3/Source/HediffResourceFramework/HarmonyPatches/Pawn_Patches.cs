@@ -13,6 +13,20 @@ using Verse.AI;
 
 namespace HediffResourceFramework
 {
+	[HarmonyPatch(typeof(PawnRenderer), "RenderPawnInternal", new Type[]
+	{
+		typeof(Vector3), typeof(float), typeof(bool), typeof(Rot4), typeof(RotDrawMode), typeof(PawnRenderFlags)
+	})]
+	public static class Patch_RenderPawnInternal
+	{
+		public static void Postfix(Pawn ___pawn)
+		{
+			foreach (var hediff in HediffResourceUtils.GetHediffResourcesFor(___pawn))
+			{
+				hediff.Draw();
+			}
+		}
+	}
 	[HarmonyPatch(typeof(Pawn), "SetFaction")]
 	public static class Patch_SetFaction
 	{

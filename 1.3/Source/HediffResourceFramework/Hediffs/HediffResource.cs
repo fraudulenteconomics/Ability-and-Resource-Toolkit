@@ -421,7 +421,7 @@ namespace HediffResourceFramework
         }
         public void Draw()
         {
-            if (this.def.shieldProperties != null && this.ResourceAmount > 0)
+            if (this.def.ShieldIsActive(pawn) && this.ResourceAmount > 0)
             {
                 float num = Mathf.Lerp(1.2f, 1.55f, this.def.lifetimeTicks != -1 ? (this.def.lifetimeTicks - duration) / this.def.lifetimeTicks : 1);
                 Vector3 drawPos = base.pawn.Drawer.DrawPos;
@@ -454,11 +454,7 @@ namespace HediffResourceFramework
                     {
                         if (option.hediff == def)
                         {
-                            var num2 = option.resourcePerSecond;
-                            if (option.qualityScalesResourcePerSecond && comp.TryGetQuality(out QualityCategory qc))
-                            {
-                                num2 *= HediffResourceUtils.GetQualityMultiplier(qc);
-                            }
+                            var num2 = option.GetResourceGain();
                             num += num2;
                         }
                     }

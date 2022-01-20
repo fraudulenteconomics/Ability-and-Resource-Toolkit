@@ -27,7 +27,7 @@ namespace HediffResourceFramework
             {
                 foreach (var option in Props.resourceSettings)
                 {
-                    var num = GetResourceGain(option);
+                    var num = option.GetResourceGain();
                     var affectedCells = HediffResourceUtils.GetAllCellsAround(option, this.Pawn, this.Pawn.OccupiedRect());
                     foreach (var cell in affectedCells)
                     {
@@ -97,12 +97,6 @@ namespace HediffResourceFramework
                     hediffResource.TryAddAmplifier(this);
                 }
             }
-        }
-
-        public float GetResourceGain(HediffOption option)
-        {
-            float num = option.resourcePerSecond;
-            return num;
         }
 
         public float GetResourceCapacityGainFor(HediffResourceDef hediffResourceDef)

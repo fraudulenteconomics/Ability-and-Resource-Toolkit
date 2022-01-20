@@ -13,7 +13,7 @@ using Verse.AI;
 
 namespace HediffResourceFramework
 {
-	[HarmonyPatch(typeof(CompReloadable), "CreateVerbTargetCommand")]
+    [HarmonyPatch(typeof(CompReloadable), "CreateVerbTargetCommand")]
 	public static class Patch_CreateVerbTargetCommand
 	{
 		private static void Postfix(ref Command_Reloadable __result, Thing gear, Verb verb)
@@ -24,6 +24,11 @@ namespace HediffResourceFramework
 				{
 					HediffResourceUtils.DisableGizmo(__result, disableReason);
 				}
+				var resourceProps = verb.GetResourceProps();
+				if (resourceProps != null)
+				{
+					__result.defaultDesc += "\n" + HediffResourceUtils.GetPropsDescriptions(verb.CasterPawn, resourceProps);
+				}
 			}
 		}
 	}
@@ -31,183 +36,25 @@ namespace HediffResourceFramework
 	[HarmonyPatch(typeof(PawnVerbGizmoUtility), "GetGizmosForVerb")]
 	public static class Patch_GetGizmosForVerb
 	{
-		private static void Postfix(Verb verb, ref IEnumerable<Gizmo> __result)
+		private static IEnumerable<Gizmo> Postfix(IEnumerable<Gizmo> __result, Verb verb)
 		{
-			if (verb.CasterIsPawn)
-			{
-				var list = __result.ToList();
-				if (!HediffResourceUtils.IsUsableBy(verb, out string disableReason))
+			bool isUsable = HediffResourceUtils.IsUsableBy(verb, out string disableReason);
+			foreach (var gizmo in __result)
+            {
+				if (!isUsable)
+				{
+					HediffResourceUtils.DisableGizmo(gizmo, disableReason);
+				}
+				if (gizmo is Command command)
                 {
-					foreach (var gizmo in list)
+					var resourceProps = verb.GetResourceProps();
+					if (resourceProps != null)
                     {
-						HediffResourceUtils.DisableGizmo(gizmo, disableReason);
-                    }
-				}
-				__result = list;
-			}
-		}
-	}
-
-	public class FloatValueCache
-	{
-		public FloatValueCache(float value)
-		{
-			this.value = value;
-		}
-		private float value;
-		public float Value
-        {
-			get
-            {
-				return value;
-			}
-			set
-            {
-				this.value = value;
-				updateTick = Find.TickManager.TicksGame;
-            }
-        }
-		public int updateTick;
-	}
-
-	[StaticConstructorOnStartup]
-	public class Gizmo_ResourceStatus : Gizmo
-	{
-		private HediffResource hediffResource;
-
-		private static readonly Texture2D EmptyShieldBarTex = SolidColorMaterials.NewSolidColorTexture(Color.clear);
-		public Gizmo_ResourceStatus(HediffResource hediffResource)
-		{
-			order = -100f;
-			this.hediffResource = hediffResource;
-			resourceStorageCapacityCache = new FloatValueCache(hediffResource.StoragesTotalCapacity);
-			resourceCapacityCache = new FloatValueCache(hediffResource.ResourceCapacity);
-			resourceAmountCache = new FloatValueCache(hediffResource.ResourceAmountNoStorages);
-			resourceBatteryAmountCache = new FloatValueCache(hediffResource.ResourceFromStorages);
-		}
-		public override float GetWidth(float maxWidth)
-		{
-			return 140f;
-		}
-
-		private Texture2D fullShieldBarTexCache;
-		private Texture2D FullShieldBarTex
-        {
-			get
-            {
-				if (fullShieldBarTexCache is null)
-                {
-					Color fullShieldBarColor;
-
-					if (hediffResource.def.progressBarColor.HasValue)
-					{
-						fullShieldBarColor = hediffResource.def.progressBarColor.Value;
+						command.defaultDesc += "\n" + HediffResourceUtils.GetPropsDescriptions(verb.CasterPawn, resourceProps);
 					}
-					else
-					{
-						fullShieldBarColor = hediffResource.def.defaultLabelColor;
-					}
-					fullShieldBarTexCache = SolidColorMaterials.NewSolidColorTexture(fullShieldBarColor);
 				}
-				return fullShieldBarTexCache;
+				yield return gizmo;
 			}
-        }
-
-		private Color cachedBackgroundColor = Color.clear;
-		private Color BackGroundColor
-        {
-			get
-            {
-				if (cachedBackgroundColor == Color.clear)
-                {
-					cachedBackgroundColor = hediffResource.def.backgroundBarColor.HasValue ? hediffResource.def.backgroundBarColor.Value : Widgets.WindowBGFillColor; ;
-				}
-				return cachedBackgroundColor;
-            }
-        }
-
-		private Color cachedDrawBox = Color.clear;
-		private Color DrawBoxColor
-        {
-			get
-            {
-				if (cachedDrawBox == Color.clear)
-                {
-					cachedDrawBox = new ColorInt(97, 108, 122).ToColor;
-				}
-				return cachedDrawBox;
-            }
-        }
-
-		public FloatValueCache resourceStorageCapacityCache;
-		public FloatValueCache resourceCapacityCache;
-		public FloatValueCache resourceAmountCache;
-		public FloatValueCache resourceBatteryAmountCache;
-		public override GizmoResult GizmoOnGUI(Vector2 topLeft, float maxWidth, GizmoRenderParms parms)
-		{
-			Rect rect = new Rect(topLeft.x, topLeft.y, GetWidth(maxWidth), 75f);
-			Rect contractedBox = rect.ContractedBy(6f);
-			DrawWindowBackground(rect, hediffResource.def);
-			Rect rect3 = contractedBox;
-			rect3.height = rect.height / 2f;
-			Text.Font = GameFont.Tiny;
-			var label = hediffResource.def.LabelCap;
-			if (hediffResource.def.lifetimeTicks != -1)
-			{
-				label += " (" + Mathf.CeilToInt((hediffResource.def.lifetimeTicks - hediffResource.duration).TicksToSeconds()) + "s)";
-			}
-			Widgets.Label(rect3, label);
-
-			if (Find.TickManager.TicksGame > resourceCapacityCache.updateTick + 30)
-			{
-				resourceCapacityCache.Value = hediffResource.ResourceCapacity;
-				resourceAmountCache.Value = hediffResource.ResourceAmountNoStorages;
-				resourceBatteryAmountCache.Value = hediffResource.ResourceFromStorages;
-				resourceStorageCapacityCache.Value = hediffResource.StoragesTotalCapacity;
-			}
-
-			var resourceAmount = resourceAmountCache.Value;
-			var resourceCapacity = resourceCapacityCache.Value;
-			var resourceStorage = resourceBatteryAmountCache.Value;
-			var resourceStorageCapacity = resourceBatteryAmountCache.Value;
-
-			Rect resourceAmountBar = contractedBox;
-			resourceAmountBar.height = 18;
-			resourceAmountBar.y += 21;
-
-			float fillPercent = resourceAmount / resourceCapacity;
-
-			Widgets.FillableBar(resourceAmountBar, fillPercent, FullShieldBarTex, EmptyShieldBarTex, doBorder: false);
-			Text.Font = GameFont.Small;
-			Text.Anchor = TextAnchor.MiddleCenter;
-			if (hediffResource.def.resourceBarTextColor.HasValue)
-            {
-				GUI.color = hediffResource.def.resourceBarTextColor.Value;
-			}
-			Widgets.Label(resourceAmountBar, (resourceAmount).ToString("F0") + " / " + (resourceCapacity).ToString("F0"));
-
-			Rect resourceStorageBar = resourceAmountBar;
-			resourceStorageBar.y += 25;
-			fillPercent = resourceStorage / resourceStorageCapacity;
-			Widgets.FillableBar(resourceStorageBar, fillPercent, FullShieldBarTex, EmptyShieldBarTex, doBorder: false);
-			if (hediffResource.def.resourceBarTextColor.HasValue)
-			{
-				GUI.color = hediffResource.def.resourceBarTextColor.Value;
-			}
-			Widgets.Label(resourceStorageBar, (resourceStorage).ToString("F0") + " / " + (resourceStorageCapacity).ToString("F0"));
-
-			Text.Anchor = TextAnchor.UpperLeft;
-			GUI.color = Color.white;
-			return new GizmoResult(GizmoState.Clear);
-		}
-
-		public void DrawWindowBackground(Rect rect, HediffResourceDef hediffResourceDef)
-		{
-			GUI.color = BackGroundColor;
-			GUI.DrawTexture(rect, BaseContent.WhiteTex);
-			GUI.color = DrawBoxColor;
-			Widgets.DrawBox(rect);
-			GUI.color = Color.white;
 		}
 	}
 
@@ -327,64 +174,57 @@ namespace HediffResourceFramework
 		}
 	}
 
-	[HarmonyPatch(typeof(Command), "GizmoOnGUI")]
-	public static class Patch_GizmoOnGUI
-	{
-		private static void Postfix(Command __instance, Vector2 topLeft, float maxWidth)
-		{
-			if (__instance is Command_VerbTarget verbTarget)
-            {
-				if (TryGetAmmoString(verbTarget.verb, out List<Tuple<HediffOption, HediffResource>> hediffs))
-				{
-					var butRect = new Rect(topLeft.x, topLeft.y, verbTarget.GetWidth(maxWidth), 75f);
-					for (var i = 0; i < hediffs.Count; i++)
-                    {
-						var pos = 35f - ((i + 1) * 18f);
-						Vector2 vector = new Vector2(5f, pos);
-						Text.Font = GameFont.Tiny;
-						GUI.color = hediffs[i].Item2.def.defaultLabelColor;
-						Widgets.Label(new Rect(butRect.x + vector.x, butRect.y + vector.y, butRect.width - 3f, 75f - pos), hediffs[i].Item1.minimumResourcePerUse.ToString());
-						GUI.color = Color.white;
-						Text.Font = GameFont.Small;
-					}
-				}
-			}
-		}
-
-		public static bool TryGetAmmoString(Verb verb, out List<Tuple<HediffOption, HediffResource>> hediffs)
-		{
-			hediffs = new List<Tuple<HediffOption, HediffResource>>();
-			if (verb.CasterIsPawn)
-			{
-				var resourceProps = GetResourceProps(verb);
-				if (resourceProps != null)
-                {
-					var resourceSettings = resourceProps.ResourceSettings;
-					if (resourceSettings != null)
-                    {
-						foreach (var option in resourceSettings)
-						{
-							var resourceHediff = verb.CasterPawn.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
-							if (resourceHediff != null)
-							{
-								hediffs.Add(new Tuple<HediffOption, HediffResource>(option, resourceHediff));
-							}
-						}
-					}
-                }
-			}
-			if (hediffs.Count > 0)
-            {
-				return true;
-            }
-			return false;
-		}
-
-		private static IResourceProps GetResourceProps(Verb verb)
-        {
-			if (verb.verbProps is IResourceProps verbResourceProps) return verbResourceProps;
-			if (verb.tool is IResourceProps toolResourceProps) return toolResourceProps;
-			return null;
-		}
-	}
+	//[HarmonyPatch(typeof(Command), "GizmoOnGUI")]
+	//public static class Patch_GizmoOnGUI
+	//{
+	//	private static void Postfix(Command __instance, Vector2 topLeft, float maxWidth)
+	//	{
+	//		if (__instance is Command_VerbTarget verbTarget)
+    //        {
+	//			if (TryGetAmmoString(verbTarget.verb, out List<Tuple<HediffOption, HediffResource>> hediffs))
+	//			{
+	//				var butRect = new Rect(topLeft.x, topLeft.y, verbTarget.GetWidth(maxWidth), 75f);
+	//				for (var i = 0; i < hediffs.Count; i++)
+    //                {
+	//					var pos = 35f - ((i + 1) * 18f);
+	//					Vector2 vector = new Vector2(5f, pos);
+	//					Text.Font = GameFont.Tiny;
+	//					GUI.color = hediffs[i].Item2.def.defaultLabelColor;
+	//					Widgets.Label(new Rect(butRect.x + vector.x, butRect.y + vector.y, butRect.width - 3f, 75f - pos), hediffs[i].Item1.minimumResourcePerUse.ToString());
+	//					GUI.color = Color.white;
+	//					Text.Font = GameFont.Small;
+	//				}
+	//			}
+	//		}
+	//	}
+	//
+	//	public static bool TryGetAmmoString(Verb verb, out List<Tuple<HediffOption, HediffResource>> hediffs)
+	//	{
+	//		hediffs = new List<Tuple<HediffOption, HediffResource>>();
+	//		if (verb.CasterIsPawn)
+	//		{
+	//			var resourceProps = verb.GetResourceProps();
+	//			if (resourceProps != null)
+    //            {
+	//				var resourceSettings = resourceProps.ResourceSettings;
+	//				if (resourceSettings != null)
+    //                {
+	//					foreach (var option in resourceSettings)
+	//					{
+	//						var resourceHediff = verb.CasterPawn.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
+	//						if (resourceHediff != null)
+	//						{
+	//							hediffs.Add(new Tuple<HediffOption, HediffResource>(option, resourceHediff));
+	//						}
+	//					}
+	//				}
+    //            }
+	//		}
+	//		if (hediffs.Count > 0)
+    //        {
+	//			return true;
+    //        }
+	//		return false;
+	//	}
+	//}
 }

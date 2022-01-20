@@ -88,11 +88,7 @@ namespace HediffResourceFramework
                     }
                     else
                     {
-                        float num = hediffOption.resourcePerSecond;
-                        if (hediffOption.qualityScalesResourcePerSecond && this.parent.TryGetQuality(out QualityCategory qc))
-                        {
-                            num *= HediffResourceUtils.GetQualityMultiplier(qc);
-                        }
+                        float num = hediffOption.GetResourceGain(this);
                         if (this.IsStorageFor(hediffOption, out var resourceStorage))
                         {
                             resourceStorage.ResourceAmount += num;

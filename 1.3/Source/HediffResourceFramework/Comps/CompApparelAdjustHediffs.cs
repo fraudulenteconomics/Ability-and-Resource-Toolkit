@@ -66,11 +66,7 @@ namespace HediffResourceFramework
                     }
                     else
                     {
-                        float num = hediffOption.resourcePerSecond;
-                        if (hediffOption.qualityScalesResourcePerSecond && Apparel.TryGetQuality(out QualityCategory qc))
-                        {
-                            num *= HediffResourceUtils.GetQualityMultiplier(qc);
-                        }
+                        float num = hediffOption.GetResourceGain(this);
                         if (this.IsStorageFor(hediffOption, out var resourceStorage))
                         {
                             if (hediffOption.addHediffIfMissing && pawn.health.hediffSet.GetFirstHediffOfDef(hediffOption.hediff) is null)

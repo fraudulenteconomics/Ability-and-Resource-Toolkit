@@ -81,9 +81,9 @@ namespace HediffResourceFramework
 	public static class HediffResourceUtils
 	{
 		static HediffResourceUtils()
-        {
+		{
 			foreach (var thingDef in DefDatabase<ThingDef>.AllDefs.Where(x => x.race?.Humanlike ?? false))
-            {
+			{
 				thingDef.inspectorTabsResolved.Add(InspectTabManager.GetSharedInstance(typeof(ITab_Pawn_Resource)));
 			}
 		}
@@ -160,7 +160,7 @@ namespace HediffResourceFramework
 						}
 					}
 					if (option.disallowEquipIfOverCapacity && !hediff.CanGainCapacity(option.maxResourceCapacityOffset))
-                    {
+					{
 						reason = option.overCapacityReasonKey.Translate(pawn.Named("PAWN"), apparel.Named("THING"));
 						return false;
 					}
@@ -199,7 +199,6 @@ namespace HediffResourceFramework
 							return false;
 						}
 					}
-
 					if (option.disallowEquipIfOverCapacity && !hediff.CanGainCapacity(option.maxResourceCapacityOffset))
 					{
 						reason = option.overCapacityReasonKey.Translate(pawn.Named("PAWN"), weapon.Named("THING"));
@@ -233,9 +232,9 @@ namespace HediffResourceFramework
 		public static bool TryGetCompAdjustHediffs(this Thing thing, out CompAdjustHediffs comp)
 		{
 			if (!cachedComps.TryGetValue(thing, out comp))
-            {
+			{
 				comp = thing.TryGetComp<CompAdjustHediffs>();
-            }
+			}
 			return comp != null;
 		}
 
@@ -243,17 +242,17 @@ namespace HediffResourceFramework
 		public static List<IAdjustResource> GetAllAdjustHediffsComps(this Pawn pawn)
 		{
 			if (resourceCache.TryGetValue(pawn, out AdjustResourcesCache adjustResourcesCache))
-            {
+			{
 				var adjusters = adjustResourcesCache.value;
 				if (Find.TickManager.TicksGame > adjustResourcesCache.updateTick + 60)
-                {
+				{
 					adjusters = GetAdjustResourcesInt(pawn);
 					adjustResourcesCache.Value = adjusters;
 				}
 				return adjusters;
-            }
+			}
 			else
-            {
+			{
 				var adjusters = GetAdjustResourcesInt(pawn);
 				resourceCache[pawn] = new AdjustResourcesCache(adjusters);
 				return adjusters;
@@ -266,7 +265,7 @@ namespace HediffResourceFramework
 		private static Dictionary<Hediff, HediffComp_AdjustHediffsPerStages> hediffCompAdjustPerStageCache = new Dictionary<Hediff, HediffComp_AdjustHediffsPerStages>();
 		private static Dictionary<Pawn, CompTraitsAdjustHediffs> compTraitsAdjustHediffsCache = new Dictionary<Pawn, CompTraitsAdjustHediffs>();
 		private static List<IAdjustResource> GetAdjustResourcesInt(Pawn pawn)
-        {
+		{
 			List<IAdjustResource> adjustHediffs = new List<IAdjustResource>();
 			var apparels = pawn.apparel?.WornApparel?.ToList();
 			if (apparels != null)
@@ -274,14 +273,14 @@ namespace HediffResourceFramework
 				foreach (var apparel in apparels)
 				{
 					if (!compApparelAdjustCache.TryGetValue(apparel, out CompApparelAdjustHediffs comp))
-                    {
+					{
 						comp = apparel.GetComp<CompApparelAdjustHediffs>();
 						compApparelAdjustCache[apparel] = comp;
-                    }
+					}
 					if (comp != null)
-                    {
+					{
 						adjustHediffs.Add(comp);
-                    }
+					}
 				}
 			}
 
@@ -360,7 +359,6 @@ namespace HediffResourceFramework
 							{
 								result += option.maxResourceCapacityOffset;
 							}
-							HRFLog.Message("Result: " + result + " - " + comp);
 						}
 					}
 				}
@@ -381,10 +379,8 @@ namespace HediffResourceFramework
 				{
 					foreach (var hediffOption in resourceSettings)
 					{
-						Log.Message($"adjuster.Parent: {adjuster.Parent}, comp.Parent: {comp.Parent}, hediffOption.hediff: {hediffOption.hediff}, hediffOption.addHediffIfMissing: {hediffOption.addHediffIfMissing}");
 						if (hediffOption.addHediffIfMissing && hediffResourcesToRemove.Contains(hediffOption.hediff))
 						{
-							Log.Message("Can't remove " + hediffOption.hediff + " due to blocker: " + comp.Parent + ", adjuster: " + adjuster.Parent);
 							hediffResourcesToRemove.Remove(hediffOption.hediff);
 						}
 					}
@@ -401,15 +397,15 @@ namespace HediffResourceFramework
 			}
 
 			if (adjuster.ResourceSettings != null)
-            {
+			{
 				foreach (var resourceSettings in adjuster.ResourceSettings)
-                {
+				{
 					if (resourceSettings.removeHediffsOnDrop != null)
-                    {
+					{
 						foreach (var hediffDef in resourceSettings.removeHediffsOnDrop)
-                        {
+						{
 							while (pawn.health.hediffSet.GetFirstHediffOfDef(hediffDef) != null)
-                            {
+							{
 								var hediff = pawn.health.hediffSet.GetFirstHediffOfDef(hediffDef);
 								if (hediff != null)
 								{
@@ -417,18 +413,16 @@ namespace HediffResourceFramework
 								}
 							}
 						}
-                    }
-                }
-            }
+					}
+				}
+			}
 		}
 
 		public static void TryDropExcessHediffGears(Pawn pawn)
 		{
-			Log.Message("TryDropExcessHediffGears: " + pawn);
 			var comps = GetAllAdjustHediffsComps(pawn);
 			foreach (var comp in comps)
 			{
-				Log.Message("Comp: " + comp.Parent);
 				var resourceSettings = comp.ResourceSettings;
 				if (resourceSettings != null)
 				{
@@ -463,8 +457,7 @@ namespace HediffResourceFramework
 				{
 					bodyPartRecord = pawn.health.hediffSet.GetNotMissingParts().FirstOrDefault((BodyPartRecord x) => x.def == bodyPartDef);
 					if (pawn.health.hediffSet.GetPartHealth(bodyPartRecord) <= 0f && !applyToDamagedPart)
-                    {
-						Log.Message("Can't adjust " + hdDef + " to " + pawn);
+					{
 						return null;
 					}
 				}
@@ -496,20 +489,19 @@ namespace HediffResourceFramework
 			switch (qualityCategory)
 			{
 				case QualityCategory.Awful: return 1.75f;
-				case QualityCategory.Poor: return 1.55f; 
+				case QualityCategory.Poor: return 1.55f;
 				case QualityCategory.Normal: return 1.3f;
 				case QualityCategory.Good: return 1.15f;
 				case QualityCategory.Excellent: return 1f;
 				case QualityCategory.Masterwork: return 0.9f;
-				case QualityCategory.Legendary: return 0.8f; 
+				case QualityCategory.Legendary: return 0.8f;
 				default: return 1f;
 			}
 		}
 
 		private static Dictionary<Pawn, HediffResourcesCache> hediffResourcesCache = new Dictionary<Pawn, HediffResourcesCache>();
-
 		public static List<HediffResource> GetHediffResourcesFor(Pawn pawn)
-        {
+		{
 			if (hediffResourcesCache.TryGetValue(pawn, out HediffResourcesCache hediffResourceCache))
 			{
 				var hediffResources = hediffResourceCache.value;
@@ -534,12 +526,11 @@ namespace HediffResourceFramework
 				var hediffResources = GetHediffResourcesFor(pawn);
 				foreach (var hediff in hediffResources)
 				{
-					if (hediff.def.shieldProperties?.cannotUseVerbType != null)
+					if (hediff.def.ShieldIsActive(pawn))
 					{
 						if (hediff.def.shieldProperties.cannotUseVerbType == VerbType.Both)
 						{
 							disableReason = "HRF.ShieldPreventAllAttack".Translate();
-							Log.Message(" - IsUsableBy - return false; - 7", true);
 							return false;
 						}
 						else if (hediff.def.shieldProperties.cannotUseVerbType == VerbType.None)
@@ -549,13 +540,11 @@ namespace HediffResourceFramework
 						else if (verb.IsMeleeAttack && hediff.def.shieldProperties.cannotUseVerbType == VerbType.Melee)
 						{
 							disableReason = "HRF.ShieldPreventMeleeAttack".Translate();
-							Log.Message(" - IsUsableBy - return false; - 12", true);
 							return false;
 						}
 						else if (hediff.def.shieldProperties.cannotUseVerbType == VerbType.Range)
 						{
 							disableReason = "HRF.ShieldPreventRangeAttack".Translate();
-							Log.Message(" - IsUsableBy - return false; - 15", true);
 							return false;
 						}
 					}
@@ -565,7 +554,6 @@ namespace HediffResourceFramework
 				{
 					if (!IsUsableForProps(pawn, props, out disableReason))
 					{
-						Log.Message(" - IsUsableBy - return false; - 18", true);
 						return false;
 					}
 				}
@@ -574,7 +562,6 @@ namespace HediffResourceFramework
 				{
 					if (!IsUsableForProps(pawn, props2, out disableReason))
 					{
-						Log.Message(" - IsUsableBy - return false; - 21", true);
 						return false;
 					}
 				}
@@ -583,8 +570,7 @@ namespace HediffResourceFramework
 			disableReason = "";
 			return true;
 		}
-
-		private static bool IsUsableForProps(Pawn pawn, IResourceProps props, out string disableReason)
+		public static bool IsUsableForProps(Pawn pawn, IResourceProps props, out string disableReason)
 		{
 			var resourceSettings = props.ResourceSettings;
 			if (resourceSettings != null)
@@ -592,7 +578,7 @@ namespace HediffResourceFramework
 				foreach (var option in resourceSettings)
 				{
 					if (option.requiredForUse)
-                    {
+					{
 						var resourceHediff = pawn.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
 						if (option.disableIfMissingHediff)
 						{
@@ -600,7 +586,6 @@ namespace HediffResourceFramework
 							if (hediffResourceIsEmptyOrNull)
 							{
 								disableReason = option.disableReason;
-								Log.Message(" - IsUsableForProps - return false; - 32", true);
 								return false;
 							}
 						}
@@ -610,7 +595,6 @@ namespace HediffResourceFramework
 							if (resourceHediff != null && resourceHediff.ResourceAmount < option.minimumResourcePerUse)
 							{
 								disableReason = option.disableReason;
-								Log.Message(" - IsUsableForProps - return false; - 36", true);
 								return false;
 							}
 						}
@@ -619,7 +603,6 @@ namespace HediffResourceFramework
 							if (resourceHediff != null && resourceHediff.ResourceAmount > option.disableAboveResource)
 							{
 								disableReason = option.disableReason;
-								Log.Message(" - IsUsableForProps - return false; - 40", true);
 								return false;
 							}
 						}
@@ -632,7 +615,6 @@ namespace HediffResourceFramework
 								if (num < 0)
 								{
 									disableReason = option.disableReason;
-									Log.Message(" - IsUsableForProps - return false; - 46", true);
 									return false;
 								}
 							}
@@ -640,12 +622,43 @@ namespace HediffResourceFramework
 					}
 				}
 			}
-
 			disableReason = "";
 			return true;
 		}
 
+		public static string GetPropsDescriptions(Pawn pawn, IResourceProps props)
+		{
+			StringBuilder description = new StringBuilder();
+			var resourceSettings = props.ResourceSettings;
+			if (resourceSettings != null)
+			{
+				foreach (var option in resourceSettings)
+				{
+					if (option.requiredForUse)
+					{
+						if (option.disableIfMissingHediff)
+						{
+							description.AppendLine("HRF.WillBeDisabledIfMissingResource".Translate(option.hediff.label).Colorize(option.hediff.defaultLabelColor));
+						}
 
+						if (option.minimumResourcePerUse != -1f)
+						{
+							description.AppendLine("HRF.RequiresResource".Translate(option.minimumResourcePerUse, option.hediff.label).Colorize(option.hediff.defaultLabelColor));
+						}
+						if (option.disableAboveResource != -1f)
+						{
+							description.AppendLine("HRF.WillBeDisabledWhenResourceAbove".Translate(option.hediff.label, option.disableAboveResource).Colorize(option.hediff.defaultLabelColor));
+						}
+
+						if (option.resourcePerUse < 0)
+						{
+							description.AppendLine("HRF.ConsumesPerUse".Translate(-option.resourcePerUse, option.hediff.label).Colorize(option.hediff.defaultLabelColor));
+						}
+					}
+				}
+			}
+			return description.ToString().TrimEndNewlines();
+		}
 		public static void DisableGizmo(Gizmo gizmo, string disableReason)
 		{
 			gizmo.Disable(disableReason);
@@ -694,18 +707,18 @@ namespace HediffResourceFramework
 			return null;
 		}
 
-		public static void ApplyResourceSettings(Verb verb, IResourceProps props)
-        {
+		public static void ApplyResourceSettings(Thing target, Pawn casterPawn, IResourceProps props)
+		{
 			if (props.TargetResourceSettings != null)
 			{
-				var target = verb.CurrentTarget.Thing as Pawn;
-				if (target != null)
+				var targetPawn = target as Pawn;
+				if (targetPawn != null)
 				{
 					foreach (var option in props.TargetResourceSettings)
 					{
 						if (option.resetLifetimeTicks)
 						{
-							var targetHediff = target.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
+							var targetHediff = targetPawn.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
 							if (targetHediff != null)
 							{
 								targetHediff.duration = 0;
@@ -724,13 +737,13 @@ namespace HediffResourceFramework
 				var hediffPostUseDelayMultipliers = new Dictionary<HediffResource, List<float>>();
 
 				var disablePostUseString = "";
-				var comps = GetAllAdjustHediffsComps(verb.CasterPawn);
+				var comps = GetAllAdjustHediffsComps(casterPawn);
 
 				foreach (var option in props.ResourceSettings)
 				{
-					var hediffResource = AdjustResourceAmount(verb.CasterPawn, option.hediff, option.resourcePerUse, option.addHediffIfMissing, option.applyToPart);
+					var hediffResource = AdjustResourceAmount(casterPawn, option.hediff, option.resourcePerUse, option.addHediffIfMissing, option.applyToPart);
 					if (hediffResource != null)
-                    {
+					{
 						var hediffResourcePostUseDelay = new List<int>();
 						var hediffResourcePostUseDelayMultipliers = new List<float>();
 						foreach (var comp in comps)
@@ -814,11 +827,9 @@ namespace HediffResourceFramework
 		}
 
 		public static void ApplyChargeResource(ref float damageAmount, ChargeResources chargeResources)
-        {
-			Log.Message("chargeResources.chargeResources: " + chargeResources.chargeResources.Count());
+		{
 			foreach (var chargeResource in chargeResources.chargeResources)
 			{
-				HRFLog.Message("1 instance - __result: " + damageAmount + " - hediffResource: " + chargeResource.chargeResource + " - compCharge.Props.damageScaling.HasValue: " + chargeResource.chargeSettings.damageScaling.HasValue);
 				switch (chargeResource.chargeSettings.damageScaling)
 				{
 					case DamageScalingMode.Flat: DoFlatDamage(ref damageAmount, chargeResource.chargeResource, chargeResource.chargeSettings); break;
@@ -826,30 +837,21 @@ namespace HediffResourceFramework
 					case DamageScalingMode.Linear: DoLinearDamage(ref damageAmount, chargeResource.chargeResource, chargeResource.chargeSettings); break;
 					default: break;
 				}
-				HRFLog.Message("2 instance - result: " + damageAmount + " - hediffResource: " + chargeResource.chargeResource + " - compCharge.Props.damageScaling.HasValue: " + chargeResource.chargeSettings.damageScaling.HasValue);
 			}
 		}
 
 		private static void DoFlatDamage(ref float __result, float resourceAmount, ChargeSettings chargeSettings)
 		{
-			var oldDamage = __result;
 			__result = (int)(__result + (chargeSettings.damagePerCharge * (resourceAmount - chargeSettings.minimumResourcePerUse) / chargeSettings.resourcePerCharge));
-			HRFLog.Message("Flat: old damage: " + oldDamage + " - new damage: " + __result);
 		}
 		private static void DoScalarDamage(ref float __result, float resourceAmount, ChargeSettings chargeSettings)
 		{
-			var oldDamage = __result;
-			HRFLog.Message("chargeSettings.damagePerCharge: " + chargeSettings.damagePerCharge + " - resourceAmount: " + resourceAmount
-				+ " - chargeSettings.minimumResourcePerUse: " + chargeSettings.minimumResourcePerUse + " - chargeSettings.resourcePerCharge: " + chargeSettings.resourcePerCharge);
 			__result = (int)(__result * Mathf.Pow((1 + chargeSettings.damagePerCharge), (resourceAmount - chargeSettings.minimumResourcePerUse) / chargeSettings.resourcePerCharge));
-			HRFLog.Message("Scalar: old damage: " + oldDamage + " - new damage: " + __result);
 		}
 
 		private static void DoLinearDamage(ref float __result, float resourceAmount, ChargeSettings chargeSettings)
 		{
-			var oldDamage = __result;
 			__result = (int)(__result * (1 + (chargeSettings.damagePerCharge * (resourceAmount - chargeSettings.minimumResourcePerUse) / chargeSettings.resourcePerCharge)));
-			HRFLog.Message("Linear: old damage: " + oldDamage + " - new damage: " + __result);
 		}
 
 		public static HashSet<IntVec3> GetAllCellsAround(HediffOption option, TargetInfo targetInfo, CellRect occupiedCells)
@@ -901,6 +903,43 @@ namespace HediffResourceFramework
 			}, int.MaxValue, rememberParents: false, (IEnumerable<IntVec3>)null);
 			affectedCells.AddRange(occupiedCells.Cells);
 			return affectedCells;
+		}
+
+		public static float GetResourceGain(this HediffOption hediffOption, IAdjustResource source)
+		{
+			float num = hediffOption.resourcePerSecond;
+			if (hediffOption.qualityScalesResourcePerSecond && source.TryGetQuality(out QualityCategory qc))
+			{
+				num *= GetQualityMultiplier(qc);
+			}
+			if (hediffOption.refillOnlyInnerStorage)
+			{
+				return num;
+			}
+			else
+			{
+				return num * hediffOption.hediff.resourcePerSecondFactor;
+			}
+		}
+
+		public static float GetResourceGain(this HediffOption hediffOption)
+		{
+			float num = hediffOption.resourcePerSecond;
+			if (hediffOption.refillOnlyInnerStorage)
+			{
+				return num;
+			}
+			else
+			{
+				return num * hediffOption.hediff.resourcePerSecondFactor;
+			}
+		}
+
+		public static IResourceProps GetResourceProps(this Verb verb)
+		{
+			if (verb.verbProps is IResourceProps verbResourceProps) return verbResourceProps;
+			if (verb.tool is IResourceProps toolResourceProps) return toolResourceProps;
+			return null;
 		}
 	}
 }

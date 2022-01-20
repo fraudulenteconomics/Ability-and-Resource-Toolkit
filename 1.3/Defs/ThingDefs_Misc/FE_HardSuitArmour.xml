@@ -99,7 +99,7 @@
 						<qualityScalesCapacityOffset>true</qualityScalesCapacityOffset>
 						<disallowEquipIfHediffMissing>false</disallowEquipIfHediffMissing>
 						<dropIfHediffMissing>false</dropIfHediffMissing>
-						<isBattery>true</isBattery>
+						<refillOnlyInnerStorage>true</refillOnlyInnerStorage>
 						<maxResourceStorageAmount>50</maxResourceStorageAmount>
 						<!--
 						<destroyWhenEmpty>false</destroyWhenEmpty>
