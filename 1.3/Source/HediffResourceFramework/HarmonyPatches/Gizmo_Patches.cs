@@ -80,8 +80,10 @@ namespace HediffResourceFramework
 		{
 			order = -100f;
 			this.hediffResource = hediffResource;
+			resourceStorageCapacityCache = new FloatValueCache(hediffResource.StoragesTotalCapacity);
 			resourceCapacityCache = new FloatValueCache(hediffResource.ResourceCapacity);
-			resourceAmountCache = new FloatValueCache(hediffResource.ResourceAmount);
+			resourceAmountCache = new FloatValueCache(hediffResource.ResourceAmountNoStorages);
+			resourceBatteryAmountCache = new FloatValueCache(hediffResource.ResourceFromStorages);
 		}
 		public override float GetWidth(float maxWidth)
 		{
@@ -137,15 +139,16 @@ namespace HediffResourceFramework
             }
         }
 
+		public FloatValueCache resourceStorageCapacityCache;
 		public FloatValueCache resourceCapacityCache;
 		public FloatValueCache resourceAmountCache;
-
+		public FloatValueCache resourceBatteryAmountCache;
 		public override GizmoResult GizmoOnGUI(Vector2 topLeft, float maxWidth, GizmoRenderParms parms)
 		{
 			Rect rect = new Rect(topLeft.x, topLeft.y, GetWidth(maxWidth), 75f);
-			Rect rect2 = rect.ContractedBy(6f);
+			Rect contractedBox = rect.ContractedBy(6f);
 			DrawWindowBackground(rect, hediffResource.def);
-			Rect rect3 = rect2;
+			Rect rect3 = contractedBox;
 			rect3.height = rect.height / 2f;
 			Text.Font = GameFont.Tiny;
 			var label = hediffResource.def.LabelCap;
@@ -154,27 +157,45 @@ namespace HediffResourceFramework
 				label += " (" + Mathf.CeilToInt((hediffResource.def.lifetimeTicks - hediffResource.duration).TicksToSeconds()) + "s)";
 			}
 			Widgets.Label(rect3, label);
-			Rect rect4 = rect2;
-			rect4.yMin = rect2.y + rect2.height / 2f;
 
 			if (Find.TickManager.TicksGame > resourceCapacityCache.updateTick + 30)
-            {
+			{
 				resourceCapacityCache.Value = hediffResource.ResourceCapacity;
-				resourceAmountCache.Value = hediffResource.ResourceAmount;
+				resourceAmountCache.Value = hediffResource.ResourceAmountNoStorages;
+				resourceBatteryAmountCache.Value = hediffResource.ResourceFromStorages;
+				resourceStorageCapacityCache.Value = hediffResource.StoragesTotalCapacity;
 			}
 
 			var resourceAmount = resourceAmountCache.Value;
 			var resourceCapacity = resourceCapacityCache.Value;
+			var resourceStorage = resourceBatteryAmountCache.Value;
+			var resourceStorageCapacity = resourceBatteryAmountCache.Value;
+
+			Rect resourceAmountBar = contractedBox;
+			resourceAmountBar.height = 18;
+			resourceAmountBar.y += 21;
+
 			float fillPercent = resourceAmount / resourceCapacity;
 
-			Widgets.FillableBar(rect4, fillPercent, FullShieldBarTex, EmptyShieldBarTex, doBorder: false);
+			Widgets.FillableBar(resourceAmountBar, fillPercent, FullShieldBarTex, EmptyShieldBarTex, doBorder: false);
 			Text.Font = GameFont.Small;
 			Text.Anchor = TextAnchor.MiddleCenter;
 			if (hediffResource.def.resourceBarTextColor.HasValue)
             {
 				GUI.color = hediffResource.def.resourceBarTextColor.Value;
 			}
-			Widgets.Label(rect4, (resourceAmount).ToString("F0") + " / " + (resourceCapacity).ToString("F0"));
+			Widgets.Label(resourceAmountBar, (resourceAmount).ToString("F0") + " / " + (resourceCapacity).ToString("F0"));
+
+			Rect resourceStorageBar = resourceAmountBar;
+			resourceStorageBar.y += 25;
+			fillPercent = resourceStorage / resourceStorageCapacity;
+			Widgets.FillableBar(resourceStorageBar, fillPercent, FullShieldBarTex, EmptyShieldBarTex, doBorder: false);
+			if (hediffResource.def.resourceBarTextColor.HasValue)
+			{
+				GUI.color = hediffResource.def.resourceBarTextColor.Value;
+			}
+			Widgets.Label(resourceStorageBar, (resourceStorage).ToString("F0") + " / " + (resourceStorageCapacity).ToString("F0"));
+
 			Text.Anchor = TextAnchor.UpperLeft;
 			GUI.color = Color.white;
 			return new GizmoResult(GizmoState.Clear);

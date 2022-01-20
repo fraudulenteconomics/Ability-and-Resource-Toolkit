@@ -18,4 +18,5 @@
 	
 	<HRF.StoredAmount>Stored amount: {0}/{1}</HRF.StoredAmount>
 	<HRF.StoredAmountCharged>Stored amount: {0}/{1} (charging)</HRF.StoredAmountCharged>
+	<HRF.Stored>stored</HRF.Stored>
 </LanguageData>

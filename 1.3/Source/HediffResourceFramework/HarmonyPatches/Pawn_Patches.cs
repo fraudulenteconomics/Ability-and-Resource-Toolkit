@@ -20,7 +20,7 @@ namespace HediffResourceFramework
 		{
 			if (__instance?.Faction == Faction.OfPlayer && __instance.RaceProps.Humanlike)
 			{
-				HediffResourceUtils.HediffResourceManager.RegisterAndRecheckForPolicies(__instance);
+				HediffResourceManager.Instance.RegisterAndRecheckForPolicies(__instance);
 			}
 		}
 	}
@@ -32,7 +32,7 @@ namespace HediffResourceFramework
 		{
 			if (__instance?.Faction == Faction.OfPlayer && __instance.RaceProps.Humanlike)
 			{
-				HediffResourceUtils.HediffResourceManager.RegisterAndRecheckForPolicies(__instance);
+				HediffResourceManager.Instance.RegisterAndRecheckForPolicies(__instance);
 			}
 			if (__instance.skills?.skills != null)
             {

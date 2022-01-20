@@ -63,7 +63,7 @@ namespace HediffResourceFramework
         public List<HediffDef> removeHediffsOnDrop;
         public bool requiredForUse = true;
 
-        public bool isBattery;
+        public bool refillOnlyInnerStorage;
         public float maxResourceStorageAmount;
 
         public bool destroyWhenFull;
@@ -74,5 +74,6 @@ namespace HediffResourceFramework
         public bool disallowEquipWhenEmpty;
         public bool unforbidWhenFull;
         public bool unforbidWhenEmpty;
+        public bool forbidItemsWhenCharging;
     }
 }

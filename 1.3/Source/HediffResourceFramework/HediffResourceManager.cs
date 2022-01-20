@@ -89,9 +89,11 @@ namespace HediffResourceFramework
         private List<IAdjustResource> resourceAdjustersToUpdate = new List<IAdjustResource>();
         public Dictionary<Thing, StatBonuses> thingsWithBonuses = new Dictionary<Thing, StatBonuses>();
         public bool dirtyUpdate;
+
+        public static HediffResourceManager Instance;
         public HediffResourceManager(Game game)
         {
-
+            Instance = this;
         }
 
         public void RegisterAdjuster(IAdjustResource adjuster)
@@ -134,6 +136,7 @@ namespace HediffResourceFramework
         }
         private void PreInit()
         {
+            Instance = this;
             if (resourceAdjusters is null) resourceAdjusters = new List<IAdjustResource>();
             if (thingsWithBonuses is null) thingsWithBonuses = new Dictionary<Thing, StatBonuses>();
             if (hediffResourcesPolicies is null) hediffResourcesPolicies = new Dictionary<Pawn, HediffResourcePolicy>();
@@ -171,7 +174,7 @@ namespace HediffResourceFramework
                 {
                     policy.satisfyPolicies[hediffResourceDef] = new HediffResourceSatisfyPolicy();
                 }
-                HediffResourceUtils.HediffResourceManager.hediffResourcesPolicies[pawn] = policy;
+                HediffResourceManager.Instance.hediffResourcesPolicies[pawn] = policy;
             }
             else
             {

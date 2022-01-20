@@ -72,7 +72,7 @@ namespace HediffResourceFramework
                 }
                 if (statValues.Any())
                 {
-                    var hediffResourceManager = HediffResourceUtils.HediffResourceManager;
+                    var hediffResourceManager = HediffResourceManager.Instance;
                     var statBonuses = new StatBonuses();
                     statBonuses.statBonuses = new Dictionary<StatDef, StatBonus>();
                     foreach (var statValue in statValues)
@@ -150,7 +150,7 @@ namespace HediffResourceFramework
     {
         private static void Postfix(Thing thing, StatDef stat, bool applyPostProcess, ref float __result)
         {
-            if (HediffResourceUtils.HediffResourceManager.thingsWithBonuses.TryGetValue(thing, out var statBonuses))
+            if (HediffResourceManager.Instance.thingsWithBonuses.TryGetValue(thing, out var statBonuses))
             {
                 if (statBonuses.statBonuses.TryGetValue(stat, out StatBonus statBonus))
                 {

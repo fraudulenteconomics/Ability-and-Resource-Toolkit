@@ -105,7 +105,7 @@ namespace HediffResourceFramework
                 }
             }
             Register();
-            var gameComp = HediffResourceUtils.HediffResourceManager;
+            var gameComp = HediffResourceManager.Instance;
             gameComp.UpdateAdjuster(this);
             this.compPower = this.parent.TryGetComp<CompPowerTrader>();
             this.compParentGlower = this.parent.TryGetComp<CompGlower>();
@@ -409,14 +409,12 @@ namespace HediffResourceFramework
 
         public void Register()
         {
-            var gameComp = HediffResourceUtils.HediffResourceManager;
-            gameComp.RegisterAdjuster(this);
+            HediffResourceManager.Instance.RegisterAdjuster(this);
         }
 
         public void Deregister()
         {
-            var gameComp = HediffResourceUtils.HediffResourceManager;
-            gameComp.DeregisterAdjuster(this);
+            HediffResourceManager.Instance.DeregisterAdjuster(this);
         }
 
         public override void PostDestroy(DestroyMode mode, Map previousMap)

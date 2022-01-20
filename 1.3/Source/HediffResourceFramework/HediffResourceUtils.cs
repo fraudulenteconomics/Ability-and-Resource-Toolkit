@@ -87,19 +87,6 @@ namespace HediffResourceFramework
 				thingDef.inspectorTabsResolved.Add(InspectTabManager.GetSharedInstance(typeof(ITab_Pawn_Resource)));
 			}
 		}
-		public static HediffResourceManager HediffResourceManager
-		{
-			get
-			{
-				if (manager == null)
-				{
-					manager = Current.Game.GetComponent<HediffResourceManager>();
-					return manager;
-				}
-				return manager;
-			}
-		}
-		private static HediffResourceManager manager;
 		public static void TryAssignNewSkillRelatedHediffs(SkillRecord skillRecord, Pawn pawn)
 		{
 			var options = skillRecord.def.GetModExtension<SkillHediffGrantOptions>();
@@ -731,7 +718,7 @@ namespace HediffResourceFramework
 
 			if (props.ResourceSettings != null)
 			{
-				var hediffResourceManage = HediffResourceManager;
+				var hediffResourceManage = HediffResourceManager.Instance;
 
 				var hediffPostUse = new Dictionary<HediffResource, List<int>>();
 				var hediffPostUseDelayMultipliers = new Dictionary<HediffResource, List<float>>();

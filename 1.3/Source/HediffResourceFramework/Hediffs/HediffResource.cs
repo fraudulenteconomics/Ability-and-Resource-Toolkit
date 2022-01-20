@@ -30,29 +30,41 @@ namespace HediffResourceFramework
                 }
             }
         }
-        public float ResourceStorage
+        public float ResourceFromStorages
         {
             get
             {
-                var storageAmount = 0f;
+                var amount = 0f;
                 foreach (var tuple in GetResourceTupleStorages())
                 {
-                    storageAmount += tuple.Item3.ResourceAmount;
+                    amount += tuple.Item3.ResourceAmount;
                 }
-                return storageAmount;
+                return amount;
             }
         }
-
+        public float StoragesTotalCapacity
+        {
+            get
+            {
+                var amount = 0f;
+                foreach (var tuple in GetResourceTupleStorages())
+                {
+                    amount += tuple.Item3.ResourceCapacity;
+                }
+                return amount;
+            }
+        }
+        public float ResourceAmountNoStorages => resourceAmount;
         public float ResourceAmount
         {
             get
             {
-                return resourceAmount + ResourceStorage;
+                return resourceAmount + ResourceFromStorages;
             }
             set
             {
                 var storages = GetResourceTupleStorages();
-                var totalValue = resourceAmount + ResourceStorage;
+                var totalValue = resourceAmount + ResourceFromStorages;
                 var toChange = value - totalValue;
                 if (toChange > 0)
                 {
@@ -158,7 +170,7 @@ namespace HediffResourceFramework
                     comp.parent.SetForbidden(false);
                 }
 
-                if (resourceAmount <= 0 && ResourceStorage <= 0 && !this.def.keepWhenEmpty)
+                if (resourceAmount <= 0 && ResourceFromStorages <= 0 && !this.def.keepWhenEmpty)
                 {
                     this.pawn.health.RemoveHediff(this);
                 }
@@ -298,7 +310,11 @@ namespace HediffResourceFramework
                 var label = base.Label;
                 if (!def.hideResourceAmount)
                 {
-                    label += ": " + this.resourceAmount.ToStringDecimalIfSmall() + " ("+ ResourceStorage + " stored) / " + this.ResourceCapacity.ToStringDecimalIfSmall();
+                    label += ": " + this.resourceAmount.ToStringDecimalIfSmall() + "/" + this.ResourceCapacity.ToStringDecimalIfSmall();
+                    if (StoragesTotalCapacity > 0)
+                    {
+                        label += " (" + ResourceFromStorages + "/" + StoragesTotalCapacity + " " + "HRF.Stored".Translate() + ")";
+                    }
                 }
                 if (this.def.lifetimeTicks != -1)
                 {
@@ -328,10 +344,6 @@ namespace HediffResourceFramework
                 {
                     return false;
                 }
-                //if (this.ResourceCapacity < 0)
-                //{
-                //    return true;
-                //}
                 if (SourceOnlyAmplifiers())
                 {
                     return true;

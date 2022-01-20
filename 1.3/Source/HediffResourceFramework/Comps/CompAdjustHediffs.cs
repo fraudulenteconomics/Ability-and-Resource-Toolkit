@@ -99,7 +99,7 @@ namespace HediffResourceFramework
             {
                 for (var i = 0; i < Props.resourceSettings.Count; i++)
                 {
-                    if (Props.resourceSettings[i].maxResourceStorageAmount > 0 && Props.resourceSettings[i].isBattery && Props.resourceSettings[i] == hediffOption)
+                    if (Props.resourceSettings[i].maxResourceStorageAmount > 0 && Props.resourceSettings[i].refillOnlyInnerStorage && Props.resourceSettings[i] == hediffOption)
                     {
                         yield return new Tuple<CompAdjustHediffs, HediffOption, ResourceStorage>(this, Props.resourceSettings[i], resourceStorages[i]);
                     }
@@ -157,14 +157,12 @@ namespace HediffResourceFramework
         }
         public void Register()
         {
-            var gameComp = HediffResourceUtils.HediffResourceManager;
-            gameComp.RegisterAdjuster(this);
+            HediffResourceManager.Instance.RegisterAdjuster(this);
         }
 
         public void Deregister()
         {
-            var gameComp = HediffResourceUtils.HediffResourceManager;
-            gameComp.DeregisterAdjuster(this);
+            HediffResourceManager.Instance.DeregisterAdjuster(this);
         }
 
         public override void PostExposeData()
@@ -199,6 +197,39 @@ namespace HediffResourceFramework
         {
             base.PostSpawnSetup(respawningAfterLoad);
             Register();
+            if (!respawningAfterLoad)
+            {
+                TryForbidAfterPlacing();
+            }
+
+        }
+
+        public void TryForbidAfterPlacing()
+        {
+            foreach (var thing in this.parent.Position.GetThingList(this.parent.Map))
+            {
+                var comp = thing.TryGetComp<CompBuildingStorageAdjustHediffs>();
+                if (comp != null)
+                {
+                    foreach (var resourceSettings in comp.ResourceSettings)
+                    {
+                        foreach (var thisResourceSettings in this.ResourceSettings)
+                        {
+                            if (resourceSettings.hediff == thisResourceSettings.hediff && resourceSettings.forbidItemsWhenCharging)
+                            {
+                                if (comp.compPower != null && !comp.compPower.PowerOn)
+                                {
+                                    continue;
+                                }
+                                else
+                                {
+                                    this.parent.SetForbidden(true);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         public override void PostPostMake()

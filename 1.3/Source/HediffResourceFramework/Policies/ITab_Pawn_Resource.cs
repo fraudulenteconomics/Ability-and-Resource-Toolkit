@@ -39,7 +39,7 @@ namespace HediffResourceFramework
 			foreach (var hediffResourceDef in hediffDefs)
             {
 				var hediffResource = pawn.health.hediffSet.GetFirstHediffOfDef(hediffResourceDef) as HediffResource;
-				var hediffPolicy = HediffResourceUtils.HediffResourceManager.hediffResourcesPolicies[pawn].satisfyPolicies[hediffResourceDef];
+				var hediffPolicy = HediffResourceManager.Instance.hediffResourcesPolicies[pawn].satisfyPolicies[hediffResourceDef];
 				var hediffLabelBox = new Rect(pos.x, pos.y, hediffLabelWidth, hediffEntryHeight);
 				GUI.color = hediffResourceDef.defaultLabelColor;
 				Widgets.Label(hediffLabelBox, hediffResourceDef.LabelCap);

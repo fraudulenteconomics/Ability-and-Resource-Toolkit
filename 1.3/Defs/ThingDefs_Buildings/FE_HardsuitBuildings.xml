@@ -163,6 +163,7 @@
 						<hediff>FE_FusionReactor</hediff>
 						<resourcePerSecond>1</resourcePerSecond>
 						<unforbidWhenFull>true</unforbidWhenFull>
+						<forbidItemsWhenCharging>true</forbidItemsWhenCharging>
 					</li>
 				</resourceSettings>
 			</li>

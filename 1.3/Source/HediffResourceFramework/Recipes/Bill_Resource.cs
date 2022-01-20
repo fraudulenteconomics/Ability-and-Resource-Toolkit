@@ -62,20 +62,9 @@ namespace HediffResourceFramework
         }
         public static void DoWork(RecipeDef recipe, Pawn p, RecipeResourceIngredients extension, Dictionary<HediffResourceDef, float> consumedResources)
         {
-            foreach (var resourceCost in extension.recourseCostList)
+            if (p.jobs.curDriver is JobDriver_DoBill jobDriver_DoBill)
             {
-                if (consumedResources is null)
-                {
-                    consumedResources = new Dictionary<HediffResourceDef, float>();
-                }
-                if (!consumedResources.ContainsKey(resourceCost.resource))
-                {
-                    consumedResources[resourceCost.resource] = 0;
-                }
-
-                var diff = resourceCost.cost - consumedResources[resourceCost.resource];
                 UnfinishedThing uft = p.CurJob.GetTarget(TargetIndex.B).Thing as UnfinishedThing;
-                JobDriver_DoBill jobDriver_DoBill = (JobDriver_DoBill)p.jobs.curDriver;
                 float num = ((p.CurJob.RecipeDef.workSpeedStat == null) ? 1f : p.GetStatValue(p.CurJob.RecipeDef.workSpeedStat));
                 if (p.CurJob.RecipeDef.workTableSpeedStat != null)
                 {
@@ -90,31 +79,44 @@ namespace HediffResourceFramework
                 {
                     num *= 30f;
                 }
-
-                var curCost = resourceCost.cost / (recipe.WorkAmountTotal(uft?.Stuff) / num);
-                if (diff != 0)
+                var workTotalAmount = recipe.WorkAmountTotal(uft?.Stuff);
+                foreach (var resourceCost in extension.recourseCostList)
                 {
-                    var hediff = p.health.hediffSet.GetFirstHediffOfDef(resourceCost.resource) as HediffResource;
-                    if (hediff is null || diff > 0 && (int)hediff.ResourceAmount < (int)diff)
+                    if (consumedResources is null)
                     {
-                        Log.Message("Ending job: " + p.CurJob + " - hediff.ResourceAmount: " + hediff.ResourceAmount + " - diff: " + diff);
-                        p.jobs.EndCurrentJob(JobCondition.Incompletable);
+                        consumedResources = new Dictionary<HediffResourceDef, float>();
                     }
-                    else
+                    if (!consumedResources.ContainsKey(resourceCost.resource))
                     {
-                        if (resourceCost.cost < 0 && hediff.ResourceAmount >= hediff.ResourceCapacity)
+                        consumedResources[resourceCost.resource] = 0;
+                    }
+
+                    var diff = resourceCost.cost - consumedResources[resourceCost.resource];
+                    var curCost = resourceCost.cost / (workTotalAmount / num);
+                    if (diff != 0)
+                    {
+                        var hediff = p.health.hediffSet.GetFirstHediffOfDef(resourceCost.resource) as HediffResource;
+                        if (hediff is null || diff > 0 && (int)hediff.ResourceAmount < (int)diff)
                         {
-                            continue;
-                        }
-                        var toConsume = diff > 0 ? diff >= curCost ? curCost : diff : diff < curCost ? curCost : diff;
-                        hediff.ResourceAmount -= toConsume;
-                        if (consumedResources.ContainsKey(resourceCost.resource))
-                        {
-                            consumedResources[resourceCost.resource] += toConsume;
+                            Log.Message("Ending job: " + p.CurJob + " - hediff.ResourceAmount: " + hediff.ResourceAmount + " - diff: " + diff);
+                            p.jobs.EndCurrentJob(JobCondition.Incompletable);
                         }
                         else
                         {
-                            consumedResources[resourceCost.resource] = toConsume;
+                            if (resourceCost.cost < 0 && hediff.ResourceAmount >= hediff.ResourceCapacity)
+                            {
+                                continue;
+                            }
+                            var toConsume = diff > 0 ? diff >= curCost ? curCost : diff : diff < curCost ? curCost : diff;
+                            hediff.ResourceAmount -= toConsume;
+                            if (consumedResources.ContainsKey(resourceCost.resource))
+                            {
+                                consumedResources[resourceCost.resource] += toConsume;
+                            }
+                            else
+                            {
+                                consumedResources[resourceCost.resource] = toConsume;
+                            }
                         }
                     }
                 }

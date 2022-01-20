@@ -16,7 +16,7 @@ namespace HediffResourceFramework
         {
             if (pawn.RaceProps.Humanlike && pawn.Faction == Faction.OfPlayer)
             {
-                if (HediffResourceUtils.HediffResourceManager.hediffResourcesPolicies.ContainsKey(pawn))
+                if (HediffResourceManager.Instance.hediffResourcesPolicies.ContainsKey(pawn))
                 {
                     if (pawn.health?.hediffSet.hediffs.OfType<HediffResource>().Any() ?? false)
                     {
@@ -28,7 +28,7 @@ namespace HediffResourceFramework
         }
         protected override Job TryGiveJob(Pawn pawn)
         {
-            if (HediffResourceUtils.HediffResourceManager.hediffResourcesPolicies.TryGetValue(pawn, out var policy))
+            if (HediffResourceManager.Instance.hediffResourcesPolicies.TryGetValue(pawn, out var policy))
             {
                 foreach (var hediffResource in pawn.health?.hediffSet.hediffs.OfType<HediffResource>())
                 {
