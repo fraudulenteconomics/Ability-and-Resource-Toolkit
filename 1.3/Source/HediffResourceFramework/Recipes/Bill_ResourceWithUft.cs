@@ -27,11 +27,6 @@ namespace HediffResourceFramework
             return Bill_Resource.AllowedToStartAnew(p, Extension);
         }
 
-        public override void Notify_PawnDidWork(Pawn p)
-        {
-            base.Notify_PawnDidWork(p);
-            Bill_Resource.DoWork(this.recipe, p, Extension, consumedResources);
-        }
 
         public override void Notify_IterationCompleted(Pawn billDoer, List<Thing> ingredients)
         {

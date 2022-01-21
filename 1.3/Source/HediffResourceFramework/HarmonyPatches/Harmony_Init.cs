@@ -21,4 +21,25 @@ namespace HediffResourceFramework
 			harmony.PatchAll();
 		}
 	}
+
+	//[HarmonyPatch(typeof(JobDriver), nameof(JobDriver.DriverTick))]
+	//public static class JobDriverPatch
+    //{
+	//	public static void Prefix(JobDriver __instance)
+    //    {
+	//		if (__instance.pawn.jobs.debugLog)
+    //        {
+	//			Log.Message("Pre Ticking " + __instance + " - " + __instance.pawn.CurJob);
+    //        }
+    //    }
+	//
+	//	public static void Postfix(JobDriver __instance)
+	//	{
+	//		if (__instance.pawn.jobs.debugLog)
+	//		{
+	//			Log.Message("Post Ticking " + __instance + " - " + __instance.pawn.CurJob);
+	//			Log.ResetMessageCount();
+	//		}
+	//	}
+	//}
 }

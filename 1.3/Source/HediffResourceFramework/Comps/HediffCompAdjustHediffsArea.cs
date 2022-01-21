@@ -27,7 +27,7 @@ namespace HediffResourceFramework
             {
                 foreach (var option in Props.resourceSettings)
                 {
-                    var num = option.GetResourceGain();
+                    var num = option.GetResourceGain(this);
                     var affectedCells = HediffResourceUtils.GetAllCellsAround(option, this.Pawn, this.Pawn.OccupiedRect());
                     foreach (var cell in affectedCells)
                     {

@@ -42,7 +42,7 @@
 							<li>
 								<hediff>FE_FusionReactor</hediff>
 								<resourcePerSecond>-5</resourcePerSecond>
-								<resourceOnComplete>-150</resourceOnComplete>
+								<resourceOnComplete>-15</resourceOnComplete>
 								<addHediffIfMissing>false</addHediffIfMissing>
 								<defaultToggleState>true</defaultToggleState>
 								<!-- in case if you want to make resourcePerSecond to add resource amount. works only for positive resourcePerSecond fields -->
@@ -83,7 +83,7 @@
 							<li>
 								<hediff>FE_StimHediff</hediff>
 								<resourcePerSecond>-5</resourcePerSecond>
-								<resourceOnComplete>-150</resourceOnComplete>
+								<resourceOnComplete>-15</resourceOnComplete>
 								<addHediffIfMissing>false</addHediffIfMissing>
 								<defaultToggleState>false</defaultToggleState>
 
@@ -139,7 +139,7 @@
 							<li>
 								<hediff>FE_FusionReactor</hediff>
 								<resourcePerSecond>-5</resourcePerSecond>
-								<resourceOnComplete>-150</resourceOnComplete>
+								<resourceOnComplete>-15</resourceOnComplete>
 								<texPathToggledOn>Things/Building/Production/TableStoveElectric</texPathToggledOn>
 								<defaultToggleState>false</defaultToggleState>
 								<addHediffIfMissing>false</addHediffIfMissing>
@@ -180,7 +180,7 @@
 							<li>
 								<hediff>FE_StimHediff</hediff>
 								<resourcePerSecond>-5</resourcePerSecond>
-								<resourceOnComplete>-150</resourceOnComplete>
+								<resourceOnComplete>-15</resourceOnComplete>
 								<addHediffIfMissing>false</addHediffIfMissing>
 								<!-- in case if you want to make resourcePerSecond to add resource amount. works only for positive resourcePerSecond fields -->
 								<qualityScalesResourcePerSecond>true</qualityScalesResourcePerSecond>

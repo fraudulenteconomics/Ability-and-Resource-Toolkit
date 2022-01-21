@@ -228,7 +228,12 @@ namespace HediffResourceFramework
 
         public void Update()
         {
-            throw new NotImplementedException();
+
+        }
+
+        public ThingDef GetStuff()
+        {
+            return this.parent.Stuff;
         }
     }
 }

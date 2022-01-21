@@ -79,23 +79,13 @@ namespace HediffResourceFramework
             for (int i = 0; i < thingList.Count; i++)
             {
                 var t = thingList[i];
-                if (CompFacilityInUse.thingBoosters.TryGetValue(t, out var comp))
+                if (!pawn.CanUseIt(t, out string cannotUseMessage))
                 {
-                    foreach (var statBooster in comp.Props.statBoosters)
+                    FloatMenuOption floatMenuOption = opts.FirstOrDefault((FloatMenuOption x) => x.Label.ToLower().Contains(t.Label.ToLower()));
+                    if (floatMenuOption != null)
                     {
-                        if (comp.StatBoosterIsEnabled(statBooster) && statBooster.preventUseIfHediffMissing)
-                        {
-                            var hediffResource = pawn.health.hediffSet.GetFirstHediffOfDef(statBooster.hediff) as HediffResource;
-                            if (hediffResource is null || !hediffResource.CanApplyStatBooster(statBooster))
-                            {
-                                FloatMenuOption floatMenuOption = opts.FirstOrDefault((FloatMenuOption x) => x.Label.ToLower().Contains(t.Label.ToLower()));
-                                if (floatMenuOption != null)
-                                {
-                                    floatMenuOption.action = null;
-                                    floatMenuOption.Label = statBooster.cannotUseMessageKey.Translate(t);
-                                }
-                            }
-                        }
+                        floatMenuOption.action = null;
+                        floatMenuOption.Label = cannotUseMessage;
                     }
                 }
             }

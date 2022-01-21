@@ -23,4 +23,7 @@
 	<HRF.RequiresResource>Requires minimum {0} of {1} resource.</HRF.RequiresResource>
 	<HRF.WillBeDisabledWhenResourceAbove>Will be disabled if {0} is above {1}.</HRF.WillBeDisabledWhenResourceAbove>
 	<HRF.ConsumesPerUse>Consumes {0} of {1} per use.</HRF.ConsumesPerUse>
+	<HRF.Reserve>(R): </HRF.Reserve>
+	<HRF.Make_KibbleInfused>{WORKER_nameDef} made {1}.</HRF.Make_KibbleInfused>
+	<HRF.Make_KibbleInfusedTitle>Infused crafting: {1}.</HRF.Make_KibbleInfusedTitle>
 </LanguageData>

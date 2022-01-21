@@ -13,27 +13,6 @@ using Verse.AI;
 
 namespace HediffResourceFramework
 {
-    public static class ReservationHelper
-    {
-        public static bool PawnCanUseIt(Pawn pawn, Thing thing)
-        {
-            if (CompFacilityInUse.thingBoosters.TryGetValue(thing, out var comp))
-            {
-                foreach (var statBooster in comp.Props.statBoosters)
-                {
-                    if (comp.StatBoosterIsEnabled(statBooster) && statBooster.preventUseIfHediffMissing)
-                    {
-                        var hediffResource = pawn.health.hediffSet.GetFirstHediffOfDef(statBooster.hediff) as HediffResource;
-                        if (hediffResource is null || !hediffResource.CanApplyStatBooster(statBooster))
-                        {
-                            return false;
-                        }
-                    }
-                }
-            }
-            return true;
-        }
-    }
 
     [HarmonyPatch(typeof(ReservationManager), "CanReserve")]
     public static class Patch_CanReserve
@@ -43,7 +22,7 @@ namespace HediffResourceFramework
             if (__result)
             {
                 var thing = target.Thing;
-                if (thing != null && !ReservationHelper.PawnCanUseIt(claimant, thing))
+                if (thing != null && !claimant.CanUseIt(thing))
                 {
                     __result = false;
                 }
@@ -58,7 +37,7 @@ namespace HediffResourceFramework
         {
             if (!__result)
             {
-                if (!ReservationHelper.PawnCanUseIt(pawn, t))
+                if (!pawn.CanUseIt(t))
                 {
                     __result = true;
                 }

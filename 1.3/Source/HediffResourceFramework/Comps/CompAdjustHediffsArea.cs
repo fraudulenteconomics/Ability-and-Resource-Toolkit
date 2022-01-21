@@ -129,19 +129,11 @@ namespace HediffResourceFramework
         {
             if (Active)
             {
-                var option = GetFirstHediffOptionFor(hediffResourceDef);
-                if (option.qualityScalesCapacityOffset && this.parent.TryGetQuality(out QualityCategory qc))
-                {
-                    return option.maxResourceCapacityOffset * HediffResourceUtils.GetQualityMultiplier(qc);
-                }
-                else
-                {
-                    return option.maxResourceCapacityOffset;
-                }
+                return this.GetCapacityFor(GetFirstHediffOptionFor(hediffResourceDef));
             }
             return 0f;
         }
- 
+
         public override void PostDrawExtraSelectionOverlays()
         {
             base.PostDrawExtraSelectionOverlays();

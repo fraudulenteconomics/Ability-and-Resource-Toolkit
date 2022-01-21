@@ -223,10 +223,12 @@ namespace HediffResourceFramework
         {
             if (statBooster.resourceOnComplete != -1f && this.ResourceAmount < -statBooster.resourceOnComplete)
             {
+                Log.Message($"Cannot use 1: this.ResourceAmount {this.ResourceAmount}, -statBooster.resourceOnComplete: {-statBooster.resourceOnComplete}");
                 return false;
             }
             else if (statBooster.resourcePerSecond != -1 && this.ResourceAmount < -statBooster.resourcePerSecond)
             {
+                Log.Message($"Cannot use 2: this.ResourceAmount {this.ResourceAmount}, -statBooster.resourcePerSecond: {-statBooster.resourcePerSecond}");
                 return false;
             }
             return true;
@@ -454,7 +456,7 @@ namespace HediffResourceFramework
                     {
                         if (option.hediff == def)
                         {
-                            var num2 = option.GetResourceGain();
+                            var num2 = option.GetResourceGain(comp);
                             num += num2;
                         }
                     }

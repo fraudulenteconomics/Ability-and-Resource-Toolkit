@@ -27,13 +27,6 @@ namespace HediffResourceFramework
         {
             return AllowedToStartAnew(p, Extension);
         }
-
-        public override void Notify_PawnDidWork(Pawn p)
-        {
-            base.Notify_PawnDidWork(p);
-            DoWork(this.recipe, p, Extension, consumedResources);
-        }
-
         public override void Notify_IterationCompleted(Pawn billDoer, List<Thing> ingredients)
         {
             base.Notify_IterationCompleted(billDoer, ingredients);
@@ -59,68 +52,6 @@ namespace HediffResourceFramework
                 }
             }
             return true;
-        }
-        public static void DoWork(RecipeDef recipe, Pawn p, RecipeResourceIngredients extension, Dictionary<HediffResourceDef, float> consumedResources)
-        {
-            if (p.jobs.curDriver is JobDriver_DoBill jobDriver_DoBill)
-            {
-                UnfinishedThing uft = p.CurJob.GetTarget(TargetIndex.B).Thing as UnfinishedThing;
-                float num = ((p.CurJob.RecipeDef.workSpeedStat == null) ? 1f : p.GetStatValue(p.CurJob.RecipeDef.workSpeedStat));
-                if (p.CurJob.RecipeDef.workTableSpeedStat != null)
-                {
-                    Building_WorkTable building_WorkTable = jobDriver_DoBill.BillGiver as Building_WorkTable;
-                    if (building_WorkTable != null)
-                    {
-                        num *= building_WorkTable.GetStatValue(p.CurJob.RecipeDef.workTableSpeedStat);
-                    }
-                }
-
-                if (DebugSettings.fastCrafting)
-                {
-                    num *= 30f;
-                }
-                var workTotalAmount = recipe.WorkAmountTotal(uft?.Stuff);
-                foreach (var resourceCost in extension.recourseCostList)
-                {
-                    if (consumedResources is null)
-                    {
-                        consumedResources = new Dictionary<HediffResourceDef, float>();
-                    }
-                    if (!consumedResources.ContainsKey(resourceCost.resource))
-                    {
-                        consumedResources[resourceCost.resource] = 0;
-                    }
-
-                    var diff = resourceCost.cost - consumedResources[resourceCost.resource];
-                    var curCost = resourceCost.cost / (workTotalAmount / num);
-                    if (diff != 0)
-                    {
-                        var hediff = p.health.hediffSet.GetFirstHediffOfDef(resourceCost.resource) as HediffResource;
-                        if (hediff is null || diff > 0 && (int)hediff.ResourceAmount < (int)diff)
-                        {
-                            Log.Message("Ending job: " + p.CurJob + " - hediff.ResourceAmount: " + hediff.ResourceAmount + " - diff: " + diff);
-                            p.jobs.EndCurrentJob(JobCondition.Incompletable);
-                        }
-                        else
-                        {
-                            if (resourceCost.cost < 0 && hediff.ResourceAmount >= hediff.ResourceCapacity)
-                            {
-                                continue;
-                            }
-                            var toConsume = diff > 0 ? diff >= curCost ? curCost : diff : diff < curCost ? curCost : diff;
-                            hediff.ResourceAmount -= toConsume;
-                            if (consumedResources.ContainsKey(resourceCost.resource))
-                            {
-                                consumedResources[resourceCost.resource] += toConsume;
-                            }
-                            else
-                            {
-                                consumedResources[resourceCost.resource] = toConsume;
-                            }
-                        }
-                    }
-                }
-            }
         }
 
         public override void ExposeData()

@@ -349,21 +349,48 @@ namespace HediffResourceFramework
 				{
 					foreach (var option in resourceSettings)
 					{
-						if (option.hediff == hdDef && option.maxResourceCapacityOffset != 0f)
+						if (option.hediff == hdDef)
 						{
-							if (option.qualityScalesCapacityOffset && comp.TryGetQuality(out QualityCategory qc))
-							{
-								result += (option.maxResourceCapacityOffset * GetQualityMultiplier(qc));
-							}
-							else
-							{
-								result += option.maxResourceCapacityOffset;
-							}
+							result += GetCapacityFor(comp, option);
 						}
 					}
 				}
 			}
 			return result;
+		}
+
+		public static float GetCapacityFor(this IAdjustResource props, HediffOption hediffOption)
+		{
+			var num = 0f;
+			if (hediffOption.maxResourceCapacityOffset != 0)
+            {
+				if (hediffOption.qualityScalesCapacityOffset && props.Parent.TryGetQuality(out QualityCategory qc))
+				{
+					num = hediffOption.maxResourceCapacityOffset * GetQualityMultiplier(qc);
+
+					var stuff = props.GetStuff();
+					if (stuff != null)
+					{
+						var extension = stuff.GetModExtension<StuffExtension>();
+						if (extension != null)
+						{
+							foreach (var option in extension.resourceSettings)
+							{
+								if (hediffOption.hediff == option.hediff)
+								{
+									num *= option.resourceCapacityFactor;
+									num += option.resourceCapacityOffset;
+								}
+							}
+						}
+					}
+				}
+				else
+				{
+					num = hediffOption.maxResourceCapacityOffset;
+				}
+			}
+			return num;
 		}
 
 		public static void RemoveExcessHediffResources(Pawn pawn, IAdjustResource adjuster)
@@ -912,19 +939,22 @@ namespace HediffResourceFramework
 			{
 				num *= GetQualityMultiplier(qc);
 			}
-			if (hediffOption.refillOnlyInnerStorage)
-			{
-				return num;
-			}
-			else
-			{
-				return num * hediffOption.hediff.resourcePerSecondFactor;
-			}
-		}
-
-		public static float GetResourceGain(this HediffOption hediffOption)
-		{
-			float num = hediffOption.resourcePerSecond;
+			var stuff = source.GetStuff();
+			if (stuff != null)
+            {
+				var extension = stuff.GetModExtension<StuffExtension>();
+				if (extension != null)
+                {
+					foreach (var option in extension.resourceSettings)
+                    {
+						if (option.hediff == hediffOption.hediff)
+                        {
+							num *= option.resourcePerSecondFactor;
+							num += option.resourcePerSecondOffset;
+						}
+                    }
+				}
+            }
 			if (hediffOption.refillOnlyInnerStorage)
 			{
 				return num;
@@ -941,5 +971,15 @@ namespace HediffResourceFramework
 			if (verb.tool is IResourceProps toolResourceProps) return toolResourceProps;
 			return null;
 		}
+
+		public static bool HasResource(this Pawn pawn, HediffResourceDef hediffResource, float minResource = 0f)
+        {
+			var hediff = pawn.health.hediffSet.GetFirstHediffOfDef(hediffResource) as HediffResource;
+			if (hediff != null && hediff.ResourceAmount >= minResource)
+            {
+				return true;
+            }
+			return false;
+        }
 	}
 }

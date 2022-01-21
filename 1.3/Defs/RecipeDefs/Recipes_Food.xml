@@ -1,115 +1,162 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Defs>
 
-  <RecipeDef>
-    <defName>HRF_Make_Kibble</defName>
-    <label>HRF make kibble</label>
-    <description>Make animal kibble by combining raw meat and plants.</description>
-    <jobString>Making kibble.</jobString>
-    <workAmount>450</workAmount>
-    <workSpeedStat>CookSpeed</workSpeedStat>
-    <effectWorking>Cook</effectWorking>
-    <soundWorking>Recipe_CookMeal</soundWorking>
-    <products>
-      <Kibble>50</Kibble>
-    </products>
-    <workSkill>Cooking</workSkill>
-	<modExtensions>
-		<li Class="HediffResourceFramework.RecipeResourceIngredients">
-			<recourseCostList>
-				<FE_FusionReactor>50</FE_FusionReactor>
-				<FE_AbsorptionBarrier>10</FE_AbsorptionBarrier>
-			</recourseCostList>
-		</li>
-	</modExtensions>
-  </RecipeDef>
-
-  <RecipeDef>
-    <defName>HRF_Make_Pemmican</defName>
-    <label>HRF make pemmican</label>
-    <description>Make pemmican, a preserved combination of meat and plant food. It doesn't taste amazing, but lasts a long time without refrigeration.</description>
-    <jobString>Making pemmican.</jobString>
-    <workAmount>700</workAmount>
-    <workSpeedStat>CookSpeed</workSpeedStat>
-    <requiredGiverWorkType>Cooking</requiredGiverWorkType>
-    <effectWorking>Cook</effectWorking>
-    <soundWorking>Recipe_CookMeal</soundWorking>
-    <products>
-      <Pemmican>16</Pemmican>
-    </products>
-    <workSkill>Cooking</workSkill>
-	<modExtensions>
-		<li Class="HediffResourceFramework.RecipeResourceIngredients">
-			<recourseCostList>
-				<FE_FusionReactor>50</FE_FusionReactor>
-				<FE_AbsorptionBarrier>10</FE_AbsorptionBarrier>
-			</recourseCostList>
-		</li>
-	</modExtensions>
-  </RecipeDef>
-
-  <RecipeDef>
-    <defName>HRF_Make_PemmicanBulk</defName>
-    <label>HRF make pemmican x4</label>
-    <description>Make bulk pemmican, a preserved combination of meat and plant food. It doesn't taste amazing, but lasts a long time without refrigeration.</description>
-    <jobString>Making bulk pemmican.</jobString>
-    <workAmount>80</workAmount>
-    <workSpeedStat>CookSpeed</workSpeedStat>
-    <requiredGiverWorkType>Cooking</requiredGiverWorkType>
-    <effectWorking>Cook</effectWorking>
-    <soundWorking>Recipe_CookMeal</soundWorking>
-    <products>
-      <Pemmican>64</Pemmican>
-    </products>
-    <workSkill>Cooking</workSkill>
-	<modExtensions>
-		<li Class="HediffResourceFramework.RecipeResourceIngredients">
-			<recourseCostList>
-				<FE_FusionReactor>150</FE_FusionReactor>
-				<FE_AbsorptionBarrier>100</FE_AbsorptionBarrier>
-			</recourseCostList>
-		</li>
-	</modExtensions>
-  </RecipeDef>
-
-  <RecipeDef>
-    <defName>HRF_Convert_PemmicanBulk</defName>
-    <label>HRF convert pemmican x4</label>
-    <description>Make bulk pemmican, a preserved combination of meat and plant food. It doesn't taste amazing, but lasts a long time without refrigeration.</description>
-    <jobString>Making bulk pemmican.</jobString>
-    <workAmount>80</workAmount>
-    <ingredients>
-      <li>
-        <filter>
-          <thingDefs>
-            <li>Pemmican</li>
-          </thingDefs>
-        </filter>
-        <count>64</count>
+  <ThingDef ParentName="OrganicProductBase">
+    <defName>InfusedKibble</defName>
+    <label>infused kibble</label>
+    <description>Animal feed made from mixed meat and plant sources. Humans can eat it, but they really, really don't like it.</description>
+    <thingCategories>
+      <li>Foods</li>
+    </thingCategories>
+    <graphicData>
+      <texPath>Things/Item/Resource/Kibble</texPath>
+    </graphicData>
+    <socialPropernessMatters>true</socialPropernessMatters>
+    <statBases>
+      <MarketValue>1.1</MarketValue>
+      <Mass>0.015</Mass>
+      <Nutrition>0.05</Nutrition>
+      <FoodPoisonChanceFixedHuman>0.02</FoodPoisonChanceFixedHuman>
+    </statBases>
+    <ingestible>
+      <foodType>Kibble</foodType>
+      <preferability>RawBad</preferability>
+      <tasteThought>AteKibble</tasteThought>
+      <optimalityOffsetHumanlikes>-30</optimalityOffsetHumanlikes>
+      <optimalityOffsetFeedingAnimals>15</optimalityOffsetFeedingAnimals>
+      <ingestEffect>EatVegetarian</ingestEffect>
+      <ingestSound>RawVegetable_Eat</ingestSound>
+    </ingestible>
+    <comps>
+      <li Class="CompProperties_Ingredients">
+        <performMergeCompatibilityChecks>false</performMergeCompatibilityChecks>
+        <noIngredientsFoodKind>Meat</noIngredientsFoodKind>
       </li>
-    </ingredients>
-    <fixedIngredientFilter>
-      <thingDefs>
-        <li>Pemmican</li>
-      </thingDefs>
-    </fixedIngredientFilter>
-    <defaultIngredientFilter>
-      <thingDefs>
-        <li>Pemmican</li>
-      </thingDefs>
-    </defaultIngredientFilter>
-    <workSpeedStat>CookSpeed</workSpeedStat>
-    <requiredGiverWorkType>Cooking</requiredGiverWorkType>
-    <effectWorking>Cook</effectWorking>
-    <soundWorking>Recipe_CookMeal</soundWorking>
-    <workSkill>Cooking</workSkill>
-	<modExtensions>
-		<li Class="HediffResourceFramework.RecipeResourceIngredients">
-			<recourseCostList>
-				<FE_FusionReactor>-150</FE_FusionReactor>
-				<FE_AbsorptionBarrier>-100</FE_AbsorptionBarrier>
-			</recourseCostList>
-		</li>
-	</modExtensions>
-  </RecipeDef>
+    </comps>
+    <allowedArchonexusCount>200</allowedArchonexusCount>
+  </ThingDef>
+  
+	<RecipeDef>
+		<defName>HRF_Make_Kibble</defName>
+		<label>HRF make kibble</label>
+		<description>Make animal kibble by combining raw meat and plants.</description>
+		<jobString>Making kibble.</jobString>
+		<workAmount>450</workAmount>
+		<workSpeedStat>CookSpeed</workSpeedStat>
+		<effectWorking>Cook</effectWorking>
+		<soundWorking>Recipe_CookMeal</soundWorking>
+		<products>
+			<Kibble>50</Kibble>
+		</products>
+		<workSkill>Cooking</workSkill>
+		<modExtensions>
+			<li Class="HediffResourceFramework.RecipeResourceIngredients">
+				<recourseCostList>
+					<FE_FusionReactor>10</FE_FusionReactor>
+				</recourseCostList>
+			</li>
+			<li Class="HediffResourceFramework.RecipeOutcomes">
+				<recipeOutcomes>
+					<li>
+						<costs>
+							<FE_FusionReactor>10</FE_FusionReactor>
+						</costs>
+						<products>
+							<InfusedKibble>50</InfusedKibble>
+						</products>
+						<topLeftMessageSuccessKey>HRF.Make_KibbleInfused</topLeftMessageSuccessKey>
+						<letterTitleSuccessKey>HRF.Make_KibbleInfusedTitle</letterTitleSuccessKey>
+						<letterDescriptionSuccessKey>HRF.Make_KibbleInfused</letterDescriptionSuccessKey>
+						<soundDef>BuildingDestroyed_Metal_Medium</soundDef>
+					</li>
+				</recipeOutcomes>
+			</li>
+		</modExtensions>
+	</RecipeDef>
+
+	<RecipeDef>
+		<defName>HRF_Make_Pemmican</defName>
+		<label>HRF make pemmican</label>
+		<description>Make pemmican, a preserved combination of meat and plant food. It doesn't taste amazing, but lasts a long time without refrigeration.</description>
+		<jobString>Making pemmican.</jobString>
+		<workAmount>700</workAmount>
+		<workSpeedStat>CookSpeed</workSpeedStat>
+		<requiredGiverWorkType>Cooking</requiredGiverWorkType>
+		<effectWorking>Cook</effectWorking>
+		<soundWorking>Recipe_CookMeal</soundWorking>
+		<products>
+			<Pemmican>16</Pemmican>
+		</products>
+		<workSkill>Cooking</workSkill>
+		<modExtensions>
+			<li Class="HediffResourceFramework.RecipeResourceIngredients">
+				<recourseCostList>
+					<FE_FusionReactor>50</FE_FusionReactor>
+				</recourseCostList>
+			</li>
+		</modExtensions>
+	</RecipeDef>
+
+	<RecipeDef>
+		<defName>HRF_Make_PemmicanBulk</defName>
+		<label>HRF make pemmican x4</label>
+		<description>Make bulk pemmican, a preserved combination of meat and plant food. It doesn't taste amazing, but lasts a long time without refrigeration.</description>
+		<jobString>Making bulk pemmican.</jobString>
+		<workAmount>80</workAmount>
+		<workSpeedStat>CookSpeed</workSpeedStat>
+		<requiredGiverWorkType>Cooking</requiredGiverWorkType>
+		<effectWorking>Cook</effectWorking>
+		<soundWorking>Recipe_CookMeal</soundWorking>
+		<products>
+			<Pemmican>64</Pemmican>
+		</products>
+		<workSkill>Cooking</workSkill>
+		<modExtensions>
+			<li Class="HediffResourceFramework.RecipeResourceIngredients">
+				<recourseCostList>
+					<FE_FusionReactor>150</FE_FusionReactor>
+				</recourseCostList>
+			</li>
+		</modExtensions>
+	</RecipeDef>
+
+	<RecipeDef>
+		<defName>HRF_Convert_PemmicanBulk</defName>
+		<label>HRF convert pemmican x4</label>
+		<description>Make bulk pemmican, a preserved combination of meat and plant food. It doesn't taste amazing, but lasts a long time without refrigeration.</description>
+		<jobString>Making bulk pemmican.</jobString>
+		<workAmount>80</workAmount>
+		<ingredients>
+			<li>
+				<filter>
+					<thingDefs>
+						<li>Pemmican</li>
+					</thingDefs>
+				</filter>
+				<count>64</count>
+			</li>
+		</ingredients>
+		<fixedIngredientFilter>
+			<thingDefs>
+				<li>Pemmican</li>
+			</thingDefs>
+		</fixedIngredientFilter>
+		<defaultIngredientFilter>
+			<thingDefs>
+				<li>Pemmican</li>
+			</thingDefs>
+		</defaultIngredientFilter>
+		<workSpeedStat>CookSpeed</workSpeedStat>
+		<requiredGiverWorkType>Cooking</requiredGiverWorkType>
+		<effectWorking>Cook</effectWorking>
+		<soundWorking>Recipe_CookMeal</soundWorking>
+		<workSkill>Cooking</workSkill>
+		<modExtensions>
+			<li Class="HediffResourceFramework.RecipeResourceIngredients">
+				<recourseCostList>
+					<FE_FusionReactor>-150</FE_FusionReactor>
+				</recourseCostList>
+			</li>
+		</modExtensions>
+	</RecipeDef>
 </Defs>

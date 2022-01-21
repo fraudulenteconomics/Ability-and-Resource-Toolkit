@@ -94,7 +94,7 @@ namespace HediffResourceFramework
                     }
                     else
                     {
-                        float num = hediffOption.GetResourceGain();
+                        float num = hediffOption.GetResourceGain(this);
                         HediffResourceUtils.AdjustResourceAmount(pawn, hediffOption.hediff, num, hediffOption.addHediffIfMissing, hediffOption.applyToPart);
                     }
                 }
@@ -113,7 +113,12 @@ namespace HediffResourceFramework
 
         public void Update()
         {
-            throw new NotImplementedException();
+
+        }
+
+        public ThingDef GetStuff()
+        {
+            return null;
         }
 
         private List<HediffResource> hediffResourceKeys;

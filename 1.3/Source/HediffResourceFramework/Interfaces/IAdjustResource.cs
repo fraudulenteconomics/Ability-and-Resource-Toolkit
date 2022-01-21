@@ -21,6 +21,7 @@ namespace HediffResourceFramework
         List<HediffOption> ResourceSettings { get; }
         string DisablePostUse { get; }
         bool TryGetQuality(out QualityCategory qc);
+        ThingDef GetStuff();
         void Drop();
     }
 }

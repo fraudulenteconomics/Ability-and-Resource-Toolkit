@@ -417,5 +417,10 @@ namespace HediffResourceFramework
         {
             UpdateGraphics();
         }
+
+        public ThingDef GetStuff()
+        {
+            return this.parent.Stuff;
+        }
     }
 }

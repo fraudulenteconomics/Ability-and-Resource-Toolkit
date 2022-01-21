@@ -11,6 +11,8 @@ using System.Threading.Tasks;
 using UnityEngine;
 using Verse;
 using Verse.AI;
+using Verse.Sound;
+using static UnityEngine.GridBrushBase;
 
 namespace HediffResourceFramework
 {
@@ -74,4 +76,166 @@ namespace HediffResourceFramework
 			}
 		}
 	}
+
+	[HarmonyPatch(typeof(Toils_Recipe), nameof(Toils_Recipe.DoRecipeWork))]
+	public static class Toils_RecipePatch
+    {
+		public static void Postfix(Toil __result)
+        {
+			__result.AddPreTickAction(delegate
+			{
+				Pawn actor = __result.actor;
+				Job curJob = actor.jobs.curJob;
+				if (curJob.bill is Bill_Resource bill_resource)
+                {
+					DoWork(bill_resource.recipe, actor, bill_resource.Extension, bill_resource.consumedResources);
+				}
+				else if (curJob.bill is Bill_ResourceWithUft bill_ResourceWithUft)
+                {
+					DoWork(bill_ResourceWithUft.recipe, actor, bill_ResourceWithUft.Extension, bill_ResourceWithUft.consumedResources);
+				}
+			});
+        }
+
+        public static void DoWork(RecipeDef recipe, Pawn p, RecipeResourceIngredients extension, Dictionary<HediffResourceDef, float> consumedResources)
+        {
+            if (p.jobs.curDriver is JobDriver_DoBill jobDriver_DoBill)
+            {
+                if (jobDriver_DoBill.BillGiver is Thing thing && !p.CanUseIt(thing))
+                {
+                    Log.Message("Ending job: " + p.CurJob + " - cannot use it");
+                    p.jobs.EndCurrentJob(JobCondition.Incompletable);
+                    return;
+                }
+                UnfinishedThing uft = p.CurJob.GetTarget(TargetIndex.B).Thing as UnfinishedThing;
+                float num = ((p.CurJob.RecipeDef.workSpeedStat == null) ? 1f : p.GetStatValue(p.CurJob.RecipeDef.workSpeedStat));
+                if (p.CurJob.RecipeDef.workTableSpeedStat != null)
+                {
+                    Building_WorkTable building_WorkTable = jobDriver_DoBill.BillGiver as Building_WorkTable;
+                    if (building_WorkTable != null)
+                    {
+                        num *= building_WorkTable.GetStatValue(p.CurJob.RecipeDef.workTableSpeedStat);
+                    }
+                }
+
+                if (DebugSettings.fastCrafting)
+                {
+                    num *= 30f;
+                }
+                var workTotalAmount = recipe.WorkAmountTotal(uft?.Stuff);
+                foreach (var resourceCost in extension.recourseCostList)
+                {
+                    if (consumedResources is null)
+                    {
+                        consumedResources = new Dictionary<HediffResourceDef, float>();
+                    }
+                    if (!consumedResources.ContainsKey(resourceCost.resource))
+                    {
+                        consumedResources[resourceCost.resource] = 0;
+                    }
+
+                    var diff = resourceCost.cost - consumedResources[resourceCost.resource];
+                    var curCost = resourceCost.cost / (workTotalAmount / num);
+                    if (diff != 0)
+                    {
+                        var hediff = p.health.hediffSet.GetFirstHediffOfDef(resourceCost.resource) as HediffResource;
+                        if (hediff is null || diff > 0 && (int)hediff.ResourceAmount < (int)diff)
+                        {
+                            Log.Message("Ending job: " + p.CurJob + " - hediff.ResourceAmount: " + hediff.ResourceAmount + " - diff: " + diff);
+                            p.jobs.EndCurrentJob(JobCondition.Incompletable);
+                            return;
+                        }
+                        else
+                        {
+                            if (resourceCost.cost < 0 && hediff.ResourceAmount >= hediff.ResourceCapacity)
+                            {
+                                continue;
+                            }
+                            var toConsume = diff > 0 ? diff >= curCost ? curCost : diff : diff < curCost ? curCost : diff;
+                            hediff.ResourceAmount -= toConsume;
+                            if (consumedResources.ContainsKey(resourceCost.resource))
+                            {
+                                consumedResources[resourceCost.resource] += toConsume;
+                            }
+                            else
+                            {
+                                consumedResources[resourceCost.resource] = toConsume;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    [HarmonyPatch(typeof(GenRecipe), "MakeRecipeProducts")]
+    public static class GenRecipe_MakeRecipeProducts_Patch
+    {
+        public class Data
+        {
+            public List<ThingDefCountClass> oldProducts;
+            public RecipeOutcome pickedRecipeOutcome;
+        }
+        public static void Prefix(out Data __state, RecipeDef recipeDef, Pawn worker)
+        {
+            var recipeOutcome = GetRecipeOutcome(recipeDef, worker);
+            if (recipeOutcome != null)
+            {
+                __state = new Data
+                {
+                    oldProducts = recipeDef.products.ListFullCopy(),
+                    pickedRecipeOutcome = recipeOutcome
+                };
+                recipeDef.products = recipeOutcome.products;
+            }
+            else
+            {
+                __state = null;
+            }
+        }
+
+        public static IEnumerable<Thing> Postfix(IEnumerable<Thing> __result, Data __state, RecipeDef recipeDef, Pawn worker)
+        {
+            foreach (var r in __result)
+            {
+                if (__state != null)
+                {
+                    if (!__state.pickedRecipeOutcome.topLeftMessageSuccessKey.NullOrEmpty())
+                    {
+                        Messages.Message(__state.pickedRecipeOutcome.topLeftMessageSuccessKey.Translate(worker.Named("WORKER"), r.LabelCap), r, MessageTypeDefOf.PositiveEvent);
+                    }
+                    if (!__state.pickedRecipeOutcome.letterTitleSuccessKey.NullOrEmpty())
+                    {
+                        Find.LetterStack.ReceiveLetter(__state.pickedRecipeOutcome.letterTitleSuccessKey.Translate(worker.Named("WORKER"), r.LabelCap),
+                            __state.pickedRecipeOutcome.letterDescriptionSuccessKey.Translate(worker.Named("WORKER"), r.LabelCap), LetterDefOf.PositiveEvent, r);
+                    }
+                    if (__state.pickedRecipeOutcome.soundDef != null)
+                    {
+                        __state.pickedRecipeOutcome.soundDef.PlayOneShot(new TargetInfo(worker.Position, worker.Map));
+                    }
+                }
+                yield return r;
+            }
+            if (__state != null)
+            {
+                recipeDef.products = __state.oldProducts;
+            }
+        }
+
+        private static RecipeOutcome GetRecipeOutcome(RecipeDef recipeDef, Pawn worker)
+        {
+            var extension = recipeDef.GetModExtension<RecipeOutcomes>();
+            if (extension != null)
+            {
+                foreach (var outcome in extension.recipeOutcomes)
+                {
+                    if (outcome.costs.All(x => worker.HasResource(x.resource, x.cost)))
+                    {
+                        return outcome;
+                    }
+                }
+            }
+            return null;
+        }
+    }
 }

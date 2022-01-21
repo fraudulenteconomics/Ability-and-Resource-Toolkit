@@ -76,6 +76,10 @@ namespace HediffResourceFramework
 		public FloatValueCache resourceCapacityCache;
 		public FloatValueCache resourceAmountCache;
 		public FloatValueCache resourceBatteryAmountCache;
+
+		[TweakValue("0HRF", 0, 35)] public static float yTest = 23;
+		[TweakValue("0HRF", 0, 35)] public static float yTest2 = 17;
+		[TweakValue("0HRF", 0, 35)] public static float yTest3 = 25;
 		public override GizmoResult GizmoOnGUI(Vector2 topLeft, float maxWidth, GizmoRenderParms parms)
 		{
 			Rect rect = new Rect(topLeft.x, topLeft.y, GetWidth(maxWidth), 75f);
@@ -105,29 +109,35 @@ namespace HediffResourceFramework
 			var resourceStorageCapacity = resourceBatteryAmountCache.Value;
 
 			Rect resourceAmountBar = contractedBox;
-			resourceAmountBar.height = 18;
-			resourceAmountBar.y += 21;
-
-			float fillPercent = resourceAmount / resourceCapacity;
-
-			Widgets.FillableBar(resourceAmountBar, fillPercent, FullShieldBarTex, EmptyShieldBarTex, doBorder: false);
-			Text.Font = GameFont.Small;
+			resourceAmountBar.height = yTest;
+			float fillPercent;
 			Text.Anchor = TextAnchor.MiddleCenter;
-			if (hediffResource.def.resourceBarTextColor.HasValue)
-            {
-				GUI.color = hediffResource.def.resourceBarTextColor.Value;
-			}
-			Widgets.Label(resourceAmountBar, (resourceAmount).ToString("F0") + " / " + (resourceCapacity).ToString("F0"));
 
-			Rect resourceStorageBar = resourceAmountBar;
-			resourceStorageBar.y += 25;
-			fillPercent = resourceStorage / resourceStorageCapacity;
-			Widgets.FillableBar(resourceStorageBar, fillPercent, FullShieldBarTex, EmptyShieldBarTex, doBorder: false);
-			if (hediffResource.def.resourceBarTextColor.HasValue)
+			if (resourceStorageCapacity > 0)
 			{
-				GUI.color = hediffResource.def.resourceBarTextColor.Value;
+				resourceAmountBar.y += yTest2;
+				fillPercent = resourceStorage / resourceStorageCapacity;
+				Widgets.FillableBar(resourceAmountBar, fillPercent, FullShieldBarTex, EmptyShieldBarTex, doBorder: true);
+				if (hediffResource.def.resourceBarTextColor.HasValue)
+				{
+					GUI.color = hediffResource.def.resourceBarTextColor.Value;
+				}
+				Rect labelRect = new Rect(resourceAmountBar.x, resourceAmountBar.y, resourceAmountBar.width, resourceAmountBar.height);
+				Widgets.Label(labelRect, "HRF.Reserve".Translate() + (resourceStorage).ToString("F0") + " / " + (resourceStorageCapacity).ToString("F0"));
 			}
-			Widgets.Label(resourceStorageBar, (resourceStorage).ToString("F0") + " / " + (resourceStorageCapacity).ToString("F0"));
+
+			if (resourceCapacity > 0)
+            {
+				resourceAmountBar.y += yTest3;
+				fillPercent = resourceAmount / resourceCapacity;
+				Widgets.FillableBar(resourceAmountBar, fillPercent, FullShieldBarTex, EmptyShieldBarTex, doBorder: true);
+				if (hediffResource.def.resourceBarTextColor.HasValue)
+				{
+					GUI.color = hediffResource.def.resourceBarTextColor.Value;
+				}
+				Rect labelRect = new Rect(resourceAmountBar.x, resourceAmountBar.y, resourceAmountBar.width, resourceAmountBar.height);
+				Widgets.Label(labelRect, (resourceAmount).ToString("F0") + " / " + (resourceCapacity).ToString("F0"));
+			}
 
 			Text.Anchor = TextAnchor.UpperLeft;
 			GUI.color = Color.white;

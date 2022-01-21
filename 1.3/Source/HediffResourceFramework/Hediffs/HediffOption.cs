@@ -69,5 +69,10 @@ namespace HediffResourceFramework
         public bool unforbidWhenFull;
         public bool unforbidWhenEmpty;
         public bool forbidItemsWhenCharging;
+
+        public float resourceCapacityFactor = 1f;
+        public float resourcePerSecondFactor = 1f;
+        public float resourceCapacityOffset;
+        public float resourcePerSecondOffset;
     }
 }

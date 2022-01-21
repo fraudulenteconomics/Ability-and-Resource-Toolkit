@@ -77,7 +77,7 @@ namespace HediffResourceFramework
                     }
                     else
                     {
-                        float num = hediffOption.GetResourceGain();
+                        float num = hediffOption.GetResourceGain(this);
                         HediffResourceUtils.AdjustResourceAmount(Pawn, hediffOption.hediff, num, hediffOption.addHediffIfMissing, hediffOption.applyToPart);
                     }
                 }
