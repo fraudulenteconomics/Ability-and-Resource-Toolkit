@@ -29,7 +29,7 @@ namespace HediffResourceFramework
                         if (statBooster.resourceOnComplete != -1f)
                         {
                             var hediffResource = worker.health.hediffSet.GetFirstHediffOfDef(statBooster.hediff) as HediffResource;
-                            if (hediffResource != null && hediffResource.CanApplyStatBooster(statBooster))
+                            if (hediffResource != null && hediffResource.CanApplyStatBooster(statBooster, out _))
                             {
                                 hediffResource.ResourceAmount += statBooster.resourceOnComplete;
                             }
@@ -126,7 +126,7 @@ namespace HediffResourceFramework
                     if (comp.StatBoosterIsEnabled(statBooster) && statBooster.increaseQuality != -1 && __result < statBooster.increaseQualityCeiling)
                     {
                         var hediffResource = pawn.health.hediffSet.GetFirstHediffOfDef(statBooster.hediff) as HediffResource;
-                        if (hediffResource != null && hediffResource.CanApplyStatBooster(statBooster))
+                        if (hediffResource != null && hediffResource.CanApplyStatBooster(statBooster, out _))
                         {
                             var result = (int)__result + (int)statBooster.increaseQuality;
                             if (result > (int)QualityCategory.Legendary)
@@ -192,7 +192,7 @@ namespace HediffResourceFramework
                                     }
                                     if (hediffResourceDict != null && hediffResourceDict.TryGetValue(statBooster, out HediffResource hediffResource))
                                     {
-                                        if (hediffResource.CanApplyStatBooster(statBooster))
+                                        if (hediffResource.CanApplyStatBooster(statBooster, out _))
                                         {
                                             HRFLog.Message($"1 Due to an user {user} with {statBooster.hediff} - {hediffResource}, {thing} is gaining a bonus to {stat}!");
                                             __result += statModifier.value;
@@ -227,7 +227,7 @@ namespace HediffResourceFramework
                                     }
                                     if (hediffResourceDict != null && hediffResourceDict.TryGetValue(statBooster, out HediffResource hediffResource))
                                     {
-                                        if (hediffResource.CanApplyStatBooster(statBooster))
+                                        if (hediffResource.CanApplyStatBooster(statBooster, out _))
                                         {
                                             HRFLog.Message($"2 Due to an user {user} with {statBooster.hediff} - {hediffResource}, {thing} is gaining a bonus to {stat}!");
                                             __result *= statModifier.value;

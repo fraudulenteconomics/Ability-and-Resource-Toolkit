@@ -88,23 +88,61 @@ namespace HediffResourceFramework
         public override string CompInspectStringExtra()
         {
             var sb = new StringBuilder(base.CompInspectStringExtra());
-            var resourceStorages = ResourceStorages;
             if (Props.resourceSettings != null)
             {
                 for (var i = 0; i < Props.resourceSettings.Count; i++)
                 {
-                    if (Props.resourceSettings[i].maxResourceStorageAmount > 0)
+                    var hediffOption = Props.resourceSettings[i];
+                    if (hediffOption.maxResourceStorageAmount > 0)
                     {
-                        foreach (var resourceStorage in GetResourceStoragesFor(Props.resourceSettings[i]).ToList())
+                        foreach (var resourceStorage in GetResourceStoragesFor(hediffOption).ToList())
                         {
                             if ((Find.TickManager.TicksGame - resourceStorage.Item3.lastChargedTick) <= 60)
                             {
-                                sb.AppendLine("HRF.StoredAmountCharged".Translate(resourceStorage.Item3.ResourceAmount, Props.resourceSettings[i].maxResourceStorageAmount));
+                                sb.AppendLine("HRF.StoredAmountCharged".Translate(resourceStorage.Item3.ResourceAmount, hediffOption.maxResourceStorageAmount));
                             }
                             else
                             {
-                                sb.AppendLine("HRF.StoredAmount".Translate(resourceStorage.Item3.ResourceAmount, Props.resourceSettings[i].maxResourceStorageAmount));
+                                sb.AppendLine("HRF.StoredAmount".Translate(resourceStorage.Item3.ResourceAmount, hediffOption.maxResourceStorageAmount));
                             }
+                        }
+                    }
+
+                    if (hediffOption.disallowEquipIfHediffMissing || hediffOption.disallowEquipWhenEmpty || hediffOption.disableIfMissingHediff)
+                    {
+                        sb.AppendLine("HRF.RequiresResource".Translate(hediffOption.hediff.label));
+                    }
+
+                    if (Prefs.DevMode)
+                    {
+                        if (hediffOption.minimumResourcePerUse != -1f)
+                        {
+                            sb.AppendLine("HRF.MinimumResourcePerUse".Translate(hediffOption.hediff.label, hediffOption.minimumResourcePerUse));
+                        }
+                        if (hediffOption.disableAboveResource != -1f)
+                        {
+                            sb.AppendLine("HRF.WillBeDisabledWhenResourceAbove".Translate(hediffOption.hediff.label, hediffOption.disableAboveResource));
+                        }
+
+                        if (hediffOption.resourcePerUse != 0)
+                        {
+                            sb.AppendLine("HRF.ResourcePerUse".Translate(hediffOption.hediff.label, -hediffOption.resourcePerUse));
+                        }
+                        if (hediffOption.resourcePerSecond != 0)
+                        {
+                            sb.AppendLine("HRF.ResourcePerSecond".Translate(hediffOption.hediff.label, hediffOption.resourcePerSecond));
+                        }
+                        if (hediffOption.maxResourceCapacityOffset != 0)
+                        {
+                            sb.AppendLine("HRF.MaxResourceCapacityOffset".Translate(hediffOption.hediff.label, hediffOption.maxResourceCapacityOffset.ToStringWithSign()));
+                        }
+                        if (hediffOption.refillOnlyInnerStorage)
+                        {
+                            sb.AppendLine("HRF.IsBattery".Translate(hediffOption.hediff.label, hediffOption.maxResourceCapacityOffset));
+                        }
+                        if (hediffOption.maxResourceStorageAmount != 0)
+                        {
+                            sb.AppendLine("HRF.MaxResourceStorageAmount".Translate(hediffOption.hediff.label, hediffOption.maxResourceStorageAmount));
                         }
                     }
                 }

@@ -45,6 +45,20 @@ namespace HediffResourceFramework
             }
             return true;
         }
+
+        public override string CompInspectStringExtra()
+        {
+            var sb = new StringBuilder(base.CompInspectStringExtra());
+            var statBoosters = this.Props.statBoosters;
+            foreach (var statBooster in statBoosters)
+            {
+                if (statBooster.preventUseIfHediffMissing)
+                {
+                    sb.AppendLine("HRF.RequiresResource".Translate(statBooster.hediff.label));
+                }
+            }
+            return sb.ToString().TrimEndNewlines();
+        }
         public override void PostSpawnSetup(bool respawningAfterLoad)
         {
             base.PostSpawnSetup(respawningAfterLoad);
@@ -262,10 +276,6 @@ namespace HediffResourceFramework
                                 UpdateGlower(statBooster.glowerOptions);
                                 changedGlower = true;
                             }
-                            else
-                            {
-                                Log.Message("Can't update glower");
-                            }
                         }
                     }
                 }
@@ -289,10 +299,6 @@ namespace HediffResourceFramework
                                     UpdateGlower(statBooster.glowerOptions);
                                     changedGlower = true;
                                 }
-                                else
-                                {
-                                    Log.Message("Can't update glower");
-                                }
                             }
                         }
                     }
@@ -305,7 +311,6 @@ namespace HediffResourceFramework
 
                 if (!changedGlower)
                 {
-                    Log.Message("Updating glower: " + this);
                     if (this.compGlower != null)
                     {
                         base.parent.Map.glowGrid.DeRegisterGlower(this.compGlower);
@@ -329,7 +334,6 @@ namespace HediffResourceFramework
             graphicData.drawSize = this.parent.def.graphicData.drawSize;
             graphicData.color = this.parent.def.graphicData.color;
             graphicData.colorTwo = this.parent.def.graphicData.colorTwo;
-
             var newGraphic = graphicData.GraphicColoredFor(this.parent);
             Traverse.Create(this.parent).Field("graphicInt").SetValue(newGraphic);
             base.parent.Map.mapDrawer.MapMeshDirty(this.parent.Position, MapMeshFlag.Things);

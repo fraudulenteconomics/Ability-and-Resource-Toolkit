@@ -670,7 +670,7 @@ namespace HediffResourceFramework
 
 						if (option.minimumResourcePerUse != -1f)
 						{
-							description.AppendLine("HRF.RequiresResource".Translate(option.minimumResourcePerUse, option.hediff.label).Colorize(option.hediff.defaultLabelColor));
+							description.AppendLine("HRF.RequiresMinimumResource".Translate(option.minimumResourcePerUse, option.hediff.label).Colorize(option.hediff.defaultLabelColor));
 						}
 						if (option.disableAboveResource != -1f)
 						{

@@ -20,10 +20,21 @@
 	<HRF.StoredAmountCharged>Stored amount: {0}/{1} (charging)</HRF.StoredAmountCharged>
 	<HRF.Stored>stored</HRF.Stored>
 	<HRF.WillBeDisabledIfMissingResource>Will be disabled if {0} resource is missing.</HRF.WillBeDisabledIfMissingResource>
-	<HRF.RequiresResource>Requires minimum {0} of {1} resource.</HRF.RequiresResource>
+	<HRF.RequiresResource>Requires {0} resource.</HRF.RequiresResource>
+	<HRF.RequiresMinimumResource>Requires minimum {0} of {1} resource.</HRF.RequiresMinimumResource>
 	<HRF.WillBeDisabledWhenResourceAbove>Will be disabled if {0} is above {1}.</HRF.WillBeDisabledWhenResourceAbove>
 	<HRF.ConsumesPerUse>Consumes {0} of {1} per use.</HRF.ConsumesPerUse>
 	<HRF.Reserve>(R): </HRF.Reserve>
 	<HRF.Make_KibbleInfused>{WORKER_nameDef} made {1}.</HRF.Make_KibbleInfused>
 	<HRF.Make_KibbleInfusedTitle>Infused crafting: {1}.</HRF.Make_KibbleInfusedTitle>
+	<HRF.ConsumesOnComplete>Consumes {0} of {1} on complete.</HRF.ConsumesOnComplete>
+	<HRF.ConsumesPerSecond>Consumes {0} of {1} per second.</HRF.ConsumesPerSecond>
+	<HRF.NoResource>{PAWN_nameDef} has no {1} resource</HRF.NoResource>
+	<FE.CannotUseMissingFusionReactor>{PAWN_nameDef} cannot use {1}: {2}</FE.CannotUseMissingFusionReactor>
+	<HRF.MinimumResourcePerUse>Minimum {0} of {1} per use</HRF.MinimumResourcePerUse>
+	<HRF.ResourcePerUse>{0} of {1} per use</HRF.ResourcePerUse>
+	<HRF.ResourcePerSecond>Refills {1} of {0} per second</HRF.ResourcePerSecond>
+	<HRF.MaxResourceCapacityOffset>Max {0} capacity offset: {1}</HRF.MaxResourceCapacityOffset>
+	<HRF.IsBattery>Is battery</HRF.IsBattery>
+	<HRF.MaxResourceStorageAmount>Max {1} of {0} storage amount</HRF.MaxResourceStorageAmount>
 </LanguageData>

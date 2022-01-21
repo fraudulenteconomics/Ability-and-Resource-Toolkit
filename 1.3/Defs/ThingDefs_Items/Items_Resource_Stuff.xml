@@ -54,7 +54,7 @@
     <terrainAffordanceNeeded>Medium</terrainAffordanceNeeded>
     <allowedArchonexusCount>80</allowedArchonexusCount>
 	<modExtensions>
-		<li Class="HediffResourceFramework.StuffExtensions">
+		<li Class="HediffResourceFramework.StuffExtension">
 			<resourceSettings>
 				<li>
 					<hediff>FE_FusionReactor</hediff>

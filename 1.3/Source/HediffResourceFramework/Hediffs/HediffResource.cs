@@ -219,16 +219,17 @@ namespace HediffResourceFramework
             }
         }
 
-        public bool CanApplyStatBooster(StatBooster statBooster)
+        public bool CanApplyStatBooster(StatBooster statBooster, out string failReason)
         {
+            failReason = "";
             if (statBooster.resourceOnComplete != -1f && this.ResourceAmount < -statBooster.resourceOnComplete)
             {
-                Log.Message($"Cannot use 1: this.ResourceAmount {this.ResourceAmount}, -statBooster.resourceOnComplete: {-statBooster.resourceOnComplete}");
+                failReason = "HRF.ConsumesOnComplete".Translate(-statBooster.resourceOnComplete, this.def.label);
                 return false;
             }
             else if (statBooster.resourcePerSecond != -1 && this.ResourceAmount < -statBooster.resourcePerSecond)
             {
-                Log.Message($"Cannot use 2: this.ResourceAmount {this.ResourceAmount}, -statBooster.resourcePerSecond: {-statBooster.resourcePerSecond}");
+                failReason = "HRF.ConsumesPerSecond".Translate(-statBooster.resourcePerSecond, this.def.label);
                 return false;
             }
             return true;
