@@ -12,7 +12,6 @@ using UnityEngine;
 using Verse;
 using Verse.AI;
 using Verse.Sound;
-using static UnityEngine.GridBrushBase;
 
 namespace HediffResourceFramework
 {
@@ -37,7 +36,93 @@ namespace HediffResourceFramework
         }
 	}
 
-	[HarmonyPatch(typeof(Dialog_BillConfig), "DoWindowContents")]
+    [HarmonyPatch(typeof(HealthCardUtility), "CreateSurgeryBill")]
+    public static class Patch_CreateSurgeryBill
+    {
+        public static bool Prefix(Pawn medPawn, RecipeDef recipe, BodyPartRecord part)
+        {
+            if (recipe.HasModExtension<RecipeResourceIngredients>())
+            {
+                CreateSurgeryBill(medPawn, recipe, part);
+                return false;
+            }
+            return true;
+        }
+        private static void CreateSurgeryBill(Pawn medPawn, RecipeDef recipe, BodyPartRecord part)
+        {
+            Bill_ResourceMedical bill_Medical = new Bill_ResourceMedical(recipe);
+            medPawn.BillStack.AddBill(bill_Medical);
+            bill_Medical.Part = part;
+            if (recipe.conceptLearned != null)
+            {
+                PlayerKnowledgeDatabase.KnowledgeDemonstrated(recipe.conceptLearned, KnowledgeAmount.Total);
+            }
+            Map map = medPawn.Map;
+            if (!map.mapPawns.FreeColonists.Any((Pawn col) => recipe.PawnSatisfiesSkillRequirements(col)))
+            {
+                Bill.CreateNoPawnsWithSkillDialog(recipe);
+            }
+            if (!medPawn.InBed() && medPawn.RaceProps.IsFlesh)
+            {
+                if (medPawn.RaceProps.Humanlike)
+                {
+                    if (!map.listerBuildings.allBuildingsColonist.Any((Building x) => x is Building_Bed && RestUtility.CanUseBedEver(medPawn, x.def) && ((Building_Bed)x).Medical))
+                    {
+                        Messages.Message("MessageNoMedicalBeds".Translate(), medPawn, MessageTypeDefOf.CautionInput, historical: false);
+                    }
+                }
+                else if (!map.listerBuildings.allBuildingsColonist.Any((Building x) => x is Building_Bed && RestUtility.CanUseBedEver(medPawn, x.def)))
+                {
+                    Messages.Message("MessageNoAnimalBeds".Translate(), medPawn, MessageTypeDefOf.CautionInput, historical: false);
+                }
+            }
+            if (medPawn.Faction != null && !medPawn.Faction.Hidden && !medPawn.Faction.HostileTo(Faction.OfPlayer) && recipe.Worker.IsViolationOnPawn(medPawn, part, Faction.OfPlayer))
+            {
+                Messages.Message("MessageMedicalOperationWillAngerFaction".Translate(medPawn.HomeFaction), medPawn, MessageTypeDefOf.CautionInput, historical: false);
+            }
+            ThingDef minRequiredMedicine = GetMinRequiredMedicine(recipe);
+            if (minRequiredMedicine != null && medPawn.playerSettings != null && !medPawn.playerSettings.medCare.AllowsMedicine(minRequiredMedicine))
+            {
+                Messages.Message("MessageTooLowMedCare".Translate(minRequiredMedicine.label, medPawn.LabelShort, medPawn.playerSettings.medCare.GetLabel(), medPawn.Named("PAWN")), medPawn, MessageTypeDefOf.CautionInput, historical: false);
+            }
+            recipe.Worker.CheckForWarnings(medPawn);
+        }
+
+        private static List<ThingDef> tmpMedicineBestToWorst = new List<ThingDef>();
+        private static ThingDef GetMinRequiredMedicine(RecipeDef recipe)
+        {
+            tmpMedicineBestToWorst.Clear();
+            List<ThingDef> allDefsListForReading = DefDatabase<ThingDef>.AllDefsListForReading;
+            for (int i = 0; i < allDefsListForReading.Count; i++)
+            {
+                if (allDefsListForReading[i].IsMedicine)
+                {
+                    tmpMedicineBestToWorst.Add(allDefsListForReading[i]);
+                }
+            }
+            tmpMedicineBestToWorst.SortByDescending((ThingDef x) => x.GetStatValueAbstract(StatDefOf.MedicalPotency));
+            ThingDef thingDef = null;
+            for (int j = 0; j < recipe.ingredients.Count; j++)
+            {
+                ThingDef thingDef2 = null;
+                for (int k = 0; k < tmpMedicineBestToWorst.Count; k++)
+                {
+                    if (recipe.ingredients[j].filter.Allows(tmpMedicineBestToWorst[k]))
+                    {
+                        thingDef2 = tmpMedicineBestToWorst[k];
+                    }
+                }
+                if (thingDef2 != null && (thingDef == null || thingDef2.GetStatValueAbstract(StatDefOf.MedicalPotency) > thingDef.GetStatValueAbstract(StatDefOf.MedicalPotency)))
+                {
+                    thingDef = thingDef2;
+                }
+            }
+            tmpMedicineBestToWorst.Clear();
+            return thingDef;
+        }
+    }
+
+    [HarmonyPatch(typeof(Dialog_BillConfig), "DoWindowContents")]
 	public static class Patch_DoWindowContents
 	{
 		[HarmonyPriority(int.MaxValue)]

@@ -83,7 +83,7 @@ namespace FraudeconCode
             numBounces++;
             ticksTillBounce = Props.bounceDelay;
             var dinfo = new DamageInfo(Projectile.projectile.damageDef,
-                Projectile.projectile.GetDamageAmount_NewTmp(Weapon?.def, Weapon?.Stuff) * Props.bounceDamageMultiplier,
+                Projectile.projectile.GetDamageAmount(Weapon?.def, Weapon?.Stuff) * Props.bounceDamageMultiplier,
                 Projectile.projectile.GetArmorPenetration(Weapon), Holder.DrawPos.AngleToFlat(Target.DrawPos),
                 Caster, null, Weapon?.def);
             var log = new BattleLogEntry_RangedImpact(Caster, Target, Target, Weapon?.def, Projectile, null);

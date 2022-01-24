@@ -27,9 +27,9 @@ namespace FraudeconCode
             return true;
         }
 
-        public override bool ValidateTarget(LocalTargetInfo target)
+        public override bool ValidateTarget(LocalTargetInfo target, bool showMessages = true)
         {
-            return base.ValidateTarget(target) && GetCorpse(target) != null;
+            return base.ValidateTarget(target, showMessages) && GetCorpse(target) != null;
         }
 
         public override bool CanHitTarget(LocalTargetInfo targ)

@@ -60,11 +60,6 @@ namespace HediffResourceFramework
             Scribe_Collections.Look(ref consumedResources, "consumedResources", LookMode.Def, LookMode.Value, ref defKeys, ref floatValues);
         }
 
-        public override bool ShouldDoNow()
-        {
-            return true;
-        }
-
         private List<HediffResourceDef> defKeys;
         private List<float> floatValues;
     }

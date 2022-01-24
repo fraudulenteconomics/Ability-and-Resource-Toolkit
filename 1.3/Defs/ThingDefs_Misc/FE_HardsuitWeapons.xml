@@ -153,7 +153,9 @@
 					</li>
 				</resourceSettings>
 			</li>
-			<li Class="HediffResourceFramework.CompProperties_ResourceOnAction">
+		</comps>
+		<modExtensions>
+			<li Class="HediffResourceFramework.ResourceOnActionExtension">
 				<resourcesOnAction>
 					<li>
 						<hediffApplied>FE_FusionReactor</hediffApplied>
@@ -163,7 +165,7 @@
 					</li>
 				</resourcesOnAction>
 			</li>
-		</comps>
+		</modExtensions>
 	</ThingDef>
 
 	<ThingDef ParentName="BaseBullet">

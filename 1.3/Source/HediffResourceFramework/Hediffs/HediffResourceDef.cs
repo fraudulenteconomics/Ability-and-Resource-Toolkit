@@ -13,7 +13,7 @@ namespace HediffResourceFramework
     {
         public float maxResourceCapacity;
         public float initialResourceAmount;
-		public ResourceGainPerDamage resourceGainPerDamages;
+		public List<ResourceGainPerDamage> resourceGainPerDamages;
 		public float resourceGainPerAllDamages;
 		public ShieldProperties shieldProperties;
 		public bool keepWhenEmpty;

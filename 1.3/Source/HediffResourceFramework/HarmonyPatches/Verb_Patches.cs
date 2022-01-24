@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using Verse;
 using Verse.AI;
+using static UnityEngine.GraphicsBuffer;
 
 namespace HediffResourceFramework
 {
@@ -63,10 +64,10 @@ namespace HediffResourceFramework
                     }
                 }
             }
-            var comp = __instance.EquipmentSource?.TryGetComp<CompResourceOnAction>();
-            if (comp != null)
+            var extension = __instance.EquipmentSource?.def.GetModExtension<ResourceOnActionExtension>();
+            if (extension != null)
             {
-                foreach (var resourceOnAction in comp.Props.resourcesOnAction)
+                foreach (var resourceOnAction in extension.resourcesOnAction)
                 {
                     if (resourceOnAction.onSelf)
                     {
@@ -75,6 +76,28 @@ namespace HediffResourceFramework
                     else if (target.Pawn != null)
                     {
                         resourceOnAction.TryApplyOn(target.Pawn);
+                    }
+                }
+            }
+
+            if (__instance.caster is Pawn pawn)
+            {
+                foreach (var hediff in pawn.health.hediffSet.hediffs)
+                {
+                    var extension2 = hediff.def.GetModExtension<ResourceOnActionExtension>();
+                    if (extension2 != null)
+                    {
+                        foreach (var resourceOnAction in extension2.resourcesOnAction)
+                        {
+                            if (resourceOnAction.onSelf)
+                            {
+                                resourceOnAction.TryApplyOn(__instance.CasterPawn);
+                            }
+                            else if (target.Pawn != null)
+                            {
+                                resourceOnAction.TryApplyOn(target.Pawn);
+                            }
+                        }
                     }
                 }
             }
@@ -122,14 +145,32 @@ namespace HediffResourceFramework
                 {
                     HediffResourceUtils.ApplyResourceSettings(__instance.CurrentTarget.Thing, __instance.CasterPawn, toolProps);
                 }
-                var comp = __instance.EquipmentSource?.TryGetComp<CompResourceOnAction>();
+                var comp = __instance.EquipmentSource?.def.GetModExtension<ResourceOnActionExtension>();
                 if (comp != null)
                 {
-                    foreach (var resourceOnAction in comp.Props.resourcesOnAction)
+                    foreach (var resourceOnAction in comp.resourcesOnAction)
                     {
                         if (resourceOnAction.onSelf)
                         {
                             resourceOnAction.TryApplyOn(__instance.CasterPawn);
+                        }
+                    }
+                }
+
+                if (__instance.caster is Pawn pawn)
+                {
+                    foreach (var hediff in pawn.health.hediffSet.hediffs)
+                    {
+                        var extension2 = hediff.def.GetModExtension<ResourceOnActionExtension>();
+                        if (extension2 != null)
+                        {
+                            foreach (var resourceOnAction in extension2.resourcesOnAction)
+                            {
+                                if (resourceOnAction.onSelf)
+                                {
+                                    resourceOnAction.TryApplyOn(__instance.CasterPawn);
+                                }
+                            }
                         }
                     }
                 }

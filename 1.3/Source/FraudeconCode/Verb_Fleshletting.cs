@@ -38,12 +38,12 @@ namespace FraudeconCode
             return base.ValidateTarget(targ);
         }
 
-        public override bool ValidateTarget(LocalTargetInfo target)
+        public override bool ValidateTarget(LocalTargetInfo target, bool showMessages = true)
         {
             var pawn = target.Pawn;
             if (pawn == null) return false;
             if (pawn.health.hediffSet.HasHediff(Props.applyHediff)) return false;
-            return base.ValidateTarget(target);
+            return base.ValidateTarget(target, showMessages);
         }
     }
 }

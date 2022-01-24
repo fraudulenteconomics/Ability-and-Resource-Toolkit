@@ -474,9 +474,15 @@ namespace HediffResourceFramework
         public override void Notify_PawnPostApplyDamage(DamageInfo dinfo, float totalDamageDealt)
         {
             base.Notify_PawnPostApplyDamage(dinfo, totalDamageDealt);
-            if (this.def.resourceGainPerDamages != null && this.def.resourceGainPerDamages.resourceGainOffsets.TryGetValue(dinfo.Def.defName, out float resourceGain))
+            if (this.def.resourceGainPerDamages != null)
             {
-                this.ResourceAmount += resourceGain;
+                foreach (var value in this.def.resourceGainPerDamages)
+                {
+                    if (dinfo.Def != null && value.damageDef == dinfo.Def)
+                    {
+                        this.ResourceAmount += value.GetResourceGain(totalDamageDealt);
+                    }
+                }
             }
             else if (this.def.resourceGainPerAllDamages != 0f)
             {

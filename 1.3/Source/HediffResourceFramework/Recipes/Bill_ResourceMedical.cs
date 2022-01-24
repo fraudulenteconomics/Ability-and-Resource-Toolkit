@@ -10,13 +10,13 @@ using Verse.AI;
 
 namespace HediffResourceFramework
 {
-    public class Bill_ResourceWithUft : Bill_ProductionWithUft
+    public class Bill_ResourceMedical : Bill_Medical
     {
-        public Bill_ResourceWithUft()
+        public Bill_ResourceMedical()
         {
 
         }
-        public Bill_ResourceWithUft(RecipeDef recipe, Precept_ThingStyle precept = null) : base(recipe, precept)
+        public Bill_ResourceMedical(RecipeDef recipe) : base(recipe)
         {
 
         }

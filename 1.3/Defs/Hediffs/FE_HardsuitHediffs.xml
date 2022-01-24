@@ -31,6 +31,16 @@
 		<letterTitleKey>FE.FusionReactorGainedTitle</letterTitleKey>
 		<letterMessageKey>FE.FusionReactorGainedMessage</letterMessageKey>
 		<showInResourceTab>true</showInResourceTab>
+		<resourceGainPerDamages>
+			<li>
+				<damageDef>Burn</damageDef>
+				<flat>5</flat>
+			</li>
+			<li>
+				<damageDef>Flame</damageDef>
+				<point>5</point>
+			</li>
+		</resourceGainPerDamages>
 	</HediffResourceFramework.HediffResourceDef>
 
 	<HediffResourceFramework.HediffResourceDef>

@@ -25,7 +25,7 @@ namespace FraudeconCode
                 CasterPawn?.records?.Increment(RecordDefOf.PlantsHarvested);
                 GenPlace.TryPlaceThing(thing, plant.Position, caster.Map, ThingPlaceMode.Near);
                 plant.def.plant.soundHarvestFinish?.PlayOneShot(caster);
-                plant.PlantCollected();
+                plant.PlantCollected(CasterPawn);
             }
         }
     }

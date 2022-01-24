@@ -18,7 +18,6 @@ namespace HediffResourceFramework
         public float applyChance = 1f;
         public void TryApplyOn(Pawn pawn)
         {
-            Log.Message("Applying on " + pawn);
             if (Rand.Chance(applyChance))
             {
                 if (hediffApplied is HediffResourceDef def)
@@ -32,16 +31,8 @@ namespace HediffResourceFramework
             }
         }
     }
-    public class CompProperties_ResourceOnAction : CompProperties
+    public class ResourceOnActionExtension : DefModExtension
     {
         public List<ResourceOnAction> resourcesOnAction;
-        public CompProperties_ResourceOnAction()
-        {
-            this.compClass = typeof(CompResourceOnAction);
-        }
-    }
-    public class CompResourceOnAction : ThingComp
-    {
-        public CompProperties_ResourceOnAction Props => base.props as CompProperties_ResourceOnAction;
     }
 }

@@ -10,9 +10,9 @@ namespace FraudeconCode
         protected override bool TryCastShot()
         {
             var cell = CurrentTarget.Cell;
-            if (verbProps.forcedMissRadius > 0.5f)
+            if (verbProps.ForcedMissRadius > 0.5f)
             {
-                var num = VerbUtility.CalculateAdjustedForcedMiss(verbProps.forcedMissRadius,
+                var num = VerbUtility.CalculateAdjustedForcedMiss(verbProps.ForcedMissRadius,
                     currentTarget.Cell - caster.Position);
                 if (num > 0.5f)
                 {
@@ -61,7 +61,7 @@ namespace FraudeconCode
                     var theta = Position.ToVector3().AngleToFlat(pawn.Position.ToVector3());
                     var radius = Mathf.CeilToInt(Props.meteorSize + 1);
                     pawn.Position = Position + IntVec3.FromVector3(new Vector3(radius, 0, 0).RotatedBy(theta));
-                    pawn.stances.stunner.StunFor_NewTmp(60, this);
+                    pawn.stances.stunner.StunFor(60, this);
                     pawn.Notify_Teleported(false, false);
                 }
         }

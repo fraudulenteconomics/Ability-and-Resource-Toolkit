@@ -24,14 +24,18 @@ namespace HediffResourceFramework
 		{
 			if (equipment != null)
             {
-				var comp = equipment.TryGetComp<CompResourceOnAction>();
-				if (comp != null)
+				var extension = equipment.def.GetModExtension<ResourceOnActionExtension>();
+				if (extension != null)
 				{
-					foreach (var resourceOnAction in comp.Props.resourcesOnAction)
+					foreach (var resourceOnAction in extension.resourcesOnAction)
 					{
 						if (!resourceOnAction.onSelf)
 						{
-							HediffResourceManager.Instance.firedProjectilesByEquipments[__instance] = equipment;
+							HediffResourceManager.Instance.firedProjectiles[__instance] = new FiredData
+                            {
+								caster = launcher,
+								equipment = equipment,
+                            };
 						}
 					}
 				}
@@ -99,12 +103,12 @@ namespace HediffResourceFramework
 	{
 		private static void Prefix(Projectile __instance, Thing hitThing)
 		{
-			if (hitThing is Pawn target && HediffResourceManager.Instance.firedProjectilesByEquipments.TryGetValue(__instance, out var equipment))
+			if (hitThing is Pawn target && HediffResourceManager.Instance.firedProjectiles.TryGetValue(__instance, out var firedData))
             {
-				var comp = equipment.TryGetComp<CompResourceOnAction>();
-				if (comp != null)
+				var extension = firedData.equipment?.def.GetModExtension<ResourceOnActionExtension>();
+				if (extension != null)
 				{
-					foreach (var resourceOnAction in comp.Props.resourcesOnAction)
+					foreach (var resourceOnAction in extension.resourcesOnAction)
 					{
 						if (!resourceOnAction.onSelf)
 						{
@@ -112,6 +116,24 @@ namespace HediffResourceFramework
 						}
 					}
 				}
+
+				if (firedData.caster is Pawn pawn)
+                {
+					foreach (var hediff in pawn.health.hediffSet.hediffs)
+                    {
+						var extension2 = hediff.def.GetModExtension<ResourceOnActionExtension>();
+						if (extension2 != null)
+						{
+							foreach (var resourceOnAction in extension2.resourcesOnAction)
+							{
+								if (!resourceOnAction.onSelf)
+								{
+									resourceOnAction.TryApplyOn(target);
+								}
+							}
+						}
+					}
+                }
 			}
 		}
 	}

@@ -7,13 +7,24 @@ using Verse;
 
 namespace HediffResourceFramework
 {
+    public class FiredData : IExposable
+    {
+        public Thing equipment;
+        public Thing caster;
+
+        public void ExposeData()
+        {
+            Scribe_References.Look(ref equipment, "launcher");
+            Scribe_References.Look(ref caster, "caster");
+        }
+    }
     public class HediffResourceManager : GameComponent
     {
         public Dictionary<Pawn, HediffResourcePolicy> hediffResourcesPolicies = new Dictionary<Pawn, HediffResourcePolicy>();
         private List<IAdjustResource> resourceAdjusters = new List<IAdjustResource>();
         private List<IAdjustResource> resourceAdjustersToUpdate = new List<IAdjustResource>();
         public Dictionary<Thing, StatBonuses> thingsWithBonuses = new Dictionary<Thing, StatBonuses>();
-        public Dictionary<Projectile, Thing> firedProjectilesByEquipments = new Dictionary<Projectile, Thing>();
+        public Dictionary<Projectile, FiredData> firedProjectiles = new Dictionary<Projectile, FiredData>();
 
         public bool dirtyUpdate;
 
@@ -67,7 +78,7 @@ namespace HediffResourceFramework
             if (resourceAdjusters is null) resourceAdjusters = new List<IAdjustResource>();
             if (thingsWithBonuses is null) thingsWithBonuses = new Dictionary<Thing, StatBonuses>();
             if (hediffResourcesPolicies is null) hediffResourcesPolicies = new Dictionary<Pawn, HediffResourcePolicy>();
-            if (firedProjectilesByEquipments is null) firedProjectilesByEquipments = new Dictionary<Projectile, Thing>();
+            if (firedProjectiles is null) firedProjectiles = new Dictionary<Projectile, FiredData>();
         }
 
         public override void LoadedGame()
@@ -102,7 +113,7 @@ namespace HediffResourceFramework
                 {
                     policy.satisfyPolicies[hediffResourceDef] = new HediffResourceSatisfyPolicy();
                 }
-                HediffResourceManager.Instance.hediffResourcesPolicies[pawn] = policy;
+                hediffResourcesPolicies[pawn] = policy;
             }
             else
             {
@@ -160,7 +171,7 @@ namespace HediffResourceFramework
             base.ExposeData();
             Scribe_Collections.Look(ref thingsWithBonuses, "thingsWithBonuses", LookMode.Reference, LookMode.Deep, ref thingKeys, ref thingStatsValues);
             Scribe_Collections.Look(ref hediffResourcesPolicies, "hediffResourcesPolicies", LookMode.Reference, LookMode.Deep, ref pawnKeys, ref hediffResourcePolicyValues);
-            Scribe_Collections.Look(ref firedProjectilesByEquipments, "firedProjectilesByEquipments", LookMode.Reference, LookMode.Reference, ref projectileKeys, ref thingValues);
+            Scribe_Collections.Look(ref firedProjectiles, "firedProjectiles", LookMode.Reference, LookMode.Deep, ref projectileKeys, ref firedDataValues);
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
                 PreInit();
@@ -174,6 +185,6 @@ namespace HediffResourceFramework
         private List<HediffResourcePolicy> hediffResourcePolicyValues;
 
         private List<Projectile> projectileKeys;
-        private List<Thing> thingValues;
+        private List<FiredData> firedDataValues;
     }
 }
