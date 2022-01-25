@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
+using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -54,9 +55,30 @@ namespace HediffResourceFramework
         }
     }
 
+    [HarmonyPatch(typeof(TendUtility), "GetOptimalHediffsToTendWithSingleTreatment")]
+    public static class Patch_GetOptimalHediffsToTendWithSingleTreatment
+    {
+        private static void Prefix(Pawn patient, ref bool usingMedicine, List<Hediff> outHediffsToTend, List<Hediff> tendableHediffsInTendPriorityOrder = null)
+        {
+            if (TendUtility_DoTend_Patch.healer != null && TendUtility_DoTend_Patch.healer.HasEnoughResourceToTend(out _))
+            {
+                usingMedicine = true;
+            }
+        }
+    }
+
     [HarmonyPatch(typeof(TendUtility), "DoTend")]
     public static class TendUtility_DoTend_Patch
     {
+        public static Pawn healer;
+        private static void Prefix(Pawn doctor)
+        {
+            healer = doctor;
+        }
+        private static void Postfix()
+        {
+            healer = null;
+        }
         public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
         {
             var codes = instructions.ToList();
