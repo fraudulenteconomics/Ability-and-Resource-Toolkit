@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 using UnityEngine;
 using Verse;
 using Verse.AI;
-using static UnityEngine.GraphicsBuffer;
 
 namespace HediffResourceFramework
 {
@@ -103,36 +102,46 @@ namespace HediffResourceFramework
 	{
 		private static void Prefix(Projectile __instance, Thing hitThing)
 		{
-			if (hitThing is Pawn target && HediffResourceManager.Instance.firedProjectiles.TryGetValue(__instance, out var firedData))
+			if (HediffResourceManager.Instance.firedProjectiles.TryGetValue(__instance, out var firedData))
             {
-				var extension = firedData.equipment?.def.GetModExtension<ResourceOnActionExtension>();
-				if (extension != null)
-				{
-					foreach (var resourceOnAction in extension.resourcesOnAction)
+				var target = hitThing as Pawn;
+				if (target != null)
+                {
+					var extension = firedData.equipment?.def.GetModExtension<ResourceOnActionExtension>();
+					if (extension != null)
 					{
-						if (!resourceOnAction.onSelf)
+						foreach (var resourceOnAction in extension.resourcesOnAction)
 						{
-							resourceOnAction.TryApplyOn(target);
+							if (!resourceOnAction.onSelf)
+							{
+								resourceOnAction.TryApplyOn(target);
+							}
 						}
 					}
-				}
 
-				if (firedData.caster is Pawn pawn)
-                {
-					foreach (var hediff in pawn.health.hediffSet.hediffs)
-                    {
-						var extension2 = hediff.def.GetModExtension<ResourceOnActionExtension>();
-						if (extension2 != null)
+					if (firedData.caster is Pawn pawn)
+					{
+						foreach (var hediff in pawn.health.hediffSet.hediffs)
 						{
-							foreach (var resourceOnAction in extension2.resourcesOnAction)
+							var extension2 = hediff.def.GetModExtension<ResourceOnActionExtension>();
+							if (extension2 != null)
 							{
-								if (!resourceOnAction.onSelf)
+								foreach (var resourceOnAction in extension2.resourcesOnAction)
 								{
-									resourceOnAction.TryApplyOn(target);
+									if (!resourceOnAction.onSelf)
+									{
+										resourceOnAction.TryApplyOn(target);
+									}
 								}
 							}
 						}
 					}
+				}
+
+				var stuffExtension = firedData.equipment?.Stuff?.GetModExtension<StuffExtension>();
+				if (stuffExtension != null)
+                {
+					stuffExtension.DamageThing(firedData.caster, hitThing, null);
                 }
 			}
 		}

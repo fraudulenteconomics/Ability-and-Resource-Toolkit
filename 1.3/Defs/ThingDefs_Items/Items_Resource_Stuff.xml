@@ -64,6 +64,12 @@
 					<resourcePerSecondOffset>1</resourcePerSecondOffset>
 				</li>
 			</resourceSettings>
+			<additionalDamages>
+				<li>
+					<damage>Burn</damage>
+					<damageRange>1~5.5</damageRange>
+				</li>
+			</additionalDamages>
 		</li>
 	</modExtensions>
   </ThingDef>

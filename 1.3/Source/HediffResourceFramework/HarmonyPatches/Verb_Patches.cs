@@ -101,6 +101,12 @@ namespace HediffResourceFramework
                     }
                 }
             }
+
+            var stuffExtension = __instance.EquipmentSource?.Stuff?.GetModExtension<StuffExtension>();
+            if (stuffExtension != null)
+            {
+                stuffExtension.DamageThing(__instance.caster, target.Thing, null);
+            }
         }
     }
 

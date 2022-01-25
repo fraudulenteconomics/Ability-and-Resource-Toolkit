@@ -81,6 +81,8 @@
     <Compile Include="Hediffs\RefuelProperties.cs" />
     <Compile Include="Hediffs\RepairProperties.cs" />
     <Compile Include="Hediffs\TendProperties.cs" />
+    <Compile Include="ModExtensions\EquipmentExtension.cs" />
+    <Compile Include="HRF_DefOf.cs" />
     <Compile Include="ModExtensions\RecipeOutcomes.cs" />
     <Compile Include="ModExtensions\StuffExtension.cs" />
     <Compile Include="Recipes\Bill_ResourceMedical.cs" />
