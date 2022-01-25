@@ -553,23 +553,23 @@ namespace HediffResourceFramework
 				var hediffResources = GetHediffResourcesFor(pawn);
 				foreach (var hediff in hediffResources)
 				{
-					if (hediff.def.ShieldIsActive(pawn))
+					if (hediff.CurStage is HediffStageResource hediffStageResource && hediffStageResource.ShieldIsActive(pawn))
 					{
-						if (hediff.def.shieldProperties.cannotUseVerbType == VerbType.Both)
+						if (hediffStageResource.shieldProperties.cannotUseVerbType == VerbType.Both)
 						{
 							disableReason = "HRF.ShieldPreventAllAttack".Translate();
 							return false;
 						}
-						else if (hediff.def.shieldProperties.cannotUseVerbType == VerbType.None)
+						else if (hediffStageResource.shieldProperties.cannotUseVerbType == VerbType.None)
 						{
 							continue;
 						}
-						else if (verb.IsMeleeAttack && hediff.def.shieldProperties.cannotUseVerbType == VerbType.Melee)
+						else if (verb.IsMeleeAttack && hediffStageResource.shieldProperties.cannotUseVerbType == VerbType.Melee)
 						{
 							disableReason = "HRF.ShieldPreventMeleeAttack".Translate();
 							return false;
 						}
-						else if (hediff.def.shieldProperties.cannotUseVerbType == VerbType.Range)
+						else if (hediffStageResource.shieldProperties.cannotUseVerbType == VerbType.Range)
 						{
 							disableReason = "HRF.ShieldPreventRangeAttack".Translate();
 							return false;

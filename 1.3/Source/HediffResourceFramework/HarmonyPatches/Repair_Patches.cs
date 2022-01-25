@@ -77,18 +77,18 @@ namespace HediffResourceFramework
         {
             foreach (var hediff in repairer.health.hediffSet.hediffs)
             {
-                if (hediff is HediffResource hediffResource && hediffResource.def.repairProperties != null)
+                if (hediff is HediffResource hediffResource && hediffResource.CurStage is HediffStageResource hediffStageResource && hediffStageResource.repairProperties != null)
                 {
-                    var hediffSource = hediffResource.def.repairProperties.hediffResource != null
-                        ? repairer.health.hediffSet.GetFirstHediffOfDef(hediffResource.def.repairProperties.hediffResource) as HediffResource
+                    var hediffSource = hediffStageResource.repairProperties.hediffResource != null
+                        ? repairer.health.hediffSet.GetFirstHediffOfDef(hediffStageResource.repairProperties.hediffResource) as HediffResource
                         : hediffResource;
 
                     if (hediffSource != null)
                     {
-                        bool canRepair = hediffSource.ResourceAmount >= hediffResource.def.repairProperties.resourceOnRepair;
+                        bool canRepair = hediffSource.ResourceAmount >= hediffStageResource.repairProperties.resourceOnRepair;
                         if (canRepair)
                         {
-                            toConsume = (hediffSource, hediffResource.def.repairProperties);
+                            toConsume = (hediffSource, hediffStageResource.repairProperties);
                             return true;
                         }
                     }

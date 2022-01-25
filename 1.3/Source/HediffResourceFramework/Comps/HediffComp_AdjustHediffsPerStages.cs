@@ -9,12 +9,7 @@ using Verse;
 
 namespace HediffResourceFramework
 {
-
-    public class HediffResourceStage : HediffStage
-    {
-        public List<HediffOption> resourceSettings;
-    }
-	public class HediffCompProperties_AdjustHediffsPerStages : HediffCompProperties
+    public class HediffCompProperties_AdjustHediffsPerStages : HediffCompProperties
 	{
         public string disablePostUse;
         public HediffCompProperties_AdjustHediffsPerStages()
@@ -31,7 +26,7 @@ namespace HediffResourceFramework
         {
             get
             {
-                if (this.parent.CurStage is HediffResourceStage hediffResourceStage)
+                if (this.parent.CurStage is HediffStageResource hediffResourceStage)
                 {
                     return hediffResourceStage.resourceSettings;
                 }

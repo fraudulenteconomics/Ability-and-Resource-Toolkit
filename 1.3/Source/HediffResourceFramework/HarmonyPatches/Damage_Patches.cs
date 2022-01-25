@@ -164,9 +164,9 @@ namespace HediffResourceFramework
 				for (int num = hediffResources.Count - 1; num >= 0; num--)
 				{
 					var hediff = hediffResources[num];
-					if (dinfo.Amount > 0 && hediff.def.ShieldIsActive(__instance))
+					if (dinfo.Amount > 0 && hediff.CurStage is HediffStageResource hediffStageResource && hediffStageResource.ShieldIsActive(__instance))
 					{
-						var shieldProps = hediff.def.shieldProperties;
+						var shieldProps = hediffStageResource.shieldProperties;
 						if (shieldProps.absorbRangeDamage && (dinfo.Weapon?.IsRangedWeapon ?? false))
 						{
 							ProcessDamage(__instance, ref dinfo, hediff, shieldProps);
@@ -279,7 +279,7 @@ namespace HediffResourceFramework
 		{
 			foreach (var h in ___pawn.health.hediffSet.hediffs)
             {
-				if (h is HediffResource hr && hr.def.effectWhenDowned != null)
+				if (h is HediffResource hr && hr.CurStage is HediffStageResource hediffStageResource && hediffStageResource.effectWhenDowned != null)
                 {
 					if (!HediffResourceManager.Instance.pawnDownedStates.TryGetValue(___pawn, out var downedStateData))
                     {
@@ -288,18 +288,18 @@ namespace HediffResourceFramework
 							lastDownedEffectTicks = new Dictionary<HediffResourceDef, int>()
 						};
 					}
-					if (hr.def.effectWhenDowned.ticksBetweenActivations > 0 && 
-						(!downedStateData.lastDownedEffectTicks.TryGetValue(hr.def, out var value) || Find.TickManager.TicksGame >= value + hr.def.effectWhenDowned.ticksBetweenActivations))
+					if (hediffStageResource.effectWhenDowned.ticksBetweenActivations > 0 && 
+						(!downedStateData.lastDownedEffectTicks.TryGetValue(hr.def, out var value) || Find.TickManager.TicksGame >= value + hediffStageResource.effectWhenDowned.ticksBetweenActivations))
                     {
 						downedStateData.lastDownedEffectTicks[hr.def] = Find.TickManager.TicksGame;
-						var hediffToApply = hr.def.effectWhenDowned.hediff != null ? hr.def.effectWhenDowned.hediff : hr.def;
+						var hediffToApply = hediffStageResource.effectWhenDowned.hediff != null ? hediffStageResource.effectWhenDowned.hediff : hr.def;
 						if (hediffToApply is HediffResourceDef resourceDef)
                         {
-							HediffResourceUtils.AdjustResourceAmount(___pawn, resourceDef, hr.def.effectWhenDowned.apply, true, null);
+							HediffResourceUtils.AdjustResourceAmount(___pawn, resourceDef, hediffStageResource.effectWhenDowned.apply, true, null);
 						}
 						else
                         {
-							HealthUtility.AdjustSeverity(___pawn, hediffToApply, hr.def.effectWhenDowned.apply);
+							HealthUtility.AdjustSeverity(___pawn, hediffToApply, hediffStageResource.effectWhenDowned.apply);
                         }
 					}
                 }

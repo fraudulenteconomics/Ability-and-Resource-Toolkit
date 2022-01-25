@@ -31,43 +31,47 @@
 		<letterTitleKey>FE.FusionReactorGainedTitle</letterTitleKey>
 		<letterMessageKey>FE.FusionReactorGainedMessage</letterMessageKey>
 		<showInResourceTab>true</showInResourceTab>
-		<resourceGainPerDamages>
-			<li>
-				<damageDef>Burn</damageDef>
-				<flat>5</flat>
+		<stages>
+			<li Class="HediffResourceFramework.HediffStageResource">
+				<resourceGainPerDamages>
+					<li>
+						<damageDef>Burn</damageDef>
+						<flat>5</flat>
+					</li>
+					<li>
+						<damageDef>Flame</damageDef>
+						<point>5</point>
+					</li>
+				</resourceGainPerDamages>
+				<tendProperties>
+					<statBases>
+						<MedicalPotency>1.00</MedicalPotency>
+						<MedicalQualityMax>1.00</MedicalQualityMax>
+					</statBases>
+					<resourceOnTend>10</resourceOnTend>
+					<!--<hediffSource>optional value</hediffSource> -->
+				</tendProperties>
+				<effectWhenDowned>
+					<hediff>FE_FusionReactor</hediff>
+					<apply>10</apply>
+					<ticksBetweenActivations>666</ticksBetweenActivations>
+					<showDownActivationTimer>true</showDownActivationTimer>
+				</effectWhenDowned>
+				<repairProperties>
+					<resourceOnRepair>6</resourceOnRepair>
+					<!--<hediffSource>optional value</hediffSource> -->
+				</repairProperties>
+				<refuelProperties>
+					<li>
+						<hediffResource>FE_FusionReactor</hediffResource>
+						<resourcesPerFuelUnit>
+							<WoodLog>0.1</WoodLog>
+							<Chemfuel>0.66</Chemfuel>
+						</resourcesPerFuelUnit>
+					</li>
+				</refuelProperties>
 			</li>
-			<li>
-				<damageDef>Flame</damageDef>
-				<point>5</point>
-			</li>
-		</resourceGainPerDamages>
-		<tendProperties>
-			<statBases>
-				<MedicalPotency>1.00</MedicalPotency>
-				<MedicalQualityMax>1.00</MedicalQualityMax>
-			</statBases>
-			<resourceOnTend>10</resourceOnTend>
-			<!--<hediffSource>optional value</hediffSource> -->
-		</tendProperties>
-		<effectWhenDowned>
-			<hediff>FE_FusionReactor</hediff>
-			<apply>10</apply>
-			<ticksBetweenActivations>666</ticksBetweenActivations>
-			<showDownActivationTimer>true</showDownActivationTimer>
-		</effectWhenDowned>
-		<repairProperties>
-			<resourceOnRepair>6</resourceOnRepair>
-			<!--<hediffSource>optional value</hediffSource> -->
-		</repairProperties>
-		<refuelProperties>
-			<li>
-				<hediffResource>FE_FusionReactor</hediffResource>
-				<resourcesPerFuelUnit>
-					<WoodLog>0.1</WoodLog>
-					<Chemfuel>0.66</Chemfuel>
-				</resourcesPerFuelUnit>
-			</li>
-		</refuelProperties>
+		</stages>
 	</HediffResourceFramework.HediffResourceDef>
 
 	<HediffResourceFramework.HediffResourceDef>
@@ -128,13 +132,17 @@
 		<tendable>false</tendable>
 		<makesSickThought>false</makesSickThought>
 		<defaultLabelColor>(0.7,0.5,0.2)</defaultLabelColor>
-		<shieldProperties>
-			<absorbMeleeDamage>true</absorbMeleeDamage>
-			<absorbRangeDamage>true</absorbRangeDamage>
-			<maxAbsorb>25</maxAbsorb>
-			<damageAbsorbedPerResource>1</damageAbsorbedPerResource>
-			<postDamageDelay>600</postDamageDelay>
-		</shieldProperties>
+		<stages>
+			<li Class="HediffResourceFramework.HediffStageResource">
+				<shieldProperties>
+					<absorbMeleeDamage>true</absorbMeleeDamage>
+					<absorbRangeDamage>true</absorbRangeDamage>
+					<maxAbsorb>25</maxAbsorb>
+					<damageAbsorbedPerResource>1</damageAbsorbedPerResource>
+					<postDamageDelay>600</postDamageDelay>
+				</shieldProperties>
+			</li>
+		</stages>
 		<showResourceBar>true</showResourceBar>
 	</HediffResourceFramework.HediffResourceDef>
 
@@ -148,12 +156,12 @@
 		<tendable>false</tendable>
 		<makesSickThought>false</makesSickThought>
 		<defaultLabelColor>(0.8,0.2,0.2)</defaultLabelColor>
-		<resourceGainPerAllDamages>5</resourceGainPerAllDamages>
 		<stages>
 			<li>
 				<label>inactive</label>
 			</li>
-			<li>
+			<li Class="HediffResourceFramework.HediffStageResource">
+				<resourceGainPerAllDamages>5</resourceGainPerAllDamages>
 				<label>initialized</label>
 				<minSeverity>1</minSeverity>
 				<statFactors>
@@ -203,7 +211,7 @@
 					<ShootingAccuracyPawn>10</ShootingAccuracyPawn>
 				</statOffsets>
 			</li>
-			<li Class="HediffResourceFramework.HediffResourceStage">
+			<li Class="HediffResourceFramework.HediffStageResource">
 				<label>optimized</label>
 				<minSeverity>90</minSeverity>
 				<statOffsets>
@@ -232,13 +240,17 @@
 		<makesSickThought>false</makesSickThought>
 		<defaultLabelColor>(0.9,0.9,0.9)</defaultLabelColor>
 		<resourceBarTextColor>(25, 25, 50)</resourceBarTextColor>
-		<shieldProperties>
-			<absorbMeleeDamage>true</absorbMeleeDamage>
-			<absorbRangeDamage>true</absorbRangeDamage>
-			<maxAbsorb>10</maxAbsorb>
-			<damageAbsorbedPerResource>1</damageAbsorbedPerResource>
-			<postDamageDelay>0</postDamageDelay>
-		</shieldProperties>
+		<stages>
+			<li Class="HediffResourceFramework.HediffStageResource">
+				<shieldProperties>
+					<absorbMeleeDamage>true</absorbMeleeDamage>
+					<absorbRangeDamage>true</absorbRangeDamage>
+					<maxAbsorb>10</maxAbsorb>
+					<damageAbsorbedPerResource>1</damageAbsorbedPerResource>
+					<postDamageDelay>0</postDamageDelay>
+				</shieldProperties>
+			</li>
+		</stages>
 		<showResourceBar>true</showResourceBar>
 		<maxResourceCapacity>100</maxResourceCapacity>
 		<lifetimeTicks>10000</lifetimeTicks>
@@ -375,7 +387,7 @@
 		<hideResourceAmount>true</hideResourceAmount>
 		<!-- <useAbsoluteSeverity>true</useAbsoluteSeverity> -->
 		<stages>
-			<li Class="HediffResourceFramework.HediffResourceStage">
+			<li Class="HediffResourceFramework.HediffStageResource">
 				<minSeverity>0.01</minSeverity>
 				<label>trace</label>
 				<capMods>
@@ -392,7 +404,7 @@
 					</li>
 				</resourceSettings>
 			</li>
-			<li Class="HediffResourceFramework.HediffResourceStage">
+			<li Class="HediffResourceFramework.HediffStageResource">
 				<minSeverity>0.25</minSeverity>
 				<label>minor</label>
 				<capMods>
@@ -413,7 +425,7 @@
 					</li>
 				</resourceSettings>
 			</li>
-			<li Class="HediffResourceFramework.HediffResourceStage">
+			<li Class="HediffResourceFramework.HediffStageResource">
 				<minSeverity>0.55</minSeverity>
 				<label>major</label>
 				<capMods>
@@ -434,7 +446,7 @@
 					</li>
 				</resourceSettings>
 			</li>
-			<li Class="HediffResourceFramework.HediffResourceStage">
+			<li Class="HediffResourceFramework.HediffStageResource">
 				<minSeverity>0.85</minSeverity>
 				<label>acute</label>
 				<capMods>
@@ -470,7 +482,7 @@
 		<defaultLabelColor>(0.1,0.9,0.5)</defaultLabelColor>
 		<maxResourceCapacity>200</maxResourceCapacity>
 		<stages>
-			<li Class="HediffResourceFramework.HediffResourceStage">
+			<li Class="HediffResourceFramework.HediffStageResource">
 				<minSeverity>0</minSeverity>
 				<label>initial</label>
 				<becomeVisible>false</becomeVisible>
@@ -483,7 +495,7 @@
 					</li>
 				</resourceSettings>
 			</li>
-			<li Class="HediffResourceFramework.HediffResourceStage">
+			<li Class="HediffResourceFramework.HediffStageResource">
 				<minSeverity>50</minSeverity>
 				<label>lesser</label>
 				<becomeVisible>false</becomeVisible>
@@ -496,7 +508,7 @@
 					</li>
 				</resourceSettings>
 			</li>
-			<li Class="HediffResourceFramework.HediffResourceStage">
+			<li Class="HediffResourceFramework.HediffStageResource">
 				<minSeverity>100</minSeverity>
 				<label>resistant</label>
 				<becomeVisible>false</becomeVisible>
@@ -509,7 +521,7 @@
 					</li>
 				</resourceSettings>
 			</li>
-			<li Class="HediffResourceFramework.HediffResourceStage">
+			<li Class="HediffResourceFramework.HediffStageResource">
 				<minSeverity>150</minSeverity>
 				<label>potent</label>
 				<becomeVisible>false</becomeVisible>
@@ -522,7 +534,7 @@
 					</li>
 				</resourceSettings>
 			</li>
-			<li Class="HediffResourceFramework.HediffResourceStage">
+			<li Class="HediffResourceFramework.HediffStageResource">
 				<minSeverity>200</minSeverity>
 				<label>fortified</label>
 				<becomeVisible>false</becomeVisible>

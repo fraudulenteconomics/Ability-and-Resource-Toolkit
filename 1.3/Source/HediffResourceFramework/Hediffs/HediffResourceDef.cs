@@ -12,9 +12,6 @@ namespace HediffResourceFramework
     {
         public float maxResourceCapacity;
         public float initialResourceAmount;
-		public List<ResourceGainPerDamage> resourceGainPerDamages;
-		public float resourceGainPerAllDamages;
-		public ShieldProperties shieldProperties;
 		public bool keepWhenEmpty;
 		public int lifetimeTicks = -1;
 		public bool hideResourceAmount;
@@ -34,22 +31,5 @@ namespace HediffResourceFramework
 
 		public bool showInResourceTab;
 		public float resourcePerSecondFactor = 1f;
-
-		public TendProperties tendProperties;
-		public EffectWhenDowned effectWhenDowned;
-		public RepairProperties repairProperties;
-		public List<RefuelProperties> refuelProperties;
-		public bool ShieldIsActive(Pawn pawn)
-        {
-			if (shieldProperties != null)
-            {
-				if (shieldProperties.activeWithHediffs != null && pawn.health.hediffSet.hediffs.Any())
-                {
-					return pawn.health.hediffSet.hediffs.All(x => shieldProperties.activeWithHediffs.Contains(x.def));
-				}
-				return true;
-            }
-			return false;
-        }
 	}
 }

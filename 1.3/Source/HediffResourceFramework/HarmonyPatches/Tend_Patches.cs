@@ -31,21 +31,24 @@ namespace HediffResourceFramework
 
         public static bool HasEnoughResourceToTend(this Pawn healer, out (HediffResource, TendProperties) toConsume)
         {
-            foreach (var hediff in healer.health.hediffSet.hediffs)
+            if (healer?.health?.hediffSet?.hediffs != null)
             {
-                if (hediff is HediffResource hediffResource && hediffResource.def.tendProperties != null)
+                foreach (var hediff in healer.health.hediffSet.hediffs)
                 {
-                    var hediffSource = hediffResource.def.tendProperties.hediffResource != null
-                        ? healer.health.hediffSet.GetFirstHediffOfDef(hediffResource.def.tendProperties.hediffResource) as HediffResource
-                        : hediffResource;
-
-                    if (hediffSource != null)
+                    if (hediff is HediffResource hediffResource && hediffResource.CurStage is HediffStageResource hediffStageResource && hediffStageResource.tendProperties != null)
                     {
-                        bool canTend = hediffSource.ResourceAmount >= hediffResource.def.tendProperties.resourceOnTend;
-                        if (canTend)
+                        var hediffSource = hediffStageResource.tendProperties.hediffResource != null
+                            ? healer.health.hediffSet.GetFirstHediffOfDef(hediffStageResource.tendProperties.hediffResource) as HediffResource
+                            : hediffResource;
+
+                        if (hediffSource != null)
                         {
-                            toConsume = (hediffSource, hediffResource.def.tendProperties);
-                            return true;
+                            bool canTend = hediffSource.ResourceAmount >= hediffStageResource.tendProperties.resourceOnTend;
+                            if (canTend)
+                            {
+                                toConsume = (hediffSource, hediffStageResource.tendProperties);
+                                return true;
+                            }
                         }
                     }
                 }

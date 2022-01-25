@@ -16,6 +16,7 @@ namespace HediffResourceFramework
         private float resourceAmount;
         public int duration;
         public int delayTicks;
+        public HediffStageResource CurStageResource => this.CurStage as HediffStageResource;
         public IEnumerable<Tuple<CompAdjustHediffs, HediffOption, ResourceStorage>> GetResourceTupleStorages()
         {
             foreach (var adjustResource in this.pawn.GetAllAdjustHediffsComps())
@@ -322,13 +323,13 @@ namespace HediffResourceFramework
                 {
                     label += " (" + Mathf.CeilToInt((this.def.lifetimeTicks - this.duration).TicksToSeconds()) + "s)";
                 }
-                if (this.def.effectWhenDowned != null && this.def.effectWhenDowned.ticksBetweenActivations > 0)
+                if (this.CurStage is HediffStageResource hediffStageResource && hediffStageResource.effectWhenDowned != null && hediffStageResource.effectWhenDowned.ticksBetweenActivations > 0)
                 {
                     if (HediffResourceManager.Instance.pawnDownedStates.TryGetValue(pawn, out var state))
                     {
                         if (state.lastDownedEffectTicks.TryGetValue(this.def, out var value))
                         {
-                            var enabledInTick = value + this.def.effectWhenDowned.ticksBetweenActivations;
+                            var enabledInTick = value + hediffStageResource.effectWhenDowned.ticksBetweenActivations;
                             if (enabledInTick > Find.TickManager.TicksGame)
                             {
                                 label += " (" + "HRF.WillBeActiveIn".Translate((enabledInTick - Find.TickManager.TicksGame).ToStringTicksToPeriod()) + ")";
@@ -430,14 +431,14 @@ namespace HediffResourceFramework
             {
                 if (bubbleMat is null)
                 {
-                    bubbleMat = MaterialPool.MatFrom("Other/ShieldBubble", ShaderDatabase.Transparent, this.def.shieldProperties.shieldColor);
+                    bubbleMat = MaterialPool.MatFrom("Other/ShieldBubble", ShaderDatabase.Transparent, CurStageResource.shieldProperties.shieldColor);
                 }
                 return bubbleMat;
             }
         }
         public void Draw()
         {
-            if (this.def.ShieldIsActive(pawn) && this.ResourceAmount > 0)
+            if (this.CurStage is HediffStageResource hediffStageResource && hediffStageResource.ShieldIsActive(pawn) && this.ResourceAmount > 0)
             {
                 float num = Mathf.Lerp(1.2f, 1.55f, this.def.lifetimeTicks != -1 ? (this.def.lifetimeTicks - duration) / this.def.lifetimeTicks : 1);
                 Vector3 drawPos = base.pawn.Drawer.DrawPos;
@@ -487,19 +488,22 @@ namespace HediffResourceFramework
         public override void Notify_PawnPostApplyDamage(DamageInfo dinfo, float totalDamageDealt)
         {
             base.Notify_PawnPostApplyDamage(dinfo, totalDamageDealt);
-            if (this.def.resourceGainPerDamages != null)
+            if (this.CurStage is HediffStageResource hediffStageResource)
             {
-                foreach (var value in this.def.resourceGainPerDamages)
+                if (hediffStageResource.resourceGainPerDamages != null)
                 {
-                    if (dinfo.Def != null && value.damageDef == dinfo.Def)
+                    foreach (var value in hediffStageResource.resourceGainPerDamages)
                     {
-                        this.ResourceAmount += value.GetResourceGain(totalDamageDealt);
+                        if (dinfo.Def != null && value.damageDef == dinfo.Def)
+                        {
+                            this.ResourceAmount += value.GetResourceGain(totalDamageDealt);
+                        }
                     }
                 }
-            }
-            else if (this.def.resourceGainPerAllDamages != 0f)
-            {
-                this.ResourceAmount += this.def.resourceGainPerAllDamages;
+                else if (hediffStageResource.resourceGainPerAllDamages != 0f)
+                {
+                    this.ResourceAmount += hediffStageResource.resourceGainPerAllDamages;
+                }
             }
         }
         public override void PostAdd(DamageInfo? dinfo)

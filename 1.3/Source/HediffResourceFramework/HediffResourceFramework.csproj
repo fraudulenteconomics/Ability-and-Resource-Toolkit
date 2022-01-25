@@ -63,7 +63,8 @@
     <Compile Include="Comps\CompChargeResource.cs" />
     <Compile Include="Comps\HediffComp_AdjustHediffsPerStages.cs" />
     <Compile Include="Comps\HediffComp_AdjustHediffs.cs" />
-    <Compile Include="Comps\HediffResouceDisable.cs" />
+    <Compile Include="Hediffs\HediffResouceDisable.cs" />
+    <Compile Include="Hediffs\HediffStageResource.cs" />
     <Compile Include="Comps\StatBooster.cs" />
     <Compile Include="DownedStateData.cs" />
     <Compile Include="FiredData.cs" />

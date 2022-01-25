@@ -63,9 +63,9 @@ namespace HediffResourceFramework
             ThingFilter filter = compRefuelable.Props.fuelFilter;
             foreach (var hediff in refueler.health.hediffSet.hediffs)
             {
-                if (hediff is HediffResource hediffResource && hediffResource.def.refuelProperties != null)
+                if (hediff is HediffResource hediffResource && hediffResource.CurStage is HediffStageResource hediffStageResource && hediffStageResource.refuelProperties != null)
                 {
-                    foreach (var li in hediffResource.def.refuelProperties)
+                    foreach (var li in hediffStageResource.refuelProperties)
                     {
                         var hediffSource = li.hediffResource != null
                             ? refueler.health.hediffSet.GetFirstHediffOfDef(li.hediffResource) as HediffResource
