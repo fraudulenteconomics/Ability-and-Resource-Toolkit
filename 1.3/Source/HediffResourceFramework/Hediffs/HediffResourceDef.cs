@@ -1,5 +1,4 @@
-﻿using RimWorld;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -36,6 +35,10 @@ namespace HediffResourceFramework
 		public bool showInResourceTab;
 		public float resourcePerSecondFactor = 1f;
 
+		public TendProperties tendProperties;
+		public EffectWhenDowned effectWhenDowned;
+		public RepairProperties repairProperties;
+		public List<RefuelProperties> refuelProperties;
 		public bool ShieldIsActive(Pawn pawn)
         {
 			if (shieldProperties != null)

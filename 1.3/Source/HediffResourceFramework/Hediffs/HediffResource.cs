@@ -16,7 +16,6 @@ namespace HediffResourceFramework
         private float resourceAmount;
         public int duration;
         public int delayTicks;
-
         public IEnumerable<Tuple<CompAdjustHediffs, HediffOption, ResourceStorage>> GetResourceTupleStorages()
         {
             foreach (var adjustResource in this.pawn.GetAllAdjustHediffsComps())
@@ -322,6 +321,20 @@ namespace HediffResourceFramework
                 if (this.def.lifetimeTicks != -1)
                 {
                     label += " (" + Mathf.CeilToInt((this.def.lifetimeTicks - this.duration).TicksToSeconds()) + "s)";
+                }
+                if (this.def.effectWhenDowned != null && this.def.effectWhenDowned.ticksBetweenActivations > 0)
+                {
+                    if (HediffResourceManager.Instance.pawnDownedStates.TryGetValue(pawn, out var state))
+                    {
+                        if (state.lastDownedEffectTicks.TryGetValue(this.def, out var value))
+                        {
+                            var enabledInTick = value + this.def.effectWhenDowned.ticksBetweenActivations;
+                            if (enabledInTick > Find.TickManager.TicksGame)
+                            {
+                                label += " (" + "HRF.WillBeActiveIn".Translate((enabledInTick - Find.TickManager.TicksGame).ToStringTicksToPeriod()) + ")";
+                            }
+                        }
+                    }
                 }
                 return label;
             }

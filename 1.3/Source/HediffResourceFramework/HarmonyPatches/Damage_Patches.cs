@@ -271,4 +271,39 @@ namespace HediffResourceFramework
 			}
 		}
 	}
+
+	[HarmonyPatch(typeof(Pawn_HealthTracker), "MakeDowned")]
+	public static class MakeDowned_Patch
+	{
+		private static void Postfix(Pawn ___pawn, DamageInfo? dinfo, Hediff hediff)
+		{
+			foreach (var h in ___pawn.health.hediffSet.hediffs)
+            {
+				if (h is HediffResource hr && hr.def.effectWhenDowned != null)
+                {
+					if (!HediffResourceManager.Instance.pawnDownedStates.TryGetValue(___pawn, out var downedStateData))
+                    {
+						HediffResourceManager.Instance.pawnDownedStates[___pawn] = downedStateData = new DownedStateData
+						{
+							lastDownedEffectTicks = new Dictionary<HediffResourceDef, int>()
+						};
+					}
+					if (hr.def.effectWhenDowned.ticksBetweenActivations > 0 && 
+						(!downedStateData.lastDownedEffectTicks.TryGetValue(hr.def, out var value) || Find.TickManager.TicksGame >= value + hr.def.effectWhenDowned.ticksBetweenActivations))
+                    {
+						downedStateData.lastDownedEffectTicks[hr.def] = Find.TickManager.TicksGame;
+						var hediffToApply = hr.def.effectWhenDowned.hediff != null ? hr.def.effectWhenDowned.hediff : hr.def;
+						if (hediffToApply is HediffResourceDef resourceDef)
+                        {
+							HediffResourceUtils.AdjustResourceAmount(___pawn, resourceDef, hr.def.effectWhenDowned.apply, true, null);
+						}
+						else
+                        {
+							HealthUtility.AdjustSeverity(___pawn, hediffToApply, hr.def.effectWhenDowned.apply);
+                        }
+					}
+                }
+            }
+		}
+	}
 }

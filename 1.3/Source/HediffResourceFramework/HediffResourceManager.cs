@@ -7,17 +7,6 @@ using Verse;
 
 namespace HediffResourceFramework
 {
-    public class FiredData : IExposable
-    {
-        public Thing equipment;
-        public Thing caster;
-
-        public void ExposeData()
-        {
-            Scribe_References.Look(ref equipment, "launcher");
-            Scribe_References.Look(ref caster, "caster");
-        }
-    }
     public class HediffResourceManager : GameComponent
     {
         public Dictionary<Pawn, HediffResourcePolicy> hediffResourcesPolicies = new Dictionary<Pawn, HediffResourcePolicy>();
@@ -25,6 +14,7 @@ namespace HediffResourceFramework
         private List<IAdjustResource> resourceAdjustersToUpdate = new List<IAdjustResource>();
         public Dictionary<Thing, StatBonuses> thingsWithBonuses = new Dictionary<Thing, StatBonuses>();
         public Dictionary<Projectile, FiredData> firedProjectiles = new Dictionary<Projectile, FiredData>();
+        public Dictionary<Pawn, DownedStateData> pawnDownedStates = new Dictionary<Pawn, DownedStateData>();
 
         public bool dirtyUpdate;
 
@@ -79,6 +69,7 @@ namespace HediffResourceFramework
             if (thingsWithBonuses is null) thingsWithBonuses = new Dictionary<Thing, StatBonuses>();
             if (hediffResourcesPolicies is null) hediffResourcesPolicies = new Dictionary<Pawn, HediffResourcePolicy>();
             if (firedProjectiles is null) firedProjectiles = new Dictionary<Projectile, FiredData>();
+            if (pawnDownedStates is null) pawnDownedStates = new Dictionary<Pawn, DownedStateData>();
         }
 
         public override void LoadedGame()
@@ -172,6 +163,7 @@ namespace HediffResourceFramework
             Scribe_Collections.Look(ref thingsWithBonuses, "thingsWithBonuses", LookMode.Reference, LookMode.Deep, ref thingKeys, ref thingStatsValues);
             Scribe_Collections.Look(ref hediffResourcesPolicies, "hediffResourcesPolicies", LookMode.Reference, LookMode.Deep, ref pawnKeys, ref hediffResourcePolicyValues);
             Scribe_Collections.Look(ref firedProjectiles, "firedProjectiles", LookMode.Reference, LookMode.Deep, ref projectileKeys, ref firedDataValues);
+            Scribe_Collections.Look(ref pawnDownedStates, "pawnDownedStates", LookMode.Reference, LookMode.Deep, ref pawnKeys2, ref downedStateDataValues);
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
                 PreInit();
@@ -186,5 +178,8 @@ namespace HediffResourceFramework
 
         private List<Projectile> projectileKeys;
         private List<FiredData> firedDataValues;
+
+        private List<Pawn> pawnKeys2;
+        private List<DownedStateData> downedStateDataValues;
     }
 }

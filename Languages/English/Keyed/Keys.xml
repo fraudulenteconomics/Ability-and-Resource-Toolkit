@@ -37,4 +37,6 @@
 	<HRF.MaxResourceCapacityOffset>Max {0} capacity offset: {1}</HRF.MaxResourceCapacityOffset>
 	<HRF.IsBattery>Is battery</HRF.IsBattery>
 	<HRF.MaxResourceStorageAmount>Max {1} of {0} storage amount</HRF.MaxResourceStorageAmount>
+	<HRF.WillBeActiveIn>Will be active in {0}</HRF.WillBeActiveIn>
+	<HRF.NoEnoughResource>No enough resource</HRF.NoEnoughResource>
 </LanguageData>

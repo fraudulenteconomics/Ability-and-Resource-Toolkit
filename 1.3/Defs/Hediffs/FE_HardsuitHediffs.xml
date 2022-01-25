@@ -41,6 +41,33 @@
 				<point>5</point>
 			</li>
 		</resourceGainPerDamages>
+		<tendProperties>
+			<statBases>
+				<MedicalPotency>1.00</MedicalPotency>
+				<MedicalQualityMax>1.00</MedicalQualityMax>
+			</statBases>
+			<resourceOnTend>10</resourceOnTend>
+			<!--<hediffSource>optional value</hediffSource> -->
+		</tendProperties>
+		<effectWhenDowned>
+			<hediff>FE_FusionReactor</hediff>
+			<apply>10</apply>
+			<ticksBetweenActivations>666</ticksBetweenActivations>
+			<showDownActivationTimer>true</showDownActivationTimer>
+		</effectWhenDowned>
+		<repairProperties>
+			<resourceOnRepair>6</resourceOnRepair>
+			<!--<hediffSource>optional value</hediffSource> -->
+		</repairProperties>
+		<refuelProperties>
+			<li>
+				<hediffResource>FE_FusionReactor</hediffResource>
+				<resourcesPerFuelUnit>
+					<WoodLog>0.1</WoodLog>
+					<Chemfuel>0.66</Chemfuel>
+				</resourcesPerFuelUnit>
+			</li>
+		</refuelProperties>
 	</HediffResourceFramework.HediffResourceDef>
 
 	<HediffResourceFramework.HediffResourceDef>
@@ -65,7 +92,7 @@
 				<minSeverity>0</minSeverity>
 			</li>
 		</requiredHediffs>
-	</HediffResourceFramework.HediffResourceDef>	
+	</HediffResourceFramework.HediffResourceDef>
 
 	<HediffResourceFramework.HediffResourceDef>
 		<defName>FE_ChargeBurstModule</defName>
@@ -139,7 +166,7 @@
 				<statFactors>
 					<IncomingDamageFactor>0.75</IncomingDamageFactor>
 				</statFactors>
-			</li>	
+			</li>
 			<li>
 				<label>overheated</label>
 				<minSeverity>95</minSeverity>
@@ -175,7 +202,7 @@
 				<statOffsets>
 					<ShootingAccuracyPawn>10</ShootingAccuracyPawn>
 				</statOffsets>
-			</li>	
+			</li>
 			<li Class="HediffResourceFramework.HediffResourceStage">
 				<label>optimized</label>
 				<minSeverity>90</minSeverity>
@@ -192,7 +219,7 @@
 				</resourceSettings>
 			</li>
 		</stages>
-	</HediffResourceFramework.HediffResourceDef> 
+	</HediffResourceFramework.HediffResourceDef>
 
 	<HediffResourceFramework.HediffResourceDef>
 		<defName>FE_ShieldInjector</defName>
@@ -379,11 +406,11 @@
 					</li>
 				</capMods>
 				<resourceSettings>
-						<li>
-							<hediff>FE_ToxicWrapper</hediff>
-							<resourcePerSecond>0.03</resourcePerSecond>
-							<addHediffIfMissing>true</addHediffIfMissing>
-						</li>
+					<li>
+						<hediff>FE_ToxicWrapper</hediff>
+						<resourcePerSecond>0.03</resourcePerSecond>
+						<addHediffIfMissing>true</addHediffIfMissing>
+					</li>
 				</resourceSettings>
 			</li>
 			<li Class="HediffResourceFramework.HediffResourceStage">
@@ -400,11 +427,11 @@
 					</li>
 				</capMods>
 				<resourceSettings>
-						<li>
-							<hediff>FE_ToxicWrapper</hediff>
-							<resourcePerSecond>0.05</resourcePerSecond>
-							<addHediffIfMissing>true</addHediffIfMissing>
-						</li>
+					<li>
+						<hediff>FE_ToxicWrapper</hediff>
+						<resourcePerSecond>0.05</resourcePerSecond>
+						<addHediffIfMissing>true</addHediffIfMissing>
+					</li>
 				</resourceSettings>
 			</li>
 			<li Class="HediffResourceFramework.HediffResourceStage">
@@ -421,11 +448,11 @@
 					</li>
 				</capMods>
 				<resourceSettings>
-						<li>
-							<hediff>FE_ToxicWrapper</hediff>
-							<resourcePerSecond>0.1</resourcePerSecond>
-							<addHediffIfMissing>true</addHediffIfMissing>
-						</li>
+					<li>
+						<hediff>FE_ToxicWrapper</hediff>
+						<resourcePerSecond>0.1</resourcePerSecond>
+						<addHediffIfMissing>true</addHediffIfMissing>
+					</li>
 				</resourceSettings>
 			</li>
 		</stages>
@@ -448,12 +475,12 @@
 				<label>initial</label>
 				<becomeVisible>false</becomeVisible>
 				<resourceSettings>
-						<li>
-							<hediff>FE_ToxicFumes</hediff>
-							<resourcePerSecond>-0.2</resourcePerSecond>
-							<addHediffIfMissing>false</addHediffIfMissing>
-							<maxResourceCapacityOffset>50</maxResourceCapacityOffset>
-						</li>
+					<li>
+						<hediff>FE_ToxicFumes</hediff>
+						<resourcePerSecond>-0.2</resourcePerSecond>
+						<addHediffIfMissing>false</addHediffIfMissing>
+						<maxResourceCapacityOffset>50</maxResourceCapacityOffset>
+					</li>
 				</resourceSettings>
 			</li>
 			<li Class="HediffResourceFramework.HediffResourceStage">
@@ -461,12 +488,12 @@
 				<label>lesser</label>
 				<becomeVisible>false</becomeVisible>
 				<resourceSettings>
-						<li>
-							<hediff>FE_ToxicFumes</hediff>
-							<resourcePerSecond>-0.35</resourcePerSecond>
-							<addHediffIfMissing>false</addHediffIfMissing>
-							<maxResourceCapacityOffset>100</maxResourceCapacityOffset>
-						</li>
+					<li>
+						<hediff>FE_ToxicFumes</hediff>
+						<resourcePerSecond>-0.35</resourcePerSecond>
+						<addHediffIfMissing>false</addHediffIfMissing>
+						<maxResourceCapacityOffset>100</maxResourceCapacityOffset>
+					</li>
 				</resourceSettings>
 			</li>
 			<li Class="HediffResourceFramework.HediffResourceStage">
@@ -474,12 +501,12 @@
 				<label>resistant</label>
 				<becomeVisible>false</becomeVisible>
 				<resourceSettings>
-						<li>
-							<hediff>FE_ToxicFumes</hediff>
-							<resourcePerSecond>-0.5</resourcePerSecond>
-							<addHediffIfMissing>false</addHediffIfMissing>
-							<maxResourceCapacityOffset>150</maxResourceCapacityOffset>
-						</li>
+					<li>
+						<hediff>FE_ToxicFumes</hediff>
+						<resourcePerSecond>-0.5</resourcePerSecond>
+						<addHediffIfMissing>false</addHediffIfMissing>
+						<maxResourceCapacityOffset>150</maxResourceCapacityOffset>
+					</li>
 				</resourceSettings>
 			</li>
 			<li Class="HediffResourceFramework.HediffResourceStage">
@@ -487,12 +514,12 @@
 				<label>potent</label>
 				<becomeVisible>false</becomeVisible>
 				<resourceSettings>
-						<li>
-							<hediff>FE_ToxicFumes</hediff>
-							<resourcePerSecond>-0.7</resourcePerSecond>
-							<addHediffIfMissing>false</addHediffIfMissing>
-							<maxResourceCapacityOffset>200</maxResourceCapacityOffset>
-						</li>
+					<li>
+						<hediff>FE_ToxicFumes</hediff>
+						<resourcePerSecond>-0.7</resourcePerSecond>
+						<addHediffIfMissing>false</addHediffIfMissing>
+						<maxResourceCapacityOffset>200</maxResourceCapacityOffset>
+					</li>
 				</resourceSettings>
 			</li>
 			<li Class="HediffResourceFramework.HediffResourceStage">
@@ -500,12 +527,12 @@
 				<label>fortified</label>
 				<becomeVisible>false</becomeVisible>
 				<resourceSettings>
-						<li>
-							<hediff>FE_ToxicFumes</hediff>
-							<resourcePerSecond>-1</resourcePerSecond>
-							<addHediffIfMissing>false</addHediffIfMissing>
-							<maxResourceCapacityOffset>250</maxResourceCapacityOffset>
-						</li>
+					<li>
+						<hediff>FE_ToxicFumes</hediff>
+						<resourcePerSecond>-1</resourcePerSecond>
+						<addHediffIfMissing>false</addHediffIfMissing>
+						<maxResourceCapacityOffset>250</maxResourceCapacityOffset>
+					</li>
 				</resourceSettings>
 			</li>
 		</stages>
