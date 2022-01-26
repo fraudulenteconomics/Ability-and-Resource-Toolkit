@@ -31,5 +31,7 @@ namespace HediffResourceFramework
 
 		public bool showInResourceTab;
 		public float resourcePerSecondFactor = 1f;
+
+		public bool ignoreTerrain;
 	}
 }

@@ -66,4 +66,42 @@ namespace HediffResourceFramework
 			HediffResourceUtils.TryAssignNewSkillRelatedHediffs(__instance, ___pawn);
 		}
 	}
+
+	[HarmonyPatch(typeof(Pawn), "Kill")]
+	public static class Patch_Kill
+	{
+		private static bool Prefix(Pawn __instance)
+		{
+			if (__instance?.health?.hediffSet?.hediffs != null)
+            {
+				foreach (var hediff in __instance.health.hediffSet.hediffs)
+                {
+					if (hediff is HediffResource hediffResource && hediff.CurStage is HediffStageResource hediffStageResource && hediffStageResource.preventDeath)
+                    {
+						return false;
+                    }
+                }
+            }
+			return true;
+		}
+	}
+
+	[HarmonyPatch(typeof(Pawn_HealthTracker), "ShouldBeDowned")]
+	public static class Patch_ShouldBeDowned
+	{
+		private static bool Prefix(Pawn ___pawn)
+		{
+			if (___pawn?.health?.hediffSet?.hediffs != null)
+			{
+				foreach (var hediff in ___pawn.health.hediffSet.hediffs)
+				{
+					if (hediff is HediffResource hediffResource && hediff.CurStage is HediffStageResource hediffStageResource && hediffStageResource.preventDowning)
+					{
+						return false;
+					}
+				}
+			}
+			return true;
+		}
+	}
 }

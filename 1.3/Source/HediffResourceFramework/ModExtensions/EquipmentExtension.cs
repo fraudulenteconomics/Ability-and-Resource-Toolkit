@@ -6,6 +6,8 @@ namespace HediffResourceFramework
     public class AdditionalDamage
     {
         public DamageDef damage;
-        public FloatRange damageRange;
+        public FloatRange amount;
+        public bool damageMelee;
+        public bool damageRange;
     }
 }

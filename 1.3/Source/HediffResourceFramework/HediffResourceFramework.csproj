@@ -63,6 +63,8 @@
     <Compile Include="Comps\CompChargeResource.cs" />
     <Compile Include="Comps\HediffComp_AdjustHediffsPerStages.cs" />
     <Compile Include="Comps\HediffComp_AdjustHediffs.cs" />
+    <Compile Include="HarmonyPatches\Caravan_Patches.cs" />
+    <Compile Include="HarmonyPatches\Pathfinding_Patches.cs" />
     <Compile Include="Hediffs\HediffResouceDisable.cs" />
     <Compile Include="Hediffs\HediffStageResource.cs" />
     <Compile Include="Comps\StatBooster.cs" />

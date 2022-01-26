@@ -9,5 +9,24 @@
 		<toStringStyle>FloatTwo</toStringStyle>
 		<defaultBaseValue>1</defaultBaseValue>
 	</StatDef>
-
+	
+	<StatDef>
+		<defName>HFR_CaravanSpeedFactor</defName>
+		<label>caravan speed factor</label>
+		<description>caravan speed factor.</description>
+		<category>FE_ResourceLabel</category>
+		<displayPriorityInCategory>10</displayPriorityInCategory>
+		<toStringStyle>FloatTwo</toStringStyle>
+		<defaultBaseValue>1.1</defaultBaseValue>
+	</StatDef>
+	
+	<StatDef>
+		<defName>HFR_CaravanDifficultyFactor</defName>
+		<label>caravan difficulty factor</label>
+		<description>caravan difficulty factor.</description>
+		<category>FE_ResourceLabel</category>
+		<displayPriorityInCategory>10</displayPriorityInCategory>
+		<toStringStyle>FloatTwo</toStringStyle>
+		<defaultBaseValue>0.5</defaultBaseValue>
+	</StatDef>
 </Defs>

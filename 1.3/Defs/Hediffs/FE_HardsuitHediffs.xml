@@ -70,8 +70,19 @@
 						</resourcesPerFuelUnit>
 					</li>
 				</refuelProperties>
+				<additionalDamages>
+					<li>
+						<damage>Burn</damage>
+						<amount>1~5.5</amount>
+						<damageMelee>true</damageMelee>
+						<damageRange>true</damageRange>
+					</li>
+				</additionalDamages>
+				<preventDeath>true</preventDeath>
+				<preventDowning>true</preventDowning>
 			</li>
 		</stages>
+		<ignoreTerrain>true</ignoreTerrain>
 	</HediffResourceFramework.HediffResourceDef>
 
 	<HediffResourceFramework.HediffResourceDef>

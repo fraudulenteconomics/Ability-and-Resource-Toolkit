@@ -7,7 +7,6 @@ namespace HediffResourceFramework
     public class HediffStageResource : HediffStage
     {
         public List<HediffOption> resourceSettings;
-
         public List<ResourceGainPerDamage> resourceGainPerDamages;
         public float resourceGainPerAllDamages;
         public ShieldProperties shieldProperties;
@@ -15,6 +14,9 @@ namespace HediffResourceFramework
         public EffectWhenDowned effectWhenDowned;
         public RepairProperties repairProperties;
         public List<RefuelProperties> refuelProperties;
+        public List<AdditionalDamage> additionalDamages;
+        public bool preventDeath;
+        public bool preventDowning;
         public bool ShieldIsActive(Pawn pawn)
         {
             if (shieldProperties != null)

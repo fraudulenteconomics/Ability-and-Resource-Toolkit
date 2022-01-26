@@ -67,7 +67,9 @@
 			<additionalDamages>
 				<li>
 					<damage>Burn</damage>
-					<damageRange>1~5.5</damageRange>
+					<amount>1~5.5</amount>
+					<damageMelee>true</damageMelee>
+					<damageRange>true</damageRange>
 				</li>
 			</additionalDamages>
 		</li>

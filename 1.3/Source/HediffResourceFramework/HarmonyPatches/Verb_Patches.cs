@@ -44,7 +44,7 @@ namespace HediffResourceFramework
     {
         private static void Postfix(ref IEnumerable<DamageInfo> __result, Verb __instance, LocalTargetInfo target)
         {
-            if (__instance.tool is IResourceProps props && props.ChargeSettings != null && __instance.CasterPawn != null)
+            if (__instance.tool is IResourceProps props && props.ChargeSettings != null && __instance.CasterPawn != null && target.HasThing)
             {
                 var list = __result.ToList();
                 foreach (var chargeSettings in props.ChargeSettings)
@@ -99,13 +99,26 @@ namespace HediffResourceFramework
                             }
                         }
                     }
+
+                    if (hediff is HediffResource hediffResource && hediffResource.CurStage is HediffStageResource hediffStageResource && hediffStageResource.additionalDamages != null)
+                    {
+                        foreach (var additionalDamage in hediffStageResource.additionalDamages)
+                        {
+                            if (additionalDamage.damageRange)
+                            {
+                                var damageAmount = additionalDamage.amount.RandomInRange;
+                                var damage = new DamageInfo(additionalDamage.damage, damageAmount);
+                                target.Thing.TakeDamage(damage);
+                            }
+                        }
+                    }
                 }
             }
 
             var stuffExtension = __instance.EquipmentSource?.Stuff?.GetModExtension<StuffExtension>();
             if (stuffExtension != null)
             {
-                stuffExtension.DamageThing(__instance.caster, target.Thing, null);
+                stuffExtension.DamageThing(__instance.caster, target.Thing, null, false, true);
             }
         }
     }

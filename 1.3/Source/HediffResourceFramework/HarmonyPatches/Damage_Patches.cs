@@ -1,9 +1,12 @@
 ﻿using HarmonyLib;
 using MVCF.Utilities;
 using RimWorld;
+using RimWorld.Planet;
+using RuntimeAudioClipLoader;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
@@ -102,7 +105,7 @@ namespace HediffResourceFramework
 	{
 		private static void Prefix(Projectile __instance, Thing hitThing)
 		{
-			if (HediffResourceManager.Instance.firedProjectiles.TryGetValue(__instance, out var firedData))
+			if (hitThing != null && HediffResourceManager.Instance.firedProjectiles.TryGetValue(__instance, out var firedData))
             {
 				var target = hitThing as Pawn;
 				if (target != null)
@@ -141,7 +144,28 @@ namespace HediffResourceFramework
 				var stuffExtension = firedData.equipment?.Stuff?.GetModExtension<StuffExtension>();
 				if (stuffExtension != null)
                 {
-					stuffExtension.DamageThing(firedData.caster, hitThing, null);
+					stuffExtension.DamageThing(firedData.caster, hitThing, null, true, false);
+                }
+				if (firedData.caster is Pawn pawn2)
+                {
+					if (pawn2.health?.hediffSet.hediffs != null)
+                    {
+						foreach (var hediff in pawn2.health.hediffSet.hediffs)
+                        {
+							if (hediff is HediffResource hediffResource && hediffResource.CurStage is HediffStageResource hediffStageResource && hediffStageResource.additionalDamages != null)
+                            {
+								foreach (var additionalDamage in hediffStageResource.additionalDamages)
+								{
+									if (additionalDamage.damageRange)
+									{
+										var damageAmount = additionalDamage.amount.RandomInRange;
+										var damage = new DamageInfo(additionalDamage.damage, damageAmount);
+										hitThing.TakeDamage(damage);
+									}
+								}
+                            }
+                        }
+                    }
                 }
 			}
 		}
