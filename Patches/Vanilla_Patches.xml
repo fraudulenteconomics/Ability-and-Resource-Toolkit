@@ -37,8 +37,8 @@
 			<li Class="PatchOperationAdd">
 				<xpath>/Defs/ThingDef[thingClass="Building_WorkTable"]/comps</xpath>
 				<value>
-					<li Class="HediffResourceFramework.CompProperties_FacilityInUse_StatBoosters">
-						<statBoosters>
+					<li Class="HediffResourceFramework.CompProperties_ThingInUse">
+						<useProperties>
 							<li>
 								<hediff>FE_FusionReactor</hediff>
 								<resourcePerSecond>-5</resourcePerSecond>
@@ -64,7 +64,7 @@
 									<overlightRadius>0</overlightRadius>
 								</glowerOptions>
 
-								<preventUseIfHediffMissing>true</preventUseIfHediffMissing>
+								<hediffRequired>true</hediffRequired>
 								<cannotUseMessageKey>FE.CannotUseMissingFusionReactor</cannotUseMessageKey>
 								<toggleResourceUse>true</toggleResourceUse>
 								<toggleResourceGizmoTexPath>UI/Designators/Cancel</toggleResourceGizmoTexPath>
@@ -99,7 +99,7 @@
 									<WorkTableEfficiencyFactor>2</WorkTableEfficiencyFactor>
 								</statFactors>
 
-								<preventUseIfHediffMissing>true</preventUseIfHediffMissing>
+								<hediffRequired>true</hediffRequired>
 								<cannotUseMessageKey>FE.CannotUseMissingStim</cannotUseMessageKey>
 								<toggleResourceUse>true</toggleResourceUse>
 								<toggleResourceGizmoTexPath>UI/Designators/Cancel</toggleResourceGizmoTexPath>
@@ -115,7 +115,7 @@
 									<Beauty>2</Beauty>
 								</outputStatFactors>
 							</li>
-						</statBoosters>
+						</useProperties>
 					</li>
 				</value>
 			</li>
@@ -134,8 +134,8 @@
 			<li Class="PatchOperationAdd">
 				<xpath>/Defs/ThingDef[thingClass="Building_WorkTable_HeatPush"]/comps</xpath>
 				<value>
-					<li Class="HediffResourceFramework.CompProperties_FacilityInUse_StatBoosters">
-						<statBoosters>
+					<li Class="HediffResourceFramework.CompProperties_ThingInUse">
+						<useProperties>
 							<li>
 								<hediff>FE_FusionReactor</hediff>
 								<resourcePerSecond>-5</resourcePerSecond>
@@ -160,7 +160,7 @@
 									<glowColor>(52,87,13,0)</glowColor>
 									<overlightRadius>0</overlightRadius>
 								</glowerOptions>
-								<preventUseIfHediffMissing>true</preventUseIfHediffMissing>
+								<hediffRequired>true</hediffRequired>
 								<cannotUseMessageKey>FE.CannotUseMissingFusionReactor</cannotUseMessageKey>
 								<toggleResourceUse>true</toggleResourceUse>
 								<toggleResourceGizmoTexPath>UI/Designators/Cancel</toggleResourceGizmoTexPath>
@@ -194,7 +194,7 @@
 									<WorkTableEfficiencyFactor>2</WorkTableEfficiencyFactor>
 								</statFactors>
 
-								<preventUseIfHediffMissing>true</preventUseIfHediffMissing>
+								<hediffRequired>true</hediffRequired>
 								<cannotUseMessageKey>FE.CannotUseMissingStim</cannotUseMessageKey>
 								<toggleResourceUse>true</toggleResourceUse>
 								<toggleResourceGizmoTexPath>UI/Designators/Cancel</toggleResourceGizmoTexPath>
@@ -210,7 +210,7 @@
 									<Beauty>2</Beauty>
 								</outputStatFactors>
 							</li>
-						</statBoosters>
+						</useProperties>
 					</li>
 				</value>
 			</li>
@@ -229,8 +229,8 @@
 			<li Class="PatchOperationAdd">
 				<xpath>/Defs/ThingDef[thingClass="Building_Bed"]/comps</xpath>
 				<value>
-					<li Class="HediffResourceFramework.CompProperties_FacilityInUse_StatBoosters">
-						<statBoosters>
+					<li Class="HediffResourceFramework.CompProperties_ThingInUse">
+						<useProperties>
 							<li>
 								<hediff>FE_FusionReactor</hediff>
 								<resourcePerSecond>-5</resourcePerSecond>
@@ -246,7 +246,7 @@
 									<BedRestEffectiveness>2</BedRestEffectiveness>
 								</statFactors>
 
-								<preventUseIfHediffMissing>true</preventUseIfHediffMissing>
+								<hediffRequired>true</hediffRequired>
 								<cannotUseMessageKey>FE.CannotUseMissingFusionReactor</cannotUseMessageKey>
 								<toggleResourceUse>true</toggleResourceUse>
 								<toggleResourceGizmoTexPath>UI/Designators/Cancel</toggleResourceGizmoTexPath>
@@ -254,7 +254,7 @@
 								<toggleResourceDesc>Toggle fusion reactor use</toggleResourceDesc>
 
 							</li>
-						</statBoosters>
+						</useProperties>
 					</li>
 				</value>
 			</li>
@@ -262,7 +262,7 @@
 				<xpath>/Defs/ThingDef[thingClass="Building_Bed"]</xpath>
 				<value>
 					<li Class="HediffResourceFramework.FacilityInProgress">
-						<statBoosters>
+						<useProperties>
 							<li>
 								<hediff>FE_FusionReactor</hediff>
 								<resourcePerSecond>-5</resourcePerSecond>
@@ -277,7 +277,7 @@
 									<BedRestEffectiveness>2</BedRestEffectiveness>
 								</statFactors>
 
-								<preventUseIfHediffMissing>true</preventUseIfHediffMissing>
+								<hediffRequired>true</hediffRequired>
 								<cannotUseMessageKey>FE.CannotUseMissingFusionReactor</cannotUseMessageKey>
 								<toggleResourceUse>true</toggleResourceUse>
 								<toggleResourceGizmoTexPath>UI/Designators/Cancel</toggleResourceGizmoTexPath>
@@ -285,7 +285,7 @@
 								<toggleResourceDesc>Toggle fusion reactor use</toggleResourceDesc>
 
 							</li>
-						</statBoosters>
+						</useProperties>
 					</li>
 				</value>
 			</li>
@@ -336,12 +336,13 @@
 				</value>
 			</li>
 
-			<!-- <li Class="PatchOperationAdd">
+			<li Class="PatchOperationAdd">
 				<xpath>/Defs/ThingDef[defName="Plant_Healroot"]</xpath>
 				<value>
 					<comps>
-						<li Class="HediffResourceFramework.CompProperties_PlantResource">
-							<statBoosters>
+						<li Class="HediffResourceFramework.CompProperties_ThingInUse">
+							<compClass>HediffResourceFramework.CompPlantInUse</compClass>
+							<useProperties>
 								<li>
 									<hediff>FE_ToxicFumes</hediff>
 									<addHediffIfMissing>true</addHediffIfMissing>
@@ -352,24 +353,27 @@
 								<li>
 									<hediff>FE_FusionReactor</hediff>
 									<addHediffIfMissing>false</addHediffIfMissing>
-									<requireResource>true</requireResource>
+									<hediffRequired>true</hediffRequired>
+									<cannotUseMessageKey>FE.CannotUseMissingFusionReactor</cannotUseMessageKey>
+									<cannotSowMessageKey>HRF.CannotUse</cannotSowMessageKey>
+									<cannotHarvestMessageKey>HRF.CannotUse</cannotHarvestMessageKey>
 									<resourceOnSow>-2</resourceOnSow>
 									<resourceOnHarvest>-5</resourceOnHarvest>
 									<scaleWithGrowthRate>false</scaleWithGrowthRate>
 									<harvestYieldAdjust>0.5</harvestYieldAdjust>
 								</li>
-							</statBoosters>
+							</useProperties>
 						</li>
 					</comps>
 				</value>
-			</li> -->
-
-			<!-- <li Class="PatchOperationAdd">
+			</li>
+			<!--
+			<li Class="PatchOperationAdd">
 				<xpath>/Defs/ThingDef[defName="RockBase"]</xpath>
 				<value>
 					<comps>
-						<li Class="HediffResourceFramework.CompProperties_MiningResource">
-							<statBoosters>
+						<li Class="HediffResourceFramework.CompProperties_ThingInUse">
+							<useProperties>
 								<li>
 									<hediff>FE_ToxicFumes</hediff>
 									<addHediffIfMissing>true</addHediffIfMissing>
@@ -379,45 +383,46 @@
 								<li>
 									<hediff>FE_FusionReactor</hediff>
 									<addHediffIfMissing>false</addHediffIfMissing>
-									<requireResource>true</requireResource>
+									<hediffRequired>true</hediffRequired>
 									<resourceOnStrike>-2</resourceOnStrike>
 									<resourceOnComplete>-10</resourceOnComplete>
 									<miningYieldAdjust>1.0</miningYieldAdjust>
 								</li>
-							</statBoosters>
+							</useProperties>
 						</li>
 					</comps>
 				</value>
-			</li> -->
+			</li>
 
-			<!-- <li Class="PatchOperationAdd">
+			<li Class="PatchOperationAdd">
 				<xpath>/Defs/ThingDef[defName="Muffalo"]/comps</xpath>
 				<value>
-						<li Class="HediffResourceFramework.CompProperties_AnimalResource">
-							<statBoosters>
+						<li Class="HediffResourceFramework.CompProperties_ThingInUse">
+							<useProperties>
 								<li>
 									<hediff>FE_FusionReactor</hediff>
 									<addHediffIfMissing>false</addHediffIfMissing>
-									<requireResource>true</requireResource>
+									<hediffRequired>true</hediffRequired>
 									<resourceOnTaming>-2</resourceOnTaming>
 									<tamingChanceAdjust>0.25</tamingChanceAdjust>
 									<resourceOnTraining>-2</resourceOnTraining>
 									<trainingChanceAdjust>0.25</trainingChanceAdjust>
-									<resourceOnGather>-5</resourceOnHarvest>
+									<resourceOnGather>-5</resourceOnGather>
 									<animalYieldAdjust>0.5</animalYieldAdjust>
 								</li>
 								<li>
 									<hediff>FE_ToxicFumes</hediff>
 									<addHediffIfMissing>true</addHediffIfMissing>
-									<requireResource>false</requireResource>
+									<hediffRequired>false</hediffRequired>
 									<resourceOnTaming>2</resourceOnTaming>
 									<resourceOnTraining>2</resourceOnTraining>
-									<resourceOnGather>5</resourceOnHarvest>
+									<resourceOnGather>5</resourceOnGather>
 								</li>
-							</statBoosters>
+							</useProperties>
 						</li>
 				</value>
-			</li> -->
+			</li>
+			-->
 		</operations>
 	</Operation>
 </Patch>

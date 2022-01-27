@@ -9,6 +9,29 @@ using Verse;
 
 namespace HediffResourceFramework
 {
+	public class ValueCache<T> 
+	{
+		public ValueCache(T value)
+		{
+			this.value = value;
+		}
+		public T value;
+
+		public T Value
+		{
+			get
+			{
+				return value;
+			}
+			set
+			{
+				this.value = value;
+				updateTick = Find.TickManager.TicksGame;
+			}
+		}
+		public int updateTick;
+	}
+
 	public class BoolPawnsValueCache
 	{
 		public BoolPawnsValueCache(bool value, IEnumerable<Pawn> pawns)
@@ -33,50 +56,6 @@ namespace HediffResourceFramework
 		}
 		public int updateTick;
 	}
-
-	public class HediffResourcesCache
-	{
-		public HediffResourcesCache(List<HediffResource> value)
-		{
-			this.value = value;
-		}
-		public List<HediffResource> value;
-		public List<HediffResource> Value
-		{
-			get
-			{
-				return value;
-			}
-			set
-			{
-				this.value = value;
-				updateTick = Find.TickManager.TicksGame;
-			}
-		}
-		public int updateTick;
-	}
-	public class AdjustResourcesCache
-	{
-		public AdjustResourcesCache(List<IAdjustResource> value)
-		{
-			this.value = value;
-		}
-		public List<IAdjustResource> value;
-		public List<IAdjustResource> Value
-		{
-			get
-			{
-				return value;
-			}
-			set
-			{
-				this.value = value;
-				updateTick = Find.TickManager.TicksGame;
-			}
-		}
-		public int updateTick;
-	}
-
 	[StaticConstructorOnStartup]
 	public static class HediffResourceUtils
 	{
@@ -238,10 +217,10 @@ namespace HediffResourceFramework
 			return comp != null;
 		}
 
-		private static Dictionary<Pawn, AdjustResourcesCache> resourceCache = new Dictionary<Pawn, AdjustResourcesCache>();
-		public static List<IAdjustResource> GetAllAdjustHediffsComps(this Pawn pawn)
+		private static Dictionary<Pawn, ValueCache<List<IAdjustResource>>> resourceCache = new Dictionary<Pawn, ValueCache<List<IAdjustResource>>>();
+		public static List<IAdjustResource> GetAllAdjustResourceComps(this Pawn pawn)
 		{
-			if (resourceCache.TryGetValue(pawn, out AdjustResourcesCache adjustResourcesCache))
+			if (resourceCache.TryGetValue(pawn, out var adjustResourcesCache))
 			{
 				var adjusters = adjustResourcesCache.value;
 				if (Find.TickManager.TicksGame > adjustResourcesCache.updateTick + 60)
@@ -254,7 +233,7 @@ namespace HediffResourceFramework
 			else
 			{
 				var adjusters = GetAdjustResourcesInt(pawn);
-				resourceCache[pawn] = new AdjustResourcesCache(adjusters);
+				resourceCache[pawn] = new ValueCache<List<IAdjustResource>>(adjusters);
 				return adjusters;
 			}
 		}
@@ -341,7 +320,7 @@ namespace HediffResourceFramework
 		public static float GetHediffResourceCapacityGainFor(Pawn pawn, HediffResourceDef hdDef)
 		{
 			float result = 0;
-			var comps = GetAllAdjustHediffsComps(pawn);
+			var comps = GetAllAdjustResourceComps(pawn);
 			foreach (var comp in comps)
 			{
 				var resourceSettings = comp.ResourceSettings;
@@ -384,6 +363,21 @@ namespace HediffResourceFramework
 							}
 						}
 					}
+
+					foreach (var adjustResourceComp in props.GetOtherResources())
+                    {
+						foreach (var option in adjustResourceComp.ResourceSettings)
+                        {
+							if (option.hediff == hediffOption.hediff)
+                            {
+								if (hediffOption.hediff == option.hediff)
+								{
+									num *= option.resourceCapacityFactor;
+									num += option.resourceCapacityOffset;
+								}
+							}
+                        }
+                    }
 				}
 				else
 				{
@@ -398,7 +392,7 @@ namespace HediffResourceFramework
 			List<HediffResourceDef> hediffResourcesToRemove = pawn.health.hediffSet.hediffs.OfType<HediffResource>()
 					.Select(x => x.def).Where(x => adjuster.ResourceSettings?.Any(y => y.hediff == x) ?? false).ToList();
 
-			var comps = GetAllAdjustHediffsComps(pawn);
+			var comps = GetAllAdjustResourceComps(pawn);
 			foreach (var comp in comps)
 			{
 				var resourceSettings = comp.ResourceSettings;
@@ -447,7 +441,7 @@ namespace HediffResourceFramework
 
 		public static void TryDropExcessHediffGears(Pawn pawn)
 		{
-			var comps = GetAllAdjustHediffsComps(pawn);
+			var comps = GetAllAdjustResourceComps(pawn);
 			foreach (var comp in comps)
 			{
 				var resourceSettings = comp.ResourceSettings;
@@ -471,11 +465,15 @@ namespace HediffResourceFramework
 
 		public static HediffResource AdjustResourceAmount(Pawn pawn, HediffResourceDef hdDef, float sevOffset, bool addHediffIfMissing, BodyPartDef bodyPartDef, bool applyToDamagedPart = false)
 		{
-			HediffResource firstHediffOfDef = pawn.health.hediffSet.GetFirstHediffOfDef(hdDef) as HediffResource;
-			if (firstHediffOfDef != null)
+			HediffResource hediff = pawn.health.hediffSet.GetFirstHediffOfDef(hdDef) as HediffResource;
+			if (hediff != null)
 			{
-				firstHediffOfDef.ResourceAmount += sevOffset;
-				return firstHediffOfDef;
+				if (sevOffset > 0 && hediff.def.restrictResourceCap && hediff.ResourceAmount >= hediff.ResourceCapacity)
+                {
+					return hediff;
+                }
+				hediff.ResourceAmount += sevOffset;
+				return hediff;
 			}
 			else if (addHediffIfMissing && (sevOffset >= 0 || hdDef.keepWhenEmpty))
 			{
@@ -488,10 +486,10 @@ namespace HediffResourceFramework
 						return null;
 					}
 				}
-				firstHediffOfDef = HediffMaker.MakeHediff(hdDef, pawn, bodyPartRecord) as HediffResource;
-				pawn.health.AddHediff(firstHediffOfDef);
-				firstHediffOfDef.ResourceAmount = sevOffset;
-				return firstHediffOfDef;
+				hediff = HediffMaker.MakeHediff(hdDef, pawn, bodyPartRecord) as HediffResource;
+				pawn.health.AddHediff(hediff);
+				hediff.ResourceAmount = sevOffset;
+				return hediff;
 			}
 			return null;
 		}
@@ -526,10 +524,10 @@ namespace HediffResourceFramework
 			}
 		}
 
-		private static Dictionary<Pawn, HediffResourcesCache> hediffResourcesCache = new Dictionary<Pawn, HediffResourcesCache>();
+		private static Dictionary<Pawn, ValueCache<List<HediffResource>>> hediffResourcesCache = new Dictionary<Pawn, ValueCache<List<HediffResource>>>();
 		public static List<HediffResource> GetHediffResourcesFor(Pawn pawn)
 		{
-			if (hediffResourcesCache.TryGetValue(pawn, out HediffResourcesCache hediffResourceCache))
+			if (hediffResourcesCache.TryGetValue(pawn, out var hediffResourceCache))
 			{
 				var hediffResources = hediffResourceCache.value;
 				if (Find.TickManager.TicksGame > hediffResourceCache.updateTick + 30)
@@ -542,7 +540,7 @@ namespace HediffResourceFramework
 			else
 			{
 				var hediffResources = pawn.health.hediffSet.hediffs.OfType<HediffResource>().ToList();
-				hediffResourcesCache[pawn] = new HediffResourcesCache(hediffResources);
+				hediffResourcesCache[pawn] = new ValueCache<List<HediffResource>>(hediffResources);
 				return hediffResources;
 			}
 		}
@@ -764,7 +762,7 @@ namespace HediffResourceFramework
 				var hediffPostUseDelayMultipliers = new Dictionary<HediffResource, List<float>>();
 
 				var disablePostUseString = "";
-				var comps = GetAllAdjustHediffsComps(casterPawn);
+				var comps = GetAllAdjustResourceComps(casterPawn);
 
 				foreach (var option in props.ResourceSettings)
 				{
@@ -955,6 +953,19 @@ namespace HediffResourceFramework
                     }
 				}
             }
+
+			foreach (var otherComp in source.GetOtherResources())
+            {
+				foreach (var option in otherComp.ResourceSettings)
+				{
+					if (option.hediff == hediffOption.hediff)
+					{
+						num *= option.resourcePerSecondFactor;
+						num += option.resourcePerSecondOffset;
+					}
+				}
+			}
+
 			if (hediffOption.refillOnlyInnerStorage)
 			{
 				return num;
@@ -965,6 +976,20 @@ namespace HediffResourceFramework
 			}
 		}
 
+		public static IEnumerable<IAdjustResource> GetOtherResources(this IAdjustResource comp)
+        {
+			var pawnHost = comp.PawnHost;
+			if (pawnHost != null)
+            {
+				foreach (var otherResourceComp in pawnHost.GetAllAdjustResourceComps())
+                {
+					if (otherResourceComp != comp)
+                    {
+						yield return otherResourceComp;
+                    }
+                }
+            }
+        }
 		public static IResourceProps GetResourceProps(this Verb verb)
 		{
 			if (verb.verbProps is IResourceProps verbResourceProps) return verbResourceProps;
@@ -981,5 +1006,7 @@ namespace HediffResourceFramework
             }
 			return false;
         }
+
+
 	}
 }

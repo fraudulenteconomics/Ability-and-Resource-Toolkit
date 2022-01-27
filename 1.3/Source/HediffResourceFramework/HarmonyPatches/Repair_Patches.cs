@@ -144,7 +144,7 @@ namespace HediffResourceFramework
                 if (!__instance.pawn.HasEnoughResourceToRepair(out var repairData))
                 {
                     MoteMaker.ThrowText((__instance.pawn.DrawPos + __instance.job.GetTarget(TargetIndex.A).Thing.DrawPos) / 2f, __instance.pawn.Map,
-                        "TextMote_FixBrokenDownBuildingFail".Translate() + " - " + "HRF.NoEnoughResource".Translate(), 3.65f);
+                        "TextMote_FixBrokenDownBuildingFail".Translate() + " - " + "HRF.NotEnoughResource".Translate(), 3.65f);
                 }
                 else if (Rand.Value > __instance.pawn.GetStatValue(StatDefOf.FixBrokenDownBuildingSuccessChance))
                 {

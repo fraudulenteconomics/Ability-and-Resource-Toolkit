@@ -18,29 +18,29 @@ namespace HediffResourceFramework
     {
         private static void Postfix(ref IEnumerable<Thing> __result, RecipeDef recipeDef, Pawn worker, List<Thing> ingredients, Thing dominantIngredient, IBillGiver billGiver)
         {
-            if (billGiver is Thing workBench && CompFacilityInUse.thingBoosters.TryGetValue(workBench, out var comp))
+            if (billGiver is Thing workBench && CompThingInUse.things.TryGetValue(workBench, out var comp))
             {
                 var list = __result.ToList();
                 Dictionary<StatDef, StatBonus> statValues = new Dictionary<StatDef, StatBonus>();
-                foreach (var statBooster in comp.Props.statBoosters)
+                foreach (var useProps in comp.Props.useProperties)
                 {
-                    if (comp.StatBoosterIsEnabled(statBooster))
+                    if (comp.UseIsEnabled(useProps))
                     {
-                        if (statBooster.resourceOnComplete != -1f)
+                        if (useProps.resourceOnComplete != -1f)
                         {
-                            var hediffResource = worker.health.hediffSet.GetFirstHediffOfDef(statBooster.hediff) as HediffResource;
-                            if (hediffResource != null && hediffResource.CanApplyStatBooster(statBooster, out _))
+                            var hediffResource = worker.health.hediffSet.GetFirstHediffOfDef(useProps.hediff) as HediffResource;
+                            if (hediffResource != null && hediffResource.CanUse(useProps, out _))
                             {
-                                hediffResource.ResourceAmount += statBooster.resourceOnComplete;
+                                hediffResource.ResourceAmount += useProps.resourceOnComplete;
                             }
                             else
                             {
                                 continue;
                             }
                         }
-                        if (statBooster.outputStatOffsets != null)
+                        if (useProps.outputStatOffsets != null)
                         {
-                            foreach (var statModifier in statBooster.outputStatOffsets)
+                            foreach (var statModifier in useProps.outputStatOffsets)
                             {
                                 if (statValues.ContainsKey(statModifier.stat))
                                 {
@@ -53,9 +53,9 @@ namespace HediffResourceFramework
                                 }
                             }
                         }
-                        if (statBooster.outputStatFactors != null)
+                        if (useProps.outputStatFactors != null)
                         {
-                            foreach (var statModifier in statBooster.outputStatFactors)
+                            foreach (var statModifier in useProps.outputStatFactors)
                             {
                                 if (statValues.ContainsKey(statModifier.stat))
                                 {
@@ -119,23 +119,23 @@ namespace HediffResourceFramework
     {
         private static void Postfix(ref QualityCategory __result, Pawn pawn, SkillDef relevantSkill)
         {
-            if (pawn.CurJobDef == JobDefOf.DoBill && CompFacilityInUse.thingBoosters.TryGetValue(pawn.CurJob.targetA.Thing, out var comp))
+            if (pawn.CurJobDef == JobDefOf.DoBill && CompThingInUse.things.TryGetValue(pawn.CurJob.targetA.Thing, out var comp))
             {
-                foreach (var statBooster in comp.Props.statBoosters)
+                foreach (var useProps in comp.Props.useProperties)
                 {
-                    if (comp.StatBoosterIsEnabled(statBooster) && statBooster.increaseQuality != -1 && __result < statBooster.increaseQualityCeiling)
+                    if (comp.UseIsEnabled(useProps) && useProps.increaseQuality != -1 && __result < useProps.increaseQualityCeiling)
                     {
-                        var hediffResource = pawn.health.hediffSet.GetFirstHediffOfDef(statBooster.hediff) as HediffResource;
-                        if (hediffResource != null && hediffResource.CanApplyStatBooster(statBooster, out _))
+                        var hediffResource = pawn.health.hediffSet.GetFirstHediffOfDef(useProps.hediff) as HediffResource;
+                        if (hediffResource != null && hediffResource.CanUse(useProps, out _))
                         {
-                            var result = (int)__result + (int)statBooster.increaseQuality;
+                            var result = (int)__result + (int)useProps.increaseQuality;
                             if (result > (int)QualityCategory.Legendary)
                             {
                                 result = (int)QualityCategory.Legendary;
                             }
-                            if (result > (int)statBooster.increaseQualityCeiling)
+                            if (result > (int)useProps.increaseQualityCeiling)
                             {
-                                result = (int)statBooster.increaseQualityCeiling;
+                                result = (int)useProps.increaseQualityCeiling;
                             }
                             __result = (QualityCategory)result;
                         }
@@ -158,20 +158,20 @@ namespace HediffResourceFramework
                     __result *= statBonus.statFactor;
                 }
             }
-            if (CompFacilityInUse.thingBoosters.TryGetValue(thing, out var comp) && comp.InUse(out var claimants))
+            if (CompThingInUse.things.TryGetValue(thing, out var comp) && comp.InUse(out var claimants))
             {
                 IEnumerable<Pawn> users = null;
-                Dictionary<Pawn, Dictionary<StatBooster, HediffResource>> checkedPawnsResources = new Dictionary<Pawn, Dictionary<StatBooster, HediffResource>>();
+                Dictionary<Pawn, Dictionary<UseProps, HediffResource>> checkedPawnsResources = new Dictionary<Pawn, Dictionary<UseProps, HediffResource>>();
                 var oldResult = __result;
-                foreach (var statBooster in comp.Props.statBoosters)
+                foreach (var useProps in comp.Props.useProperties)
                 {
-                    if (!comp.StatBoosterIsEnabled(statBooster))
+                    if (!comp.UseIsEnabled(useProps))
                     {
                         continue;
                     }
-                    if (statBooster.statOffsets != null)
+                    if (useProps.statOffsets != null)
                     {
-                        foreach (var statModifier in statBooster.statOffsets)
+                        foreach (var statModifier in useProps.statOffsets)
                         {
                             if (statModifier.stat == stat)
                             {
@@ -185,16 +185,16 @@ namespace HediffResourceFramework
                                     {
                                         if (hediffResourceDict is null)
                                         {
-                                            hediffResourceDict = new Dictionary<StatBooster, HediffResource>();
+                                            hediffResourceDict = new Dictionary<UseProps, HediffResource>();
                                         }
-                                        hediffResourceDict[statBooster] = user.health.hediffSet.GetFirstHediffOfDef(statBooster.hediff) as HediffResource;
+                                        hediffResourceDict[useProps] = user.health.hediffSet.GetFirstHediffOfDef(useProps.hediff) as HediffResource;
                                         checkedPawnsResources[user] = hediffResourceDict;
                                     }
-                                    if (hediffResourceDict != null && hediffResourceDict.TryGetValue(statBooster, out HediffResource hediffResource))
+                                    if (hediffResourceDict != null && hediffResourceDict.TryGetValue(useProps, out HediffResource hediffResource))
                                     {
-                                        if (hediffResource.CanApplyStatBooster(statBooster, out _))
+                                        if (hediffResource.CanUse(useProps, out _))
                                         {
-                                            HRFLog.Message($"1 Due to an user {user} with {statBooster.hediff} - {hediffResource}, {thing} is gaining a bonus to {stat}!");
+                                            HRFLog.Message($"1 Due to an user {user} with {useProps.hediff} - {hediffResource}, {thing} is gaining a bonus to {stat}!");
                                             __result += statModifier.value;
                                             break;
                                         }
@@ -204,9 +204,9 @@ namespace HediffResourceFramework
                         }
                     }
 
-                    if (statBooster.statFactors != null)
+                    if (useProps.statFactors != null)
                     {
-                        foreach (var statModifier in statBooster.statFactors)
+                        foreach (var statModifier in useProps.statFactors)
                         {
                             if (statModifier.stat == stat)
                             {
@@ -220,16 +220,16 @@ namespace HediffResourceFramework
                                     {
                                         if (hediffResourceDict is null)
                                         {
-                                            hediffResourceDict = new Dictionary<StatBooster, HediffResource>();
+                                            hediffResourceDict = new Dictionary<UseProps, HediffResource>();
                                         }
-                                        hediffResourceDict[statBooster] = user.health.hediffSet.GetFirstHediffOfDef(statBooster.hediff) as HediffResource;
+                                        hediffResourceDict[useProps] = user.health.hediffSet.GetFirstHediffOfDef(useProps.hediff) as HediffResource;
                                         checkedPawnsResources[user] = hediffResourceDict;
                                     }
-                                    if (hediffResourceDict != null && hediffResourceDict.TryGetValue(statBooster, out HediffResource hediffResource))
+                                    if (hediffResourceDict != null && hediffResourceDict.TryGetValue(useProps, out HediffResource hediffResource))
                                     {
-                                        if (hediffResource.CanApplyStatBooster(statBooster, out _))
+                                        if (hediffResource.CanUse(useProps, out _))
                                         {
-                                            HRFLog.Message($"2 Due to an user {user} with {statBooster.hediff} - {hediffResource}, {thing} is gaining a bonus to {stat}!");
+                                            HRFLog.Message($"2 Due to an user {user} with {useProps.hediff} - {hediffResource}, {thing} is gaining a bonus to {stat}!");
                                             __result *= statModifier.value;
                                             break;
                                         }

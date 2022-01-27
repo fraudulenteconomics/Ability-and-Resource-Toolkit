@@ -30,7 +30,7 @@
 	<HRF.ConsumesOnComplete>Consumes {0} of {1} on complete.</HRF.ConsumesOnComplete>
 	<HRF.ConsumesPerSecond>Consumes {0} of {1} per second.</HRF.ConsumesPerSecond>
 	<HRF.NoResource>{PAWN_nameDef} has no {1} resource</HRF.NoResource>
-	<FE.CannotUseMissingFusionReactor>{PAWN_nameDef} cannot use {1}: {2}</FE.CannotUseMissingFusionReactor>
+	<HRF.CannotUse>{PAWN_nameDef} cannot use {1}: {2}</HRF.CannotUse>
 	<HRF.MinimumResourcePerUse>Minimum {0} of {1} per use</HRF.MinimumResourcePerUse>
 	<HRF.ResourcePerUse>{0} of {1} per use</HRF.ResourcePerUse>
 	<HRF.ResourcePerSecond>Refills {1} of {0} per second</HRF.ResourcePerSecond>
@@ -38,5 +38,7 @@
 	<HRF.IsBattery>Is battery</HRF.IsBattery>
 	<HRF.MaxResourceStorageAmount>Max {1} of {0} storage amount</HRF.MaxResourceStorageAmount>
 	<HRF.WillBeActiveIn>Will be active in {0}</HRF.WillBeActiveIn>
-	<HRF.NoEnoughResource>No enough resource</HRF.NoEnoughResource>
+	<HRF.NotEnoughResource>Not enough resource</HRF.NotEnoughResource>
+	<FE.CannotUseMissingFusionReactor>{PAWN_nameDef} cannot use {1}: {2}</FE.CannotUseMissingFusionReactor>
+
 </LanguageData>

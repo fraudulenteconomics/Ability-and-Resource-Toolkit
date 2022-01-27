@@ -33,5 +33,7 @@ namespace HediffResourceFramework
 		public float resourcePerSecondFactor = 1f;
 
 		public bool ignoreTerrain;
+		public bool useAbsoluteSeverity;
+		public bool restrictResourceCap = true;
 	}
 }

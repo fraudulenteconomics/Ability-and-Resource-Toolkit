@@ -396,7 +396,8 @@
 		<defaultLabelColor>(0.1,0.6,0.1)</defaultLabelColor>
 		<maxResourceCapacity>50</maxResourceCapacity>
 		<hideResourceAmount>true</hideResourceAmount>
-		<!-- <useAbsoluteSeverity>true</useAbsoluteSeverity> -->
+		<useAbsoluteSeverity>true</useAbsoluteSeverity>
+		<restrictResourceCap>false</restrictResourceCap>
 		<stages>
 			<li Class="HediffResourceFramework.HediffStageResource">
 				<minSeverity>0.01</minSeverity>

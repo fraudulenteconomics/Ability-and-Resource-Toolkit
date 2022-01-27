@@ -61,6 +61,7 @@ namespace HediffResourceFramework
         }
 
         public bool Active => this.parent.Map != null && IsEnabled();
+        public override Pawn PawnHost => null;
         public bool IsEnabled()
         {
             if (flickableComp != null && !flickableComp.SwitchIsOn)

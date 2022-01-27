@@ -21,8 +21,8 @@ namespace HediffResourceFramework
 			var options = def.GetModExtension<FacilityInProgress>();
 			if (options != null)
             {
-				var props = new CompProperties_FacilityInUse_StatBoosters();
-				props.statBoosters = options.statBoosters;
+				var props = new CompProperties_ThingInUse();
+				props.useProperties = options.useProperties;
 				__result.comps.Add(props);
 			}
 		}

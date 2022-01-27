@@ -17,9 +17,9 @@ namespace HediffResourceFramework
         public int duration;
         public int delayTicks;
         public HediffStageResource CurStageResource => this.CurStage as HediffStageResource;
-        public IEnumerable<Tuple<CompAdjustHediffs, HediffOption, ResourceStorage>> GetResourceTupleStorages()
+        public IEnumerable<Tuple<CompAdjustHediffs, HediffOption, ResourceStorage>> GetResourceStorages()
         {
-            foreach (var adjustResource in this.pawn.GetAllAdjustHediffsComps())
+            foreach (var adjustResource in this.pawn.GetAllAdjustResourceComps())
             {
                 if (adjustResource is CompAdjustHediffs comp)
                 {
@@ -35,7 +35,7 @@ namespace HediffResourceFramework
             get
             {
                 var amount = 0f;
-                foreach (var tuple in GetResourceTupleStorages())
+                foreach (var tuple in GetResourceStorages())
                 {
                     amount += tuple.Item3.ResourceAmount;
                 }
@@ -47,7 +47,7 @@ namespace HediffResourceFramework
             get
             {
                 var amount = 0f;
-                foreach (var tuple in GetResourceTupleStorages())
+                foreach (var tuple in GetResourceStorages())
                 {
                     amount += tuple.Item3.ResourceCapacity;
                 }
@@ -63,12 +63,12 @@ namespace HediffResourceFramework
             }
             set
             {
-                var storages = GetResourceTupleStorages();
+                var storages = GetResourceStorages();
                 var totalValue = resourceAmount + ResourceFromStorages;
                 var toChange = value - totalValue;
                 if (toChange > 0)
                 {
-                    var toAdd = Mathf.Min(toChange, ResourceCapacityInt - resourceAmount);
+                    var toAdd = this.def.restrictResourceCap ? Mathf.Min(toChange, ResourceCapacityInt - resourceAmount) : toChange;
                     toChange -= toAdd;
                     resourceAmount += toAdd;
                     while (toChange > 0)
@@ -176,7 +176,14 @@ namespace HediffResourceFramework
                 }
                 else
                 {
-                    this.Severity = ResourceAmount;
+                    if (this.def.useAbsoluteSeverity)
+                    {
+                        this.Severity = ResourceAmount / ResourceCapacity;
+                    }
+                    else
+                    {
+                        this.Severity = ResourceAmount;
+                    }
                 }
             }
         }
@@ -219,17 +226,17 @@ namespace HediffResourceFramework
             }
         }
 
-        public bool CanApplyStatBooster(StatBooster statBooster, out string failReason)
+        public bool CanUse(UseProps useProps, out string failReason)
         {
             failReason = "";
-            if (statBooster.resourceOnComplete != -1f && this.ResourceAmount < -statBooster.resourceOnComplete)
+            if (useProps.resourceOnComplete != -1f && this.ResourceAmount < -useProps.resourceOnComplete)
             {
-                failReason = "HRF.ConsumesOnComplete".Translate(-statBooster.resourceOnComplete, this.def.label);
+                failReason = "HRF.ConsumesOnComplete".Translate(-useProps.resourceOnComplete, this.def.label);
                 return false;
             }
-            else if (statBooster.resourcePerSecond != -1 && this.ResourceAmount < -statBooster.resourcePerSecond)
+            else if (useProps.resourcePerSecond != -1 && this.ResourceAmount < -useProps.resourcePerSecond)
             {
-                failReason = "HRF.ConsumesPerSecond".Translate(-statBooster.resourcePerSecond, this.def.label);
+                failReason = "HRF.ConsumesPerSecond".Translate(-useProps.resourcePerSecond, this.def.label);
                 return false;
             }
             return true;
@@ -461,7 +468,7 @@ namespace HediffResourceFramework
         {
             float num = 0;
 
-            var comps = HediffResourceUtils.GetAllAdjustHediffsComps(this.pawn);
+            var comps = HediffResourceUtils.GetAllAdjustResourceComps(this.pawn);
             foreach (var comp in comps)
             {
                 var resourceSettings = comp.ResourceSettings;
@@ -526,7 +533,7 @@ namespace HediffResourceFramework
             base.PostRemoved();
             HRFLog.Message(this.def.defName + " removing resource hediff from " + this.pawn);
 
-            var comps = HediffResourceUtils.GetAllAdjustHediffsComps(this.pawn);
+            var comps = HediffResourceUtils.GetAllAdjustResourceComps(this.pawn);
             foreach (var comp in comps)
             {
                 var resourceSettings = comp.ResourceSettings;

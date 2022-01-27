@@ -9,6 +9,6 @@ namespace HediffResourceFramework
 {
     public class FacilityInProgress : DefModExtension
     {
-        public List<StatBooster> statBoosters;
+        public List<UseProps> useProperties;
     }
 }

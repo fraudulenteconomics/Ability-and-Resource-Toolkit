@@ -4,10 +4,10 @@ using Verse;
 
 namespace HediffResourceFramework
 {
-    public class StatBooster
+    public class UseProps
     {
         public HediffResourceDef hediff;
-        public bool preventUseIfHediffMissing;
+        public bool hediffRequired;
         public string cannotUseMessageKey;
 
         public bool toggleResourceUse;
@@ -31,5 +31,13 @@ namespace HediffResourceFramework
         public List<StatBonus> outputStatOffsets;
         public List<StatBonus> outputStatFactors;
         public bool defaultToggleState;
+
+        public float resourceOnSow;
+        public float resourceOnHarvest;
+        public bool scaleWithGrowthRate;
+        public float harvestYieldAdjust;
+        public string cannotSowMessageKey;
+        public string cannotHarvestMessageKey;
+
     }
 }

@@ -29,15 +29,13 @@ namespace HediffResourceFramework
 
     public class CompTraitsAdjustHediffs : CompAdjustHediffs
     {
-        public Pawn Pawn => this.parent as Pawn;
-
         public static Dictionary<TraitDef, TraitsAdjustHediff> cachedModExtensions = new Dictionary<TraitDef, TraitsAdjustHediff>();
         public override List<HediffOption> ResourceSettings
         {
             get
             {
                 var resourceSettings = new List<HediffOption>();
-                foreach (var trait in Pawn.story?.traits?.allTraits)
+                foreach (var trait in PawnHost.story?.traits?.allTraits)
                 {
                     if (!cachedModExtensions.TryGetValue(trait.def, out TraitsAdjustHediff traitAdjustOptions))
                     {
@@ -53,6 +51,8 @@ namespace HediffResourceFramework
             }
         }
 
+        public override Pawn PawnHost => this.parent as Pawn;
+
         public override void Drop()
         {
         }
@@ -64,7 +64,7 @@ namespace HediffResourceFramework
         public override void ResourceTick()
         {
             base.ResourceTick();
-            var pawn = Pawn;
+            var pawn = PawnHost;
             if (pawn != null && !pawn.Dead)
             {
                 foreach (var hediffOption in ResourceSettings)
@@ -78,7 +78,7 @@ namespace HediffResourceFramework
                     else
                     {
                         float num = hediffOption.GetResourceGain(this);
-                        HediffResourceUtils.AdjustResourceAmount(Pawn, hediffOption.hediff, num, hediffOption.addHediffIfMissing, hediffOption.applyToPart);
+                        HediffResourceUtils.AdjustResourceAmount(PawnHost, hediffOption.hediff, num, hediffOption.addHediffIfMissing, hediffOption.applyToPart);
                     }
                 }
             }

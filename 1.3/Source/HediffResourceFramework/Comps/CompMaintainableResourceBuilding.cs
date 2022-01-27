@@ -11,13 +11,13 @@ namespace HediffResourceFramework
 
     public class CompMaintainableResourceBuilding : ThingComp
     {
-		private CompFacilityInUse compFacilityInUse;
+		private CompThingInUse compFacilityInUse;
 
 		public static Dictionary<Map, HashSet<Thing>> maintainables = new Dictionary<Map, HashSet<Thing>>();
         public override void PostSpawnSetup(bool respawningAfterLoad)
         {
             base.PostSpawnSetup(respawningAfterLoad);
-			compFacilityInUse = this.parent.TryGetComp<CompFacilityInUse>();
+			compFacilityInUse = this.parent.TryGetComp<CompThingInUse>();
 			var map = this.parent.Map;
 			if (maintainables.ContainsKey(map))
             {
@@ -60,19 +60,19 @@ namespace HediffResourceFramework
         {
 			if (compFacilityInUse != null)
             {
-				foreach (var statBooster in compFacilityInUse.Props.statBoosters)
+				foreach (var useProps in compFacilityInUse.Props.useProperties)
                 {
-					if (statBooster.resourceOnComplete != -1)
+					if (useProps.resourceOnComplete != -1)
                     {
-						if (!compFacilityInUse.StatBoosterIsEnabled(statBooster))
+						if (!compFacilityInUse.UseIsEnabled(useProps))
                         {
-							failReason = statBooster.cannotUseMessageKey;
+							failReason = useProps.cannotUseMessageKey;
 							return false;
                         }
-						var hediff = pawn.health.hediffSet.GetFirstHediffOfDef(statBooster.hediff) as HediffResource;
-						if (hediff is null || hediff.ResourceAmount < -statBooster.resourceOnComplete)
+						var hediff = pawn.health.hediffSet.GetFirstHediffOfDef(useProps.hediff) as HediffResource;
+						if (hediff is null || hediff.ResourceAmount < -useProps.resourceOnComplete)
                         {
-							failReason = statBooster.cannotUseMessageKey;
+							failReason = useProps.cannotUseMessageKey;
 							return false;
                         }
 					}
@@ -125,12 +125,12 @@ namespace HediffResourceFramework
 			ticksSinceMaintain = 0;
 			if (compFacilityInUse != null)
 			{
-				foreach (var statBooster in compFacilityInUse.Props.statBoosters)
+				foreach (var useProps in compFacilityInUse.Props.useProperties)
 				{
-					if (statBooster.resourceOnComplete != -1)
+					if (useProps.resourceOnComplete != -1)
 					{
-						var hediff = maintainer.health.hediffSet.GetFirstHediffOfDef(statBooster.hediff) as HediffResource;
-						hediff.ResourceAmount -= -statBooster.resourceOnComplete;
+						var hediff = maintainer.health.hediffSet.GetFirstHediffOfDef(useProps.hediff) as HediffResource;
+						hediff.ResourceAmount -= -useProps.resourceOnComplete;
 					}
 				}
 			}

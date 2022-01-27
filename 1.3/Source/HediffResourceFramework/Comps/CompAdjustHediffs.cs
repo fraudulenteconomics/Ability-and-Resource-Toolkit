@@ -15,7 +15,7 @@ namespace HediffResourceFramework
 
         public string disablePostUse;
     }
-    public class CompAdjustHediffs : ThingComp, IAdjustResource, IResourceStorage
+    public abstract class CompAdjustHediffs : ThingComp, IAdjustResource, IResourceStorage
     {
         public CompProperties_AdjustHediffs Props => (CompProperties_AdjustHediffs)this.props;
         public Thing Parent => this.parent;
@@ -162,6 +162,8 @@ namespace HediffResourceFramework
                 return postUseDelayTicks;
             }
         }
+
+        public abstract Pawn PawnHost { get; }
         public bool TryGetQuality(out QualityCategory qc)
         {
             return this.parent.TryGetQuality(out qc);

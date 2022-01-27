@@ -20,6 +20,7 @@ namespace HediffResourceFramework
     public class CompApparelAdjustHediffs : CompAdjustHediffs
     {
         public Apparel Apparel => this.parent as Apparel;
+        public override Pawn PawnHost => Apparel.Wearer;
         public override void Notify_Removed()
         {
             if (Apparel.Wearer != null)

@@ -40,6 +40,7 @@ namespace HediffResourceFramework
                 return postUseDelayTicks;
             }
         }
+        public Pawn PawnHost => this.Pawn;
         public void Register()
         {
             HediffResourceManager.Instance.RegisterAdjuster(this);

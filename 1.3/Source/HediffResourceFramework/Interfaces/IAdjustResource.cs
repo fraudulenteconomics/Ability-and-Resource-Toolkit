@@ -18,6 +18,7 @@ namespace HediffResourceFramework
         void Update();
         Dictionary<HediffResource, HediffResouceDisable> PostUseDelayTicks { get; }
         Thing Parent { get; }
+        Pawn PawnHost { get; }
         List<HediffOption> ResourceSettings { get; }
         string DisablePostUse { get; }
         bool TryGetQuality(out QualityCategory qc);

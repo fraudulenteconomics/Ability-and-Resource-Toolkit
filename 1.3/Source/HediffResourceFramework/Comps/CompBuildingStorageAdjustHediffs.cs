@@ -39,6 +39,7 @@ namespace HediffResourceFramework
                 }
             }
         }
+        public override Pawn PawnHost => null;
         public override void ResourceTick()
         {
             base.ResourceTick();

@@ -17,7 +17,6 @@ namespace HediffResourceFramework
     }
     public class CompWeaponAdjustHediffs : CompAdjustHediffs
     {
-
         private CompEquippable compEquippable;
         private CompEquippable CompEquippable
         {
@@ -30,30 +29,20 @@ namespace HediffResourceFramework
                 return compEquippable;
             }
         }
-        public Pawn Pawn
-        {
-            get
-            {
-                if (CompEquippable.ParentHolder is Pawn_EquipmentTracker equipmentTracker && equipmentTracker.pawn != null)
-                {
-                    return equipmentTracker.pawn;
-                }
-                return null;
-            }
-        }
+        public override Pawn PawnHost => (CompEquippable.ParentHolder as Pawn_EquipmentTracker)?.pawn;
         public override void Notify_Removed()
         {
             base.Notify_Removed();
-            if (Pawn != null)
+            if (PawnHost != null)
             {
-                HediffResourceUtils.RemoveExcessHediffResources(Pawn, this);
+                HediffResourceUtils.RemoveExcessHediffResources(PawnHost, this);
             }
         }
 
         public override void Drop()
         {
             base.Drop();
-            var pawn = Pawn;
+            var pawn = PawnHost;
             if (pawn != null)
             {
                 if (pawn.Map != null)
@@ -74,7 +63,7 @@ namespace HediffResourceFramework
         public override void ResourceTick()
         {
             base.ResourceTick();
-            var pawn = Pawn;
+            var pawn = PawnHost;
             if (pawn != null)
             {
                 foreach (var hediffOption in Props.resourceSettings)

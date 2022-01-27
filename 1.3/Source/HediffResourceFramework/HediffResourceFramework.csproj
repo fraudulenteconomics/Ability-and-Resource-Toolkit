@@ -50,11 +50,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Comps\CompPlantInUse.cs" />
     <Compile Include="Comps\CompResourceOnAction.cs" />
     <Compile Include="Comps\CompMaintainableResourceBuilding.cs" />
-    <Compile Include="Comps\CompFacilityInUse.cs" />
+    <Compile Include="Comps\CompThingInUse.cs" />
     <Compile Include="Comps\CompAdjustHediffs.cs" />
     <Compile Include="Comps\CompBuildingStorageAdjustHediffs.cs" />
+    <Compile Include="Comps\GlowerOptions.cs" />
     <Compile Include="Comps\HediffCompAdjustHediffsArea.cs" />
     <Compile Include="Comps\CompAdjustHediffsArea.cs" />
     <Compile Include="Comps\ChargeResource.cs" />
@@ -65,9 +67,10 @@
     <Compile Include="Comps\HediffComp_AdjustHediffs.cs" />
     <Compile Include="HarmonyPatches\Caravan_Patches.cs" />
     <Compile Include="HarmonyPatches\Pathfinding_Patches.cs" />
+    <Compile Include="HarmonyPatches\Plant_Patches.cs" />
     <Compile Include="Hediffs\HediffResouceDisable.cs" />
     <Compile Include="Hediffs\HediffStageResource.cs" />
-    <Compile Include="Comps\StatBooster.cs" />
+    <Compile Include="Comps\UseProps.cs" />
     <Compile Include="DownedStateData.cs" />
     <Compile Include="FiredData.cs" />
     <Compile Include="HarmonyPatches\Building_Patches.cs" />

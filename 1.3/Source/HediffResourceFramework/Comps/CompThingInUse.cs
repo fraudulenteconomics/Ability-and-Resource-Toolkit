@@ -11,24 +11,17 @@ using static Verse.AI.ReservationManager;
 
 namespace HediffResourceFramework
 {
-    public class GlowerOptions
+    public class CompProperties_ThingInUse : CompProperties
     {
-        public ColorInt glowColor;
-        public float glowRadius;
-        public float overlightRadius;
-    }
-
-    public class CompProperties_FacilityInUse_StatBoosters : CompProperties
-    {
-        public List<StatBooster> statBoosters;
-        public CompProperties_FacilityInUse_StatBoosters()
+        public List<UseProps> useProperties;
+        public CompProperties_ThingInUse()
         {
-            this.compClass = typeof(CompFacilityInUse);
+            this.compClass = typeof(CompThingInUse);
         }
     }
-    public class CompFacilityInUse : ThingComp, IAdjustResource
+    public class CompThingInUse : ThingComp, IAdjustResource
     {
-        public static Dictionary<Thing, CompFacilityInUse> thingBoosters = new Dictionary<Thing, CompFacilityInUse>();
+        public static Dictionary<Thing, CompThingInUse> things = new Dictionary<Thing, CompThingInUse>();
 
         public static HashSet<StatDef> statsWithBoosters = new HashSet<StatDef> { };
 
@@ -36,25 +29,30 @@ namespace HediffResourceFramework
         public CompGlower compParentGlower;
 
         public bool powerIsOn;
-        public bool StatBoosterIsEnabled(StatBooster statBooster)
+        public bool UseIsEnabled(UseProps useProps)
         {
-            var ind = this.Props.statBoosters.IndexOf(statBooster);
-            if (statBooster.toggleResourceUse && resourceUseToggleStates != null && resourceUseToggleStates.TryGetValue(ind, out bool state) && !state)
+            var ind = this.Props.useProperties.IndexOf(useProps);
+            if (useProps.toggleResourceUse && resourceUseToggleStates != null && resourceUseToggleStates.TryGetValue(ind, out bool state) && !state)
             {
                 return false;
             }
             return true;
         }
 
+        public virtual bool PawnCanUseIt(Pawn pawn, UseProps useProps)
+        {
+            return true;
+        }
+
         public override string CompInspectStringExtra()
         {
             var sb = new StringBuilder(base.CompInspectStringExtra());
-            var statBoosters = this.Props.statBoosters;
-            foreach (var statBooster in statBoosters)
+            var useProps = this.Props.useProperties;
+            foreach (var useProp in useProps)
             {
-                if (statBooster.preventUseIfHediffMissing)
+                if (useProp.hediffRequired)
                 {
-                    sb.AppendLine("HRF.RequiresResource".Translate(statBooster.hediff.label));
+                    sb.AppendLine("HRF.RequiresResource".Translate(useProp.hediff.label));
                 }
             }
             return sb.ToString().TrimEndNewlines();
@@ -65,26 +63,26 @@ namespace HediffResourceFramework
             if (!respawningAfterLoad)
             {
                 resourceUseToggleStates = new Dictionary<int, bool>();
-                foreach (var statBooster in Props.statBoosters)
+                foreach (var useProps in Props.useProperties)
                 {
-                    var ind = Props.statBoosters.IndexOf(statBooster);
-                    resourceUseToggleStates[ind] = statBooster.defaultToggleState;
+                    var ind = Props.useProperties.IndexOf(useProps);
+                    resourceUseToggleStates[ind] = useProps.defaultToggleState;
                 }
             }
-            thingBoosters[this.parent] = this;
-            foreach (var statBooster in Props.statBoosters)
+            things[this.parent] = this;
+            foreach (var useProps in Props.useProperties)
             {
-                if (statBooster.statOffsets != null)
+                if (useProps.statOffsets != null)
                 {
-                    foreach (var stat in statBooster.statOffsets)
+                    foreach (var stat in useProps.statOffsets)
                     {
                         statsWithBoosters.Add(stat.stat);
                     }
                 }
 
-                if (statBooster.statFactors != null)
+                if (useProps.statFactors != null)
                 {
-                    foreach (var stat in statBooster.statFactors)
+                    foreach (var stat in useProps.statFactors)
                     {
                         statsWithBoosters.Add(stat.stat);
                     }
@@ -100,13 +98,11 @@ namespace HediffResourceFramework
         }
 
         private BoolPawnsValueCache boolValueCache;
-
         public bool InUse(out IEnumerable<Pawn> claimants)
         {
             if (Find.TickManager.TicksGame + 60 > boolValueCache.updateTick)
             {
                 boolValueCache.Value = InUseInt(out IEnumerable<Pawn> pawns);
-                boolValueCache.pawns = pawns;
             }
             claimants = boolValueCache.pawns;
             return boolValueCache.value;
@@ -189,11 +185,12 @@ namespace HediffResourceFramework
             }
         }
 
-        public CompProperties_FacilityInUse_StatBoosters Props => (CompProperties_FacilityInUse_StatBoosters)this.props;
+        public CompProperties_ThingInUse Props => (CompProperties_ThingInUse)this.props;
         public List<HediffOption> ResourceSettings => throw new NotImplementedException();
         public Dictionary<HediffResource, HediffResouceDisable> PostUseDelayTicks => throw new NotImplementedException();
         public string DisablePostUse => throw new NotImplementedException();
         public Thing Parent => this.parent;
+        public Pawn PawnHost => null;
         public void ResourceTick()
         {
             bool inUse = InUse(out var claimaints);
@@ -202,16 +199,16 @@ namespace HediffResourceFramework
                 var users = GetActualUsers(claimaints);
                 foreach (var user in users)
                 {
-                    foreach (var statBooster in Props.statBoosters)
+                    foreach (var useProps in Props.useProperties)
                     {
-                        if (statBooster.resourcePerSecond != -1f && this.StatBoosterIsEnabled(statBooster))
+                        if (useProps.resourcePerSecond != -1f && this.UseIsEnabled(useProps))
                         {
-                            float num = statBooster.resourcePerSecond;
-                            if (statBooster.qualityScalesResourcePerSecond && this.parent.TryGetQuality(out QualityCategory qc))
+                            float num = useProps.resourcePerSecond;
+                            if (useProps.qualityScalesResourcePerSecond && this.parent.TryGetQuality(out QualityCategory qc))
                             {
                                 num *= HediffResourceUtils.GetQualityMultiplierInverted(qc);
                             }
-                            HediffResourceUtils.AdjustResourceAmount(user, statBooster.hediff, num, statBooster.addHediffIfMissing, statBooster.applyToPart);
+                            HediffResourceUtils.AdjustResourceAmount(user, useProps.hediff, num, useProps.addHediffIfMissing, useProps.applyToPart);
                         }
 
                     }
@@ -226,15 +223,15 @@ namespace HediffResourceFramework
             {
                 yield return g;
             }
-            foreach (var statBooster in Props.statBoosters)
+            foreach (var useProps in Props.useProperties)
             {
-                if (statBooster.toggleResourceUse)
+                if (useProps.toggleResourceUse)
                 {
-                    var ind = Props.statBoosters.IndexOf(statBooster);
+                    var ind = Props.useProperties.IndexOf(useProps);
                     var toggle = new Command_Toggle();
-                    toggle.defaultLabel = statBooster.toggleResourceLabel;
-                    toggle.defaultDesc = statBooster.toggleResourceDesc;
-                    toggle.icon = ContentFinder<Texture2D>.Get(statBooster.toggleResourceGizmoTexPath);
+                    toggle.defaultLabel = useProps.toggleResourceLabel;
+                    toggle.defaultDesc = useProps.toggleResourceDesc;
+                    toggle.icon = ContentFinder<Texture2D>.Get(useProps.toggleResourceGizmoTexPath);
                     toggle.toggleAction = delegate ()
                     {
                         if (resourceUseToggleStates.ContainsKey(ind))
@@ -261,19 +258,19 @@ namespace HediffResourceFramework
             {
                 if (resourceUseToggleStates is null)
                 {
-                    foreach (var statBooster in Props.statBoosters)
+                    foreach (var useProps in Props.useProperties)
                     {
-                        if (!changedGraphics && !statBooster.texPathToggledOn.NullOrEmpty())
+                        if (!changedGraphics && !useProps.texPathToggledOn.NullOrEmpty())
                         {
-                            ChangeGraphic(statBooster.texPathToggledOn);
+                            ChangeGraphic(useProps.texPathToggledOn);
                             changedGraphics = true;
                         }
 
-                        if (!changedGlower && statBooster.glowerOptions != null)
+                        if (!changedGlower && useProps.glowerOptions != null)
                         {
-                            if (!statBooster.glowOnlyPowered || (this.parent.TryGetComp<CompPowerTrader>()?.PowerOn ?? false))
+                            if (!useProps.glowOnlyPowered || (this.parent.TryGetComp<CompPowerTrader>()?.PowerOn ?? false))
                             {
-                                UpdateGlower(statBooster.glowerOptions);
+                                UpdateGlower(useProps.glowerOptions);
                                 changedGlower = true;
                             }
                         }
@@ -281,22 +278,22 @@ namespace HediffResourceFramework
                 }
                 else
                 {
-                    foreach (var statBooster in Props.statBoosters)
+                    foreach (var useProps in Props.useProperties)
                     {
-                        if (StatBoosterIsEnabled(statBooster))
+                        if (UseIsEnabled(useProps))
                         {
-                            var ind = Props.statBoosters.IndexOf(statBooster);
-                            if (!changedGraphics && !statBooster.texPathToggledOn.NullOrEmpty() && resourceUseToggleStates.ContainsKey(ind) && resourceUseToggleStates[ind])
+                            var ind = Props.useProperties.IndexOf(useProps);
+                            if (!changedGraphics && !useProps.texPathToggledOn.NullOrEmpty() && resourceUseToggleStates.ContainsKey(ind) && resourceUseToggleStates[ind])
                             {
-                                ChangeGraphic(statBooster.texPathToggledOn);
+                                ChangeGraphic(useProps.texPathToggledOn);
                                 changedGraphics = true;
                             }
 
-                            if (!changedGlower && statBooster.glowerOptions != null)
+                            if (!changedGlower && useProps.glowerOptions != null)
                             {
-                                if (statBooster.glowOnlyPowered && (this.parent.TryGetComp<CompPowerTrader>()?.PowerOn ?? false))
+                                if (useProps.glowOnlyPowered && (this.parent.TryGetComp<CompPowerTrader>()?.PowerOn ?? false))
                                 {
-                                    UpdateGlower(statBooster.glowerOptions);
+                                    UpdateGlower(useProps.glowerOptions);
                                     changedGlower = true;
                                 }
                             }
