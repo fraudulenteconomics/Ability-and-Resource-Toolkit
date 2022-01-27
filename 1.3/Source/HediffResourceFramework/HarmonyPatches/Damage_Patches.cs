@@ -100,16 +100,31 @@ namespace HediffResourceFramework
 		}
 	}
 
-	[HarmonyPatch(typeof(Projectile), "Impact")]
-	internal static class Impact_Patch
+	[HarmonyPatch(typeof(Bullet), "Impact")]
+	public static class Impact_Patch
 	{
+		public static Thing hitThingStatic;
+		public static Projectile curProjectileStatic;
+
 		private static void Prefix(Projectile __instance, Thing hitThing)
 		{
+			hitThingStatic = hitThing;
+			curProjectileStatic = __instance;
+		}
+
+		private static void Postfix(Projectile __instance, Thing hitThing)
+		{
+			hitThingStatic = null;
+			curProjectileStatic = null;
+		}
+
+		public static void ImpactThing(Projectile __instance, Thing hitThing, DamageInfo source)
+        {
 			if (hitThing != null && HediffResourceManager.Instance.firedProjectiles.TryGetValue(__instance, out var firedData))
-            {
+			{
 				var target = hitThing as Pawn;
 				if (target != null)
-                {
+				{
 					var extension = firedData.equipment?.def.GetModExtension<ResourceOnActionExtension>();
 					if (extension != null)
 					{
@@ -143,30 +158,63 @@ namespace HediffResourceFramework
 
 				var stuffExtension = firedData.equipment?.Stuff?.GetModExtension<StuffExtension>();
 				if (stuffExtension != null)
-                {
-					stuffExtension.DamageThing(firedData.caster, hitThing, null, true, false);
-                }
+				{
+					stuffExtension.DamageThing(firedData.caster, hitThing, source, true, false);
+				}
+
+				Log.Message("Projectile fire data: __instance: " + __instance + " - hitThing: " + hitThing + " - source: " + source + " - caster: " + firedData.caster);
+
 				if (firedData.caster is Pawn pawn2)
-                {
+				{
+					Log.Message("Iterating over pawn: " + pawn2);
 					if (pawn2.health?.hediffSet.hediffs != null)
-                    {
+					{
+						Log.Message("Checking hediffs on: " + pawn2);
 						foreach (var hediff in pawn2.health.hediffSet.hediffs)
-                        {
+						{
+							Log.Message("Checking hediff on: " + hediff);
 							if (hediff is HediffResource hediffResource && hediffResource.CurStage is HediffStageResource hediffStageResource && hediffStageResource.additionalDamages != null)
-                            {
+							{
+								Log.Message("Passed hediff: " + hediff);
 								foreach (var additionalDamage in hediffStageResource.additionalDamages)
 								{
+									Log.Message("Looking at : " + additionalDamage.damage + " - " + additionalDamage.damageRange);
 									if (additionalDamage.damageRange)
 									{
 										var damageAmount = additionalDamage.amount.RandomInRange;
-										var damage = new DamageInfo(additionalDamage.damage, damageAmount);
+										var damage = new DamageInfo(additionalDamage.damage, damageAmount, instigator: source.Instigator, hitPart: source.HitPart, weapon: source.Weapon);
+										Log.Message(hitThing + " should take damage: " + damage);
 										hitThing.TakeDamage(damage);
+										Log.Message(hitThing + " 2 should take damage: " + damage);
+									}
+									else
+                                    {
+										Log.Message(hitThing + " won't take damage: " + additionalDamage.damage);
 									}
 								}
-                            }
-                        }
-                    }
-                }
+							}
+						}
+					}
+				}
+			}
+			else
+            {
+				Log.Error("Projectile fire data isn't found: __instance: " + __instance + " - hitThing: " + hitThing + " - source: " + source);
+			}
+		}
+	}
+
+	[HarmonyPatch(typeof(Thing), "TakeDamage")]
+	public static class Patch_TakeDamage
+	{
+		public static bool preventRecursion;
+		public static void Postfix(Thing __instance, DamageInfo dinfo)
+		{
+			if (!preventRecursion && Impact_Patch.hitThingStatic != null && __instance == Impact_Patch.hitThingStatic && Impact_Patch.curProjectileStatic != null)
+            {
+				preventRecursion = true;
+				Impact_Patch.ImpactThing(Impact_Patch.curProjectileStatic, Impact_Patch.hitThingStatic, dinfo);
+				preventRecursion = false;
 			}
 		}
 	}

@@ -15,9 +15,76 @@ using Verse.AI;
 
 namespace HediffResourceFramework
 {
+    [StaticConstructorOnStartup]
+    public static class PathfindingUtility
+    {
+        public static HashSet<TerrainDef> impassableTerrains;
+        static PathfindingUtility()
+        {
+            impassableTerrains = DefDatabase<TerrainDef>.AllDefs.Where(x => x.passability == Traversability.Impassable).ToHashSet();
+        }
+        public static List<IntVec3> FindPathPrefix(Pawn pawn)
+        {
+            List<IntVec3> __state;
+            if (pawn != null && pawn.IgnoresTerrain())
+            {
+                __state = new List<IntVec3>();
+                foreach (var def in impassableTerrains)
+                {
+                    def.passability = Traversability.Standable;
+                }
+                foreach (var cell in pawn.Map.AllCells)
+                {
+                    if (impassableTerrains.Contains(cell.GetTerrain(pawn.Map)))
+                    {
+                        __state.Add(cell);
+                        bool haveNotified = false;
+                        pawn.Map.pathing.Normal.pathGrid.RecalculatePerceivedPathCostAt(cell, ref haveNotified);
+                        haveNotified = false;
+                        pawn.Map.pathing.FenceBlocked.pathGrid.RecalculatePerceivedPathCostAt(cell, ref haveNotified);
+                    }
+                }
+                //pawn.Map.pathing.RecalculateAllPerceivedPathCosts();
+            }
+            else
+            {
+                __state = null;
+            }
+            return __state;
+        }
+        public static void FindPathPostfix(List<IntVec3> __state, Pawn pawn)
+        {
+            if (__state != null)
+            {
+                foreach (var def in impassableTerrains)
+                {
+                    def.passability = Traversability.Impassable;
+                }
+                foreach (var cell in __state)
+                {
+                    bool haveNotified = false;
+                    pawn.Map.pathing.Normal.pathGrid.RecalculatePerceivedPathCostAt(cell, ref haveNotified);
+                    haveNotified = false;
+                    pawn.Map.pathing.FenceBlocked.pathGrid.RecalculatePerceivedPathCostAt(cell, ref haveNotified);
+                }
+                pawn.Map.pathing.RecalculateAllPerceivedPathCosts();
+            }
+        }
+    }
+
     [HarmonyPatch(typeof(PathFinder), nameof(PathFinder.FindPath), new Type[] { typeof(IntVec3), typeof(LocalTargetInfo), typeof(TraverseParms), typeof(PathEndMode), typeof(PathFinderCostTuning) })]
     public static class PathFinder_FindPath_Patch
     {
+        //public static void Prefix(out List<IntVec3> __state, IntVec3 start, LocalTargetInfo dest, TraverseParms traverseParms, PathEndMode peMode = PathEndMode.OnCell, PathFinderCostTuning tuning = null)
+        //{
+        //    __state = PathfindingUtility.FindPathPrefix(traverseParms.pawn);
+        //}
+        //
+        //public static void Postfix(List<IntVec3> __state, IntVec3 start, LocalTargetInfo dest, TraverseParms traverseParms, PathEndMode peMode = PathEndMode.OnCell, PathFinderCostTuning tuning = null)
+        //{
+        //    PathfindingUtility.FindPathPostfix(__state, traverseParms.pawn);
+        //}
+
         public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
         {
             var codes = instructions.ToList();

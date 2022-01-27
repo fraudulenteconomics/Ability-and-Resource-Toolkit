@@ -4,6 +4,7 @@ using RimWorld;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
@@ -80,6 +81,7 @@ namespace HediffResourceFramework
                 }
             }
 
+            var dinfoSource = __result.First();
             if (__instance.caster is Pawn pawn)
             {
                 foreach (var hediff in pawn.health.hediffSet.hediffs)
@@ -107,7 +109,8 @@ namespace HediffResourceFramework
                             if (additionalDamage.damageRange)
                             {
                                 var damageAmount = additionalDamage.amount.RandomInRange;
-                                var damage = new DamageInfo(additionalDamage.damage, damageAmount);
+                                var damage = new DamageInfo(additionalDamage.damage, damageAmount, instigator: dinfoSource.Instigator, hitPart: dinfoSource.HitPart, weapon: dinfoSource.Weapon);
+                                Log.Message("Damaging " + target.Thing + " with " + damage);
                                 target.Thing.TakeDamage(damage);
                             }
                         }
@@ -118,7 +121,7 @@ namespace HediffResourceFramework
             var stuffExtension = __instance.EquipmentSource?.Stuff?.GetModExtension<StuffExtension>();
             if (stuffExtension != null)
             {
-                stuffExtension.DamageThing(__instance.caster, target.Thing, null, false, true);
+                stuffExtension.DamageThing(__instance.caster, target.Thing, dinfoSource, false, true);
             }
         }
     }
