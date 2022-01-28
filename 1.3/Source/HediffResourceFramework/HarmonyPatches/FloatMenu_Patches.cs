@@ -33,7 +33,7 @@ namespace HediffResourceFramework
                     opts.Add(newOption);
                 }
             }
-
+    
             if (pawn.equipment != null)
             {
                 for (int i = 0; i < thingList.Count; i++)
@@ -53,7 +53,7 @@ namespace HediffResourceFramework
                     }
                 }
             }
-
+    
             for (int i = 0; i < thingList.Count; i++)
             {
                 var t = thingList[i];
@@ -69,6 +69,7 @@ namespace HediffResourceFramework
             }
         }
     }
+
     [HarmonyPatch(typeof(FloatMenuMakerMap), "AddJobGiverWorkOrders")]
     public static class AddJobGiverWorkOrders_Patch
     {
@@ -82,7 +83,7 @@ namespace HediffResourceFramework
                 if (!pawn.CanUseIt(t, out string cannotUseMessage))
                 {
                     FloatMenuOption floatMenuOption = opts.FirstOrDefault((FloatMenuOption x) => x.Label.ToLower().Contains(t.Label.ToLower()));
-                    if (floatMenuOption != null)
+                    if (floatMenuOption?.action != null)
                     {
                         floatMenuOption.action = null;
                         floatMenuOption.Label = cannotUseMessage;

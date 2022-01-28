@@ -30,6 +30,31 @@ namespace HediffResourceFramework
                     }
                 }
             }
+            else
+            {
+                var extension = t.def.GetModExtension<Extension_ThingInUse>();
+                if (extension != null)
+                {
+                    foreach (var useProps in extension.useProperties)
+                    {
+                        if (useProps.hediffRequired)
+                        {
+                            var hediffResource = pawn.health.hediffSet.GetFirstHediffOfDef(useProps.hediff) as HediffResource;
+                            if (hediffResource is null)
+                            {
+                                var noResourceReason = "HRF.NoResource".Translate(pawn.Named("PAWN"), useProps.hediff.label);
+                                cannotUseMessage = useProps.cannotUseMessageKey.Translate(pawn.Named("PAWN"), t.Label, noResourceReason);
+                                return false;
+                            }
+                            else if (!hediffResource.CanUse(useProps, out string failReason))
+                            {
+                                cannotUseMessage = useProps.cannotUseMessageKey.Translate(pawn.Named("PAWN"), t.Label, failReason);
+                                return false;
+                            }
+                        }
+                    }
+                }
+            }
             cannotUseMessage = null;
             return true;
         }
@@ -37,7 +62,7 @@ namespace HediffResourceFramework
         public static bool CanUseIt(this Pawn pawn, string thingLabel, UseProps useProps, float resourceAmount, string cannotUseMessageKey, out string failMessage)
         {
             failMessage = null;
-            if (resourceAmount < 0 && !pawn.HasResource(useProps.hediff, -resourceAmount))
+            if (useProps.hediffRequired &&  resourceAmount < 0 && !pawn.HasResource(useProps.hediff, -resourceAmount))
             {
                 if (!cannotUseMessageKey.NullOrEmpty())
                 {

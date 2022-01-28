@@ -45,5 +45,8 @@ namespace HediffResourceFramework
         public string cannotTameMessageKey;
         public string cannotTrainMessageKey;
         public string cannotGatherMessageKey;
+
+        public float resourceOnStrike;
+        public string cannotMineMessageKey;
     }
 }

@@ -388,9 +388,6 @@
 									<resourceOnTaming>2</resourceOnTaming>
 									<resourceOnTraining>2</resourceOnTraining>
 									<resourceOnGather>5</resourceOnGather>
-									<cannotTameMessageKey>HRF.CannotUse</cannotTameMessageKey>
-									<cannotTrainMessageKey>HRF.CannotUse</cannotTrainMessageKey>
-									<cannotGatherMessageKey>HRF.CannotUse</cannotGatherMessageKey>
 								</li>
 							</useProperties>
 						</li>
@@ -421,42 +418,35 @@
 									<resourceOnTaming>2</resourceOnTaming>
 									<resourceOnTraining>2</resourceOnTraining>
 									<resourceOnGather>5</resourceOnGather>
-									<cannotTameMessageKey>HRF.CannotUse</cannotTameMessageKey>
-									<cannotTrainMessageKey>HRF.CannotUse</cannotTrainMessageKey>
-									<cannotGatherMessageKey>HRF.CannotUse</cannotGatherMessageKey>
 								</li>
 							</useProperties>
 						</li>
 					</comps>
 				</value>
 			</li>
-			<!--
-			<li Class="PatchOperationAdd">
-				<xpath>/Defs/ThingDef[defName="RockBase"]</xpath>
+
+			<li Class="PatchOperationAddModExtension">
+				<xpath>/Defs/ThingDef[defName="MineableSteel"]</xpath>
 				<value>
-					<comps>
-						<li Class="HediffResourceFramework.CompProperties_ThingInUse">
-							<useProperties>
-								<li>
-									<hediff>FE_ToxicFumes</hediff>
-									<addHediffIfMissing>true</addHediffIfMissing>
-									<resourceOnStrike>0.5</resourceOnStrike>
-									<resourceOnComplete>2.5</resourceOnComplete>
-								</li>
-								<li>
-									<hediff>FE_FusionReactor</hediff>
-									<addHediffIfMissing>false</addHediffIfMissing>
-									<hediffRequired>true</hediffRequired>
-									<resourceOnStrike>-2</resourceOnStrike>
-									<resourceOnComplete>-10</resourceOnComplete>
-									<miningYieldAdjust>1.0</miningYieldAdjust>
-								</li>
-							</useProperties>
-						</li>
-					</comps>
+					<li Class="HediffResourceFramework.Extension_ThingInUse">
+						<useProperties>
+							<li>
+								<hediff>FE_ToxicFumes</hediff>
+								<addHediffIfMissing>true</addHediffIfMissing>
+								<resourceOnStrike>0.5</resourceOnStrike>
+							</li>
+							<li>
+								<hediff>FE_FusionReactor</hediff>
+								<addHediffIfMissing>false</addHediffIfMissing>
+								<hediffRequired>true</hediffRequired>
+								<resourceOnStrike>-2</resourceOnStrike>
+								<cannotMineMessageKey>HRF.CannotUse</cannotMineMessageKey>
+							</li>
+						</useProperties>
+					</li>
 				</value>
 			</li>
-			-->
+
 		</operations>
 	</Operation>
 </Patch>

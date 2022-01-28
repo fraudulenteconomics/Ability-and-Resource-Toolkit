@@ -30,7 +30,7 @@ namespace HediffResourceFramework
             }
         }
     }
-
+    
     [HarmonyPatch(typeof(ForbidUtility), "IsForbidden", new Type[] { typeof(Thing), typeof(Pawn) })]
     public static class Patch_IsForbidden
     {
