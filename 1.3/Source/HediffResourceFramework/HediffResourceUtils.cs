@@ -463,7 +463,7 @@ namespace HediffResourceFramework
 			}
 		}
 
-		public static HediffResource AdjustResourceAmount(Pawn pawn, HediffResourceDef hdDef, float sevOffset, bool addHediffIfMissing, BodyPartDef bodyPartDef, bool applyToDamagedPart = false)
+		public static HediffResource AdjustResourceAmount(this Pawn pawn, HediffResourceDef hdDef, float sevOffset, bool addHediffIfMissing, BodyPartDef bodyPartDef, bool applyToDamagedPart = false)
 		{
 			HediffResource hediff = pawn.health.hediffSet.GetFirstHediffOfDef(hdDef) as HediffResource;
 			if (hediff != null)
@@ -1006,7 +1006,5 @@ namespace HediffResourceFramework
             }
 			return false;
         }
-
-
 	}
 }

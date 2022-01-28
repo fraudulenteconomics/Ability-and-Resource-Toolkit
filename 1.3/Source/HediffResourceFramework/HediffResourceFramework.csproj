@@ -50,7 +50,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Comps\CompPlantInUse.cs" />
     <Compile Include="Comps\CompResourceOnAction.cs" />
     <Compile Include="Comps\CompMaintainableResourceBuilding.cs" />
     <Compile Include="Comps\CompThingInUse.cs" />
@@ -67,6 +66,7 @@
     <Compile Include="Comps\HediffComp_AdjustHediffs.cs" />
     <Compile Include="HarmonyPatches\Caravan_Patches.cs" />
     <Compile Include="HarmonyPatches\Pathfinding_Patches.cs" />
+    <Compile Include="HarmonyPatches\Animal_Patches.cs" />
     <Compile Include="HarmonyPatches\Plant_Patches.cs" />
     <Compile Include="Hediffs\HediffResouceDisable.cs" />
     <Compile Include="Hediffs\HediffStageResource.cs" />
@@ -91,7 +91,7 @@
     <Compile Include="ModExtensions\RecipeOutcomes.cs" />
     <Compile Include="ModExtensions\StuffExtension.cs" />
     <Compile Include="Recipes\Bill_ResourceMedical.cs" />
-    <Compile Include="ReservationHelper.cs" />
+    <Compile Include="UseHelper.cs" />
     <Compile Include="HarmonyPatches\ThingDefGenerator_Patches.cs" />
     <Compile Include="HarmonyPatches\QualityAndStats_Patches.cs" />
     <Compile Include="HarmonyPatches\Ability_Patches.cs" />

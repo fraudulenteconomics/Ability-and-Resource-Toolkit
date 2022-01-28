@@ -25,7 +25,7 @@ namespace HediffResourceFramework
                 {
                     foreach (var useProps in compProperties.useProperties)
                     {
-                        if (!CompPlantInUse.PawnCanSowIt(pawn, __result.plantDefToSow, useProps, out var failMessage))
+                        if (!pawn.CanUseIt(__result.plantDefToSow.label, useProps, useProps.resourceOnSow, useProps.cannotSowMessageKey, out var failMessage))
                         {
                             JobFailReason.Is(failMessage);
                             __result = null;
@@ -51,7 +51,7 @@ namespace HediffResourceFramework
                 initAction = delegate
                 {
                     var plant = __instance.job.targetA.Thing;
-                    var comp = plant.TryGetComp<CompPlantInUse>();
+                    var comp = plant.TryGetComp<CompThingInUse>();
                     if (comp != null)
                     {
                         foreach (var useProps in comp.Props.useProperties)
@@ -75,12 +75,12 @@ namespace HediffResourceFramework
             Plant plant = c.GetPlant(pawn.Map);
             if (plant != null)
             {
-                var comp = plant.GetComp<CompPlantInUse>();
+                var comp = plant.GetComp<CompThingInUse>();
                 if (comp != null)
                 {
                     foreach (var useProps in comp.Props.useProperties)
                     {
-                        if (!CompPlantInUse.PawnCanHarvestIt(pawn, plant, useProps, out var failMessage))
+                        if (!pawn.CanUseIt(plant.Label, useProps, useProps.resourceOnHarvest, useProps.cannotHarvestMessageKey, out var failMessage))
                         {
                             JobFailReason.Is(failMessage);
                             __result = false;
@@ -97,7 +97,7 @@ namespace HediffResourceFramework
     {
         private static void Postfix(Plant __instance, Pawn by)
         {
-            var comp = __instance.TryGetComp<CompPlantInUse>();
+            var comp = __instance.TryGetComp<CompThingInUse>();
             if (comp != null)
             {
                 foreach (var useProps in comp.Props.useProperties)

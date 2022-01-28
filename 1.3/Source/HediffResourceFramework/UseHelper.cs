@@ -1,28 +1,12 @@
-﻿using Verse;
+﻿using RimWorld;
+using System.Net.Mail;
+using Verse;
+using Verse.AI;
 
 namespace HediffResourceFramework
 {
-    public static class ReservationHelper
+    public static class UseHelper
     {
-        public static bool CanUseIt(this Pawn pawn, Thing thing)
-        {
-            if (CompThingInUse.things.TryGetValue(thing, out var comp))
-            {
-                foreach (var useProps in comp.Props.useProperties)
-                {
-                    if (comp.UseIsEnabled(useProps) && useProps.hediffRequired)
-                    {
-                        var hediffResource = pawn.health.hediffSet.GetFirstHediffOfDef(useProps.hediff) as HediffResource;
-                        if (hediffResource is null || !hediffResource.CanUse(useProps, out _))
-                        {
-                            return false;
-                        }
-                    }
-                }
-            }
-            return true;
-        }
-
         public static bool CanUseIt(this Pawn pawn, Thing t, out string cannotUseMessage)
         {
             if (CompThingInUse.things.TryGetValue(t, out var comp))
@@ -47,6 +31,20 @@ namespace HediffResourceFramework
                 }
             }
             cannotUseMessage = null;
+            return true;
+        }
+
+        public static bool CanUseIt(this Pawn pawn, string thingLabel, UseProps useProps, float resourceAmount, string cannotUseMessageKey, out string failMessage)
+        {
+            failMessage = null;
+            if (resourceAmount < 0 && !pawn.HasResource(useProps.hediff, -resourceAmount))
+            {
+                if (!cannotUseMessageKey.NullOrEmpty())
+                {
+                    failMessage = cannotUseMessageKey.Translate(pawn.Named("PAWN"), thingLabel, "HRF.NotEnoughResource".Translate());
+                }
+                return false;
+            }
             return true;
         }
     }

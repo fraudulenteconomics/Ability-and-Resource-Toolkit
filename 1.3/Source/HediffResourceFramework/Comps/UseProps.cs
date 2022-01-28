@@ -35,9 +35,15 @@ namespace HediffResourceFramework
         public float resourceOnSow;
         public float resourceOnHarvest;
         public bool scaleWithGrowthRate;
-        public float harvestYieldAdjust;
         public string cannotSowMessageKey;
         public string cannotHarvestMessageKey;
 
+        public float resourceOnTaming;
+        public float resourceOnTraining;
+        public float resourceOnGather;
+
+        public string cannotTameMessageKey;
+        public string cannotTrainMessageKey;
+        public string cannotGatherMessageKey;
     }
 }

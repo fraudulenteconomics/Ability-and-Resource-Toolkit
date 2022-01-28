@@ -186,7 +186,7 @@ namespace HediffResourceFramework
         {
             if (p.jobs.curDriver is JobDriver_DoBill jobDriver_DoBill)
             {
-                if (jobDriver_DoBill.BillGiver is Thing thing && !p.CanUseIt(thing))
+                if (jobDriver_DoBill.BillGiver is Thing thing && !p.CanUseIt(thing, out _))
                 {
                     Log.Message("Ending job: " + p.CurJob + " - cannot use it");
                     p.jobs.EndCurrentJob(JobCondition.Incompletable);

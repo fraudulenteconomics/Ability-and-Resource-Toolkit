@@ -341,7 +341,6 @@
 				<value>
 					<comps>
 						<li Class="HediffResourceFramework.CompProperties_ThingInUse">
-							<compClass>HediffResourceFramework.CompPlantInUse</compClass>
 							<useProperties>
 								<li>
 									<hediff>FE_ToxicFumes</hediff>
@@ -360,7 +359,71 @@
 									<resourceOnSow>-2</resourceOnSow>
 									<resourceOnHarvest>-5</resourceOnHarvest>
 									<scaleWithGrowthRate>false</scaleWithGrowthRate>
-									<harvestYieldAdjust>0.5</harvestYieldAdjust>
+								</li>
+							</useProperties>
+						</li>
+					</comps>
+				</value>
+			</li>
+			<li Class="PatchOperationAdd">
+				<xpath>/Defs/ThingDef[defName="Muffalo"]/comps</xpath>
+				<value>
+						<li Class="HediffResourceFramework.CompProperties_ThingInUse">
+							<useProperties>
+								<li>
+									<hediff>FE_FusionReactor</hediff>
+									<addHediffIfMissing>false</addHediffIfMissing>
+									<hediffRequired>true</hediffRequired>
+									<resourceOnTaming>-2</resourceOnTaming>
+									<resourceOnTraining>-2</resourceOnTraining>
+									<resourceOnGather>-5</resourceOnGather>
+									<cannotTameMessageKey>HRF.CannotUse</cannotTameMessageKey>
+									<cannotTrainMessageKey>HRF.CannotUse</cannotTrainMessageKey>
+									<cannotGatherMessageKey>HRF.CannotUse</cannotGatherMessageKey>
+								</li>
+								<li>
+									<hediff>FE_ToxicFumes</hediff>
+									<addHediffIfMissing>true</addHediffIfMissing>
+									<hediffRequired>false</hediffRequired>
+									<resourceOnTaming>2</resourceOnTaming>
+									<resourceOnTraining>2</resourceOnTraining>
+									<resourceOnGather>5</resourceOnGather>
+									<cannotTameMessageKey>HRF.CannotUse</cannotTameMessageKey>
+									<cannotTrainMessageKey>HRF.CannotUse</cannotTrainMessageKey>
+									<cannotGatherMessageKey>HRF.CannotUse</cannotGatherMessageKey>
+								</li>
+							</useProperties>
+						</li>
+				</value>
+			</li>
+			
+			<li Class="PatchOperationAdd">
+				<xpath>/Defs/ThingDef[defName="LabradorRetriever"]</xpath>
+				<value>
+					<comps>
+						<li Class="HediffResourceFramework.CompProperties_ThingInUse">
+							<useProperties>
+								<li>
+									<hediff>FE_FusionReactor</hediff>
+									<addHediffIfMissing>false</addHediffIfMissing>
+									<hediffRequired>true</hediffRequired>
+									<resourceOnTaming>-2</resourceOnTaming>
+									<resourceOnTraining>-2</resourceOnTraining>
+									<resourceOnGather>-5</resourceOnGather>
+									<cannotTameMessageKey>HRF.CannotUse</cannotTameMessageKey>
+									<cannotTrainMessageKey>HRF.CannotUse</cannotTrainMessageKey>
+									<cannotGatherMessageKey>HRF.CannotUse</cannotGatherMessageKey>
+								</li>
+								<li>
+									<hediff>FE_ToxicFumes</hediff>
+									<addHediffIfMissing>true</addHediffIfMissing>
+									<hediffRequired>false</hediffRequired>
+									<resourceOnTaming>2</resourceOnTaming>
+									<resourceOnTraining>2</resourceOnTraining>
+									<resourceOnGather>5</resourceOnGather>
+									<cannotTameMessageKey>HRF.CannotUse</cannotTameMessageKey>
+									<cannotTrainMessageKey>HRF.CannotUse</cannotTrainMessageKey>
+									<cannotGatherMessageKey>HRF.CannotUse</cannotGatherMessageKey>
 								</li>
 							</useProperties>
 						</li>
@@ -391,35 +454,6 @@
 							</useProperties>
 						</li>
 					</comps>
-				</value>
-			</li>
-
-			<li Class="PatchOperationAdd">
-				<xpath>/Defs/ThingDef[defName="Muffalo"]/comps</xpath>
-				<value>
-						<li Class="HediffResourceFramework.CompProperties_ThingInUse">
-							<useProperties>
-								<li>
-									<hediff>FE_FusionReactor</hediff>
-									<addHediffIfMissing>false</addHediffIfMissing>
-									<hediffRequired>true</hediffRequired>
-									<resourceOnTaming>-2</resourceOnTaming>
-									<tamingChanceAdjust>0.25</tamingChanceAdjust>
-									<resourceOnTraining>-2</resourceOnTraining>
-									<trainingChanceAdjust>0.25</trainingChanceAdjust>
-									<resourceOnGather>-5</resourceOnGather>
-									<animalYieldAdjust>0.5</animalYieldAdjust>
-								</li>
-								<li>
-									<hediff>FE_ToxicFumes</hediff>
-									<addHediffIfMissing>true</addHediffIfMissing>
-									<hediffRequired>false</hediffRequired>
-									<resourceOnTaming>2</resourceOnTaming>
-									<resourceOnTraining>2</resourceOnTraining>
-									<resourceOnGather>5</resourceOnGather>
-								</li>
-							</useProperties>
-						</li>
 				</value>
 			</li>
 			-->

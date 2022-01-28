@@ -22,8 +22,9 @@ namespace HediffResourceFramework
             if (__result)
             {
                 var thing = target.Thing;
-                if (thing != null && !claimant.CanUseIt(thing))
+                if (thing != null && !claimant.CanUseIt(thing, out var failReason))
                 {
+                    JobFailReason.Is(failReason);
                     __result = false;
                 }
             }
@@ -37,8 +38,9 @@ namespace HediffResourceFramework
         {
             if (!__result)
             {
-                if (!pawn.CanUseIt(t))
+                if (!pawn.CanUseIt(t, out var failReason))
                 {
+                    JobFailReason.Is(failReason);
                     __result = true;
                 }
             }
