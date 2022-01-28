@@ -18,7 +18,7 @@ namespace HediffResourceFramework
     {
         public static void Postfix(ref Job __result, WorkGiver_GrowerSow __instance, Pawn pawn, IntVec3 c, bool forced = false)
         {
-            if (__result != null)
+            if (__result?.plantDefToSow != null)
             {
                 var compProperties = __result.plantDefToSow.GetCompProperties<CompProperties_ThingInUse>();
                 if (compProperties != null)

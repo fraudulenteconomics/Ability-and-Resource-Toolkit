@@ -48,7 +48,7 @@ namespace HediffResourceFramework
             return typeof(JobDriver_Mine).GetNestedTypes(AccessTools.all).First().GetMethods(AccessTools.all).Where(x => x.Name.Contains("<MakeNewToils>")).First();
         }
 
-        public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> codeInstructions)
+        public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> codeInstructions, MethodBase method)
         {
             var codes = codeInstructions.ToList();
             for (var i = 0; i < codes.Count; i++)
@@ -57,6 +57,7 @@ namespace HediffResourceFramework
                 if (i > 1 && codes[i].opcode == OpCodes.Bgt && codes[i - 1].opcode == OpCodes.Ldc_I4_0)
                 {
                     yield return new CodeInstruction(OpCodes.Ldarg_0);
+                    yield return new CodeInstruction(OpCodes.Ldfld, method.DeclaringType.GetField("<>4__this"));
                     yield return new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(JobDriver_Mine_Patch), "RegisterHit"));
                 }
             }
@@ -64,12 +65,16 @@ namespace HediffResourceFramework
 
         public static void RegisterHit(JobDriver_Mine jobDriver_Mine)
         {
-            var extension = jobDriver_Mine.job.GetTarget(TargetIndex.A).Thing.def.GetModExtension<Extension_ThingInUse>();
+            var mineableDef = jobDriver_Mine.job.GetTarget(TargetIndex.A).Thing.def;
+            var extension = mineableDef.GetModExtension<Extension_ThingInUse>();
+            Log.Message(extension + " - " + mineableDef + " - " + mineableDef.GetType());
             if (extension != null)
             {
                 foreach (var useProps in extension.useProperties)
                 {
-                    if (useProps.resourceOnGather != 0)
+                    Log.Message("useProps.resourceOnStrike: " + useProps.resourceOnStrike);
+                    Log.Message("useProps.hediff: " + useProps.hediff);
+                    if (useProps.resourceOnStrike != 0)
                     {
                         HediffResourceUtils.AdjustResourceAmount(jobDriver_Mine.pawn, useProps.hediff, useProps.resourceOnStrike, useProps.addHediffIfMissing, null);
                     }
