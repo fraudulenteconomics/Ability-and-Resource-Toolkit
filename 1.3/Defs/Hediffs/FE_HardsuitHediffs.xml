@@ -49,7 +49,7 @@
 						<MedicalQualityMax>1.00</MedicalQualityMax>
 					</statBases>
 					<resourceOnTend>10</resourceOnTend>
-					<!--<hediffSource>optional value</hediffSource> -->
+					<!--<hediffResource>optional value</hediffResource> -->
 				</tendProperties>
 				<effectWhenDowned>
 					<hediff>FE_FusionReactor</hediff>
@@ -59,7 +59,7 @@
 				</effectWhenDowned>
 				<repairProperties>
 					<resourceOnRepair>6</resourceOnRepair>
-					<!--<hediffSource>optional value</hediffSource> -->
+					<!--<hediffResource>optional value</hediffResource> -->
 				</repairProperties>
 				<refuelProperties>
 					<li>
@@ -80,6 +80,12 @@
 				</additionalDamages>
 				<preventDeath>true</preventDeath>
 				<preventDowning>true</preventDowning>
+				<ingestibleProperties>
+					<!--<hediffResource>optional value</hediffResource> -->
+					<resourcePerIngestion>10</resourcePerIngestion>
+					<nutritionGiven>1</nutritionGiven>
+					<nutritionCategories>VegetarianRoughAnimal, DendrovoreAnimal</nutritionCategories>
+				</ingestibleProperties>
 			</li>
 		</stages>
 		<ignoreTerrain>true</ignoreTerrain>

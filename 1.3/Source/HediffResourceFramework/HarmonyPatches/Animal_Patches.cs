@@ -4,6 +4,7 @@ using RimWorld;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
@@ -158,6 +159,111 @@ namespace HediffResourceFramework
                 }
             }
             return true;
+        }
+    }
+
+
+    public class IngestionData
+    {
+        public HediffResource hediffResource;
+        public float requiredResourceAmount;
+        public float requiredNutrition;
+    }
+    [HarmonyPatch(typeof(WorkGiver_InteractAnimal), "HasFoodToInteractAnimal")]
+    public static class Patch_HasFoodToInteractAnimal
+    {
+        public static void Postfix(ref bool __result, Pawn pawn, Pawn tamee)
+        {
+            if (!__result)
+            {
+                __result = pawn.CanFeedAnimalWithResource(tamee, out _);
+            }
+        }
+
+        public static bool CanFeedAnimalWithResource(this Pawn pawn, Pawn tamee, out IngestionData ingestionData)
+        {
+            ingestionData = default;
+            if (pawn?.health?.hediffSet?.hediffs != null)
+            {
+                foreach (var hediffResource in pawn.health.hediffSet.hediffs.OfType<HediffResource>())
+                {
+                    if (hediffResource.CurStage is HediffStageResource hediffStageResource && hediffStageResource.ingestibleProperties != null
+                        && (hediffStageResource.ingestibleProperties.nutritionCategories & tamee.def.race.foodType) != 0)
+                    {
+                        ingestionData = new IngestionData();
+                        ingestionData.hediffResource = hediffStageResource.ingestibleProperties.hediffSource != null
+                            ? pawn.health.hediffSet.GetFirstHediffOfDef(hediffStageResource.ingestibleProperties.hediffSource) as HediffResource
+                            : hediffResource;
+                        var requiredNutrition = JobDriver_InteractAnimal.RequiredNutritionPerFeed(tamee);
+                        var requiredResourceAmount = hediffStageResource.ingestibleProperties.resourcePerIngestion * requiredNutrition;
+                        if (ingestionData.hediffResource != null && ingestionData.hediffResource.ResourceAmount >= requiredResourceAmount)
+                        {
+                            ingestionData.requiredResourceAmount = requiredResourceAmount;
+                            ingestionData.requiredNutrition = requiredNutrition;
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+    }
+
+    [HarmonyPatch(typeof(JobDriver_InteractAnimal), "FeedToils")]
+    public static class Patch_FeedToils
+    {
+        public static IEnumerable<Toil> Postfix(IEnumerable<Toil> __result, JobDriver_InteractAnimal __instance)
+        {
+            var pawn = __instance.pawn;
+            var tamee = __instance.job.targetA.Pawn;
+            if (pawn.CanFeedAnimalWithResource(tamee, out _))
+            {
+                Toil toil = new Toil();
+                toil.initAction = delegate
+                {
+                    __instance.feedNutritionLeft = JobDriver_InteractAnimal.RequiredNutritionPerFeed(tamee);
+                };
+                toil.defaultCompleteMode = ToilCompleteMode.Instant;
+                yield return toil;
+                Toil gotoAnimal = Toils_Goto.GotoThing(TargetIndex.A, PathEndMode.Touch);
+                yield return gotoAnimal;
+                yield return FinalizeIngest(__instance, pawn, tamee);
+                yield return Toils_Jump.JumpIf(gotoAnimal, () => __instance.feedNutritionLeft > 0f);
+            }
+            else
+            {
+                foreach (var r in __result)
+                {
+                    yield return r;
+                }
+            }
+        }
+
+        public static Toil FinalizeIngest(JobDriver_InteractAnimal __instance, Pawn pawn, Pawn ingester)
+        {
+            Toil toil = new Toil();
+            toil.initAction = delegate
+            {
+                if (pawn.CanFeedAnimalWithResource(ingester, out var ingestionData))
+                {
+                    __instance.feedNutritionLeft -= ingestionData.requiredNutrition;
+                    if (__instance.feedNutritionLeft < 0.001f)
+                    {
+                        __instance.feedNutritionLeft = 0f;
+                    }
+                    PawnUtility.ForceWait(ingester, 270, pawn);
+                    Pawn actor = toil.actor;
+                    Job curJob = actor.jobs.curJob;
+                    ingestionData.hediffResource.ResourceAmount -= ingestionData.requiredResourceAmount;
+                    if (!ingester.Dead)
+                    {
+                        ingester.needs.food.CurLevel += ingestionData.requiredNutrition;
+                    }
+                    ingester.records.AddTo(RecordDefOf.NutritionEaten, ingestionData.requiredNutrition);
+                }
+            };
+            toil.defaultCompleteMode = ToilCompleteMode.Instant;
+            return toil;
         }
     }
 }

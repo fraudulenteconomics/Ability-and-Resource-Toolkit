@@ -37,16 +37,16 @@ namespace HediffResourceFramework
                 {
                     if (hediff is HediffResource hediffResource && hediffResource.CurStage is HediffStageResource hediffStageResource && hediffStageResource.tendProperties != null)
                     {
-                        var hediffSource = hediffStageResource.tendProperties.hediffResource != null
+                        hediffResource = hediffStageResource.tendProperties.hediffResource != null
                             ? healer.health.hediffSet.GetFirstHediffOfDef(hediffStageResource.tendProperties.hediffResource) as HediffResource
                             : hediffResource;
 
-                        if (hediffSource != null)
+                        if (hediffResource != null)
                         {
-                            bool canTend = hediffSource.ResourceAmount >= hediffStageResource.tendProperties.resourceOnTend;
+                            bool canTend = hediffResource.ResourceAmount >= hediffStageResource.tendProperties.resourceOnTend;
                             if (canTend)
                             {
-                                toConsume = (hediffSource, hediffStageResource.tendProperties);
+                                toConsume = (hediffResource, hediffStageResource.tendProperties);
                                 return true;
                             }
                         }

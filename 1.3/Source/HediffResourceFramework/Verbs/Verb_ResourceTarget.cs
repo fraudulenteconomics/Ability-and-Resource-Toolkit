@@ -15,7 +15,7 @@ namespace HediffResourceFramework
         {
             return this.ResourceProps?.TargetResourceSettings?.Count() > 0;
         }
-        protected override bool TryCastShot()
+        public override bool TryCastShot()
         {
             base.TryCastShot();
             var targetResourceSettings = this.ResourceProps.TargetResourceSettings;

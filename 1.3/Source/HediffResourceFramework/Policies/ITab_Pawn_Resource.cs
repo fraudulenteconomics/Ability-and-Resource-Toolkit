@@ -21,7 +21,7 @@ namespace HediffResourceFramework
 		[TweakValue("0HRF", 0f, 300f)] public static float hediffLabelWidth = 165;
 		[TweakValue("0HRF", 0f, 300f)] public static float hediffBarWidth = 125f;
 		[TweakValue("0HRF", 0f, 300f)] public static float satisfyNeedsWidth = 115f;
-		protected override void FillTab()
+		public override void FillTab()
 		{
 			var pawn = PawnToShowInfoAbout;
 			var rect = new Rect(0f, 0f, this.size.x, this.size.y);

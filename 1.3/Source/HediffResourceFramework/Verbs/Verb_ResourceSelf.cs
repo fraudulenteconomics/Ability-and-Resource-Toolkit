@@ -28,7 +28,7 @@ namespace HediffResourceFramework
             return true;
         }
 
-        protected override bool TryCastShot()
+        public override bool TryCastShot()
         {
             base.TryCastShot();
             if (this.CasterPawn != null)

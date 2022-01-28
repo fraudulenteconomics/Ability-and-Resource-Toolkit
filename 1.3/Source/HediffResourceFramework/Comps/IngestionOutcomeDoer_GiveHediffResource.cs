@@ -24,7 +24,7 @@ namespace HediffResourceFramework
 
         public ChemicalDef toleranceChemical;
 
-        protected override void DoIngestionOutcomeSpecial(Pawn pawn, Thing ingested)
+        public override void DoIngestionOutcomeSpecial(Pawn pawn, Thing ingested)
         {
             if (blacklistHediffsPreventAdd != null)
             {

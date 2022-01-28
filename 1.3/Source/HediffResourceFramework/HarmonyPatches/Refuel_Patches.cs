@@ -67,20 +67,20 @@ namespace HediffResourceFramework
                 {
                     foreach (var li in hediffStageResource.refuelProperties)
                     {
-                        var hediffSource = li.hediffResource != null
+                        hediffResource = li.hediffResource != null
                             ? refueler.health.hediffSet.GetFirstHediffOfDef(li.hediffResource) as HediffResource
                             : hediffResource;
 
-                        if (hediffSource != null)
+                        if (hediffResource != null)
                         {
                             foreach (var resource in li.resourcesPerFuelUnit)
                             {
                                 if (filter.Allows(resource.thingDef))
                                 {
-                                    bool canFuel = hediffSource.ResourceAmount >= resource.rate * fuelCountToFullyRefuel;
+                                    bool canFuel = hediffResource.ResourceAmount >= resource.rate * fuelCountToFullyRefuel;
                                     if (canFuel)
                                     {
-                                        toConsume = (hediffSource, resource);
+                                        toConsume = (hediffResource, resource);
                                         return true;
                                     }
                                 }

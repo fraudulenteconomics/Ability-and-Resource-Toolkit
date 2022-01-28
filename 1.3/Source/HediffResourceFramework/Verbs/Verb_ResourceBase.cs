@@ -25,7 +25,7 @@ namespace HediffResourceFramework
                 }
             }
         }
-        protected override bool TryCastShot()
+        public override bool TryCastShot()
         {
             if (base.EquipmentSource != null)
             {

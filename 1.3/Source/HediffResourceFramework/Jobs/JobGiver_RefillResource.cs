@@ -26,7 +26,7 @@ namespace HediffResourceFramework
             }
             return 0f;
         }
-        protected override Job TryGiveJob(Pawn pawn)
+        public override Job TryGiveJob(Pawn pawn)
         {
             if (HediffResourceManager.Instance.hediffResourcesPolicies.TryGetValue(pawn, out var policy))
             {

@@ -1,9 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using RimWorld;
+using System.Collections.Generic;
 using System.Linq;
 using Verse;
 
 namespace HediffResourceFramework
 {
+    public class IngestibleProperties
+    {
+        public HediffResourceDef hediffSource;
+        public float resourcePerIngestion;
+        public float nutritionGiven;
+        public FoodTypeFlags nutritionCategories;
+    }
     public class HediffStageResource : HediffStage
     {
         public List<HediffOption> resourceSettings;
@@ -17,6 +25,9 @@ namespace HediffResourceFramework
         public List<AdditionalDamage> additionalDamages;
         public bool preventDeath;
         public bool preventDowning;
+
+        public IngestibleProperties ingestibleProperties;
+
         public bool ShieldIsActive(Pawn pawn)
         {
             if (shieldProperties != null)
