@@ -191,8 +191,8 @@ namespace HediffResourceFramework
                         && (hediffStageResource.ingestibleProperties.nutritionCategories & tamee.def.race.foodType) != 0)
                     {
                         ingestionData = new IngestionData();
-                        ingestionData.hediffResource = hediffStageResource.ingestibleProperties.hediffSource != null
-                            ? pawn.health.hediffSet.GetFirstHediffOfDef(hediffStageResource.ingestibleProperties.hediffSource) as HediffResource
+                        ingestionData.hediffResource = hediffStageResource.ingestibleProperties.hediffResource != null
+                            ? pawn.health.hediffSet.GetFirstHediffOfDef(hediffStageResource.ingestibleProperties.hediffResource) as HediffResource
                             : hediffResource;
                         var requiredNutrition = JobDriver_InteractAnimal.RequiredNutritionPerFeed(tamee);
                         var requiredResourceAmount = hediffStageResource.ingestibleProperties.resourcePerIngestion * requiredNutrition;

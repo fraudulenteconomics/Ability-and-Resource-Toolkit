@@ -22,11 +22,11 @@ namespace HediffResourceFramework
         {
 
         }
-        public ResourceStorage(HediffOption hediffOption)
+        public ResourceStorage(HediffOption hediffOption, IResourceStorage parent)
         {
             this.hediffOption = hediffOption;
+            this.parent = parent;
         }
-
         public float ResourceAmount
         {
             get
@@ -46,6 +46,7 @@ namespace HediffResourceFramework
                     resourceAmount = 0;
                 }
 
+                parent.GetResourceFor(hediffOption).UpdateSeverity();
             }
         }
         public float ResourceCapacity

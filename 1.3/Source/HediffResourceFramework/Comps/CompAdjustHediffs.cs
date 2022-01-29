@@ -43,7 +43,7 @@ namespace HediffResourceFramework
                     {
                         if (Props.resourceSettings[i].maxResourceStorageAmount > 0 && !resourceStorages.ContainsKey(i))
                         {
-                            resourceStorages[i] = new ResourceStorage(Props.resourceSettings[i]);
+                            resourceStorages[i] = new ResourceStorage(Props.resourceSettings[i], this);
                             if (Props.resourceSettings[i].initialResourceAmount != 0)
                             {
                                 resourceStorages[i].ResourceAmount = Props.resourceSettings[i].initialResourceAmount;
@@ -51,7 +51,6 @@ namespace HediffResourceFramework
                         }
                     }
                 }
-
                 return resourceStorages;
             }
         }
@@ -201,6 +200,7 @@ namespace HediffResourceFramework
                     if (resourceSettings.Count - 1 <= data.Key)
                     {
                         data.Value.hediffOption = resourceSettings[data.Key];
+                        data.Value.parent = this;
                     }
                 }
             }
@@ -274,6 +274,11 @@ namespace HediffResourceFramework
         public ThingDef GetStuff()
         {
             return this.parent.Stuff;
+        }
+
+        public HediffResource GetResourceFor(HediffOption hediffOption)
+        {
+            return PawnHost.health.hediffSet.GetFirstHediffOfDef(hediffOption.hediff) as HediffResource;
         }
     }
 }

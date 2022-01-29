@@ -47,7 +47,6 @@ namespace HediffResourceFramework
         {
             return typeof(JobDriver_Mine).GetNestedTypes(AccessTools.all).First().GetMethods(AccessTools.all).Where(x => x.Name.Contains("<MakeNewToils>")).First();
         }
-
         public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> codeInstructions, MethodBase method)
         {
             var codes = codeInstructions.ToList();
@@ -67,13 +66,10 @@ namespace HediffResourceFramework
         {
             var mineableDef = jobDriver_Mine.job.GetTarget(TargetIndex.A).Thing.def;
             var extension = mineableDef.GetModExtension<Extension_ThingInUse>();
-            Log.Message(extension + " - " + mineableDef + " - " + mineableDef.GetType());
             if (extension != null)
             {
                 foreach (var useProps in extension.useProperties)
                 {
-                    Log.Message("useProps.resourceOnStrike: " + useProps.resourceOnStrike);
-                    Log.Message("useProps.hediff: " + useProps.hediff);
                     if (useProps.resourceOnStrike != 0)
                     {
                         HediffResourceUtils.AdjustResourceAmount(jobDriver_Mine.pawn, useProps.hediff, useProps.resourceOnStrike, useProps.addHediffIfMissing, null);

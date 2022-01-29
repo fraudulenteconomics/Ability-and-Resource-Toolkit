@@ -30,19 +30,13 @@ namespace HediffResourceFramework
             {
                 foreach (var blacklistHediff in blacklistHediffsPreventAdd)
                 {
-                    HRFLog.Message("IngestionOutcomeDoer_GiveHediffResource : IngestionOutcomeDoer - DoIngestionOutcomeSpecial - var hd = pawn.health.hediffSet.GetFirstHediffOfDef(blacklistHediff); - 3", true);
                     var hd = pawn.health.hediffSet.GetFirstHediffOfDef(blacklistHediff);
-                    HRFLog.Message("IngestionOutcomeDoer_GiveHediffResource : IngestionOutcomeDoer - DoIngestionOutcomeSpecial - if (hd != null) - 4", true);
                     if (hd != null)
                     {
-                        HRFLog.Message("IngestionOutcomeDoer_GiveHediffResource : IngestionOutcomeDoer - DoIngestionOutcomeSpecial - if (blacklistHediffPoison != null) - 5", true);
                         if (blacklistHediffPoison != null)
                         {
-                            HRFLog.Message("IngestionOutcomeDoer_GiveHediffResource : IngestionOutcomeDoer - DoIngestionOutcomeSpecial - var poison = HediffMaker.MakeHediff(blacklistHediffPoison, pawn); - 6", true);
                             var poison = HediffMaker.MakeHediff(blacklistHediffPoison, pawn);
-                            HRFLog.Message("IngestionOutcomeDoer_GiveHediffResource : IngestionOutcomeDoer - DoIngestionOutcomeSpecial - pawn.health.AddHediff(poison); - 7", true);
                             pawn.health.AddHediff(poison);
-                            HRFLog.Message("IngestionOutcomeDoer_GiveHediffResource : IngestionOutcomeDoer - DoIngestionOutcomeSpecial - Messages.Message(blacklistHediffPoisonMessage.Translate(pawn.Named(\"PAWN\"), ingested.Named(\"INGESTED\")), pawn, MessageTypeDefOf.NegativeHealthEvent); - 8", true);
                             Messages.Message(blacklistHediffPoisonMessage.Translate(pawn.Named("PAWN"), ingested.Named("INGESTED")), pawn, MessageTypeDefOf.NegativeHealthEvent);
                         }
                         return;
@@ -85,10 +79,8 @@ namespace HediffResourceFramework
 
         public override IEnumerable<StatDrawEntry> SpecialDisplayStats(ThingDef parentDef)
         {
-            HRFLog.Message("IngestionOutcomeDoer_GiveHediffResource : IngestionOutcomeDoer - SpecialDisplayStats - if (parentDef.IsDrug && chance >= 1f) - 18", true);
             if (parentDef.IsDrug && chance >= 1f)
             {
-                HRFLog.Message("IngestionOutcomeDoer_GiveHediffResource : IngestionOutcomeDoer - SpecialDisplayStats - foreach (StatDrawEntry item in hediffDef.SpecialDisplayStats(StatRequest.ForEmpty())) - 19", true);
                 foreach (StatDrawEntry item in hediffDef.SpecialDisplayStats(StatRequest.ForEmpty()))
                 {
                     yield return item;

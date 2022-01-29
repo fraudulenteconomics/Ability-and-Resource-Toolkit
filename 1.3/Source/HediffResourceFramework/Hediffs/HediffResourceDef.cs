@@ -1,14 +1,16 @@
-﻿using System;
+﻿using RimWorld;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 using UnityEngine;
 using Verse;
 
 namespace HediffResourceFramework
 {
-    public class HediffResourceDef : HediffDef
+	public class HediffResourceDef : HediffDef
     {
         public float maxResourceCapacity;
         public float initialResourceAmount;

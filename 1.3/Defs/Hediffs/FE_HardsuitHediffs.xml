@@ -86,6 +86,62 @@
 					<nutritionGiven>1</nutritionGiven>
 					<nutritionCategories>VegetarianRoughAnimal, DendrovoreAnimal</nutritionCategories>
 				</ingestibleProperties>
+				<plantSowingProperties>
+					<!--<hediffResource>optional value</hediffResource> -->
+					<resourcePerSowing>10</resourcePerSowing>
+					<growthRateOffset>5</growthRateOffset>
+				</plantSowingProperties>
+				<needAdjustProperties>
+					<tickRate>60</tickRate>
+					<needsToAdjust>
+						<Food>0.25</Food>
+						<Rest>0.25</Rest>
+						<Joy>0.25</Joy>
+						<Outdoors>0.5</Outdoors>
+					</needsToAdjust>
+				</needAdjustProperties>
+				<healingProperties>
+					<healPoints>5</healPoints>
+					<!-- <hediffsToHeal>3</hediffsToHeal> -->
+					<affectPermanent>true</affectPermanent>
+					<affectIllness>true</affectIllness>
+					<affectInjuries>true</affectInjuries>
+					<pointsOverflow>true</pointsOverflow>
+					<healPriority>TendablesFirst</healPriority>
+					<affectMechanical>true</affectMechanical>
+					<affectOrganic>true</affectOrganic>
+					<effectRadius>9</effectRadius>
+					<affectsAllies>true</affectsAllies>
+					<affectsEnemies>true</affectsEnemies>
+					<ticksPerEffect>60</ticksPerEffect>
+					<healOnApply>true</healOnApply>
+					<soundOnEffect>ToxicBuildupGained</soundOnEffect>
+				</healingProperties>
+				<skillAdjustProperties>
+					<li>
+						<skill>Shooting</skill>
+						<skillLevelOffset>5</skillLevelOffset>
+						<maxSkillLevel>18</maxSkillLevel>
+						<forcedPassion>Minor</forcedPassion>					
+					</li>
+				</skillAdjustProperties>
+			</li>
+			<li Class="HediffResourceFramework.HediffStageResource">
+				<minSeverity>50</minSeverity>
+				<skillAdjustProperties>
+					<li>
+						<skill>Shooting</skill>
+						<skillLevelOffset>6</skillLevelOffset>
+						<maxSkillLevel>18</maxSkillLevel>
+						<forcedPassion>Major</forcedPassion>					
+					</li>
+					<li>
+						<skill>Melee</skill>
+						<skillLevelOffset>4</skillLevelOffset>
+						<maxSkillLevel>18</maxSkillLevel>
+						<forcedPassion>Major</forcedPassion>					
+					</li>
+				</skillAdjustProperties>
 			</li>
 		</stages>
 		<ignoreTerrain>true</ignoreTerrain>

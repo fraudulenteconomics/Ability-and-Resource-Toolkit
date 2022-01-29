@@ -50,7 +50,7 @@ namespace HediffResourceFramework
             {
                 initAction = delegate
                 {
-                    var plant = __instance.job.targetA.Thing;
+                    var plant = __instance.job.targetA.Thing as Plant;
                     var comp = plant.TryGetComp<CompThingInUse>();
                     if (comp != null)
                     {
@@ -59,6 +59,35 @@ namespace HediffResourceFramework
                             if (useProps.resourceOnSow != 0)
                             {
                                 HediffResourceUtils.AdjustResourceAmount(__instance.pawn, useProps.hediff, useProps.resourceOnSow, useProps.addHediffIfMissing, null);
+                            }
+                        }
+                    }
+
+                    foreach (var hediff in __instance.pawn.health?.hediffSet?.hediffs?.OfType<HediffResource>() ?? Enumerable.Empty<HediffResource>())
+                    {
+                        if (hediff.CurStage is HediffStageResource hediffStageResource && hediffStageResource.plantSowingProperties != null)
+                        {
+                            if (hediffStageResource.plantSowingProperties.resourcePerSowing != 0)
+                            {
+                                var hediffSource = hediffStageResource.plantSowingProperties.requiredHediff != null
+                                ? __instance.pawn.health.hediffSet.GetFirstHediffOfDef(hediffStageResource.plantSowingProperties.requiredHediff) as HediffResource
+                                : hediff;
+                                if (hediffSource != null && hediffSource.ResourceAmount >= hediffStageResource.plantSowingProperties.resourcePerSowing)
+                                {
+                                    hediffSource.ResourceAmount -= hediffStageResource.plantSowingProperties.resourcePerSowing;
+                                }
+                                else
+                                {
+                                    continue;
+                                }
+                            }
+                            if (HediffResourceManager.Instance.plantsAdjustedByGrowth.ContainsKey(plant))
+                            {
+                                HediffResourceManager.Instance.plantsAdjustedByGrowth[plant] += hediffStageResource.plantSowingProperties.growthRateOffset;
+                            }
+                            else
+                            {
+                                HediffResourceManager.Instance.plantsAdjustedByGrowth[plant] = hediffStageResource.plantSowingProperties.growthRateOffset;
                             }
                         }
                     }
@@ -109,7 +138,18 @@ namespace HediffResourceFramework
                     }
                 }
             }
+        }
+    }
 
+    [HarmonyPatch(typeof(Plant), "GrowthRate", MethodType.Getter)]
+    public static class Plant_GrowthRate
+    {
+        private static void Postfix(Plant __instance, ref float __result)
+        {
+            if (HediffResourceManager.Instance.plantsAdjustedByGrowth.TryGetValue(__instance, out var growthAdjust))
+            {
+                __result += growthAdjust;
+            }
         }
     }
 }

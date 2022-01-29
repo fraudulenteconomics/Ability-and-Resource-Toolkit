@@ -53,7 +53,7 @@ namespace HediffResourceFramework
         public override void ResourceTick()
         {
             base.ResourceTick();
-            var pawn = Apparel.Wearer;
+            var pawn = PawnHost;
             if (pawn != null)
             {
                 foreach (var hediffOption in Props.resourceSettings)

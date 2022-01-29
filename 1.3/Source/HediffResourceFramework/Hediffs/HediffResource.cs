@@ -5,17 +5,57 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.UIElements;
 using Verse;
 using Verse.Sound;
 
 namespace HediffResourceFramework
 {
+    public class SavedSkillRecordCollection : IExposable
+    {
+        public List<SavedSkillRecord> savedSkillRecords = new List<SavedSkillRecord>();
+        public SavedSkillRecordCollection()
+        {
+            savedSkillRecords = new List<SavedSkillRecord>();
+        }
+        public void ExposeData()
+        {
+            Scribe_Collections.Look(ref savedSkillRecords, "savedSkillRecords", LookMode.Deep);
+            if (savedSkillRecords is null)
+            {
+                savedSkillRecords = new List<SavedSkillRecord>();
+            }
+        }
+    }
+    public class SavedSkillRecord : IExposable
+    {
+        public SkillDef def;
+
+        public int levelInt;
+
+        public Passion passion;
+
+        public void ExposeData()
+        {
+            Scribe_Defs.Look(ref def, "def");
+            Scribe_Values.Look(ref levelInt, "levelInt");
+            Scribe_Values.Look(ref passion, "passion");
+        }
+    }
     public class HediffResource : HediffWithComps, IResourceGenerator
     {
         public new HediffResourceDef def => base.def as HediffResourceDef;
         private float resourceAmount;
         public int duration;
         public int delayTicks;
+        public int lastHealingEffectTick;
+        public int previousStageIndex;
+        public Dictionary<int, SavedSkillRecordCollection> savedSkillRecordsByStages;
+        public List<Thing> amplifiers = new List<Thing>();
+        public HediffResource()
+        {
+            PreInit();
+        }
         public HediffStageResource CurStageResource => this.CurStage as HediffStageResource;
         public IEnumerable<Tuple<CompAdjustHediffs, HediffOption, ResourceStorage>> GetResourceStorages()
         {
@@ -176,17 +216,23 @@ namespace HediffResourceFramework
                 }
                 else
                 {
-                    if (this.def.useAbsoluteSeverity)
-                    {
-                        this.Severity = ResourceAmount / ResourceCapacity;
-                    }
-                    else
-                    {
-                        this.Severity = ResourceAmount;
-                    }
+                    UpdateSeverity();
                 }
             }
         }
+
+        public void UpdateSeverity()
+        {
+            if (this.def.useAbsoluteSeverity)
+            {
+                this.Severity = ResourceAmount / ResourceCapacity;
+            }
+            else
+            {
+                this.Severity = ResourceAmount;
+            }
+        }
+
         public bool CanGainResource => Find.TickManager.TicksGame > this.delayTicks;
 
         private float ResourceCapacityInt
@@ -205,6 +251,17 @@ namespace HediffResourceFramework
             }
         }
 
+        private void PreInit()
+        {
+            if (this.amplifiers is null)
+            {
+                this.amplifiers = new List<Thing>();
+            }
+            if (this.savedSkillRecordsByStages is null)
+            {
+                this.savedSkillRecordsByStages = new Dictionary<int, SavedSkillRecordCollection>();
+            }
+        }
         public bool CanGainCapacity(float newCapacity)
         {
             return ResourceCapacity > newCapacity || ResourceCapacity > 0;
@@ -242,10 +299,7 @@ namespace HediffResourceFramework
             return true;
         }
 
-        public List<Thing> amplifiers = new List<Thing>();
-
         public Dictionary<Thing, IAdjustResouceInArea> cachedAmplifiers = new Dictionary<Thing, IAdjustResouceInArea>();
-
         public float GetHediffResourceCapacityGainFromAmplifiers()
         {
             float num = 0;
@@ -401,69 +455,6 @@ namespace HediffResourceFramework
             }
             return false;
         }
-
-        public override void Tick()
-        {
-            base.Tick();
-            this.duration++;
-            if (Find.TickManager.TicksGame % 30 == 0 && ResourceCapacity < 0)
-            {
-                HediffResourceUtils.TryDropExcessHediffGears(this.pawn);
-            }
-        }
-        
-        private Vector3 impactAngleVect;
-
-        private int lastAbsorbDamageTick = -9999;
-        public void AbsorbedDamage(DamageInfo dinfo)
-        {
-            SoundDefOf.EnergyShield_AbsorbDamage.PlayOneShot(new TargetInfo(base.pawn.Position, base.pawn.Map));
-            impactAngleVect = Vector3Utility.HorizontalVectorFromAngle(dinfo.Angle);
-            Vector3 loc = base.pawn.TrueCenter() + impactAngleVect.RotatedBy(180f) * 0.5f;
-            float num = Mathf.Min(10f, 2f + dinfo.Amount / 10f);
-            FleckMaker.Static(loc, base.pawn.Map, FleckDefOf.ExplosionFlash, num);
-            int num2 = (int)num;
-            for (int i = 0; i < num2; i++)
-            {
-                FleckMaker.ThrowDustPuff(loc, base.pawn.Map, Rand.Range(0.8f, 1.2f));
-            }
-            lastAbsorbDamageTick = Find.TickManager.TicksGame;
-        }
-
-        private Material bubbleMat;
-
-        public Material BubbleMat
-        {
-            get
-            {
-                if (bubbleMat is null)
-                {
-                    bubbleMat = MaterialPool.MatFrom("Other/ShieldBubble", ShaderDatabase.Transparent, CurStageResource.shieldProperties.shieldColor);
-                }
-                return bubbleMat;
-            }
-        }
-        public void Draw()
-        {
-            if (this.CurStage is HediffStageResource hediffStageResource && hediffStageResource.ShieldIsActive(pawn) && this.ResourceAmount > 0)
-            {
-                float num = Mathf.Lerp(1.2f, 1.55f, this.def.lifetimeTicks != -1 ? (this.def.lifetimeTicks - duration) / this.def.lifetimeTicks : 1);
-                Vector3 drawPos = base.pawn.Drawer.DrawPos;
-                drawPos.y = AltitudeLayer.MoteOverhead.AltitudeFor();
-                int num2 = Find.TickManager.TicksGame - lastAbsorbDamageTick;
-                if (num2 < 8)
-                {
-                    float num3 = (float)(8 - num2) / 8f * 0.05f;
-                    drawPos += impactAngleVect * num3;
-                    num -= num3;
-                }
-                float angle = Rand.Range(0, 360);
-                Vector3 s = new Vector3(num, 1f, num);
-                Matrix4x4 matrix = default(Matrix4x4);
-                matrix.SetTRS(drawPos, Quaternion.AngleAxis(angle, Vector3.up), s);
-                Graphics.DrawMesh(MeshPool.plane10, matrix, BubbleMat, 0);
-            }
-        }
         public float TotalResourceGainAmount()
         {
             float num = 0;
@@ -517,16 +508,30 @@ namespace HediffResourceFramework
         {
             base.PostAdd(dinfo);
             HRFLog.Message(this.def.defName + " adding resource hediff to " + this.pawn);
-
             this.resourceAmount = this.def.initialResourceAmount;
+            UpdateSeverity();
             this.duration = 0;
             if (this.def.sendLetterWhenGained && this.pawn.Faction == Faction.OfPlayer)
             {
                 Find.LetterStack.ReceiveLetter(this.def.letterTitleKey.Translate(this.pawn.Named("PAWN"), this.def.Named("RESOURCE")),
                     this.def.letterMessageKey.Translate(this.pawn.Named("PAWN"), this.def.Named("RESOURCE")), this.def.letterType, this.pawn);
             }
+            if (this.CurStage is HediffStageResource hediffStageResource)
+            {
+                if (hediffStageResource.healingProperties != null && hediffStageResource.healingProperties.healOnApply)
+                {
+                    DoHeal(hediffStageResource.healingProperties);
+                }
+                if (hediffStageResource.skillAdjustProperties != null)
+                {
+                    foreach (var skillAdjust in hediffStageResource.skillAdjustProperties)
+                    {
+                        AddSkillAdjust(this.CurStageIndex, skillAdjust);
+                    }
+                }
+            }
+            this.previousStageIndex = this.CurStageIndex;
         }
-
 
         public override void PostRemoved()
         {
@@ -550,13 +555,293 @@ namespace HediffResourceFramework
             }
         }
 
+        public override void Tick()
+        {
+            base.Tick();
+            this.duration++;
+            if (this.pawn.IsHashIntervalTick(30) && ResourceCapacity < 0)
+            {
+                HediffResourceUtils.TryDropExcessHediffGears(this.pawn);
+            }
+            var hediffStageResource = this.CurStage as HediffStageResource;
+            if (this.previousStageIndex != this.CurStageIndex)
+            {
+                var previousStage = def.stages[this.previousStageIndex] as HediffStageResource;
+                if (previousStage != null)
+                {
+                    if (previousStage.skillAdjustProperties != null)
+                    {
+                        foreach (var skillAdjust in previousStage.skillAdjustProperties)
+                        {
+                            RemoveSkillAdjust(this.previousStageIndex, skillAdjust);
+                        }
+                    }
+                }
+                this.previousStageIndex = this.CurStageIndex;
+                if (hediffStageResource != null && hediffStageResource.skillAdjustProperties != null)
+                {
+                    foreach (var skillAdjust in hediffStageResource.skillAdjustProperties)
+                    {
+                        AddSkillAdjust(this.CurStageIndex, skillAdjust);
+                    }
+                }
+            }
+
+            if (hediffStageResource != null)
+            {
+                if (hediffStageResource.needAdjustProperties != null && this.pawn.IsHashIntervalTick(hediffStageResource.needAdjustProperties.tickRate))
+                {
+                    foreach (var needToAdjust in hediffStageResource.needAdjustProperties.needsToAdjust)
+                    {
+                        var need = this.pawn.needs.TryGetNeed(needToAdjust.need);
+                        if (need != null)
+                        {
+                            need.CurLevelPercentage += needToAdjust.adjustValue;
+                        }
+                    }
+                }
+                if (hediffStageResource.healingProperties != null && Find.TickManager.TicksGame >= lastHealingEffectTick + hediffStageResource.healingProperties.ticksPerEffect)
+                {
+                    DoHeal(hediffStageResource.healingProperties);
+                }
+            }
+        }
+        private void AddSkillAdjust(int stageIndex, SkillAdjustProperties skillAdjust)
+        {
+            var skillRecord = pawn.skills.GetSkill(skillAdjust.skill);
+            if (skillRecord != null && !skillRecord.TotallyDisabled)
+            {
+                Log.Message("BEFORE: " + this.pawn + " - adding skill adjust: " + skillAdjust.skill + " - " + skillRecord.levelInt + " - " + skillRecord.passion + ", severity: " + this.Severity);
+                if (!savedSkillRecordsByStages.TryGetValue(stageIndex, out var list))
+                {
+                    savedSkillRecordsByStages[stageIndex] = list = new SavedSkillRecordCollection();
+                }
+                list.savedSkillRecords.Add(new SavedSkillRecord
+                {
+                    def = skillAdjust.skill,
+                    levelInt = skillRecord.levelInt,
+                    passion = skillRecord.passion
+                });
+                skillRecord.levelInt += skillAdjust.skillLevelOffset;
+                skillRecord.passion = skillAdjust.forcedPassion;
+                if (skillRecord.levelInt > skillAdjust.maxSkillLevel)
+                {
+                    skillRecord.levelInt = skillAdjust.maxSkillLevel;
+                }
+                skillRecord.levelInt = Mathf.Clamp(skillRecord.levelInt, 0, 20);
+                Log.Message("AFTER: " + this.pawn + " - adding skill adjust: " + skillAdjust.skill + " - " + skillRecord.levelInt + " - " + skillRecord.passion + ", severity: " + this.Severity);
+            }
+        }
+
+        private void RemoveSkillAdjust(int stageIndex, SkillAdjustProperties skillAdjust)
+        {
+            var skillRecord = pawn.skills.GetSkill(skillAdjust.skill);
+            if (skillRecord != null && !skillRecord.TotallyDisabled)
+            {
+                if (savedSkillRecordsByStages.ContainsKey(stageIndex))
+                {
+                    Log.Message("BEFORE: " + this.pawn + " - removing skill adjust: " + skillAdjust.skill + " - " + skillRecord.levelInt + " - " + skillRecord.passion + ", severity: " + this.Severity);
+                    var savedSkillRecord = savedSkillRecordsByStages[stageIndex].savedSkillRecords.FirstOrDefault(x => x.def == skillAdjust.skill);
+                    if (savedSkillRecord != null)
+                    {
+                        savedSkillRecordsByStages[stageIndex].savedSkillRecords.Remove(savedSkillRecord);
+                        skillRecord.levelInt = Mathf.Max(skillRecord.levelInt - skillAdjust.skillLevelOffset,
+                            savedSkillRecord.levelInt);
+                        skillRecord.levelInt = Mathf.Clamp(skillRecord.levelInt, 0, 20);
+                        skillRecord.passion = savedSkillRecord.passion;
+                    }
+                    Log.Message("AFTER: " + this.pawn + " - removing skill adjust: " + skillAdjust.skill + " - " + skillRecord.levelInt + " - " + skillRecord.passion + ", severity: " + this.Severity);
+                }
+            }
+        }
+
+        public void DoHeal(HealingProperties healingProperties)
+        {
+            lastHealingEffectTick = Find.TickManager.TicksGame;
+            float totalSpentPoints = healingProperties.healPoints;
+            foreach (var pawn in GetPawns(healingProperties))
+            {
+                Log.Message($"Checking {pawn} to heal");
+                if (CanHeal(pawn, healingProperties))
+                {
+                    var hediffs = GetHediffsToHeal(pawn, healingProperties).ToList();
+                    Log.Message($"Can heal {pawn}, checking hediffs: " + String.Join(", ", hediffs));
+                    if (hediffs.Any())
+                    {
+                        if (healingProperties.healPriority == HealPriority.TendablesFirst)
+                        {
+                            hediffs = hediffs.OrderBy(x => x.TendableNow() ? 0 : 1).ToList();
+                        }
+                        else
+                        {
+                            hediffs = hediffs.InRandomOrder().ToList();
+                        }
+                        var toHeal = healingProperties.hediffsToHeal > 0 ? hediffs.Take(healingProperties.hediffsToHeal).ToList() : hediffs;
+                        Log.Message("Working on hediffs to cure: " + String.Join(", ", toHeal));
+                        foreach (var hediff in toHeal)
+                        {
+                            Log.Message("Curing hediff: " + hediff + ", Severity: " + hediff.Severity + ", totalSpentPoints: " + totalSpentPoints);
+                            if (healingProperties.hediffsToHeal > 0)
+                            {
+                                Log.Message("1 Cured hediff: " + hediff + ", Severity: " + hediff.Severity + ", totalSpentPoints: " + totalSpentPoints);
+                                pawn.health.RemoveHediff(hediff);
+
+                                if (healingProperties.soundOnEffect != null)
+                                {
+                                    healingProperties.soundOnEffect.PlayOneShot(new TargetInfo(pawn.Position, pawn.Map));
+                                }
+                            }
+                            else if (totalSpentPoints != 0)
+                            {
+                                var toHealPoints = Mathf.Min(totalSpentPoints, hediff.Severity);
+                                hediff.Severity -= toHealPoints;
+                                totalSpentPoints -= toHealPoints;
+                                if (hediff.Severity == 0)
+                                {
+                                    Log.Message("2 Cured hediff: " + hediff + ", Severity: " + hediff.Severity + ", totalSpentPoints: " + totalSpentPoints);
+                                    pawn.health.RemoveHediff(hediff);
+                                }
+
+                                if (healingProperties.soundOnEffect != null)
+                                {
+                                    healingProperties.soundOnEffect.PlayOneShot(new TargetInfo(pawn.Position, pawn.Map));
+                                }
+                            }
+
+                            if (healingProperties.hediffsToHeal <= 0 && (!healingProperties.pointsOverflow || totalSpentPoints == 0))
+                            {
+                                Log.Message("Spent all points. Stopping now.");
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private IEnumerable<Pawn> GetPawns(HealingProperties healingProperties)
+        {
+            if (healingProperties.effectRadius <= 0)
+            {
+                yield return this.pawn;
+            }
+            else
+            {
+                foreach (var pawn in GenRadial.RadialDistinctThingsAround(this.pawn.PositionHeld, this.pawn.MapHeld, healingProperties.effectRadius, true).OfType<Pawn>())
+                {
+                    yield return pawn;
+                }
+            }
+        }
+        private bool CanHeal(Pawn pawn, HealingProperties healingProperties)
+        {
+            if (pawn.health?.hediffSet?.hediffs is null)
+            {
+                return false;
+            }
+            bool isFlesh = pawn.RaceProps.IsFlesh;
+            if (!healingProperties.affectMechanical && isFlesh == false)
+            {
+                return false;
+            }
+            if (!healingProperties.affectOrganic && isFlesh)
+            {
+                return false;
+            }
+            bool isAllyOrColonist = pawn.Faction != null && !pawn.HostileTo(this.pawn);
+            if (!healingProperties.affectsAllies && isAllyOrColonist)
+            {
+                return false;
+            }
+            if (!healingProperties.affectsEnemies && isAllyOrColonist == false)
+            {
+                return false;
+            }
+            return true;
+        }
+        private IEnumerable<Hediff> GetHediffsToHeal(Pawn pawn, HealingProperties healingProperties)
+        {
+            foreach (var hediff in pawn.health.hediffSet.hediffs)
+            {
+                if (healingProperties.affectIllness && !(hediff is Hediff_Injury) && !(hediff is Hediff_MissingPart) && hediff.def.PossibleToDevelopImmunityNaturally() && !hediff.FullyImmune())
+                {
+                    yield return hediff;
+                }
+                else if (healingProperties.affectInjuries && hediff is Hediff_Injury)
+                {
+                    yield return hediff;
+                }
+                else if (healingProperties.affectPermanent && hediff.IsPermanent())
+                {
+                    yield return hediff;
+                }
+            
+            }
+        }
+
+        private Vector3 impactAngleVect;
+
+        private int lastAbsorbDamageTick = -9999;
+        public void AbsorbedDamage(DamageInfo dinfo)
+        {
+            SoundDefOf.EnergyShield_AbsorbDamage.PlayOneShot(new TargetInfo(base.pawn.Position, base.pawn.Map));
+            impactAngleVect = Vector3Utility.HorizontalVectorFromAngle(dinfo.Angle);
+            Vector3 loc = base.pawn.TrueCenter() + impactAngleVect.RotatedBy(180f) * 0.5f;
+            float num = Mathf.Min(10f, 2f + dinfo.Amount / 10f);
+            FleckMaker.Static(loc, base.pawn.Map, FleckDefOf.ExplosionFlash, num);
+            int num2 = (int)num;
+            for (int i = 0; i < num2; i++)
+            {
+                FleckMaker.ThrowDustPuff(loc, base.pawn.Map, Rand.Range(0.8f, 1.2f));
+            }
+            lastAbsorbDamageTick = Find.TickManager.TicksGame;
+        }
+
+        private Material bubbleMat;
+
+        public Material BubbleMat
+        {
+            get
+            {
+                if (bubbleMat is null)
+                {
+                    bubbleMat = MaterialPool.MatFrom("Other/ShieldBubble", ShaderDatabase.Transparent, CurStageResource.shieldProperties.shieldColor);
+                }
+                return bubbleMat;
+            }
+        }
+        public void Draw()
+        {
+            if (this.CurStage is HediffStageResource hediffStageResource && hediffStageResource.ShieldIsActive(pawn) && this.ResourceAmount > 0)
+            {
+                float num = Mathf.Lerp(1.2f, 1.55f, this.def.lifetimeTicks != -1 ? (this.def.lifetimeTicks - duration) / this.def.lifetimeTicks : 1);
+                Vector3 drawPos = base.pawn.Drawer.DrawPos;
+                drawPos.y = AltitudeLayer.MoteOverhead.AltitudeFor();
+                int num2 = Find.TickManager.TicksGame - lastAbsorbDamageTick;
+                if (num2 < 8)
+                {
+                    float num3 = (float)(8 - num2) / 8f * 0.05f;
+                    drawPos += impactAngleVect * num3;
+                    num -= num3;
+                }
+                float angle = Rand.Range(0, 360);
+                Vector3 s = new Vector3(num, 1f, num);
+                Matrix4x4 matrix = default(Matrix4x4);
+                matrix.SetTRS(drawPos, Quaternion.AngleAxis(angle, Vector3.up), s);
+                Graphics.DrawMesh(MeshPool.plane10, matrix, BubbleMat, 0);
+            }
+        }
         public override void ExposeData()
         {
             base.ExposeData();
             Scribe_Values.Look(ref resourceAmount, "resourceAmount");
             Scribe_Values.Look(ref duration, "duration");
             Scribe_Values.Look(ref delayTicks, "delayTicks");
+            Scribe_Values.Look(ref lastHealingEffectTick, "lastHealingEffectTick");
             Scribe_Collections.Look(ref amplifiers, "amplifiers", LookMode.Reference);
+            Scribe_Collections.Look(ref savedSkillRecordsByStages, "savedSkillRecordsByStages", LookMode.Value, LookMode.Deep);
+            Scribe_Values.Look(ref previousStageIndex, "previousStageIndex");
+            PreInit();
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
                 foreach (var amplifier in amplifiers)

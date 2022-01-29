@@ -11,8 +11,8 @@ namespace HediffResourceFramework
 {
 	public static class HRFLog
 	{
-		private static bool enabled = false;
-		public static void Message(string message, bool limit = true)
+		private static bool enabled = true;
+		public static void Message(string message)
         {
 			if (enabled)
             {

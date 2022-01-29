@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RimWorld;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,7 +16,7 @@ namespace HediffResourceFramework
         public Dictionary<Thing, StatBonuses> thingsWithBonuses = new Dictionary<Thing, StatBonuses>();
         public Dictionary<Projectile, FiredData> firedProjectiles = new Dictionary<Projectile, FiredData>();
         public Dictionary<Pawn, DownedStateData> pawnDownedStates = new Dictionary<Pawn, DownedStateData>();
-
+        public Dictionary<Plant, float> plantsAdjustedByGrowth = new Dictionary<Plant, float>();
         public bool dirtyUpdate;
 
         public static HediffResourceManager Instance;
@@ -23,7 +24,6 @@ namespace HediffResourceFramework
         {
             Instance = this;
         }
-
         public void RegisterAdjuster(IAdjustResource adjuster)
         {
             if (!resourceAdjusters.Contains(adjuster))
@@ -70,6 +70,7 @@ namespace HediffResourceFramework
             if (hediffResourcesPolicies is null) hediffResourcesPolicies = new Dictionary<Pawn, HediffResourcePolicy>();
             if (firedProjectiles is null) firedProjectiles = new Dictionary<Projectile, FiredData>();
             if (pawnDownedStates is null) pawnDownedStates = new Dictionary<Pawn, DownedStateData>();
+            if (plantsAdjustedByGrowth is null) plantsAdjustedByGrowth = new Dictionary<Plant, float>();
         }
 
         public override void LoadedGame()
@@ -164,6 +165,7 @@ namespace HediffResourceFramework
             Scribe_Collections.Look(ref hediffResourcesPolicies, "hediffResourcesPolicies", LookMode.Reference, LookMode.Deep, ref pawnKeys, ref hediffResourcePolicyValues);
             Scribe_Collections.Look(ref firedProjectiles, "firedProjectiles", LookMode.Reference, LookMode.Deep, ref projectileKeys, ref firedDataValues);
             Scribe_Collections.Look(ref pawnDownedStates, "pawnDownedStates", LookMode.Reference, LookMode.Deep, ref pawnKeys2, ref downedStateDataValues);
+            Scribe_Collections.Look(ref plantsAdjustedByGrowth, "plantsAdjustedByGrowth", LookMode.Reference, LookMode.Deep, ref plantKeys, ref floatValues);
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
                 PreInit();
@@ -181,5 +183,8 @@ namespace HediffResourceFramework
 
         private List<Pawn> pawnKeys2;
         private List<DownedStateData> downedStateDataValues;
+
+        private List<Plant> plantKeys;
+        private List<float> floatValues;
     }
 }

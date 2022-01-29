@@ -12,5 +12,6 @@ namespace HediffResourceFramework
 	public interface IResourceStorage
 	{
         Dictionary<int, ResourceStorage> ResourceStorages { get; }
+        HediffResource GetResourceFor(HediffOption hediffOption);
     }
 }
