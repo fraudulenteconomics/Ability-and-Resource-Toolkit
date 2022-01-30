@@ -727,7 +727,7 @@ namespace HediffResourceFramework
         {
             lastHealingEffectTick = Find.TickManager.TicksGame;
             float totalSpentPoints = healingProperties.healPoints;
-            foreach (var pawn in GetPawns(healingProperties))
+            foreach (var pawn in HediffResourceUtils.GetPawnsAround(this.pawn, healingProperties.effectRadius))
             {
                 Log.Message($"Checking {pawn} to heal");
                 if (CanHeal(pawn, healingProperties))
@@ -736,71 +736,14 @@ namespace HediffResourceFramework
                     Log.Message($"Can heal {pawn}, checking hediffs: " + String.Join(", ", hediffs));
                     if (hediffs.Any())
                     {
-                        if (healingProperties.healPriority == HealPriority.TendablesFirst)
-                        {
-                            hediffs = hediffs.OrderBy(x => x.TendableNow() ? 0 : 1).ToList();
-                        }
-                        else
-                        {
-                            hediffs = hediffs.InRandomOrder().ToList();
-                        }
-                        var toHeal = healingProperties.hediffsToHeal > 0 ? hediffs.Take(healingProperties.hediffsToHeal).ToList() : hediffs;
-                        Log.Message("Working on hediffs to cure: " + String.Join(", ", toHeal));
-                        foreach (var hediff in toHeal)
-                        {
-                            Log.Message("Curing hediff: " + hediff + ", Severity: " + hediff.Severity + ", totalSpentPoints: " + totalSpentPoints);
-                            if (healingProperties.hediffsToHeal > 0)
-                            {
-                                Log.Message("1 Cured hediff: " + hediff + ", Severity: " + hediff.Severity + ", totalSpentPoints: " + totalSpentPoints);
-                                pawn.health.RemoveHediff(hediff);
-
-                                if (healingProperties.soundOnEffect != null)
-                                {
-                                    healingProperties.soundOnEffect.PlayOneShot(new TargetInfo(pawn.Position, pawn.Map));
-                                }
-                            }
-                            else if (totalSpentPoints != 0)
-                            {
-                                var toHealPoints = Mathf.Min(totalSpentPoints, hediff.Severity);
-                                hediff.Severity -= toHealPoints;
-                                totalSpentPoints -= toHealPoints;
-                                if (hediff.Severity == 0)
-                                {
-                                    Log.Message("2 Cured hediff: " + hediff + ", Severity: " + hediff.Severity + ", totalSpentPoints: " + totalSpentPoints);
-                                    pawn.health.RemoveHediff(hediff);
-                                }
-
-                                if (healingProperties.soundOnEffect != null)
-                                {
-                                    healingProperties.soundOnEffect.PlayOneShot(new TargetInfo(pawn.Position, pawn.Map));
-                                }
-                            }
-
-                            if (healingProperties.hediffsToHeal <= 0 && (!healingProperties.pointsOverflow || totalSpentPoints == 0))
-                            {
-                                Log.Message("Spent all points. Stopping now.");
-                                return;
-                            }
-                        }
+                        var hediffsToHeal = healingProperties.hediffsToHeal > 0 ? hediffs.Take(healingProperties.hediffsToHeal).ToList() : hediffs;
+                        HediffResourceUtils.HealHediffs(this.pawn, ref totalSpentPoints, hediffsToHeal, healingProperties.pointsOverflow,
+                            healingProperties.healPriority, healingProperties.hediffsToHeal > 0, healingProperties.soundOnEffect);
                     }
                 }
             }
         }
 
-        private IEnumerable<Pawn> GetPawns(HealingProperties healingProperties)
-        {
-            if (healingProperties.effectRadius <= 0)
-            {
-                yield return this.pawn;
-            }
-            else
-            {
-                foreach (var pawn in GenRadial.RadialDistinctThingsAround(this.pawn.PositionHeld, this.pawn.MapHeld, healingProperties.effectRadius, true).OfType<Pawn>())
-                {
-                    yield return pawn;
-                }
-            }
-        }
         private bool CanHeal(Pawn pawn, HealingProperties healingProperties)
         {
             if (pawn.health?.hediffSet?.hediffs is null)
@@ -848,7 +791,6 @@ namespace HediffResourceFramework
                 {
                     yield return hediff;
                 }
-            
             }
         }
 

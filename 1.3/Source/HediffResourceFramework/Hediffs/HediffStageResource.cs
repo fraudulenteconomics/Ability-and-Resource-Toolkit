@@ -14,6 +14,10 @@ using Ionic.Zlib;
 using static UnityEngine.GraphicsBuffer;
 using UnityEngine.SocialPlatforms;
 using Verse.Noise;
+using static RimWorld.FleshTypeDef;
+using static RimWorld.MechClusterSketch;
+using System.Runtime.Remoting.Messaging;
+using Mono.Cecil;
 
 namespace HediffResourceFramework
 {
@@ -97,6 +101,59 @@ namespace HediffResourceFramework
         public GraphicData auraGraphic;
         public SoundDef soundOnEffect;
     }
+
+    public class LifeStealProperties
+    {
+        public DamageDef damageDef;
+        public float flatHeal;
+        public float percentHeal;
+        public bool checkOrganic;
+        public bool healOverflow;
+        public HealPriority healPriority;
+        public float effectRadius;
+        public bool affectSelf;
+        public bool affectsAllies;
+        public bool affectsEnemies = true;
+        public bool worksThroughWalls;
+        public SoundDef soundOnEffect;
+        public bool affectMelee;
+        public bool affectRanged;
+
+        public void StealLife(Pawn instigator, Pawn targetPawn, DamageInfo source)
+        {
+            Log.Message("Stealing life: " + instigator + " - " + targetPawn + " - " + source);
+            if (damageDef is null || damageDef == source.Def)
+            {
+                foreach (var pawn in HediffResourceUtils.GetPawnsAround(instigator, effectRadius))
+                {
+                    Log.Message("Checking pawn: " + pawn);
+                    if (CanExtractLife(instigator, pawn, targetPawn))
+                    {
+                        Log.Message("Healing pawn: " + pawn);
+                        var hediffsToHeal = pawn.health.hediffSet.hediffs.Where(x => x is Hediff_Injury).ToList();
+                        var healPoints = flatHeal > 0 ? flatHeal : source.Amount * percentHeal;
+                        HediffResourceUtils.HealHediffs(pawn, ref healPoints, hediffsToHeal, healOverflow, healPriority, false, soundOnEffect);
+                    }
+                    else
+                    {
+                        Log.Message("Cannot work on " + pawn);
+                    }
+                }
+            }
+        }
+        private bool CanExtractLife(Pawn instigator, Pawn toGive, Pawn targetPawn)
+        {
+            if (checkOrganic && toGive.RaceProps.IsFlesh != targetPawn.RaceProps.IsFlesh
+                || !worksThroughWalls && !GenSight.LineOfSight(toGive.Position, targetPawn.Position, toGive.Map)
+                || !affectSelf && instigator == toGive 
+                || !affectsAllies && targetPawn.Faction != null && !toGive.HostileTo(instigator)
+                || !affectsEnemies && toGive.HostileTo(instigator))
+            {
+                return false;
+            }
+            return true;
+        }
+    }
     public class HediffStageResource : HediffStage
     {
         public List<HediffOption> resourceSettings;
@@ -117,6 +174,7 @@ namespace HediffResourceFramework
         public HealingProperties healingProperties;
         public List<SkillAdjustProperties> skillAdjustProperties;
         public DamageAuraProperties damageAuraProperties;
+        public LifeStealProperties lifeStealProperties;
         public bool ShieldIsActive(Pawn pawn)
         {
             if (shieldProperties != null)

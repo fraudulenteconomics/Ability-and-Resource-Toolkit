@@ -122,8 +122,8 @@ namespace HediffResourceFramework
         {
 			if (hitThing != null && HediffResourceManager.Instance.firedProjectiles.TryGetValue(__instance, out var firedData))
 			{
-				var target = hitThing as Pawn;
-				if (target != null)
+				var targetPawn = hitThing as Pawn;
+				if (targetPawn != null)
 				{
 					var extension = firedData.equipment?.def.GetModExtension<ResourceOnActionExtension>();
 					if (extension != null)
@@ -132,7 +132,7 @@ namespace HediffResourceFramework
 						{
 							if (!resourceOnAction.onSelf)
 							{
-								resourceOnAction.TryApplyOn(target);
+								resourceOnAction.TryApplyOn(targetPawn);
 							}
 						}
 					}
@@ -148,7 +148,7 @@ namespace HediffResourceFramework
 								{
 									if (!resourceOnAction.onSelf)
 									{
-										resourceOnAction.TryApplyOn(target);
+										resourceOnAction.TryApplyOn(targetPawn);
 									}
 								}
 							}
@@ -164,34 +164,42 @@ namespace HediffResourceFramework
 
 				Log.Message("Projectile fire data: __instance: " + __instance + " - hitThing: " + hitThing + " - source: " + source + " - caster: " + firedData.caster);
 
-				if (firedData.caster is Pawn pawn2)
+				if (firedData.caster is Pawn instigator)
 				{
-					Log.Message("Iterating over pawn: " + pawn2);
-					if (pawn2.health?.hediffSet.hediffs != null)
+					Log.Message("Iterating over pawn: " + instigator);
+					if (instigator.health?.hediffSet.hediffs != null)
 					{
-						Log.Message("Checking hediffs on: " + pawn2);
-						foreach (var hediff in pawn2.health.hediffSet.hediffs)
+						Log.Message("Checking hediffs on: " + instigator);
+						foreach (var hediff in instigator.health.hediffSet.hediffs)
 						{
 							Log.Message("Checking hediff on: " + hediff);
-							if (hediff is HediffResource hediffResource && hediffResource.CurStage is HediffStageResource hediffStageResource && hediffStageResource.additionalDamages != null)
+							if (hediff is HediffResource hediffResource && hediffResource.CurStage is HediffStageResource hediffStageResource)
 							{
 								Log.Message("Passed hediff: " + hediff);
-								foreach (var additionalDamage in hediffStageResource.additionalDamages)
-								{
-									Log.Message("Looking at : " + additionalDamage.damage + " - " + additionalDamage.damageRange);
-									if (additionalDamage.damageRange)
+								if (hediffStageResource.additionalDamages != null)
+                                {
+									foreach (var additionalDamage in hediffStageResource.additionalDamages)
 									{
-										var damageAmount = additionalDamage.amount.RandomInRange;
-										var damage = new DamageInfo(additionalDamage.damage, damageAmount, instigator: source.Instigator, hitPart: source.HitPart, weapon: source.Weapon);
-										Log.Message(hitThing + " should take damage: " + damage);
-										hitThing.TakeDamage(damage);
-										Log.Message(hitThing + " 2 should take damage: " + damage);
-									}
-									else
-                                    {
-										Log.Message(hitThing + " won't take damage: " + additionalDamage.damage);
+										Log.Message("Looking at : " + additionalDamage.damage + " - " + additionalDamage.damageRange);
+										if (additionalDamage.damageRange)
+										{
+											var damageAmount = additionalDamage.amount.RandomInRange;
+											var damage = new DamageInfo(additionalDamage.damage, damageAmount, instigator: source.Instigator, hitPart: source.HitPart, weapon: source.Weapon);
+											Log.Message(hitThing + " should take damage: " + damage);
+											hitThing.TakeDamage(damage);
+											Log.Message(hitThing + " 2 should take damage: " + damage);
+										}
+										else
+										{
+											Log.Message(hitThing + " won't take damage: " + additionalDamage.damage);
+										}
 									}
 								}
+								if (targetPawn != null && hediffStageResource.lifeStealProperties != null && hediffStageResource.lifeStealProperties.affectRanged)
+                                {
+
+                                }
+									
 							}
 						}
 					}

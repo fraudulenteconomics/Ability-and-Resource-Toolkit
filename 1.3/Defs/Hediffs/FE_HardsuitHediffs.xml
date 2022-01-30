@@ -106,14 +106,15 @@
 					<affectPermanent>true</affectPermanent>
 					<affectIllness>true</affectIllness>
 					<affectInjuries>true</affectInjuries>
+					<affectChronic>true</affectChronic>
 					<pointsOverflow>true</pointsOverflow>
 					<healPriority>TendablesFirst</healPriority>
 					<affectMechanical>true</affectMechanical>
 					<affectOrganic>true</affectOrganic>
 					<effectRadius>9</effectRadius>
 					<affectsAllies>true</affectsAllies>
-					<affectsEnemies>true</affectsEnemies>
-					<ticksPerEffect>60</ticksPerEffect>
+					<affectsEnemies>false</affectsEnemies>
+					<ticksPerEffect>600</ticksPerEffect>
 					<healOnApply>true</healOnApply>
 					<soundOnEffect>ToxicBuildupGained</soundOnEffect>
 				</healingProperties>
@@ -144,6 +145,22 @@
 					</auraGraphic>
 					<soundOnEffect>ToxicBuildupGained</soundOnEffect>
 				</damageAuraProperties>
+				<lifeStealProperties>
+					<!-- <damageDef>optional value</damageDef> -->
+					<flatHeal>5</flatHeal>
+					<!--<percentHeal>optional value</percentHeal>-->
+					<checkOrganic>true</checkOrganic>
+					<healOverflow>true</healOverflow>
+					<healPriority>TendablesFirst</healPriority>
+					<effectRadius>14</effectRadius>
+					<affectSelf>true</affectSelf>
+					<affectsAllies>true</affectsAllies>
+					<affectsEnemies>false</affectsEnemies>
+					<worksThroughWalls>false</worksThroughWalls>
+					<soundOnEffect>ToxicBuildupGained</soundOnEffect>
+					<affectMelee>true</affectMelee>
+					<affectRanged>true</affectRanged>
+				</lifeStealProperties>
 			</li>
 			<li Class="HediffResourceFramework.HediffStageResource">
 				<minSeverity>50</minSeverity>

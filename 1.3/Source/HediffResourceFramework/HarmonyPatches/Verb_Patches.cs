@@ -65,6 +65,7 @@ namespace HediffResourceFramework
                     }
                 }
             }
+            var targetPawn = target.Pawn;
             var extension = __instance.EquipmentSource?.def.GetModExtension<ResourceOnActionExtension>();
             if (extension != null)
             {
@@ -74,17 +75,17 @@ namespace HediffResourceFramework
                     {
                         resourceOnAction.TryApplyOn(__instance.CasterPawn);
                     }
-                    else if (target.Pawn != null)
+                    else if (targetPawn != null)
                     {
-                        resourceOnAction.TryApplyOn(target.Pawn);
+                        resourceOnAction.TryApplyOn(targetPawn);
                     }
                 }
             }
 
             var dinfoSource = __result.First();
-            if (__instance.caster is Pawn pawn)
+            if (__instance.caster is Pawn instigator)
             {
-                foreach (var hediff in pawn.health.hediffSet.hediffs)
+                foreach (var hediff in instigator.health.hediffSet.hediffs)
                 {
                     var extension2 = hediff.def.GetModExtension<ResourceOnActionExtension>();
                     if (extension2 != null)
@@ -95,24 +96,32 @@ namespace HediffResourceFramework
                             {
                                 resourceOnAction.TryApplyOn(__instance.CasterPawn);
                             }
-                            else if (target.Pawn != null)
+                            else if (targetPawn != null)
                             {
-                                resourceOnAction.TryApplyOn(target.Pawn);
+                                resourceOnAction.TryApplyOn(targetPawn);
                             }
                         }
                     }
 
-                    if (hediff is HediffResource hediffResource && hediffResource.CurStage is HediffStageResource hediffStageResource && hediffStageResource.additionalDamages != null)
+                    if (hediff is HediffResource hediffResource && hediffResource.CurStage is HediffStageResource hediffStageResource)
                     {
-                        foreach (var additionalDamage in hediffStageResource.additionalDamages)
+                        if (hediffStageResource.additionalDamages != null)
                         {
-                            if (additionalDamage.damageRange)
+                            foreach (var additionalDamage in hediffStageResource.additionalDamages)
                             {
-                                var damageAmount = additionalDamage.amount.RandomInRange;
-                                var damage = new DamageInfo(additionalDamage.damage, damageAmount, instigator: dinfoSource.Instigator, hitPart: dinfoSource.HitPart, weapon: dinfoSource.Weapon);
-                                Log.Message("Damaging " + target.Thing + " with " + damage);
-                                target.Thing.TakeDamage(damage);
+                                if (additionalDamage.damageRange)
+                                {
+                                    var damageAmount = additionalDamage.amount.RandomInRange;
+                                    var damage = new DamageInfo(additionalDamage.damage, damageAmount, instigator: dinfoSource.Instigator, hitPart: dinfoSource.HitPart, weapon: dinfoSource.Weapon);
+                                    Log.Message("Damaging " + target.Thing + " with " + damage);
+                                    target.Thing.TakeDamage(damage);
+                                }
                             }
+                        }
+
+                        if (targetPawn != null && hediffStageResource.lifeStealProperties != null && hediffStageResource.lifeStealProperties.affectMelee)
+                        {
+                            hediffStageResource.lifeStealProperties.StealLife(instigator, targetPawn, dinfoSource);
                         }
                     }
                 }

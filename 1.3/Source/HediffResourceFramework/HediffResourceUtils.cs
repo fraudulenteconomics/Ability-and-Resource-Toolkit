@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using Verse;
+using Verse.Sound;
 
 namespace HediffResourceFramework
 {
@@ -1006,5 +1007,68 @@ namespace HediffResourceFramework
             }
 			return false;
         }
+
+		public static IEnumerable<Pawn> GetPawnsAround(Pawn checker, float effectRadius)
+		{
+			if (effectRadius <= 0)
+			{
+				yield return checker;
+			}
+			else
+			{
+				foreach (var pawn in GenRadial.RadialDistinctThingsAround(checker.PositionHeld, checker.MapHeld, effectRadius, true).OfType<Pawn>())
+				{
+					yield return pawn;
+				}
+			}
+		}
+		public static void HealHediffs(Pawn pawn, ref float healPoints, List<Hediff> hediffsToHeal, bool pointsOverflow, HealPriority healPriority, bool healAll, SoundDef soundOnEffect)
+		{
+			if (healPriority == HealPriority.TendablesFirst)
+			{
+				hediffsToHeal = hediffsToHeal.OrderBy(x => x.TendableNow() ? 0 : 1).ToList();
+			}
+			else
+			{
+				hediffsToHeal = hediffsToHeal.InRandomOrder().ToList();
+			}
+			Log.Message("Working on hediffs to cure: " + String.Join(", ", hediffsToHeal));
+			foreach (var hediff in hediffsToHeal)
+			{
+				Log.Message("Curing hediff: " + hediff + ", Severity: " + hediff.Severity + ", totalSpentPoints: " + healPoints);
+				if (healAll)
+				{
+					Log.Message("1 Cured hediff: " + hediff + ", Severity: " + hediff.Severity + ", totalSpentPoints: " + healPoints);
+					pawn.health.RemoveHediff(hediff);
+
+					if (soundOnEffect != null)
+					{
+						soundOnEffect.PlayOneShot(new TargetInfo(pawn.Position, pawn.Map));
+					}
+				}
+				else if (healPoints != 0)
+				{
+					var toHealPoints = Mathf.Min(healPoints, hediff.Severity);
+					hediff.Severity -= toHealPoints;
+					healPoints -= toHealPoints;
+					if (hediff.Severity == 0)
+					{
+						Log.Message("2 Cured hediff: " + hediff + ", Severity: " + hediff.Severity + ", healPoints: " + healPoints);
+						pawn.health.RemoveHediff(hediff);
+					}
+
+					if (soundOnEffect != null)
+					{
+						soundOnEffect.PlayOneShot(new TargetInfo(pawn.Position, pawn.Map));
+					}
+				}
+
+				if (!healAll && (!pointsOverflow || healPoints == 0))
+				{
+					Log.Message("Spent all points. Stopping now.");
+					return;
+				}
+			}
+		}
 	}
 }
