@@ -125,6 +125,25 @@
 						<forcedPassion>Minor</forcedPassion>					
 					</li>
 				</skillAdjustProperties>
+				<damageAuraProperties>
+					<damageDef>Burn</damageDef>
+					<damageAmount>3</damageAmount>
+					<ticksPerEffect>60</ticksPerEffect>
+					<effectRadius>15</effectRadius>
+					<worksThroughWalls>true</worksThroughWalls>
+					<affectsAllies>true</affectsAllies>
+					<affectsEnemies>true</affectsEnemies>
+					<affectsSelf>false</affectsSelf>
+					<otherDamageMote>Mote_PsychicEmanatorEffect</otherDamageMote>
+					<selfDamageMote>Mote_PsychicConditionCauserEffect</selfDamageMote>
+					<auraGraphic>
+						<texPath>Things/Mote/PowerBeam</texPath>
+						<drawSize>8</drawSize>
+						<color>(189,169,118)</color>
+						<shaderType>MoteGlow</shaderType>
+					</auraGraphic>
+					<soundOnEffect>ToxicBuildupGained</soundOnEffect>
+				</damageAuraProperties>
 			</li>
 			<li Class="HediffResourceFramework.HediffStageResource">
 				<minSeverity>50</minSeverity>

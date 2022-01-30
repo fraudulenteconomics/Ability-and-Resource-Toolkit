@@ -10,6 +10,10 @@ using UnityEngine.Networking.Types;
 using UnityEngine;
 using Verse;
 using static UnityEngine.UIElements.UxmlAttributeDescription;
+using Ionic.Zlib;
+using static UnityEngine.GraphicsBuffer;
+using UnityEngine.SocialPlatforms;
+using Verse.Noise;
 
 namespace HediffResourceFramework
 {
@@ -76,6 +80,22 @@ namespace HediffResourceFramework
         public int maxSkillLevel;
         public Passion forcedPassion;
     }
+
+    public class DamageAuraProperties
+    {
+        public DamageDef damageDef;
+        public int damageAmount;
+        public int ticksPerEffect;
+        public float effectRadius;
+        public bool worksThroughWalls;
+        public bool affectsAllies;
+        public bool affectsEnemies = true;
+        public bool affectsSelf;
+        public ThingDef otherDamageMote;
+        public ThingDef selfDamageMote;
+        public GraphicData auraGraphic;
+        public SoundDef soundOnEffect;
+    }
     public class HediffStageResource : HediffStage
     {
         public List<HediffOption> resourceSettings;
@@ -95,6 +115,7 @@ namespace HediffResourceFramework
         public NeedAdjustProperties needAdjustProperties;
         public HealingProperties healingProperties;
         public List<SkillAdjustProperties> skillAdjustProperties;
+        public DamageAuraProperties damageAuraProperties;
         public bool ShieldIsActive(Pawn pawn)
         {
             if (shieldProperties != null)

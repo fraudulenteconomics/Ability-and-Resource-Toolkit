@@ -49,6 +49,7 @@ namespace HediffResourceFramework
         public int duration;
         public int delayTicks;
         public int lastHealingEffectTick;
+        public int lastDamagingEffectTick;
         public int previousStageIndex;
         public Dictionary<int, SavedSkillRecordCollection> savedSkillRecordsByStages;
         public List<Thing> amplifiers = new List<Thing>();
@@ -604,7 +605,74 @@ namespace HediffResourceFramework
                 {
                     DoHeal(hediffStageResource.healingProperties);
                 }
+
+                if (hediffStageResource.damageAuraProperties != null && Find.TickManager.TicksGame >= lastDamagingEffectTick + hediffStageResource.damageAuraProperties.ticksPerEffect)
+                {
+                    DoDamage(hediffStageResource.damageAuraProperties);
+                }
             }
+        }
+
+        private void DoDamage(DamageAuraProperties damagingProperties)
+        {
+            lastDamagingEffectTick = Find.TickManager.TicksGame;
+            foreach (var pawn in GetPawns(damagingProperties))
+            {
+                Log.Message($"Checking {pawn} to damage");
+                if (CanDamage(pawn, damagingProperties))
+                {
+                    pawn.TakeDamage(new DamageInfo(damagingProperties.damageDef, damagingProperties.damageAmount));
+                    if (damagingProperties.selfDamageMote != null && this.pawn == pawn)
+                    {
+                        MoteMaker.MakeStaticMote(this.pawn.Position, this.pawn.Map, damagingProperties.selfDamageMote);
+                    }
+                    else if (damagingProperties.otherDamageMote != null && this.pawn != pawn)
+                    {
+                        MoteMaker.MakeStaticMote(pawn.Position, pawn.Map, damagingProperties.otherDamageMote);
+                    }
+
+                    if (damagingProperties.soundOnEffect != null)
+                    {
+                        damagingProperties.soundOnEffect.PlayOneShot(new TargetInfo(pawn.Position, pawn.Map));
+                    }
+                }
+            }
+        }
+
+        private IEnumerable<Pawn> GetPawns(DamageAuraProperties damagingProperties)
+        {
+            if (damagingProperties.effectRadius <= 0)
+            {
+                yield return this.pawn;
+            }
+            else
+            {
+                foreach (var pawn in GenRadial.RadialDistinctThingsAround(this.pawn.PositionHeld, this.pawn.MapHeld, damagingProperties.effectRadius, true).OfType<Pawn>())
+                {
+                    yield return pawn;
+                }
+            }
+        }
+        private bool CanDamage(Pawn pawn, DamageAuraProperties damagingProperties)
+        {
+            if (!damagingProperties.affectsSelf && this.pawn == pawn)
+            {
+                return false;
+            }
+            if (!damagingProperties.worksThroughWalls && !GenSight.LineOfSight(this.pawn.Position, pawn.Position, this.pawn.Map))
+            {
+                return false;
+            }
+            bool isAllyOrColonist = pawn.Faction != null && !pawn.HostileTo(this.pawn);
+            if (!damagingProperties.affectsAllies && isAllyOrColonist)
+            {
+                return false;
+            }
+            if (!damagingProperties.affectsEnemies && isAllyOrColonist == false)
+            {
+                return false;
+            }
+            return true;
         }
         private void AddSkillAdjust(int stageIndex, SkillAdjustProperties skillAdjust)
         {
@@ -810,26 +878,52 @@ namespace HediffResourceFramework
                 return bubbleMat;
             }
         }
+
+        private static Dictionary<GraphicData, Material> auraGraphics = new Dictionary<GraphicData, Material>();
+
+        public static Material GetAuraMaterial(GraphicData graphicData)
+        {
+            if (!auraGraphics.TryGetValue(graphicData, out Material material))
+            {
+                auraGraphics[graphicData] = material = MaterialPool.MatFrom(graphicData.texPath, graphicData.shaderType?.Shader ?? ShaderDatabase.Mote, graphicData.color);
+            }
+            return material;
+        }
         public void Draw()
         {
-            if (this.CurStage is HediffStageResource hediffStageResource && hediffStageResource.ShieldIsActive(pawn) && this.ResourceAmount > 0)
+            if (this.CurStage is HediffStageResource hediffStageResource)
             {
-                float num = Mathf.Lerp(1.2f, 1.55f, this.def.lifetimeTicks != -1 ? (this.def.lifetimeTicks - duration) / this.def.lifetimeTicks : 1);
-                Vector3 drawPos = base.pawn.Drawer.DrawPos;
-                drawPos.y = AltitudeLayer.MoteOverhead.AltitudeFor();
-                int num2 = Find.TickManager.TicksGame - lastAbsorbDamageTick;
-                if (num2 < 8)
+                if (hediffStageResource.ShieldIsActive(pawn) && this.ResourceAmount > 0)
                 {
-                    float num3 = (float)(8 - num2) / 8f * 0.05f;
-                    drawPos += impactAngleVect * num3;
-                    num -= num3;
+                    float num = Mathf.Lerp(1.2f, 1.55f, this.def.lifetimeTicks != -1 ? (this.def.lifetimeTicks - duration) / this.def.lifetimeTicks : 1);
+                    Vector3 drawPos = base.pawn.Drawer.DrawPos;
+                    drawPos.y = AltitudeLayer.MoteOverhead.AltitudeFor();
+                    int num2 = Find.TickManager.TicksGame - lastAbsorbDamageTick;
+                    if (num2 < 8)
+                    {
+                        float num3 = (float)(8 - num2) / 8f * 0.05f;
+                        drawPos += impactAngleVect * num3;
+                        num -= num3;
+                    }
+                    float angle = Rand.Range(0, 360);
+                    Vector3 s = new Vector3(num, 1f, num);
+                    Matrix4x4 matrix = default(Matrix4x4);
+                    matrix.SetTRS(drawPos, Quaternion.AngleAxis(angle, Vector3.up), s);
+                    Graphics.DrawMesh(MeshPool.plane10, matrix, BubbleMat, 0);
                 }
-                float angle = Rand.Range(0, 360);
-                Vector3 s = new Vector3(num, 1f, num);
-                Matrix4x4 matrix = default(Matrix4x4);
-                matrix.SetTRS(drawPos, Quaternion.AngleAxis(angle, Vector3.up), s);
-                Graphics.DrawMesh(MeshPool.plane10, matrix, BubbleMat, 0);
+                if (hediffStageResource.damageAuraProperties?.auraGraphic != null)
+                {
+                    Vector3 drawPos = base.pawn.Drawer.DrawPos;
+                    drawPos.y = AltitudeLayer.MoteOverhead.AltitudeFor();
+                    Vector3 s = new Vector3(hediffStageResource.damageAuraProperties.auraGraphic.drawSize.x, 1f, hediffStageResource.damageAuraProperties.auraGraphic.drawSize.y);
+                    Matrix4x4 matrix = default(Matrix4x4);
+                    matrix.SetTRS(drawPos, Quaternion.identity, s);
+                    var auraMaterial = GetAuraMaterial(hediffStageResource.damageAuraProperties.auraGraphic);
+                    Graphics.DrawMesh(MeshPool.plane10, matrix, auraMaterial, 0);
+                    Log.Message("Should draw: " + auraMaterial);
+                }
             }
+            Log.Message("draw");
         }
         public override void ExposeData()
         {
@@ -838,6 +932,7 @@ namespace HediffResourceFramework
             Scribe_Values.Look(ref duration, "duration");
             Scribe_Values.Look(ref delayTicks, "delayTicks");
             Scribe_Values.Look(ref lastHealingEffectTick, "lastHealingEffectTick");
+            Scribe_Values.Look(ref lastDamagingEffectTick, "lastDamagingEffectTick");
             Scribe_Collections.Look(ref amplifiers, "amplifiers", LookMode.Reference);
             Scribe_Collections.Look(ref savedSkillRecordsByStages, "savedSkillRecordsByStages", LookMode.Value, LookMode.Deep);
             Scribe_Values.Look(ref previousStageIndex, "previousStageIndex");

@@ -13,11 +13,8 @@ using Verse.AI;
 
 namespace HediffResourceFramework
 {
-	[HarmonyPatch(typeof(PawnRenderer), "RenderPawnInternal", new Type[]
-	{
-		typeof(Vector3), typeof(float), typeof(bool), typeof(Rot4), typeof(RotDrawMode), typeof(PawnRenderFlags)
-	})]
-	public static class Patch_RenderPawnInternal
+	[HarmonyPatch(typeof(PawnRenderer), "RenderPawnAt")]
+	public static class Patch_RenderPawnAt
 	{
 		public static void Postfix(Pawn ___pawn)
 		{
