@@ -27,34 +27,57 @@ namespace HediffResourceFramework
             return resourceStorages != null;
         }
 
-        private Dictionary<int, ResourceStorage> resourceStorages;
+        private Dictionary<int, ResourceStorage> resourceStorages = new Dictionary<int, ResourceStorage>();
         public Dictionary<int, ResourceStorage> ResourceStorages
         {
             get
             {
-                if (resourceStorages is null)
-                {
-                    resourceStorages = new Dictionary<int, ResourceStorage>();
-                }
-
-                if (Props.resourceSettings != null)
-                {
-                    for (var i = 0; i < Props.resourceSettings.Count; i++)
-                    {
-                        if (Props.resourceSettings[i].maxResourceStorageAmount > 0 && !resourceStorages.ContainsKey(i))
-                        {
-                            resourceStorages[i] = new ResourceStorage(Props.resourceSettings[i], this);
-                            if (Props.resourceSettings[i].initialResourceAmount != 0)
-                            {
-                                resourceStorages[i].ResourceAmount = Props.resourceSettings[i].initialResourceAmount;
-                            }
-                        }
-                    }
-                }
+                InitializeResourceStorages();
                 return resourceStorages;
             }
         }
 
+        public void InitializeResourceStorages()
+        {
+            if (resourceStorages is null)
+            {
+                resourceStorages = new Dictionary<int, ResourceStorage>();
+            }
+            if (Props.resourceSettings != null)
+            {
+                for (var i = 0; i < Props.resourceSettings.Count; i++)
+                {
+                    if (Props.resourceSettings[i].maxResourceStorageAmount > 0 && !resourceStorages.ContainsKey(i))
+                    {
+                        resourceStorages[i] = new ResourceStorage(Props.resourceSettings[i], this);
+                        if (Props.resourceSettings[i].initialResourceAmount != 0)
+                        {
+                            resourceStorages[i].ResourceAmount = Props.resourceSettings[i].initialResourceAmount;
+                        }
+                    }
+                }
+            }
+        }
+
+        public override void Notify_Equipped(Pawn pawn)
+        {
+            base.Notify_Equipped(pawn);
+            if (resourceStorages != null)
+            {
+                foreach (var storage in resourceStorages.Values)
+                {
+                    if (storage.hediffOption.addHediffIfMissing)
+                    {
+                        var hediff = pawn.health.hediffSet.GetFirstHediffOfDef(storage.hediffOption.hediff);
+                        if (hediff is null)
+                        {
+                            hediff = HediffMaker.MakeHediff(storage.hediffOption.hediff, pawn);
+                            pawn.health.AddHediff(hediff);
+                        }
+                    }
+                }
+            }
+        }
         public IEnumerable<Tuple<CompAdjustHediffs, HediffOption, ResourceStorage>> GetResourceStoragesFor(HediffResourceDef hediffDef)
         {
             var resourceStorages = ResourceStorages;
@@ -175,6 +198,7 @@ namespace HediffResourceFramework
         public void Register()
         {
             HediffResourceManager.Instance.RegisterAdjuster(this);
+            InitializeResourceStorages();
         }
 
         public void Deregister()
@@ -278,7 +302,7 @@ namespace HediffResourceFramework
 
         public HediffResource GetResourceFor(HediffOption hediffOption)
         {
-            return PawnHost.health.hediffSet.GetFirstHediffOfDef(hediffOption.hediff) as HediffResource;
+            return PawnHost?.health?.hediffSet?.GetFirstHediffOfDef(hediffOption.hediff) as HediffResource;
         }
     }
 }

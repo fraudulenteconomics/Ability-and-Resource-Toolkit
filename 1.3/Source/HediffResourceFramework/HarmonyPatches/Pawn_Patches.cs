@@ -13,7 +13,7 @@ using Verse.AI;
 
 namespace HediffResourceFramework
 {
-	[HarmonyPatch(typeof(PawnRenderer), "RenderPawnAt")]
+    [HarmonyPatch(typeof(PawnRenderer), "RenderPawnAt")]
 	public static class Patch_RenderPawnAt
 	{
 		public static void Postfix(Pawn ___pawn)
@@ -79,25 +79,6 @@ namespace HediffResourceFramework
                     }
                 }
             }
-			return true;
-		}
-	}
-
-	[HarmonyPatch(typeof(Pawn_HealthTracker), "ShouldBeDowned")]
-	public static class Patch_ShouldBeDowned
-	{
-		private static bool Prefix(Pawn ___pawn)
-		{
-			if (___pawn?.health?.hediffSet?.hediffs != null)
-			{
-				foreach (var hediff in ___pawn.health.hediffSet.hediffs)
-				{
-					if (hediff is HediffResource hediffResource && hediff.CurStage is HediffStageResource hediffStageResource && hediffStageResource.preventDowning)
-					{
-						return false;
-					}
-				}
-			}
 			return true;
 		}
 	}

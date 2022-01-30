@@ -85,8 +85,9 @@ namespace HediffResourceFramework
             var dinfoSource = __result.First();
             if (__instance.caster is Pawn instigator)
             {
-                foreach (var hediff in instigator.health.hediffSet.hediffs)
+                for (int i = instigator.health.hediffSet.hediffs.Count - 1; i >= 0; i--)
                 {
+                    var hediff = instigator.health.hediffSet.hediffs[i];
                     var extension2 = hediff.def.GetModExtension<ResourceOnActionExtension>();
                     if (extension2 != null)
                     {

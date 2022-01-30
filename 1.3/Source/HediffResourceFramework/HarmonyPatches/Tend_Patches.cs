@@ -99,9 +99,21 @@ namespace HediffResourceFramework
             }
         }
 
+        public class HardCodedTendData
+        {
+            public float quality;
+            public float maxQuality;
+        }
+
+        public static HardCodedTendData hardCodedTendData;
         public static void DoTendingEffect(Pawn doctor, Pawn patient, ref float quality, ref float maxQuality)
         {
-            if (doctor.HasEnoughResourceToTend(out var data))
+            if (hardCodedTendData != null)
+            {
+                quality = hardCodedTendData.quality;
+                maxQuality = hardCodedTendData.maxQuality;
+            }
+            else if (doctor.HasEnoughResourceToTend(out var data))
             {
                 quality = CalculateBaseTendQuality(doctor, patient, data.Item2);
                 maxQuality = data.Item2.statBases.First(x => x.stat == StatDefOf.MedicalQualityMax).value;

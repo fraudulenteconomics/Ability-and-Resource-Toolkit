@@ -46,7 +46,7 @@ namespace HediffResourceFramework
                     resourceAmount = 0;
                 }
 
-                parent.GetResourceFor(hediffOption).UpdateSeverity();
+                parent.GetResourceFor(hediffOption)?.UpdateSeverity();
             }
         }
         public float ResourceCapacity

@@ -33,6 +33,7 @@
 		<showInResourceTab>true</showInResourceTab>
 		<stages>
 			<li Class="HediffResourceFramework.HediffStageResource">
+				<label>Stage One</label>
 				<resourceGainPerDamages>
 					<li>
 						<damageDef>Burn</damageDef>
@@ -161,9 +162,28 @@
 					<affectMelee>true</affectMelee>
 					<affectRanged>true</affectRanged>
 				</lifeStealProperties>
+				<tendingProperties>
+					<tendCount>2</tendCount>
+					<tendQuality>0.5~1</tendQuality>
+					<ticksPerEffect>60</ticksPerEffect>
+					<affectConditions>true</affectConditions>
+					<tendOnApply>true</tendOnApply>
+				</tendingProperties>
+				<togglingProperties>
+					<cooldownTime>3000</cooldownTime>
+					<changeTime>100</changeTime>
+					<graphicData>
+						<texPath>Things/Mote/PowerBeam</texPath>
+						<color>(189,169,118)</color>
+					</graphicData>
+					<soundOnToggle>ToxicBuildupGained</soundOnToggle>
+				</togglingProperties>
 			</li>
 			<li Class="HediffResourceFramework.HediffStageResource">
+				<label>Stage Two</label>
 				<minSeverity>50</minSeverity>
+				<preventDeath>true</preventDeath>
+				<preventDowning>true</preventDowning>
 				<skillAdjustProperties>
 					<li>
 						<skill>Shooting</skill>
@@ -178,8 +198,21 @@
 						<forcedPassion>Major</forcedPassion>					
 					</li>
 				</skillAdjustProperties>
+				<togglingProperties>
+					<cooldownTime>3000</cooldownTime>
+					<changeTime>100</changeTime>
+					<graphicData>
+						<texPath>Things/Mote/PowerBeam</texPath>
+						<color>(189,169,118)</color>
+					</graphicData>
+					<soundOnToggle>ToxicBuildupGained</soundOnToggle>
+				</togglingProperties>
 			</li>
 		</stages>
+		<fallbackTogglingGraphicData>
+			<texPath>Things/Mote/PowerBeam</texPath>
+			<color>(189,169,118)</color>
+		</fallbackTogglingGraphicData>
 		<ignoreTerrain>true</ignoreTerrain>
 	</HediffResourceFramework.HediffResourceDef>
 

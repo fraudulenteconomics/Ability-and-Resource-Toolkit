@@ -120,94 +120,97 @@ namespace HediffResourceFramework
 
 		public static void ImpactThing(Projectile __instance, Thing hitThing, DamageInfo source)
         {
-			if (hitThing != null && HediffResourceManager.Instance.firedProjectiles.TryGetValue(__instance, out var firedData))
+			if (hitThing != null)
 			{
-				var targetPawn = hitThing as Pawn;
-				if (targetPawn != null)
-				{
-					var extension = firedData.equipment?.def.GetModExtension<ResourceOnActionExtension>();
-					if (extension != null)
+				if (HediffResourceManager.Instance.firedProjectiles.TryGetValue(__instance, out var firedData))
+                {
+					var targetPawn = hitThing as Pawn;
+					if (targetPawn != null)
 					{
-						foreach (var resourceOnAction in extension.resourcesOnAction)
+						var extension = firedData.equipment?.def.GetModExtension<ResourceOnActionExtension>();
+						if (extension != null)
 						{
-							if (!resourceOnAction.onSelf)
+							foreach (var resourceOnAction in extension.resourcesOnAction)
 							{
-								resourceOnAction.TryApplyOn(targetPawn);
-							}
-						}
-					}
-
-					if (firedData.caster is Pawn pawn)
-					{
-						foreach (var hediff in pawn.health.hediffSet.hediffs)
-						{
-							var extension2 = hediff.def.GetModExtension<ResourceOnActionExtension>();
-							if (extension2 != null)
-							{
-								foreach (var resourceOnAction in extension2.resourcesOnAction)
+								if (!resourceOnAction.onSelf)
 								{
-									if (!resourceOnAction.onSelf)
-									{
-										resourceOnAction.TryApplyOn(targetPawn);
-									}
+									resourceOnAction.TryApplyOn(targetPawn);
 								}
 							}
 						}
-					}
-				}
 
-				var stuffExtension = firedData.equipment?.Stuff?.GetModExtension<StuffExtension>();
-				if (stuffExtension != null)
-				{
-					stuffExtension.DamageThing(firedData.caster, hitThing, source, true, false);
-				}
-
-				Log.Message("Projectile fire data: __instance: " + __instance + " - hitThing: " + hitThing + " - source: " + source + " - caster: " + firedData.caster);
-
-				if (firedData.caster is Pawn instigator)
-				{
-					Log.Message("Iterating over pawn: " + instigator);
-					if (instigator.health?.hediffSet.hediffs != null)
-					{
-						Log.Message("Checking hediffs on: " + instigator);
-						foreach (var hediff in instigator.health.hediffSet.hediffs)
+						if (firedData.caster is Pawn pawn)
 						{
-							Log.Message("Checking hediff on: " + hediff);
-							if (hediff is HediffResource hediffResource && hediffResource.CurStage is HediffStageResource hediffStageResource)
+							foreach (var hediff in pawn.health.hediffSet.hediffs)
 							{
-								Log.Message("Passed hediff: " + hediff);
-								if (hediffStageResource.additionalDamages != null)
-                                {
-									foreach (var additionalDamage in hediffStageResource.additionalDamages)
+								var extension2 = hediff.def.GetModExtension<ResourceOnActionExtension>();
+								if (extension2 != null)
+								{
+									foreach (var resourceOnAction in extension2.resourcesOnAction)
 									{
-										Log.Message("Looking at : " + additionalDamage.damage + " - " + additionalDamage.damageRange);
-										if (additionalDamage.damageRange)
+										if (!resourceOnAction.onSelf)
 										{
-											var damageAmount = additionalDamage.amount.RandomInRange;
-											var damage = new DamageInfo(additionalDamage.damage, damageAmount, instigator: source.Instigator, hitPart: source.HitPart, weapon: source.Weapon);
-											Log.Message(hitThing + " should take damage: " + damage);
-											hitThing.TakeDamage(damage);
-											Log.Message(hitThing + " 2 should take damage: " + damage);
-										}
-										else
-										{
-											Log.Message(hitThing + " won't take damage: " + additionalDamage.damage);
+											resourceOnAction.TryApplyOn(targetPawn);
 										}
 									}
 								}
-								if (targetPawn != null && hediffStageResource.lifeStealProperties != null && hediffStageResource.lifeStealProperties.affectRanged)
-                                {
+							}
+						}
+					}
 
-                                }
-									
+					var stuffExtension = firedData.equipment?.Stuff?.GetModExtension<StuffExtension>();
+					if (stuffExtension != null)
+					{
+						stuffExtension.DamageThing(firedData.caster, hitThing, source, true, false);
+					}
+
+					Log.Message("Projectile fire data: __instance: " + __instance + " - hitThing: " + hitThing + " - source: " + source + " - caster: " + firedData.caster);
+
+					if (firedData.caster is Pawn instigator)
+					{
+						Log.Message("Iterating over pawn: " + instigator);
+						if (instigator.health?.hediffSet.hediffs != null)
+						{
+							Log.Message("Checking hediffs on: " + instigator);
+							for (int i = instigator.health.hediffSet.hediffs.Count - 1; i >= 0; i--)
+							{
+								var hediff = instigator.health.hediffSet.hediffs[i];
+								Log.Message("Checking hediff on: " + hediff);
+								if (hediff is HediffResource hediffResource && hediffResource.CurStage is HediffStageResource hediffStageResource)
+								{
+									Log.Message("Passed hediff: " + hediff);
+									if (hediffStageResource.additionalDamages != null)
+									{
+										foreach (var additionalDamage in hediffStageResource.additionalDamages)
+										{
+											Log.Message("Looking at : " + additionalDamage.damage + " - " + additionalDamage.damageRange);
+											if (additionalDamage.damageRange)
+											{
+												var damageAmount = additionalDamage.amount.RandomInRange;
+												var damage = new DamageInfo(additionalDamage.damage, damageAmount, instigator: source.Instigator, hitPart: source.HitPart, weapon: source.Weapon);
+												Log.Message(hitThing + " should take damage: " + damage);
+												hitThing.TakeDamage(damage);
+												Log.Message(hitThing + " 2 should take damage: " + damage);
+											}
+											else
+											{
+												Log.Message(hitThing + " won't take damage: " + additionalDamage.damage);
+											}
+										}
+									}
+									if (targetPawn != null && hediffStageResource.lifeStealProperties != null && hediffStageResource.lifeStealProperties.affectRanged)
+									{
+										hediffStageResource.lifeStealProperties.StealLife(instigator, targetPawn, source);
+									}
+								}
 							}
 						}
 					}
 				}
-			}
-			else
-            {
-				Log.Error("Projectile fire data isn't found: __instance: " + __instance + " - hitThing: " + hitThing + " - source: " + source);
+				else
+				{
+					Log.Error("Projectile fire data isn't found: __instance: " + __instance + " - hitThing: " + hitThing + " - source: " + source);
+				}
 			}
 		}
 	}

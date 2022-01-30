@@ -37,5 +37,7 @@ namespace HediffResourceFramework
 		public bool ignoreTerrain;
 		public bool useAbsoluteSeverity;
 		public bool restrictResourceCap = true;
+
+		public GraphicData fallbackTogglingGraphicData;
 	}
 }

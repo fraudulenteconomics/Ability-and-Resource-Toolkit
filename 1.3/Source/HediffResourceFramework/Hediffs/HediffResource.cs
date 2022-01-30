@@ -11,37 +11,6 @@ using Verse.Sound;
 
 namespace HediffResourceFramework
 {
-    public class SavedSkillRecordCollection : IExposable
-    {
-        public List<SavedSkillRecord> savedSkillRecords = new List<SavedSkillRecord>();
-        public SavedSkillRecordCollection()
-        {
-            savedSkillRecords = new List<SavedSkillRecord>();
-        }
-        public void ExposeData()
-        {
-            Scribe_Collections.Look(ref savedSkillRecords, "savedSkillRecords", LookMode.Deep);
-            if (savedSkillRecords is null)
-            {
-                savedSkillRecords = new List<SavedSkillRecord>();
-            }
-        }
-    }
-    public class SavedSkillRecord : IExposable
-    {
-        public SkillDef def;
-
-        public int levelInt;
-
-        public Passion passion;
-
-        public void ExposeData()
-        {
-            Scribe_Defs.Look(ref def, "def");
-            Scribe_Values.Look(ref levelInt, "levelInt");
-            Scribe_Values.Look(ref passion, "passion");
-        }
-    }
     public class HediffResource : HediffWithComps, IResourceGenerator
     {
         public new HediffResourceDef def => base.def as HediffResourceDef;
@@ -49,8 +18,17 @@ namespace HediffResourceFramework
         public int duration;
         public int delayTicks;
         public int lastHealingEffectTick;
+        public int lastTendingEffectTick;
         public int lastDamagingEffectTick;
+
+        public int lastStageSwitchTick;
+        public int lastStageActivatedTick;
+        public int stageSwitchTickToActivate;
+        public int stageIndexToActivate = -1;
+        public int curCooldownPeriod;
+        public int curChangeTime;
         public int previousStageIndex;
+
         public Dictionary<int, SavedSkillRecordCollection> savedSkillRecordsByStages;
         public List<Thing> amplifiers = new List<Thing>();
         public HediffResource()
@@ -523,6 +501,10 @@ namespace HediffResourceFramework
                 {
                     DoHeal(hediffStageResource.healingProperties);
                 }
+                if (hediffStageResource.tendingProperties != null && hediffStageResource.tendingProperties.tendOnApply)
+                {
+                    DoTend(hediffStageResource.tendingProperties);
+                }
                 if (hediffStageResource.skillAdjustProperties != null)
                 {
                     foreach (var skillAdjust in hediffStageResource.skillAdjustProperties)
@@ -605,14 +587,101 @@ namespace HediffResourceFramework
                 {
                     DoHeal(hediffStageResource.healingProperties);
                 }
-
+                if (hediffStageResource.tendingProperties != null && Find.TickManager.TicksGame >= lastTendingEffectTick + hediffStageResource.tendingProperties.ticksPerEffect)
+                {
+                    DoTend(hediffStageResource.tendingProperties);
+                }
                 if (hediffStageResource.damageAuraProperties != null && Find.TickManager.TicksGame >= lastDamagingEffectTick + hediffStageResource.damageAuraProperties.ticksPerEffect)
                 {
                     DoDamage(hediffStageResource.damageAuraProperties);
                 }
             }
+
+            if (stageIndexToActivate != -1 && Find.TickManager.TicksGame >= stageSwitchTickToActivate)
+            {
+                SwitchToStage(stageIndexToActivate);
+            }
         }
 
+        public override IEnumerable<Gizmo> GetGizmos()
+        {
+            var toggleableStages = this.def.stages.OfType<HediffStageResource>().Where(x => x.togglingProperties != null);
+            if (toggleableStages.Any())
+            {
+                yield return new Command_SwitchHediffStageResource(this)
+                {
+                    defaultLabel = this.def.label + " - " + this.CurStage.label,
+                    icon = GetIcon(),
+                    action = delegate
+                    {
+                        var options = new List<FloatMenuOption>();
+                        var otherStages = toggleableStages.Where(x => x != this.CurStage).ToList();
+                        foreach (var otherStage in otherStages)
+                        {
+                            options.Add(new FloatMenuOption(this.def.label + " - " + otherStage.label, delegate
+                            {
+                                lastStageSwitchTick = Find.TickManager.TicksGame;
+                                stageSwitchTickToActivate = Find.TickManager.TicksGame + otherStage.togglingProperties.changeTime;
+                                curChangeTime = otherStage.togglingProperties.changeTime;
+                                curCooldownPeriod = otherStage.togglingProperties.cooldownTime;
+                                stageIndexToActivate = this.def.stages.IndexOf(otherStage);
+                                Log.Message("Activating " + stageIndexToActivate);
+                            }));
+                        }
+                        Find.WindowStack.Add(new FloatMenu(options));
+                    },
+                    disabled = !IsActive()
+                };
+            }
+            Texture2D GetIcon()
+            {
+                if (this.CurStage is HediffStageResource stageResource && stageResource.togglingProperties.graphicData != null)
+                {
+                    return ContentFinder<Texture2D>.Get(stageResource.togglingProperties.graphicData.texPath);
+                }
+                return ContentFinder<Texture2D>.Get(this.def.fallbackTogglingGraphicData.texPath);
+            }
+
+            bool IsActive()
+            {
+                if (this.lastStageActivatedTick > 0)
+                {
+                    var cooldownTicksRemaining = Find.TickManager.TicksGame - this.lastStageActivatedTick;
+                    if (cooldownTicksRemaining < this.curCooldownPeriod)
+                    {
+                        return false;
+                    }
+                }
+                if (this.lastStageSwitchTick > 0)
+                {
+                    var cooldownTicksRemaining = Find.TickManager.TicksGame - this.lastStageSwitchTick;
+                    if (cooldownTicksRemaining < this.curChangeTime)
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+        }
+
+        private void SwitchToStage(int stageIndex)
+        {
+            var stage = this.def.stages[stageIndex] as HediffStageResource;
+            if (this.def.useAbsoluteSeverity)
+            {
+                this.Severity = this.ResourceAmount = this.ResourceCapacity * stage.minSeverity;
+            }
+            else
+            {
+                this.Severity = this.ResourceAmount = stage.minSeverity;
+            }
+            if (stage.togglingProperties.soundOnToggle != null)
+            {
+                stage.togglingProperties.soundOnToggle.PlayOneShot(new TargetInfo(pawn.Position, pawn.Map));
+            }
+            this.lastStageActivatedTick = Find.TickManager.TicksGame;
+            stageIndexToActivate = -1;
+        }
         private void DoDamage(DamageAuraProperties damagingProperties)
         {
             lastDamagingEffectTick = Find.TickManager.TicksGame;
@@ -720,6 +789,30 @@ namespace HediffResourceFramework
                     }
                     Log.Message("AFTER: " + this.pawn + " - removing skill adjust: " + skillAdjust.skill + " - " + skillRecord.levelInt + " - " + skillRecord.passion + ", severity: " + this.Severity);
                 }
+            }
+        }
+
+        public void DoTend(TendingProperties tendingProperties)
+        {
+            Log.Message(pawn + " tending");
+            lastTendingEffectTick = Find.TickManager.TicksGame;
+            var hediffs = tendingProperties.affectConditions 
+                ? pawn.health.hediffSet.hediffs.Where(x => x.TendableNow()).ToList() 
+                : pawn.health.hediffSet.hediffs.Where(x => x is Hediff_Injury && x.TendableNow()).ToList();
+            if (hediffs.Any())
+            {
+                hediffs = hediffs.Take(tendingProperties.tendCount).ToList();
+                TendUtility_DoTend_Patch.hardCodedTendData = new TendUtility_DoTend_Patch.HardCodedTendData
+                {
+                    quality = tendingProperties.tendQuality.RandomInRange,
+                    maxQuality = tendingProperties.tendQuality.max
+                };
+                foreach (var hediff in hediffs)
+                {
+                    Log.Message("Tending " + hediff);
+                    TendUtility.DoTend(null, pawn, null);
+                }
+                TendUtility_DoTend_Patch.hardCodedTendData = null;
             }
         }
 
@@ -877,10 +970,19 @@ namespace HediffResourceFramework
             Scribe_Values.Look(ref duration, "duration");
             Scribe_Values.Look(ref delayTicks, "delayTicks");
             Scribe_Values.Look(ref lastHealingEffectTick, "lastHealingEffectTick");
+            Scribe_Values.Look(ref lastTendingEffectTick, "lastTendingEffectTick");
             Scribe_Values.Look(ref lastDamagingEffectTick, "lastDamagingEffectTick");
+
+            Scribe_Values.Look(ref stageIndexToActivate, "stageIndexToActivate", -1);
+            Scribe_Values.Look(ref lastStageActivatedTick, "lastStageActivatedTick");
+            Scribe_Values.Look(ref stageSwitchTickToActivate, "stageSwitchTickToActivate");
+            Scribe_Values.Look(ref curCooldownPeriod, "curCooldownPeriod");
+            Scribe_Values.Look(ref curChangeTime, "curChangeTime");
+            Scribe_Values.Look(ref lastStageSwitchTick, "lastStageSwitchTick");
+
+            Scribe_Values.Look(ref previousStageIndex, "previousStageIndex");
             Scribe_Collections.Look(ref amplifiers, "amplifiers", LookMode.Reference);
             Scribe_Collections.Look(ref savedSkillRecordsByStages, "savedSkillRecordsByStages", LookMode.Value, LookMode.Deep);
-            Scribe_Values.Look(ref previousStageIndex, "previousStageIndex");
             PreInit();
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
