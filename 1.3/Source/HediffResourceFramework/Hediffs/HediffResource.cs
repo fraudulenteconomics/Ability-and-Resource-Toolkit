@@ -831,7 +831,8 @@ namespace HediffResourceFramework
         {
             foreach (var hediff in pawn.health.hediffSet.hediffs)
             {
-                if (healingProperties.affectIllness && !(hediff is Hediff_Injury) && !(hediff is Hediff_MissingPart) && hediff.def.PossibleToDevelopImmunityNaturally() && !hediff.FullyImmune())
+                if (healingProperties.affectIllness && !(hediff is Hediff_Injury) && !(hediff is Hediff_MissingPart) 
+                    && (hediff.def.PossibleToDevelopImmunityNaturally() && !hediff.FullyImmune() || hediff.def.makesSickThought && hediff.def.tendable))
                 {
                     yield return hediff;
                 }
@@ -840,6 +841,10 @@ namespace HediffResourceFramework
                     yield return hediff;
                 }
                 else if (healingProperties.affectPermanent && hediff.IsPermanent())
+                {
+                    yield return hediff;
+                }
+                else if (healingProperties.affectChronic && hediff.def.chronic)
                 {
                     yield return hediff;
                 }
@@ -920,10 +925,8 @@ namespace HediffResourceFramework
                     matrix.SetTRS(drawPos, Quaternion.identity, s);
                     var auraMaterial = GetAuraMaterial(hediffStageResource.damageAuraProperties.auraGraphic);
                     Graphics.DrawMesh(MeshPool.plane10, matrix, auraMaterial, 0);
-                    Log.Message("Should draw: " + auraMaterial);
                 }
             }
-            Log.Message("draw");
         }
         public override void ExposeData()
         {

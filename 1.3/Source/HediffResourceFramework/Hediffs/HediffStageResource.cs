@@ -59,6 +59,7 @@ namespace HediffResourceFramework
         public float healPoints;
         public int hediffsToHeal;
         public bool affectPermanent;
+        public bool affectChronic;
         public bool affectIllness;
         public bool affectInjuries;
         public bool pointsOverflow;
