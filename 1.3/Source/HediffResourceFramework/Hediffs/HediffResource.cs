@@ -202,8 +202,9 @@ namespace HediffResourceFramework
 
         public void UpdateData()
         {
-            var resourceAmount = ResourceAmount;
+            var resourceAmount = ResourceAmountNoStorages;
             var resourceCapacity = ResourceCapacity;
+
             if (this.def.restrictResourceCap && resourceAmount > resourceCapacity)
             {
                 ResourceAmount = resourceAmount = resourceCapacity;
@@ -311,7 +312,6 @@ namespace HediffResourceFramework
         {
             get
             {
-                Log.Message("amplifiers: " + amplifiers.Count);
                 for (int num = amplifiers.Count - 1; num >= 0; num--)
                 {
                     var amplifier = amplifiers[num];
@@ -421,7 +421,7 @@ namespace HediffResourceFramework
                 {
                     return true;
                 }
-                if (this.def.keepWhenEmpty && this.ResourceAmount <= 0)
+                if (this.def.keepWhenEmpty)
                 {
                     return false;
                 }

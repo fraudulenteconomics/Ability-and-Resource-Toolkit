@@ -106,7 +106,7 @@ namespace HediffResourceFramework
 			var resourceAmount = resourceAmountCache.Value;
 			var resourceCapacity = resourceCapacityCache.Value;
 			var resourceStorage = resourceBatteryAmountCache.Value;
-			var resourceStorageCapacity = resourceBatteryAmountCache.Value;
+			var resourceStorageCapacity = resourceStorageCapacityCache.Value;
 
 			Rect resourceAmountBar = contractedBox;
 			resourceAmountBar.height = yTest;

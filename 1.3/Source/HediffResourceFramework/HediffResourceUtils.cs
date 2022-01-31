@@ -858,6 +858,7 @@ namespace HediffResourceFramework
 
 		public static void ApplyChargeResource(ref float damageAmount, ChargeResources chargeResources)
 		{
+			Log.Message("Old damage: " + damageAmount);
 			foreach (var chargeResource in chargeResources.chargeResources)
 			{
 				switch (chargeResource.chargeSettings.damageScaling)
@@ -868,6 +869,7 @@ namespace HediffResourceFramework
 					default: break;
 				}
 			}
+			Log.Message("New damage: " + damageAmount);
 		}
 
 		private static void DoFlatDamage(ref float __result, float resourceAmount, ChargeSettings chargeSettings)
