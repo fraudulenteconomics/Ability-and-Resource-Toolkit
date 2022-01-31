@@ -65,6 +65,7 @@ namespace HediffResourceFramework
         }
         public void AppendResource(Pawn pawn, HediffOption hediffOption, float num)
         {
+            Log.Message("AppendResource: " + pawn);
             var hediffResource = pawn.health.hediffSet.GetFirstHediffOfDef(hediffOption.hediff) as HediffResource;
             if (hediffResource != null && !hediffResource.CanGainResource)
             {

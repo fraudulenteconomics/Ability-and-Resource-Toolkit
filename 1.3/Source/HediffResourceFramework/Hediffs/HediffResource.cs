@@ -291,6 +291,7 @@ namespace HediffResourceFramework
             float num = 0;
             foreach (var compAmplifier in Amplifiers)
             {
+                Log.Message("compAmplifier: " + compAmplifier);
                 var gain = compAmplifier.GetResourceCapacityGainFor(this.def);
                 explanation.AppendLine("HRF.CapacityAmplifier".Translate(compAmplifier.Parent, gain));
                 num += gain;
@@ -310,6 +311,7 @@ namespace HediffResourceFramework
         {
             get
             {
+                Log.Message("amplifiers: " + amplifiers.Count);
                 for (int num = amplifiers.Count - 1; num >= 0; num--)
                 {
                     var amplifier = amplifiers[num];

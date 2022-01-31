@@ -186,9 +186,9 @@ namespace HediffResourceFramework
         }
 
         public CompProperties_ThingInUse Props => (CompProperties_ThingInUse)this.props;
-        public List<HediffOption> ResourceSettings => throw new NotImplementedException();
-        public Dictionary<HediffResource, HediffResouceDisable> PostUseDelayTicks => throw new NotImplementedException();
-        public string DisablePostUse => throw new NotImplementedException();
+        public List<HediffOption> ResourceSettings => null;
+        public Dictionary<HediffResource, HediffResouceDisable> PostUseDelayTicks => null;
+        public string DisablePostUse => null;
         public Thing Parent => this.parent;
         public Pawn PawnHost => null;
         public void ResourceTick()
@@ -367,12 +367,12 @@ namespace HediffResourceFramework
 
         public void Drop()
         {
-            throw new NotImplementedException();
+
         }
 
         public void Notify_Removed()
         {
-            throw new NotImplementedException();
+
         }
 
         public bool TryGetQuality(out QualityCategory qc)

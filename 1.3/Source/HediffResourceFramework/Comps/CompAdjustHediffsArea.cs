@@ -34,6 +34,9 @@ namespace HediffResourceFramework
         }
         public override void ResourceTick()
         {
+            Log.Message("Active: " + Active + " - " + this);
+            Log.Message("this.parent.Map: " + this.parent.Map);
+            Log.Message(" IsEnabled(): " + IsEnabled());
             if (Active)
             {
                 foreach (var option in Props.resourceSettings)
@@ -92,6 +95,7 @@ namespace HediffResourceFramework
         }
         public void AppendResource(Pawn pawn, HediffOption option, float num)
         {
+            Log.Message("AppendResource: " + pawn);
             var hediffResource = pawn.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
             if (hediffResource != null && !hediffResource.CanGainResource)
             {
