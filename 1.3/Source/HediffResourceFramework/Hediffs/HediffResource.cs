@@ -195,20 +195,26 @@ namespace HediffResourceFramework
                 }
                 else
                 {
-                    UpdateSeverity();
+                    UpdateData();
                 }
             }
         }
 
-        public void UpdateSeverity()
+        public void UpdateData()
         {
+            var resourceAmount = ResourceAmount;
+            var resourceCapacity = ResourceCapacity;
+            if (this.def.restrictResourceCap && resourceAmount > resourceCapacity)
+            {
+                ResourceAmount = resourceAmount = resourceCapacity;
+            }
             if (this.def.useAbsoluteSeverity)
             {
-                this.Severity = ResourceAmount / ResourceCapacity;
+                this.Severity = resourceAmount / resourceCapacity;
             }
             else
             {
-                this.Severity = ResourceAmount;
+                this.Severity = resourceAmount;
             }
         }
 
@@ -218,7 +224,7 @@ namespace HediffResourceFramework
         {
             get
             {
-                return this.def.maxResourceCapacity + HediffResourceUtils.GetHediffResourceCapacityGainFor(this.pawn, def) + GetHediffResourceCapacityGainFromAmplifiers();
+                return this.def.maxResourceCapacity + HediffResourceUtils.GetHediffResourceCapacityGainFor(this.pawn, def, out _) + GetHediffResourceCapacityGainFromAmplifiers(out _);
             }
         }
         public float ResourceCapacity
@@ -279,12 +285,15 @@ namespace HediffResourceFramework
         }
 
         public Dictionary<Thing, IAdjustResouceInArea> cachedAmplifiers = new Dictionary<Thing, IAdjustResouceInArea>();
-        public float GetHediffResourceCapacityGainFromAmplifiers()
+        public float GetHediffResourceCapacityGainFromAmplifiers(out StringBuilder explanation)
         {
+            explanation = new StringBuilder();
             float num = 0;
             foreach (var compAmplifier in Amplifiers)
             {
-                num += compAmplifier.GetResourceCapacityGainFor(this.def);
+                var gain = compAmplifier.GetResourceCapacityGainFor(this.def);
+                explanation.AppendLine("HRF.CapacityAmplifier".Translate(compAmplifier.Parent, gain));
+                num += gain;
             }
             return num;
         }
@@ -356,12 +365,12 @@ namespace HediffResourceFramework
                     label += ": " + this.resourceAmount.ToStringDecimalIfSmall() + "/" + this.ResourceCapacity.ToStringDecimalIfSmall();
                     if (StoragesTotalCapacity > 0)
                     {
-                        label += " (" + ResourceFromStorages + "/" + StoragesTotalCapacity + " " + "HRF.Stored".Translate() + ")";
+                        label += " (" + ResourceFromStorages.ToStringDecimalIfSmall() + "/" + StoragesTotalCapacity.ToStringDecimalIfSmall() + " " + "HRF.Stored".Translate() + ")";
                     }
                 }
                 if (this.def.lifetimeTicks != -1)
                 {
-                    label += " (" + Mathf.CeilToInt((this.def.lifetimeTicks - this.duration).TicksToSeconds()) + "s)";
+                    label += " (" + Mathf.CeilToInt((this.def.lifetimeTicks - this.duration)).ToStringTicksToPeriod() + ")";
                 }
                 if (this.CurStage is HediffStageResource hediffStageResource && hediffStageResource.effectWhenDowned != null && hediffStageResource.effectWhenDowned.ticksBetweenActivations > 0)
                 {
@@ -385,7 +394,20 @@ namespace HediffResourceFramework
         {
             get
             {
-                return base.TipStringExtra + "\n" + this.def.fulfilsTranslationKey.Translate((TotalResourceGainAmount()).ToStringDecimalIfSmall());
+                var allCapacityAdjusters = "HRF.NativeCapacity".Translate(this.def.maxResourceCapacity);
+                HediffResourceUtils.GetHediffResourceCapacityGainFor(this.pawn, def, out var sbExplanation);
+                var explanation = sbExplanation.ToString().TrimEndNewlines();
+                if (!explanation.NullOrEmpty())
+                {
+                    allCapacityAdjusters += "\n" + explanation;
+                }
+                GetHediffResourceCapacityGainFromAmplifiers(out sbExplanation);
+                explanation = sbExplanation.ToString().TrimEndNewlines();
+                if (!explanation.NullOrEmpty())
+                {
+                    allCapacityAdjusters += "\n" + explanation;
+                }
+                return base.TipStringExtra + allCapacityAdjusters;
             }
         }
 
@@ -473,7 +495,12 @@ namespace HediffResourceFramework
                     {
                         if (dinfo.Def != null && value.damageDef == dinfo.Def)
                         {
-                            this.ResourceAmount += value.GetResourceGain(totalDamageDealt);
+                            var resourceToGain = value.GetResourceGain(totalDamageDealt);
+                            var hediff = value.hediffToRefill != null ? this.pawn.health.hediffSet.GetFirstHediffOfDef(value.hediffToRefill) as HediffResource : this;
+                            if (hediff != null)
+                            {
+                                hediff.ResourceAmount += resourceToGain;
+                            }
                         }
                     }
                 }
@@ -488,7 +515,7 @@ namespace HediffResourceFramework
             base.PostAdd(dinfo);
             HRFLog.Message(this.def.defName + " adding resource hediff to " + this.pawn);
             this.resourceAmount = this.def.initialResourceAmount;
-            UpdateSeverity();
+            UpdateData();
             this.duration = 0;
             if (this.def.sendLetterWhenGained && this.pawn.Faction == Faction.OfPlayer)
             {
@@ -542,9 +569,13 @@ namespace HediffResourceFramework
         {
             base.Tick();
             this.duration++;
-            if (this.pawn.IsHashIntervalTick(30) && ResourceCapacity < 0)
+            if (this.pawn.IsHashIntervalTick(30))
             {
-                HediffResourceUtils.TryDropExcessHediffGears(this.pawn);
+                UpdateData();
+                if (ResourceCapacity < 0)
+                {
+                    HediffResourceUtils.TryDropExcessHediffGears(this.pawn);
+                }
             }
             var hediffStageResource = this.CurStage as HediffStageResource;
             if (this.previousStageIndex != this.CurStageIndex)
@@ -605,62 +636,65 @@ namespace HediffResourceFramework
 
         public override IEnumerable<Gizmo> GetGizmos()
         {
-            var toggleableStages = this.def.stages.OfType<HediffStageResource>().Where(x => x.togglingProperties != null);
-            if (toggleableStages.Any())
+            if (this.def.stages != null)
             {
-                yield return new Command_SwitchHediffStageResource(this)
+                var toggleableStages = this.def.stages.OfType<HediffStageResource>().Where(x => x.togglingProperties != null);
+                if (toggleableStages.Any())
                 {
-                    defaultLabel = this.def.label + " - " + this.CurStage.label,
-                    icon = GetIcon(),
-                    action = delegate
+                    yield return new Command_SwitchHediffStageResource(this)
                     {
-                        var options = new List<FloatMenuOption>();
-                        var otherStages = toggleableStages.Where(x => x != this.CurStage).ToList();
-                        foreach (var otherStage in otherStages)
+                        defaultLabel = this.def.label + " - " + this.CurStage.label,
+                        icon = GetIcon(),
+                        action = delegate
                         {
-                            options.Add(new FloatMenuOption(this.def.label + " - " + otherStage.label, delegate
+                            var options = new List<FloatMenuOption>();
+                            var otherStages = toggleableStages.Where(x => x != this.CurStage).ToList();
+                            foreach (var otherStage in otherStages)
                             {
-                                lastStageSwitchTick = Find.TickManager.TicksGame;
-                                stageSwitchTickToActivate = Find.TickManager.TicksGame + otherStage.togglingProperties.changeTime;
-                                curChangeTime = otherStage.togglingProperties.changeTime;
-                                curCooldownPeriod = otherStage.togglingProperties.cooldownTime;
-                                stageIndexToActivate = this.def.stages.IndexOf(otherStage);
-                                Log.Message("Activating " + stageIndexToActivate);
-                            }));
+                                options.Add(new FloatMenuOption(this.def.label + " - " + otherStage.label, delegate
+                                {
+                                    lastStageSwitchTick = Find.TickManager.TicksGame;
+                                    stageSwitchTickToActivate = Find.TickManager.TicksGame + otherStage.togglingProperties.changeTime;
+                                    curChangeTime = otherStage.togglingProperties.changeTime;
+                                    curCooldownPeriod = otherStage.togglingProperties.cooldownTime;
+                                    stageIndexToActivate = this.def.stages.IndexOf(otherStage);
+                                    Log.Message("Activating " + stageIndexToActivate);
+                                }));
+                            }
+                            Find.WindowStack.Add(new FloatMenu(options));
+                        },
+                        disabled = !IsActive()
+                    };
+                    Texture2D GetIcon()
+                    {
+                        if (this.CurStage is HediffStageResource stageResource && stageResource.togglingProperties.graphicData != null)
+                        {
+                            return ContentFinder<Texture2D>.Get(stageResource.togglingProperties.graphicData.texPath);
                         }
-                        Find.WindowStack.Add(new FloatMenu(options));
-                    },
-                    disabled = !IsActive()
-                };
-            }
-            Texture2D GetIcon()
-            {
-                if (this.CurStage is HediffStageResource stageResource && stageResource.togglingProperties.graphicData != null)
-                {
-                    return ContentFinder<Texture2D>.Get(stageResource.togglingProperties.graphicData.texPath);
-                }
-                return ContentFinder<Texture2D>.Get(this.def.fallbackTogglingGraphicData.texPath);
-            }
+                        return ContentFinder<Texture2D>.Get(this.def.fallbackTogglingGraphicData.texPath);
+                    }
 
-            bool IsActive()
-            {
-                if (this.lastStageActivatedTick > 0)
-                {
-                    var cooldownTicksRemaining = Find.TickManager.TicksGame - this.lastStageActivatedTick;
-                    if (cooldownTicksRemaining < this.curCooldownPeriod)
+                    bool IsActive()
                     {
-                        return false;
+                        if (this.lastStageActivatedTick > 0)
+                        {
+                            var cooldownTicksRemaining = Find.TickManager.TicksGame - this.lastStageActivatedTick;
+                            if (cooldownTicksRemaining < this.curCooldownPeriod)
+                            {
+                                return false;
+                            }
+                        }
+                        if (this.lastStageSwitchTick > 0)
+                        {
+                            var cooldownTicksRemaining = Find.TickManager.TicksGame - this.lastStageSwitchTick;
+                            if (cooldownTicksRemaining < this.curChangeTime)
+                            {
+                                return false;
+                            }
+                        }
+                        return true;
                     }
                 }
-                if (this.lastStageSwitchTick > 0)
-                {
-                    var cooldownTicksRemaining = Find.TickManager.TicksGame - this.lastStageSwitchTick;
-                    if (cooldownTicksRemaining < this.curChangeTime)
-                    {
-                        return false;
-                    }
-                }
-                return true;
             }
         }
 

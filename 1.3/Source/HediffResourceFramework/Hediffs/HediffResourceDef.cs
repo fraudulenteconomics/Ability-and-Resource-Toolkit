@@ -22,7 +22,6 @@ namespace HediffResourceFramework
 		public Color? backgroundBarColor;
 		public Color? progressBarColor;
 		public Color? resourceBarTextColor;
-		public string fulfilsTranslationKey;
 
 		public bool sendLetterWhenGained;
 		public LetterDef letterType;

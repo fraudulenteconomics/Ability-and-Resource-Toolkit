@@ -10,7 +10,7 @@ namespace HediffResourceFramework
 		public float? flat;
 		public float? point;
 		public DamageDef damageDef;
-
+        public HediffResourceDef hediffToRefill;
 		public float GetResourceGain(float damageAmount)
         {
             float num = 0f;

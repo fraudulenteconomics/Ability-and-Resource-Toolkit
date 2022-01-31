@@ -7,19 +7,14 @@ using System.Security.Cryptography;
 using UnityEngine.Networking.Types;
 using UnityEngine;
 using Verse;
-using static UnityEngine.UIElements.UxmlAttributeDescription;
-using Ionic.Zlib;
-using static UnityEngine.GraphicsBuffer;
-using UnityEngine.SocialPlatforms;
-using Verse.Noise;
-using static RimWorld.FleshTypeDef;
-using static RimWorld.MechClusterSketch;
-using System.Runtime.Remoting.Messaging;
-using Mono.Cecil;
-using static Mono.Security.X509.X520;
+
 
 namespace HediffResourceFramework
 {
+    public class QualityAdjustProperties
+    {
+        public float qualityOffset;
+    }
     public class HediffStageResource : HediffStage
     {
         public List<HediffOption> resourceSettings;
@@ -42,6 +37,7 @@ namespace HediffResourceFramework
         public LifeStealProperties lifeStealProperties;
         public TendingProperties tendingProperties;
         public TogglingProperties togglingProperties;
+        public QualityAdjustProperties qualityAdjustProperties;
         public bool ShieldIsActive(Pawn pawn)
         {
             if (shieldProperties != null)

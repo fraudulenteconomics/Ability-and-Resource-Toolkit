@@ -23,6 +23,7 @@ namespace HediffResourceFramework
         public override Pawn PawnHost => Apparel.Wearer;
         public override void Notify_Removed()
         {
+            Log.Message("Removed: " + PawnHost);
             if (PawnHost != null)
             {
                 HediffResourceUtils.RemoveExcessHediffResources(PawnHost, this);

@@ -26,21 +26,11 @@ namespace HediffResourceFramework
 		{
 			if (equipment != null)
             {
-				var extension = equipment.def.GetModExtension<ResourceOnActionExtension>();
-				if (extension != null)
+				HediffResourceManager.Instance.firedProjectiles[__instance] = new FiredData
 				{
-					foreach (var resourceOnAction in extension.resourcesOnAction)
-					{
-						if (!resourceOnAction.onSelf)
-						{
-							HediffResourceManager.Instance.firedProjectiles[__instance] = new FiredData
-                            {
-								caster = launcher,
-								equipment = equipment,
-                            };
-						}
-					}
-				}
+					caster = launcher,
+					equipment = equipment,
+				};
 			}
 
 			if (launcher is Pawn pawn && Patch_TryCastShot.verbSource != null)
@@ -364,38 +354,21 @@ namespace HediffResourceFramework
 		}
 	}
 
-	[HarmonyPatch(typeof(Pawn_HealthTracker), "MakeDowned")]
-	public static class MakeDowned_Patch
+	[HarmonyPatch(typeof(ThingWithComps), "Destroy")]
+	public static class Patch_Destroy
 	{
-		private static void Postfix(Pawn ___pawn, DamageInfo? dinfo, Hediff hediff)
+		public static void Prefix(ThingWithComps __instance)
 		{
-			foreach (var h in ___pawn.health.hediffSet.hediffs)
+			if (__instance.comps != null)
             {
-				if (h is HediffResource hr && hr.CurStage is HediffStageResource hediffStageResource && hediffStageResource.effectWhenDowned != null)
-                {
-					if (!HediffResourceManager.Instance.pawnDownedStates.TryGetValue(___pawn, out var downedStateData))
+				foreach (var comp in __instance.comps)
+				{
+					if (comp is IAdjustResource adjustResource)
                     {
-						HediffResourceManager.Instance.pawnDownedStates[___pawn] = downedStateData = new DownedStateData
-						{
-							lastDownedEffectTicks = new Dictionary<HediffResourceDef, int>()
-						};
+						adjustResource.Notify_Removed();
 					}
-					if (hediffStageResource.effectWhenDowned.ticksBetweenActivations > 0 && 
-						(!downedStateData.lastDownedEffectTicks.TryGetValue(hr.def, out var value) || Find.TickManager.TicksGame >= value + hediffStageResource.effectWhenDowned.ticksBetweenActivations))
-                    {
-						downedStateData.lastDownedEffectTicks[hr.def] = Find.TickManager.TicksGame;
-						var hediffToApply = hediffStageResource.effectWhenDowned.hediff != null ? hediffStageResource.effectWhenDowned.hediff : hr.def;
-						if (hediffToApply is HediffResourceDef resourceDef)
-                        {
-							HediffResourceUtils.AdjustResourceAmount(___pawn, resourceDef, hediffStageResource.effectWhenDowned.apply, true, null);
-						}
-						else
-                        {
-							HealthUtility.AdjustSeverity(___pawn, hediffToApply, hediffStageResource.effectWhenDowned.apply);
-                        }
-					}
-                }
-            }
+				}
+			}
 		}
 	}
 }

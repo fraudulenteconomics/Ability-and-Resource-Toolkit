@@ -40,5 +40,7 @@
 	<HRF.WillBeActiveIn>Will be active in {0}</HRF.WillBeActiveIn>
 	<HRF.NotEnoughResource>Not enough resource</HRF.NotEnoughResource>
 	<FE.CannotUseMissingFusionReactor>{PAWN_nameDef} cannot use {1}: {2}</FE.CannotUseMissingFusionReactor>
-
+	<HRF.NativeCapacity>Native capacity: {0}</HRF.NativeCapacity>
+	<HRF.CapacityAdjuster>Capacity adjuster: {0} - {1}</HRF.CapacityAdjuster>
+	<HRF.CapacityAmplifier>Capacity amplifier: {0} - {1}</HRF.CapacityAmplifier>
 </LanguageData>

@@ -100,9 +100,9 @@ namespace HediffResourceFramework
         private BoolPawnsValueCache boolValueCache;
         public bool InUse(out IEnumerable<Pawn> claimants)
         {
-            if (Find.TickManager.TicksGame + 60 > boolValueCache.updateTick)
+            if (boolValueCache is null || Find.TickManager.TicksGame + 60 > boolValueCache.updateTick)
             {
-                boolValueCache.Value = InUseInt(out IEnumerable<Pawn> pawns);
+                boolValueCache = new BoolPawnsValueCache(InUseInt(out IEnumerable<Pawn> pawns), pawns);
             }
             claimants = boolValueCache.pawns;
             return boolValueCache.value;

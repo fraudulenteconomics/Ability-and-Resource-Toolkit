@@ -318,8 +318,9 @@ namespace HediffResourceFramework
 			}
 			return adjustHediffs;
 		}
-		public static float GetHediffResourceCapacityGainFor(Pawn pawn, HediffResourceDef hdDef)
+		public static float GetHediffResourceCapacityGainFor(Pawn pawn, HediffResourceDef hdDef, out StringBuilder explanation)
 		{
+			explanation = new StringBuilder();
 			float result = 0;
 			var comps = GetAllAdjustResourceComps(pawn);
 			foreach (var comp in comps)
@@ -331,13 +332,16 @@ namespace HediffResourceFramework
 					{
 						if (option.hediff == hdDef)
 						{
-							result += GetCapacityFor(comp, option);
+							var gain = GetCapacityFor(comp, option);
+							result += gain;
+							explanation.AppendLine("HRF.CapacityAdjuster".Translate(comp.Parent.Label, gain));
 						}
 					}
 				}
 			}
 			return result;
 		}
+
 
 		public static float GetCapacityFor(this IAdjustResource props, HediffOption hediffOption)
 		{

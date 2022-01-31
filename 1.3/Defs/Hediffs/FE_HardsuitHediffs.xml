@@ -178,6 +178,9 @@
 					</graphicData>
 					<soundOnToggle>ToxicBuildupGained</soundOnToggle>
 				</togglingProperties>
+				<qualityAdjustProperties>
+					<qualityOffset>1.5</qualityOffset>
+				</qualityAdjustProperties>
 			</li>
 			<li Class="HediffResourceFramework.HediffStageResource">
 				<label>Stage Two</label>
@@ -207,6 +210,9 @@
 					</graphicData>
 					<soundOnToggle>ToxicBuildupGained</soundOnToggle>
 				</togglingProperties>
+				<qualityAdjustProperties>
+					<qualityOffset>1.5</qualityOffset>
+				</qualityAdjustProperties>
 			</li>
 		</stages>
 		<fallbackTogglingGraphicData>

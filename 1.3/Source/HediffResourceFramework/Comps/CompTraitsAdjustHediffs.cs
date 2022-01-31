@@ -55,6 +55,7 @@ namespace HediffResourceFramework
 
         public override void Drop()
         {
+
         }
         public override void PostDestroy(DestroyMode mode, Map previousMap)
         {

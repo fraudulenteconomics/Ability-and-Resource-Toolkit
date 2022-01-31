@@ -16,11 +16,19 @@ namespace HediffResourceFramework
     [HarmonyPatch(typeof(GenRecipe), "MakeRecipeProducts")]
     internal static class MakeRecipeProducts_Patch
     {
-        private static void Postfix(ref IEnumerable<Thing> __result, RecipeDef recipeDef, Pawn worker, List<Thing> ingredients, Thing dominantIngredient, IBillGiver billGiver)
+        private static IEnumerable<Thing> Postfix(IEnumerable<Thing> __result, RecipeDef recipeDef, Pawn worker, List<Thing> ingredients, Thing dominantIngredient, IBillGiver billGiver)
+        {
+            foreach (var result in __result)
+            {
+                ProcessThing(worker, billGiver, result);
+                yield return result;
+            }
+        }
+
+        private static void ProcessThing(Pawn worker, IBillGiver billGiver, Thing result)
         {
             if (billGiver is Thing workBench && CompThingInUse.things.TryGetValue(workBench, out var comp))
             {
-                var list = __result.ToList();
                 Dictionary<StatDef, StatBonus> statValues = new Dictionary<StatDef, StatBonus>();
                 foreach (var useProps in comp.Props.useProperties)
                 {
@@ -84,22 +92,17 @@ namespace HediffResourceFramework
                         statBonuses.statBonuses[statValue.Key] = statBonus;
                     }
 
-                    for (var i = 0; i < list.Count; i++)
+                    while (result.stackCount > result.def.stackLimit) // with HRF we can get overstacked things when resource in use is active.
+                                                                      // when the game does that, it creates new things in place of overstacked things and then we can't tract them.
+                                                                      // this is a workaround to solve it.
                     {
-                        while (list[i].stackCount > list[i].def.stackLimit) // with HRF we can get overstacked things when resource in use is active.
-                                                                            // when the game does that, it creates new things in place of overstacked things and then we can't tract them.
-                                                                            // this is a workaround to solve it.
-                        {
-                            var thing = list[i].SplitOff(list[i].def.stackLimit);
-                            thing.stackCount = list[i].def.stackLimit;
-                            GenPlace.TryPlaceThing(thing, worker.Position, worker.Map, ThingPlaceMode.Near);
-                            hediffResourceManager.thingsWithBonuses[thing] = statBonuses;
-                        }
-                        list[i].stackCount = list[i].def.stackLimit;
-                        hediffResourceManager.thingsWithBonuses[list[i]] = statBonuses;
+                        var thing = result.SplitOff(result.def.stackLimit);
+                        GenPlace.TryPlaceThing(thing, worker.Position, worker.Map, ThingPlaceMode.Near);
+                        hediffResourceManager.thingsWithBonuses[thing] = statBonuses;
                     }
+                    result.stackCount = result.def.stackLimit;
+                    hediffResourceManager.thingsWithBonuses[result] = statBonuses;
                 }
-                __result = list;
             }
         }
     }
@@ -119,25 +122,52 @@ namespace HediffResourceFramework
     {
         private static void Postfix(ref QualityCategory __result, Pawn pawn, SkillDef relevantSkill)
         {
-            if (pawn.CurJobDef == JobDefOf.DoBill && CompThingInUse.things.TryGetValue(pawn.CurJob.targetA.Thing, out var comp))
+            if (pawn.CurJobDef == JobDefOf.DoBill)
             {
-                foreach (var useProps in comp.Props.useProperties)
+                if (CompThingInUse.things.TryGetValue(pawn.CurJob.targetA.Thing, out var comp))
                 {
-                    if (comp.UseIsEnabled(useProps) && useProps.increaseQuality != -1 && __result < useProps.increaseQualityCeiling)
+                    foreach (var useProps in comp.Props.useProperties)
                     {
-                        var hediffResource = pawn.health.hediffSet.GetFirstHediffOfDef(useProps.hediff) as HediffResource;
-                        if (hediffResource != null && hediffResource.CanUse(useProps, out _))
+                        if (comp.UseIsEnabled(useProps) && useProps.increaseQuality != -1 && __result < useProps.increaseQualityCeiling)
                         {
-                            var result = (int)__result + (int)useProps.increaseQuality;
+                            var hediffResource = pawn.health.hediffSet.GetFirstHediffOfDef(useProps.hediff) as HediffResource;
+                            if (hediffResource != null && hediffResource.CanUse(useProps, out _))
+                            {
+                                var result = (int)__result + (int)useProps.increaseQuality;
+                                if (result > (int)QualityCategory.Legendary)
+                                {
+                                    result = (int)QualityCategory.Legendary;
+                                }
+                                if (result > (int)useProps.increaseQualityCeiling)
+                                {
+                                    result = (int)useProps.increaseQualityCeiling;
+                                }
+                                __result = (QualityCategory)result;
+                            }
+                        }
+                    }
+                }
+
+                if (pawn.health?.hediffSet?.hediffs != null)
+                {
+                    foreach (var hediff in pawn.health.hediffSet.hediffs)
+                    {
+                        if (hediff is HediffResource hediffResource && hediffResource.CurStage is HediffStageResource hediffStageResource && hediffStageResource.qualityAdjustProperties != null)
+                        {
+                            var qualityBonus = (int)Math.Truncate(hediffStageResource.qualityAdjustProperties.qualityOffset);
+                            var decimalPart = hediffStageResource.qualityAdjustProperties.qualityOffset - qualityBonus;
+                            if (Rand.Chance(decimalPart))
+                            {
+                                qualityBonus += 1;
+                            }
+                            var result = (int)__result + (int)qualityBonus;
                             if (result > (int)QualityCategory.Legendary)
                             {
                                 result = (int)QualityCategory.Legendary;
                             }
-                            if (result > (int)useProps.increaseQualityCeiling)
-                            {
-                                result = (int)useProps.increaseQualityCeiling;
-                            }
+                            Log.Message("Old result: " + __result);
                             __result = (QualityCategory)result;
+                            Log.Message("New result: " + __result);
                         }
                     }
                 }
@@ -162,7 +192,6 @@ namespace HediffResourceFramework
             {
                 IEnumerable<Pawn> users = null;
                 Dictionary<Pawn, Dictionary<UseProps, HediffResource>> checkedPawnsResources = new Dictionary<Pawn, Dictionary<UseProps, HediffResource>>();
-                var oldResult = __result;
                 foreach (var useProps in comp.Props.useProperties)
                 {
                     if (!comp.UseIsEnabled(useProps))
@@ -183,21 +212,16 @@ namespace HediffResourceFramework
                                 {
                                     if (!checkedPawnsResources.TryGetValue(user, out var hediffResourceDict))
                                     {
-                                        if (hediffResourceDict is null)
-                                        {
-                                            hediffResourceDict = new Dictionary<UseProps, HediffResource>();
-                                        }
-                                        hediffResourceDict[useProps] = user.health.hediffSet.GetFirstHediffOfDef(useProps.hediff) as HediffResource;
-                                        checkedPawnsResources[user] = hediffResourceDict;
+                                        checkedPawnsResources[user] = hediffResourceDict = new Dictionary<UseProps, HediffResource>();
                                     }
-                                    if (hediffResourceDict != null && hediffResourceDict.TryGetValue(useProps, out HediffResource hediffResource))
+                                    if (!hediffResourceDict.TryGetValue(useProps, out var hediffResource))
                                     {
-                                        if (hediffResource.CanUse(useProps, out _))
-                                        {
-                                            HRFLog.Message($"1 Due to an user {user} with {useProps.hediff} - {hediffResource}, {thing} is gaining a bonus to {stat}!");
-                                            __result += statModifier.value;
-                                            break;
-                                        }
+                                        hediffResourceDict[useProps] = hediffResource = user.health.hediffSet.GetFirstHediffOfDef(useProps.hediff) as HediffResource;
+                                    }
+                                    if (hediffResource != null && hediffResource.CanUse(useProps, out _))
+                                    {
+                                        __result += statModifier.value;
+                                        break;
                                     }
                                 }
                             }
@@ -218,21 +242,17 @@ namespace HediffResourceFramework
                                 {
                                     if (!checkedPawnsResources.TryGetValue(user, out var hediffResourceDict))
                                     {
-                                        if (hediffResourceDict is null)
-                                        {
-                                            hediffResourceDict = new Dictionary<UseProps, HediffResource>();
-                                        }
-                                        hediffResourceDict[useProps] = user.health.hediffSet.GetFirstHediffOfDef(useProps.hediff) as HediffResource;
-                                        checkedPawnsResources[user] = hediffResourceDict;
+                                        checkedPawnsResources[user] = hediffResourceDict = new Dictionary<UseProps, HediffResource>();
                                     }
-                                    if (hediffResourceDict != null && hediffResourceDict.TryGetValue(useProps, out HediffResource hediffResource))
+                                    if (!hediffResourceDict.TryGetValue(useProps, out var hediffResource))
                                     {
-                                        if (hediffResource.CanUse(useProps, out _))
-                                        {
-                                            HRFLog.Message($"2 Due to an user {user} with {useProps.hediff} - {hediffResource}, {thing} is gaining a bonus to {stat}!");
-                                            __result *= statModifier.value;
-                                            break;
-                                        }
+                                        hediffResourceDict[useProps] = hediffResource = user.health.hediffSet.GetFirstHediffOfDef(useProps.hediff) as HediffResource;
+                                    }
+
+                                    if (hediffResource != null && hediffResource.CanUse(useProps, out _))
+                                    {
+                                        __result *= statModifier.value;
+                                        break;
                                     }
                                 }
                             }
