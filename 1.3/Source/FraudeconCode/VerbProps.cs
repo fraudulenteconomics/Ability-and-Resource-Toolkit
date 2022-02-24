@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using HediffResourceFramework;
+using ART;
 using RimWorld;
 using Verse;
 

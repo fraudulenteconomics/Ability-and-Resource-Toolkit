@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <Defs>
 
   <ThingDef ParentName="ResourceBase">
@@ -54,7 +54,7 @@
     <terrainAffordanceNeeded>Medium</terrainAffordanceNeeded>
     <allowedArchonexusCount>80</allowedArchonexusCount>
 	<modExtensions>
-		<li Class="HediffResourceFramework.StuffExtension">
+		<li Class="ART.StuffExtension">
 			<resourceSettings>
 				<li>
 					<hediff>FE_FusionReactor</hediff>

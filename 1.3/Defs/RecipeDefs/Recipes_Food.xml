@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Defs>
 
   <ThingDef ParentName="OrganicProductBase">
@@ -37,8 +37,8 @@
   </ThingDef>
   
 	<RecipeDef>
-		<defName>HRF_Make_Kibble</defName>
-		<label>HRF make kibble</label>
+		<defName>ART_Make_Kibble</defName>
+		<label>ART make kibble</label>
 		<description>Make animal kibble by combining raw meat and plants.</description>
 		<jobString>Making kibble.</jobString>
 		<workAmount>450</workAmount>
@@ -50,12 +50,12 @@
 		</products>
 		<workSkill>Cooking</workSkill>
 		<modExtensions>
-			<li Class="HediffResourceFramework.RecipeResourceIngredients">
+			<li Class="ART.RecipeResourceIngredients">
 				<recourseCostList>
 					<FE_FusionReactor>10</FE_FusionReactor>
 				</recourseCostList>
 			</li>
-			<li Class="HediffResourceFramework.RecipeOutcomes">
+			<li Class="ART.RecipeOutcomes">
 				<recipeOutcomes>
 					<li>
 						<costs>
@@ -64,9 +64,9 @@
 						<products>
 							<InfusedKibble>50</InfusedKibble>
 						</products>
-						<topLeftMessageSuccessKey>HRF.Make_KibbleInfused</topLeftMessageSuccessKey>
-						<letterTitleSuccessKey>HRF.Make_KibbleInfusedTitle</letterTitleSuccessKey>
-						<letterDescriptionSuccessKey>HRF.Make_KibbleInfused</letterDescriptionSuccessKey>
+						<topLeftMessageSuccessKey>ART.Make_KibbleInfused</topLeftMessageSuccessKey>
+						<letterTitleSuccessKey>ART.Make_KibbleInfusedTitle</letterTitleSuccessKey>
+						<letterDescriptionSuccessKey>ART.Make_KibbleInfused</letterDescriptionSuccessKey>
 						<soundDef>BuildingDestroyed_Metal_Medium</soundDef>
 					</li>
 				</recipeOutcomes>
@@ -75,8 +75,8 @@
 	</RecipeDef>
 
 	<RecipeDef>
-		<defName>HRF_Make_Pemmican</defName>
-		<label>HRF make pemmican</label>
+		<defName>ART_Make_Pemmican</defName>
+		<label>ART make pemmican</label>
 		<description>Make pemmican, a preserved combination of meat and plant food. It doesn't taste amazing, but lasts a long time without refrigeration.</description>
 		<jobString>Making pemmican.</jobString>
 		<workAmount>700</workAmount>
@@ -89,7 +89,7 @@
 		</products>
 		<workSkill>Cooking</workSkill>
 		<modExtensions>
-			<li Class="HediffResourceFramework.RecipeResourceIngredients">
+			<li Class="ART.RecipeResourceIngredients">
 				<recourseCostList>
 					<FE_FusionReactor>50</FE_FusionReactor>
 				</recourseCostList>
@@ -98,8 +98,8 @@
 	</RecipeDef>
 
 	<RecipeDef>
-		<defName>HRF_Make_PemmicanBulk</defName>
-		<label>HRF make pemmican x4</label>
+		<defName>ART_Make_PemmicanBulk</defName>
+		<label>ART make pemmican x4</label>
 		<description>Make bulk pemmican, a preserved combination of meat and plant food. It doesn't taste amazing, but lasts a long time without refrigeration.</description>
 		<jobString>Making bulk pemmican.</jobString>
 		<workAmount>80</workAmount>
@@ -112,7 +112,7 @@
 		</products>
 		<workSkill>Cooking</workSkill>
 		<modExtensions>
-			<li Class="HediffResourceFramework.RecipeResourceIngredients">
+			<li Class="ART.RecipeResourceIngredients">
 				<recourseCostList>
 					<FE_FusionReactor>150</FE_FusionReactor>
 				</recourseCostList>
@@ -121,8 +121,8 @@
 	</RecipeDef>
 
 	<RecipeDef>
-		<defName>HRF_Convert_PemmicanBulk</defName>
-		<label>HRF convert pemmican x4</label>
+		<defName>ART_Convert_PemmicanBulk</defName>
+		<label>ART convert pemmican x4</label>
 		<description>Make bulk pemmican, a preserved combination of meat and plant food. It doesn't taste amazing, but lasts a long time without refrigeration.</description>
 		<jobString>Making bulk pemmican.</jobString>
 		<workAmount>80</workAmount>
@@ -152,7 +152,7 @@
 		<soundWorking>Recipe_CookMeal</soundWorking>
 		<workSkill>Cooking</workSkill>
 		<modExtensions>
-			<li Class="HediffResourceFramework.RecipeResourceIngredients">
+			<li Class="ART.RecipeResourceIngredients">
 				<recourseCostList>
 					<FE_FusionReactor>-150</FE_FusionReactor>
 				</recourseCostList>

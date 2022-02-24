@@ -73,7 +73,7 @@
 		</apparel>
 		<comps Inherit="False">
 			<li Class="CompProperties_Forbiddable"/>
-			<li Class="HediffResourceFramework.CompProperties_ApparelAdjustHediffs">
+			<li Class="ART.CompProperties_ApparelAdjustHediffs">
 				<resourceSettings>
 					<li>
 						<hediff>FE_BoilerplateHediff</hediff>
@@ -153,7 +153,7 @@
 		</apparel>
 		<comps Inherit="False">
 			<li Class="CompProperties_Forbiddable"/>
-			<li Class="HediffResourceFramework.CompProperties_ApparelAdjustHediffs">
+			<li Class="ART.CompProperties_ApparelAdjustHediffs">
 				<resourceSettings>
 					<li>
 						<hediff>FE_ExoframeHediff</hediff>
@@ -236,7 +236,7 @@
 		</apparel>
 		<comps Inherit="False">
 			<li Class="CompProperties_Forbiddable"/>
-			<li Class="HediffResourceFramework.CompProperties_ApparelAdjustHediffs">
+			<li Class="ART.CompProperties_ApparelAdjustHediffs">
 				<resourceSettings>
 					<li>
 						<hediff>FE_HardsuitHediff</hediff>
@@ -426,7 +426,7 @@
 			<DeteriorationRate>0</DeteriorationRate>
 		</statBases>
 		<comps>
-			<li Class="HediffResourceFramework.CompProperties_ApparelAdjustHediffs">
+			<li Class="ART.CompProperties_ApparelAdjustHediffs">
 				<resourceSettings>
 					<li>
 						<hediff>FE_BoilerplateHediff</hediff>
@@ -535,7 +535,7 @@
 			</defaultOutfitTags>	
 		</apparel>
 		<comps>
-			<li Class="HediffResourceFramework.CompProperties_ApparelAdjustHediffs">
+			<li Class="ART.CompProperties_ApparelAdjustHediffs">
 				<resourceSettings>
 					<li>
 						<hediff>FE_BoilerplateHediff</hediff>
@@ -644,7 +644,7 @@
 			</defaultOutfitTags>	
 		</apparel>
 		<comps>
-			<li Class="HediffResourceFramework.CompProperties_ApparelAdjustHediffs">
+			<li Class="ART.CompProperties_ApparelAdjustHediffs">
 				<resourceSettings>
 					<li>
 						<hediff>FE_BoilerplateHediff</hediff>
@@ -754,7 +754,7 @@
 			<Steel>40</Steel>
 		</costList>
 		<verbs>
-			<li Class="HediffResourceFramework.VerbResourceProps">
+			<li Class="ART.VerbResourceProps">
 				<resourceSettings>
 					<li>
 						<hediff>FE_SteamTank</hediff>
@@ -790,7 +790,7 @@
 			</li>
 		</verbs>
 		<comps>
-			<li Class="HediffResourceFramework.CompProperties_ApparelAdjustHediffs">
+			<li Class="ART.CompProperties_ApparelAdjustHediffs">
 				<resourceSettings>
 					<li>
 						<hediff>FE_BoilerplateHediff</hediff>
@@ -851,7 +851,7 @@
 			<Cloth>25</Cloth>
 		</costList>
 		<verbs>
-			<li Class="HediffResourceFramework.VerbResourceProps">
+			<li Class="ART.VerbResourceProps">
 				<resourceSettings>
 					<li>
 						<hediff>FE_SteamTank</hediff>
@@ -875,7 +875,7 @@
 						<effectRadius>1.9</effectRadius>
 					</li>
 				</targetResourceSettings>
-				<verbClass>HediffResourceFramework.Verb_ResourceTarget</verbClass>
+				<verbClass>ART.Verb_ResourceTarget</verbClass>
 				<label>netlauncher</label>
 				<hasStandardCommand>true</hasStandardCommand>
 				<defaultProjectile>FE_ChargeBurstBullet</defaultProjectile>
@@ -899,7 +899,7 @@
 			</li>
 		</verbs>
 		<comps>
-			<li Class="HediffResourceFramework.CompProperties_ApparelAdjustHediffs">
+			<li Class="ART.CompProperties_ApparelAdjustHediffs">
 				<resourceSettings>
 					<li>
 						<hediff>FE_BoilerplateHediff</hediff>
@@ -968,7 +968,7 @@
 			<Cloth>25</Cloth>
 		</costList>
 		<verbs>
-			<li Class="HediffResourceFramework.VerbResourceProps">
+			<li Class="ART.VerbResourceProps">
 				<resourceSettings>
 					<li>
 						<hediff>FE_SteamTank</hediff>
@@ -992,7 +992,7 @@
 						<effectRadius>0</effectRadius>
 					</li>
 				</targetResourceSettings>
-				<verbClass>HediffResourceFramework.Verb_ResourceTarget</verbClass>
+				<verbClass>ART.Verb_ResourceTarget</verbClass>
 				<label>poulticedispenser</label>
 				<hasStandardCommand>true</hasStandardCommand>
 				<defaultProjectile>FE_ChargeBurstBullet</defaultProjectile>
@@ -1019,7 +1019,7 @@
 			</li>
 		</verbs>
 		<comps>
-			<li Class="HediffResourceFramework.CompProperties_ApparelAdjustHediffs">
+			<li Class="ART.CompProperties_ApparelAdjustHediffs">
 				<resourceSettings>
 					<li>
 						<hediff>FE_BoilerplateHediff</hediff>
@@ -1128,7 +1128,7 @@
 			</li>
 		</verbs>
 		<comps>
-			<li Class="HediffResourceFramework.CompProperties_ApparelAdjustHediffs">
+			<li Class="ART.CompProperties_ApparelAdjustHediffs">
 				<resourceSettings>
 					<li>
 						<hediff>FE_BoilerplateHediff</hediff>
@@ -1187,7 +1187,7 @@
 			<Steel>40</Steel>
 		</costList>
 		<comps>
-			<li Class="HediffResourceFramework.CompProperties_ApparelAdjustHediffs">
+			<li Class="ART.CompProperties_ApparelAdjustHediffs">
 				<resourceSettings>
 					<li>
 						<hediff>FE_BoilerplateHediff</hediff>
@@ -1278,7 +1278,7 @@
 			</li>
 		</verbs>
 		<comps>
-			<li Class="HediffResourceFramework.CompProperties_ApparelAdjustHediffs">
+			<li Class="ART.CompProperties_ApparelAdjustHediffs">
 				<resourceSettings>
 					<li>
 						<hediff>FE_BoilerplateHediff</hediff>
@@ -1340,7 +1340,7 @@
 			<Steel>40</Steel>
 		</costList>
 		<comps>
-			<li Class="HediffResourceFramework.CompProperties_ApparelAdjustHediffs">
+			<li Class="ART.CompProperties_ApparelAdjustHediffs">
 				<resourceSettings>
 					<li>
 						<hediff>FE_BoilerplateHediff</hediff>
@@ -1401,7 +1401,7 @@
 			<Silver>50</Silver>
 		</costList>
 		<comps>
-			<li Class="HediffResourceFramework.CompProperties_ApparelAdjustHediffs">
+			<li Class="ART.CompProperties_ApparelAdjustHediffs">
 				<resourceSettings>
 					<li>
 						<hediff>FE_BoilerplateHediff</hediff>
@@ -1463,7 +1463,7 @@
 			<Steel>40</Steel>
 		</costList>
 		<comps>
-			<li Class="HediffResourceFramework.CompProperties_ApparelAdjustHediffs">
+			<li Class="ART.CompProperties_ApparelAdjustHediffs">
 				<resourceSettings>
 					<li>
 						<hediff>FE_BoilerplateHediff</hediff>
@@ -1521,7 +1521,7 @@
 			<Silver>50</Silver>
 		</costList>
 		<comps>
-			<li Class="HediffResourceFramework.CompProperties_ApparelAdjustHediffs">
+			<li Class="ART.CompProperties_ApparelAdjustHediffs">
 				<resourceSettings>
 					<li>
 						<hediff>FE_BoilerplateHediff</hediff>
@@ -1570,7 +1570,7 @@
 			<Silver>30</Silver>
 		</costList>
 		<comps>
-			<li Class="HediffResourceFramework.CompProperties_ApparelAdjustHediffs">
+			<li Class="ART.CompProperties_ApparelAdjustHediffs">
 				<resourceSettings>
 					<li>
 						<hediff>FE_BoilerplateHediff</hediff>
@@ -1627,7 +1627,7 @@
 			<Silver>50</Silver>
 		</costList>
 		<comps>
-			<li Class="HediffResourceFramework.CompProperties_ApparelAdjustHediffs">
+			<li Class="ART.CompProperties_ApparelAdjustHediffs">
 				<resourceSettings>
 					<li>
 						<hediff>FE_BoilerplateHediff</hediff>
@@ -1685,7 +1685,7 @@
 			<Silver>70</Silver>
 		</costList>
 		<comps>
-			<li Class="HediffResourceFramework.CompProperties_ApparelAdjustHediffs">
+			<li Class="ART.CompProperties_ApparelAdjustHediffs">
 				<resourceSettings>
 					<li>
 						<hediff>FE_BoilerplateHediff</hediff>
@@ -1740,7 +1740,7 @@
 			<Gold>5</Gold>
 		</costList>
 		<comps>
-			<li Class="HediffResourceFramework.CompProperties_ApparelAdjustHediffs">
+			<li Class="ART.CompProperties_ApparelAdjustHediffs">
 				<resourceSettings>
 					<li>
 						<hediff>FE_BoilerplateHediff</hediff>
@@ -1799,7 +1799,7 @@
 			<Silver>20</Silver>
 		</costList>
 		<comps>
-			<li Class="HediffResourceFramework.CompProperties_ApparelAdjustHediffs">
+			<li Class="ART.CompProperties_ApparelAdjustHediffs">
 				<resourceSettings>
 					<li>
 						<hediff>FE_BoilerplateHediff</hediff>
@@ -1854,7 +1854,7 @@
 			<Gold>10</Gold>
 		</costList>
 		<comps>
-			<li Class="HediffResourceFramework.CompProperties_ApparelAdjustHediffs">
+			<li Class="ART.CompProperties_ApparelAdjustHediffs">
 				<resourceSettings>
 					<li>
 						<hediff>FE_BoilerplateHediff</hediff>
@@ -1910,7 +1910,7 @@
 			<li>RangedHeavy</li>
 		</weaponClasses>
 		<verbs>
-			<li Class="HediffResourceFramework.VerbResourceProps">
+			<li Class="ART.VerbResourceProps">
 				<resourceSettings>
 					<li>
 						<hediff>FE_SteamBowHediff</hediff>
@@ -1951,7 +1951,7 @@
 			</skillRequirements>
 		</recipeMaker>
 		<comps>
-			<li Class="HediffResourceFramework.CompProperties_WeaponAdjustHediffs">
+			<li Class="ART.CompProperties_WeaponAdjustHediffs">
 				<resourceSettings>
 					<li>
 						<hediff>FE_BoilerplateHediff</hediff>
@@ -2047,7 +2047,7 @@
 			</skillRequirements>
 		</recipeMaker>
 		<modExtensions>
-			<li Class="HediffResourceFramework.ResourceOnActionExtension">
+			<li Class="ART.ResourceOnActionExtension">
 				<resourcesOnAction>
 					<li>
 						<hediffApplied>FE_HeatCleaverHediff</hediffApplied>
@@ -2059,7 +2059,7 @@
 			</li>
 		</modExtensions>
 		<comps>
-			<li Class="HediffResourceFramework.CompProperties_WeaponAdjustHediffs">
+			<li Class="ART.CompProperties_WeaponAdjustHediffs">
 				<resourceSettings>
 					<li>
 						<hediff>FE_BoilerplateHediff</hediff>
@@ -2114,7 +2114,7 @@
 			<li>RangedHeavy</li>
 		</weaponClasses>
 		<verbs>
-			<li Class="HediffResourceFramework.VerbResourceProps">
+			<li Class="ART.VerbResourceProps">
 				<resourceSettings>
 					<li>
 						<hediff>FE_StoneFlingerHediff</hediff>
@@ -2156,7 +2156,7 @@
 			</skillRequirements>
 		</recipeMaker>
 		<comps>
-			<li Class="HediffResourceFramework.CompProperties_WeaponAdjustHediffs">
+			<li Class="ART.CompProperties_WeaponAdjustHediffs">
 				<resourceSettings>
 					<li>
 						<hediff>FE_BoilerplateHediff</hediff>

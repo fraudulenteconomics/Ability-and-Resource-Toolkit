@@ -2,7 +2,7 @@
 <Defs>
 
 	<TraitDef>
-		<defName>HRF_PowerUser</defName>
+		<defName>ART_PowerUser</defName>
 		<commonality>0.1</commonality>
 		<degreeDatas>
 			<li>
@@ -11,7 +11,7 @@
 			</li>
 		</degreeDatas>
 		<modExtensions>
-			<li Class="HediffResourceFramework.TraitsAdjustHediff">
+			<li Class="ART.TraitsAdjustHediff">
 				<resourceSettings>
 					<li>
 						<hediff>FE_FusionReactor</hediff>

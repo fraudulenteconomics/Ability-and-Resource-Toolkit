@@ -10,7 +10,7 @@
 		</descriptionHyperlinks>
 		<spawnThingOnRemoved>FE_FusionHeartThing</spawnThingOnRemoved>
 		<comps>
-			<li Class="HediffResourceFramework.HediffCompProperties_AdjustHediffs">
+			<li Class="ART.HediffCompProperties_AdjustHediffs">
 				<resourceSettings>
 					<li>
 						<hediff>FE_FusionReactor</hediff>
@@ -20,10 +20,10 @@
 					</li>
 				</resourceSettings>
 			</li>
-			<li Class="HediffResourceFramework.HediffCompProperties_ChargeResource"/>
+			<li Class="ART.HediffCompProperties_ChargeResource"/>
 			<li Class="MVCF.Comps.HediffCompProperties_ExtendedVerbGiver">
 				<verbs>
-					<li Class="HediffResourceFramework.VerbResourceProps">
+					<li Class="ART.VerbResourceProps">
 						<resourceSettings>
 							<li>
 								<hediff>FE_FusionReactor</hediff>
@@ -162,10 +162,10 @@
 			<ThingDef>FE_FusionArmThing</ThingDef>
 		</descriptionHyperlinks>
 		<comps>
-			<li Class="HediffResourceFramework.HediffCompProperties_ChargeResource"/>
+			<li Class="ART.HediffCompProperties_ChargeResource"/>
 			<li Class="MVCF.Comps.HediffCompProperties_ExtendedVerbGiver">
 				<verbs>
-					<li Class="HediffResourceFramework.VerbResourceProps">
+					<li Class="ART.VerbResourceProps">
 						<resourceSettings>
 							<li>
 								<hediff>FE_FusionReactor</hediff>
@@ -188,7 +188,7 @@
 								<affectsEnemies>false</affectsEnemies>-->
 							</li>
 						</targetResourceSettings>
-						<verbClass>HediffResourceFramework.Verb_ResourceTarget</verbClass>
+						<verbClass>ART.Verb_ResourceTarget</verbClass>
 						<label>surge</label>
 						<hasStandardCommand>true</hasStandardCommand>
 						<defaultProjectile>FE_StimInjectorBullet</defaultProjectile>
@@ -217,7 +217,7 @@
 			</li>
 			<li Class="HediffCompProperties_VerbGiver">
 				<tools>
-					<li Class="HediffResourceFramework.ToolResource">
+					<li Class="ART.ToolResource">
 						<label>fist</label>
 						<capacities>
 							<li>Blunt</li>

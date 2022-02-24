@@ -5,10 +5,10 @@
 			<li Class="PatchOperationAdd">
 				<xpath>/Defs/ThingDef[defName="Campfire"]/recipes</xpath>
 				<value>
-					<li>HRF_Make_Kibble</li>
-					<li>HRF_Make_Pemmican</li>
-					<li>HRF_Make_PemmicanBulk</li>
-					<li>HRF_Convert_PemmicanBulk</li>
+					<li>ART_Make_Kibble</li>
+					<li>ART_Make_Pemmican</li>
+					<li>ART_Make_PemmicanBulk</li>
+					<li>ART_Convert_PemmicanBulk</li>
 				</value>
 			</li>
 
@@ -19,7 +19,7 @@
 				<xpath>/Defs/ThinkTreeDef[defName='MainColonistBehaviorCore']/thinkRoot[@Class='ThinkNode_Tagger']/subNodes/li[@Class='ThinkNode_PrioritySorter']/subNodes</xpath>
 				<order>Prepend</order>
 				<value>
-					<li Class="HediffResourceFramework.JobGiver_RefillResource"/>
+					<li Class="ART.JobGiver_RefillResource"/>
 				</value>
 			</li>
 
@@ -37,7 +37,7 @@
 			<li Class="PatchOperationAdd">
 				<xpath>/Defs/ThingDef[thingClass="Building_WorkTable"]/comps</xpath>
 				<value>
-					<li Class="HediffResourceFramework.CompProperties_ThingInUse">
+					<li Class="ART.CompProperties_ThingInUse">
 						<useProperties>
 							<li>
 								<hediff>FE_FusionReactor</hediff>
@@ -134,7 +134,7 @@
 			<li Class="PatchOperationAdd">
 				<xpath>/Defs/ThingDef[thingClass="Building_WorkTable_HeatPush"]/comps</xpath>
 				<value>
-					<li Class="HediffResourceFramework.CompProperties_ThingInUse">
+					<li Class="ART.CompProperties_ThingInUse">
 						<useProperties>
 							<li>
 								<hediff>FE_FusionReactor</hediff>
@@ -229,7 +229,7 @@
 			<li Class="PatchOperationAdd">
 				<xpath>/Defs/ThingDef[thingClass="Building_Bed"]/comps</xpath>
 				<value>
-					<li Class="HediffResourceFramework.CompProperties_ThingInUse">
+					<li Class="ART.CompProperties_ThingInUse">
 						<useProperties>
 							<li>
 								<hediff>FE_FusionReactor</hediff>
@@ -261,7 +261,7 @@
 			<li Class="PatchOperationAddModExtension">
 				<xpath>/Defs/ThingDef[thingClass="Building_Bed"]</xpath>
 				<value>
-					<li Class="HediffResourceFramework.FacilityInProgress">
+					<li Class="ART.FacilityInProgress">
 						<useProperties>
 							<li>
 								<hediff>FE_FusionReactor</hediff>
@@ -292,7 +292,7 @@
 			<li Class="PatchOperationAddModExtension">
 				<xpath>/Defs/ThingDef[thingClass="Building_Bed"]</xpath>
 				<value>
-					<li Class="HediffResourceFramework.BuildingSpawnOptions">
+					<li Class="ART.BuildingSpawnOptions">
 						<materialReplaces>
 							<li>
 								<floorDef>Soil</floorDef>
@@ -312,7 +312,7 @@
 			<li Class="PatchOperationAddModExtension">
 				<xpath>/Defs/SkillDef[defName="Shooting"]</xpath>
 				<value>
-					<li Class="HediffResourceFramework.SkillHediffGrantOptions">
+					<li Class="ART.SkillHediffGrantOptions">
 						<hediffGrantRequirements>
 							<li>
 								<minLevel>5</minLevel>
@@ -340,7 +340,7 @@
 				<xpath>/Defs/ThingDef[defName="Plant_Healroot"]</xpath>
 				<value>
 					<comps>
-						<li Class="HediffResourceFramework.CompProperties_ThingInUse">
+						<li Class="ART.CompProperties_ThingInUse">
 							<useProperties>
 								<li>
 									<hediff>FE_ToxicFumes</hediff>
@@ -354,8 +354,8 @@
 									<addHediffIfMissing>false</addHediffIfMissing>
 									<hediffRequired>true</hediffRequired>
 									<cannotUseMessageKey>FE.CannotUseMissingFusionReactor</cannotUseMessageKey>
-									<cannotSowMessageKey>HRF.CannotUse</cannotSowMessageKey>
-									<cannotHarvestMessageKey>HRF.CannotUse</cannotHarvestMessageKey>
+									<cannotSowMessageKey>ART.CannotUse</cannotSowMessageKey>
+									<cannotHarvestMessageKey>ART.CannotUse</cannotHarvestMessageKey>
 									<resourceOnSow>-2</resourceOnSow>
 									<resourceOnHarvest>-5</resourceOnHarvest>
 									<scaleWithGrowthRate>false</scaleWithGrowthRate>
@@ -368,7 +368,7 @@
 			<li Class="PatchOperationAdd">
 				<xpath>/Defs/ThingDef[defName="Muffalo"]/comps</xpath>
 				<value>
-						<li Class="HediffResourceFramework.CompProperties_ThingInUse">
+						<li Class="ART.CompProperties_ThingInUse">
 							<useProperties>
 								<li>
 									<hediff>FE_FusionReactor</hediff>
@@ -377,9 +377,9 @@
 									<resourceOnTaming>-2</resourceOnTaming>
 									<resourceOnTraining>-2</resourceOnTraining>
 									<resourceOnGather>-5</resourceOnGather>
-									<cannotTameMessageKey>HRF.CannotUse</cannotTameMessageKey>
-									<cannotTrainMessageKey>HRF.CannotUse</cannotTrainMessageKey>
-									<cannotGatherMessageKey>HRF.CannotUse</cannotGatherMessageKey>
+									<cannotTameMessageKey>ART.CannotUse</cannotTameMessageKey>
+									<cannotTrainMessageKey>ART.CannotUse</cannotTrainMessageKey>
+									<cannotGatherMessageKey>ART.CannotUse</cannotGatherMessageKey>
 								</li>
 								<li>
 									<hediff>FE_ToxicFumes</hediff>
@@ -398,7 +398,7 @@
 				<xpath>/Defs/ThingDef[defName="LabradorRetriever"]</xpath>
 				<value>
 					<comps>
-						<li Class="HediffResourceFramework.CompProperties_ThingInUse">
+						<li Class="ART.CompProperties_ThingInUse">
 							<useProperties>
 								<li>
 									<hediff>FE_FusionReactor</hediff>
@@ -407,9 +407,9 @@
 									<resourceOnTaming>-2</resourceOnTaming>
 									<resourceOnTraining>-2</resourceOnTraining>
 									<resourceOnGather>-5</resourceOnGather>
-									<cannotTameMessageKey>HRF.CannotUse</cannotTameMessageKey>
-									<cannotTrainMessageKey>HRF.CannotUse</cannotTrainMessageKey>
-									<cannotGatherMessageKey>HRF.CannotUse</cannotGatherMessageKey>
+									<cannotTameMessageKey>ART.CannotUse</cannotTameMessageKey>
+									<cannotTrainMessageKey>ART.CannotUse</cannotTrainMessageKey>
+									<cannotGatherMessageKey>ART.CannotUse</cannotGatherMessageKey>
 								</li>
 								<li>
 									<hediff>FE_ToxicFumes</hediff>
@@ -428,7 +428,7 @@
 			<li Class="PatchOperationAddModExtension">
 				<xpath>/Defs/ThingDef[defName="MineableSteel"]</xpath>
 				<value>
-					<li Class="HediffResourceFramework.Extension_ThingInUse">
+					<li Class="ART.Extension_ThingInUse">
 						<useProperties>
 							<li>
 								<hediff>FE_ToxicFumes</hediff>
@@ -440,7 +440,7 @@
 								<addHediffIfMissing>false</addHediffIfMissing>
 								<hediffRequired>true</hediffRequired>
 								<resourceOnStrike>-2</resourceOnStrike>
-								<cannotMineMessageKey>HRF.CannotUse</cannotMineMessageKey>
+								<cannotMineMessageKey>ART.CannotUse</cannotMineMessageKey>
 							</li>
 						</useProperties>
 					</li>

@@ -88,7 +88,7 @@
 			</options>
 		</colorGenerator>
 		<comps>
-			<li Class="HediffResourceFramework.CompProperties_ApparelAdjustHediffs">
+			<li Class="ART.CompProperties_ApparelAdjustHediffs">
 				<resourceSettings>
 					<li>
 						<hediff>FE_FusionReactor</hediff>
@@ -198,7 +198,7 @@
 			</options>
 		</colorGenerator>
 		<comps>
-			<li Class="HediffResourceFramework.CompProperties_ApparelAdjustHediffs">
+			<li Class="ART.CompProperties_ApparelAdjustHediffs">
 				<resourceSettings>
 					<li>
 						<hediff>FE_FusionReactor</hediff>
@@ -315,7 +315,7 @@
 			</tags>
 		</apparel>
 		<comps>
-			<li Class="HediffResourceFramework.CompProperties_ApparelAdjustHediffs">
+			<li Class="ART.CompProperties_ApparelAdjustHediffs">
 				<resourceSettings>
 					<li>
 						<hediff>FE_FusionReactor</hediff>
@@ -409,7 +409,7 @@
 			<Uranium>20</Uranium>
 		</costList>
 		<comps>
-			<li Class="HediffResourceFramework.CompProperties_ApparelAdjustHediffs">
+			<li Class="ART.CompProperties_ApparelAdjustHediffs">
 				<resourceSettings>
 					<li>
 						<hediff>FE_FusionReactor</hediff>
@@ -460,7 +460,7 @@
 			<Uranium>20</Uranium>
 		</costList>
 		<comps>
-			<li Class="HediffResourceFramework.CompProperties_ApparelAdjustHediffs">
+			<li Class="ART.CompProperties_ApparelAdjustHediffs">
 				<resourceSettings>
 					<li>
 						<hediff>FE_FusionReactor</hediff>
@@ -516,7 +516,7 @@
 			<Uranium>20</Uranium>
 		</costList>
 		<comps>
-			<li Class="HediffResourceFramework.CompProperties_ApparelAdjustHediffs">
+			<li Class="ART.CompProperties_ApparelAdjustHediffs">
 				<resourceSettings>
 					<li>
 						<hediff>FE_FusionReactor</hediff>
@@ -529,7 +529,7 @@
 						<disallowEquipIfHediffMissing>true</disallowEquipIfHediffMissing>
 						<dropIfHediffMissing>true</dropIfHediffMissing>
 						<disallowEquipIfOverCapacity>true</disallowEquipIfOverCapacity>
-						<overCapacityReasonKey>HRF.FusionReactorOverCapacityReason</overCapacityReasonKey>
+						<overCapacityReasonKey>ART.FusionReactorOverCapacityReason</overCapacityReasonKey>
 						<dropIfOverCapacity>true</dropIfOverCapacity>
 						<blackListHediffsPreventEquipping>
 						</blackListHediffsPreventEquipping>
@@ -590,7 +590,7 @@
 			<Uranium>20</Uranium>
 		</costList>
 		<comps>
-			<li Class="HediffResourceFramework.CompProperties_ApparelAdjustHediffs">
+			<li Class="ART.CompProperties_ApparelAdjustHediffs">
 				<resourceSettings>
 					<li>
 						<hediff>FE_FusionReactor</hediff>
@@ -641,7 +641,7 @@
 			<Uranium>20</Uranium>
 		</costList>
 		<verbs>
-			<li Class="HediffResourceFramework.VerbResourceProps">
+			<li Class="ART.VerbResourceProps">
 				<resourceSettings>
 					<li>
 						<hediff>FE_FusionReactor</hediff>
@@ -680,7 +680,7 @@
 					</li>
 				</verbProps>
 			</li>
-			<li Class="HediffResourceFramework.CompProperties_ApparelAdjustHediffs">
+			<li Class="ART.CompProperties_ApparelAdjustHediffs">
 				<resourceSettings>
 					<li>
 						<hediff>FE_FusionReactor</hediff>
@@ -731,7 +731,7 @@
 			<Uranium>20</Uranium>
 		</costList>
 		<verbs>
-			<li Class="HediffResourceFramework.VerbResourceProps">
+			<li Class="ART.VerbResourceProps">
 				<resourceSettings>
 					<li>
 						<hediff>FE_FusionReactor</hediff>
@@ -770,7 +770,7 @@
 					</li>
 				</verbProps>
 			</li>
-			<li Class="HediffResourceFramework.CompProperties_ApparelAdjustHediffs">
+			<li Class="ART.CompProperties_ApparelAdjustHediffs">
 				<resourceSettings>
 					<li>
 						<hediff>FE_FusionReactor</hediff>
@@ -905,7 +905,7 @@
 			<Uranium>20</Uranium>
 		</costList>
 		<verbs>
-			<li Class="HediffResourceFramework.VerbResourceProps">
+			<li Class="ART.VerbResourceProps">
 				<targetResourceSettings>
 					<li>
 						<hediff>FE_FusionReactor</hediff>
@@ -913,7 +913,7 @@
 						<addHediffIfMissing>false</addHediffIfMissing>
 					</li>
 				</targetResourceSettings>
-				<verbClass>HediffResourceFramework.Verb_ResourceSelf</verbClass>
+				<verbClass>ART.Verb_ResourceSelf</verbClass>
 				<label>fusion energy bolster</label>
 				<hasStandardCommand>true</hasStandardCommand>
 				<violent>false</violent>
@@ -935,7 +935,7 @@
 				<chargeNoun>fusion charge</chargeNoun>
 				<displayGizmoWhileUndrafted>false</displayGizmoWhileUndrafted>
 			</li>
-			<li Class="HediffResourceFramework.CompProperties_ApparelAdjustHediffs">
+			<li Class="ART.CompProperties_ApparelAdjustHediffs">
 				<resourceSettings>
 					<li>
 						<hediff>FE_FusionReactor</hediff>
@@ -1003,7 +1003,7 @@
 			<Uranium>20</Uranium>
 		</costList>
 		<verbs>
-			<li Class="HediffResourceFramework.VerbResourceProps">
+			<li Class="ART.VerbResourceProps">
 				<resourceSettings>
 					<li>
 						<hediff>FE_FusionReactor</hediff>
@@ -1048,7 +1048,7 @@
 					</li>
 				</verbProps>
 			</li>
-			<li Class="HediffResourceFramework.CompProperties_ApparelAdjustHediffs">
+			<li Class="ART.CompProperties_ApparelAdjustHediffs">
 				<resourceSettings>
 					<li>
 						<hediff>FE_FusionReactor</hediff>
@@ -1116,7 +1116,7 @@
 			<Uranium>20</Uranium>
 		</costList>
 		<verbs>
-			<li Class="HediffResourceFramework.VerbResourceProps">
+			<li Class="ART.VerbResourceProps">
 				<resourceSettings>
 					<li>
 						<hediff>FE_FusionReactor</hediff>
@@ -1136,7 +1136,7 @@
 						<effectRadius>2.9</effectRadius>
 					</li>
 				</targetResourceSettings>
-				<verbClass>HediffResourceFramework.Verb_ResourceTarget</verbClass>
+				<verbClass>ART.Verb_ResourceTarget</verbClass>
 				<label>stim injector</label>
 				<hasStandardCommand>true</hasStandardCommand>
 				<defaultProjectile>FE_StimInjectorBullet</defaultProjectile>
@@ -1161,7 +1161,7 @@
 				</targetParams>
 				<defaultCooldownTime>1.0</defaultCooldownTime>
 			</li>
-			<li Class="HediffResourceFramework.VerbResourceProps">
+			<li Class="ART.VerbResourceProps">
 				<resourceSettings>
 					<li>
 						<hediff>FE_FusionReactor</hediff>
@@ -1180,7 +1180,7 @@
 						<resetLifetimeTicks>true</resetLifetimeTicks>
 					</li>
 				</targetResourceSettings>
-				<verbClass>HediffResourceFramework.Verb_ResourceSelf</verbClass>
+				<verbClass>ART.Verb_ResourceSelf</verbClass>
 				<label>self-stim injector</label>
 				<hasStandardCommand>true</hasStandardCommand>
 				<soundCast>Message_PositiveEvent</soundCast>
@@ -1208,7 +1208,7 @@
 					</li>
 				</verbProps>
 			</li>
-			<li Class="HediffResourceFramework.CompProperties_ApparelAdjustHediffs">
+			<li Class="ART.CompProperties_ApparelAdjustHediffs">
 				<resourceSettings>
 					<li>
 						<hediff>FE_FusionReactor</hediff>
@@ -1302,7 +1302,7 @@
 			<Uranium>20</Uranium>
 		</costList>
 		<verbs>
-			<li Class="HediffResourceFramework.VerbResourceProps">
+			<li Class="ART.VerbResourceProps">
 				<resourceSettings>
 					<li>
 						<hediff>FE_ChargeBurstModule</hediff>
@@ -1357,7 +1357,7 @@
 					</li>
 				</verbProps>
 			</li>
-			<li Class="HediffResourceFramework.CompProperties_ApparelAdjustHediffs">
+			<li Class="ART.CompProperties_ApparelAdjustHediffs">
 				<resourceSettings>
 					<li>
 						<hediff>FE_FusionReactor</hediff>
@@ -1383,7 +1383,7 @@
 					</li>
 				</resourceSettings>
 			</li>
-			<li Class="HediffResourceFramework.CompProperties_ChargeResource"/>
+			<li Class="ART.CompProperties_ChargeResource"/>
 		</comps>
 	</ThingDef>
 
@@ -1433,7 +1433,7 @@
 			<Uranium>20</Uranium>
 		</costList>
 		<comps>
-			<li Class="HediffResourceFramework.CompProperties_ApparelAdjustHediffs">
+			<li Class="ART.CompProperties_ApparelAdjustHediffs">
 				<resourceSettings>
 					<li>
 						<hediff>FE_FusionReactor</hediff>
@@ -1446,7 +1446,7 @@
 						<disallowEquipIfHediffMissing>true</disallowEquipIfHediffMissing>
 						<dropIfHediffMissing>true</dropIfHediffMissing>
 						<disallowEquipIfOverCapacity>true</disallowEquipIfOverCapacity>
-						<overCapacityReasonKey>HRF.FusionReactorOverCapacityReason</overCapacityReasonKey>
+						<overCapacityReasonKey>ART.FusionReactorOverCapacityReason</overCapacityReasonKey>
 						<dropIfOverCapacity>true</dropIfOverCapacity>
 						<blackListHediffsPreventEquipping>
 						</blackListHediffsPreventEquipping>
@@ -1495,7 +1495,7 @@
 			<Uranium>20</Uranium>
 		</costList>
 		<comps>
-			<li Class="HediffResourceFramework.CompProperties_ApparelAdjustHediffs">
+			<li Class="ART.CompProperties_ApparelAdjustHediffs">
 				<resourceSettings>
 					<li>
 						<hediff>FE_FusionReactor</hediff>
@@ -1545,7 +1545,7 @@
 			</recipeUsers>
 		</recipeMaker>
 		<verbs>
-			<li Class="HediffResourceFramework.VerbResourceProps">
+			<li Class="ART.VerbResourceProps">
 				<resourceSettings>
 					<li>
 						<hediff>FE_FusionReactor</hediff>
@@ -1592,7 +1592,7 @@
 					</li>
 				</verbProps>
 			</li>
-			<li Class="HediffResourceFramework.CompProperties_ApparelAdjustHediffs">
+			<li Class="ART.CompProperties_ApparelAdjustHediffs">
 				<resourceSettings>
 					<li>
 						<hediff>FE_FusionReactor</hediff>
@@ -1651,7 +1651,7 @@
 		</recipeMaker>
 		<tickerType>Normal</tickerType> 
 		<comps>
-			<li Class="HediffResourceFramework.CompProperties_ApparelAdjustHediffs">
+			<li Class="ART.CompProperties_ApparelAdjustHediffs">
 				<resourceSettings>
 					<li>
 						<hediff>FE_FusionReactor</hediff>
@@ -1664,7 +1664,7 @@
 						<disallowEquipIfHediffMissing>true</disallowEquipIfHediffMissing>
 						<dropIfHediffMissing>true</dropIfHediffMissing>
 						<disallowEquipIfOverCapacity>true</disallowEquipIfOverCapacity>
-						<overCapacityReasonKey>HRF.FusionReactorOverCapacityReason</overCapacityReasonKey>
+						<overCapacityReasonKey>ART.FusionReactorOverCapacityReason</overCapacityReasonKey>
 						<dropIfOverCapacity>true</dropIfOverCapacity>
 						<blackListHediffsPreventEquipping>
 						</blackListHediffsPreventEquipping>

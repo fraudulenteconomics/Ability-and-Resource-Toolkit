@@ -9,7 +9,7 @@
 
 	<StatDef>
 		<defName>FE_FusionReactorPerSecond</defName>
-		<workerClass>HediffResourceFramework.StatWorker_ResourceOffset</workerClass> 
+		<workerClass>ART.StatWorker_ResourceOffset</workerClass> 
 		<label>energy per second</label>
 		<description>Amount of energy generated per second.</description>
 		<category>FE_ResourceLabel</category>
@@ -17,7 +17,7 @@
 		<toStringStyle>FloatTwo</toStringStyle>
 		<defaultBaseValue>0</defaultBaseValue>
 		<modExtensions>
-			<li Class="HediffResourceFramework.StatWorkerExtender">
+			<li Class="ART.StatWorkerExtender">
 				<hediffResource>FE_FusionReactor</hediffResource>
 			</li>
 		</modExtensions>
@@ -25,7 +25,7 @@
 	
 	<StatDef>
 		<defName>FE_FusionReactorCapacity</defName>
-		<workerClass>HediffResourceFramework.StatWorker_MaxResourceCapacityOffset</workerClass>
+		<workerClass>ART.StatWorker_MaxResourceCapacityOffset</workerClass>
 		<label>energy capacity</label>
 		<description>Maximum amount of energy.</description>
 		<category>FE_ResourceLabel</category>
@@ -33,7 +33,7 @@
 		<toStringStyle>FloatTwo</toStringStyle>
 		<defaultBaseValue>0</defaultBaseValue>
 		<modExtensions>
-			<li Class="HediffResourceFramework.StatWorkerExtender">
+			<li Class="ART.StatWorkerExtender">
 				<hediffResource>FE_FusionReactor</hediffResource>
 			</li>
 		</modExtensions>
@@ -42,7 +42,7 @@
 	
 	<!-- <StatDef>
 		<defName>FE_MarksmanOpticsPerSecond</defName>
-		<workerClass>HediffResourceFramework.StatWorker_ResourceOffset</workerClass> 
+		<workerClass>ART.StatWorker_ResourceOffset</workerClass> 
 		<label>marksman energy per second</label>
 		<description>Amount of energy generated per second.</description>
 		<category>FE_ResourceLabel</category>
@@ -50,7 +50,7 @@
 		<toStringStyle>FloatTwo</toStringStyle>
 		<defaultBaseValue>0</defaultBaseValue>
 		<modExtensions>
-			<li Class="HediffResourceFramework.StatWorkerExtender">
+			<li Class="ART.StatWorkerExtender">
 				<hediffResource>FE_MarksmanOptics</hediffResource>
 			</li>
 		</modExtensions>
@@ -58,7 +58,7 @@
 	
 	<StatDef>
 		<defName>FE_MarksmanOpticsCapacity</defName>
-		<workerClass>HediffResourceFramework.StatWorker_MaxResourceCapacityOffset</workerClass>
+		<workerClass>ART.StatWorker_MaxResourceCapacityOffset</workerClass>
 		<label>marksman energy capacity</label>
 		<description>Maximum amount of energy.</description>
 		<category>FE_ResourceLabel</category>
@@ -66,7 +66,7 @@
 		<toStringStyle>FloatTwo</toStringStyle>
 		<defaultBaseValue>0</defaultBaseValue>
 		<modExtensions>
-			<li Class="HediffResourceFramework.StatWorkerExtender">
+			<li Class="ART.StatWorkerExtender">
 				<hediffResource>FE_MarksmanOptics</hediffResource>
 			</li>
 		</modExtensions>

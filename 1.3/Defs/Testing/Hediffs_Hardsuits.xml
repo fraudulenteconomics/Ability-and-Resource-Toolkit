@@ -2,11 +2,11 @@
 
 <Defs>
 
-	<HediffResourceFramework.HediffResourceDef>
+	<ART.HediffResourceDef>
 		<defName>FE_BoilerplateHediff</defName>
 		<label>boilerplate</label>
 		<description>A steamtech boilerplate, allows modules.</description>
-		<hediffClass>HediffResourceFramework.HediffResource</hediffClass>
+		<hediffClass>ART.HediffResource</hediffClass>
 		<keepWhenEmpty>true</keepWhenEmpty>
 		<isBad>false</isBad>
 		<hideResourceAmount>true</hideResourceAmount>
@@ -24,13 +24,13 @@
 				<label>present</label>
 			</li>
 		</stages>
-	</HediffResourceFramework.HediffResourceDef>
+	</ART.HediffResourceDef>
 
-	<HediffResourceFramework.HediffResourceDef>
+	<ART.HediffResourceDef>
 		<defName>FE_FuelPackHediff</defName>
 		<label>fuel pack</label>
 		<description>A steamtech boilerplate steam source, generates steam.</description>
-		<hediffClass>HediffResourceFramework.HediffResource</hediffClass>
+		<hediffClass>ART.HediffResource</hediffClass>
 		<keepWhenEmpty>true</keepWhenEmpty>
 		<isBad>false</isBad>
 		<tendable>false</tendable>
@@ -42,13 +42,13 @@
 				<label>burning</label>
 			</li>
 		</stages>
-	</HediffResourceFramework.HediffResourceDef>
+	</ART.HediffResourceDef>
 
-	<HediffResourceFramework.HediffResourceDef>
+	<ART.HediffResourceDef>
 		<defName>FE_SteamTank</defName>
 		<label>steam</label>
 		<description>Powers steamtech boilerplates.</description>
-		<hediffClass>HediffResourceFramework.HediffResource</hediffClass>
+		<hediffClass>ART.HediffResource</hediffClass>
 		<keepWhenEmpty>true</keepWhenEmpty>
 		<isBad>false</isBad>
 		<tendable>false</tendable>
@@ -61,7 +61,7 @@
 				<minSeverity>0</minSeverity>
 				<label>empty</label>
 			</li>
-			<li Class="HediffResourceFramework.HediffStageResource">
+			<li Class="ART.HediffStageResource">
 				<minSeverity>0.01</minSeverity>
 				<resourceSettings>
 					<li>
@@ -102,13 +102,13 @@
 				</resourceSettings>
 			</li>
 		</stages>
-	</HediffResourceFramework.HediffResourceDef>
+	</ART.HediffResourceDef>
 
-	<HediffResourceFramework.HediffResourceDef>
+	<ART.HediffResourceDef>
 		<defName>FE_NetLauncherHediff</defName>
 		<label>net launcher ammo</label>
 		<description>Contains cloth nets that can slow targets.</description>
-		<hediffClass>HediffResourceFramework.HediffResource</hediffClass>
+		<hediffClass>ART.HediffResource</hediffClass>
 		<keepWhenEmpty>true</keepWhenEmpty>
 		<isBad>false</isBad>
 		<tendable>false</tendable>
@@ -121,13 +121,13 @@
 				<label>loaded</label>
 			</li>
 		</stages>
-	</HediffResourceFramework.HediffResourceDef>
+	</ART.HediffResourceDef>
 
-	<HediffResourceFramework.HediffResourceDef>
+	<ART.HediffResourceDef>
 		<defName>FE_NetHediff</defName>
 		<label>net</label>
 		<description>Caught in a cloth net.</description>
-		<hediffClass>HediffResourceFramework.HediffResource</hediffClass>
+		<hediffClass>ART.HediffResource</hediffClass>
 		<keepWhenEmpty>true</keepWhenEmpty>
 		<isBad>true</isBad>
 		<tendable>false</tendable>
@@ -145,13 +145,13 @@
 				</capMods>
 			</li>
 		</stages>
-	</HediffResourceFramework.HediffResourceDef>
+	</ART.HediffResourceDef>
 
-	<HediffResourceFramework.HediffResourceDef>
+	<ART.HediffResourceDef>
 		<defName>FE_PoulticeDispenserHediff</defName>
 		<label>poultice dispenser</label>
 		<description>Contains mashed up healroot which can heal wounds.</description>
-		<hediffClass>HediffResourceFramework.HediffResource</hediffClass>
+		<hediffClass>ART.HediffResource</hediffClass>
 		<keepWhenEmpty>true</keepWhenEmpty>
 		<isBad>false</isBad>
 		<tendable>false</tendable>
@@ -159,7 +159,7 @@
 		<defaultLabelColor>(0.2, 0.5, 0.2)</defaultLabelColor>
 		<showResourceBar>false</showResourceBar>
 		<stages>
-			<li Class="HediffResourceFramework.HediffStageResource">
+			<li Class="ART.HediffStageResource">
 				<tendProperties>
 					<statBases>
 						<MedicalPotency>0.8</MedicalPotency>
@@ -169,13 +169,13 @@
 				</tendProperties>
 			</li>
 		</stages>
-	</HediffResourceFramework.HediffResourceDef>
+	</ART.HediffResourceDef>
 
-	<HediffResourceFramework.HediffResourceDef>
+	<ART.HediffResourceDef>
 		<defName>FE_PoulticeDispenserEffect</defName>
 		<label>glop</label>
 		<description>Gloopy healroot healing wounds.</description>
-		<hediffClass>HediffResourceFramework.HediffResource</hediffClass>
+		<hediffClass>ART.HediffResource</hediffClass>
 		<keepWhenEmpty>true</keepWhenEmpty>
 		<isBad>false</isBad>
 		<tendable>false</tendable>
@@ -185,7 +185,7 @@
 		<showResourceBar>false</showResourceBar>
 		<lifetimeTicks>301</lifetimeTicks>
 		<stages>
-			<li Class="HediffResourceFramework.HediffStageResource">
+			<li Class="ART.HediffStageResource">
 				<tendingProperties>
 					<tendCount>1</tendCount>
 					<tendQuality>0.4~0.6</tendQuality>
@@ -195,13 +195,13 @@
 				</tendingProperties>
 			</li>
 		</stages>
-	</HediffResourceFramework.HediffResourceDef>
+	</ART.HediffResourceDef>
 
-	<HediffResourceFramework.HediffResourceDef>
+	<ART.HediffResourceDef>
 		<defName>FE_PressurePistonsHediff</defName>
 		<label>pistons</label>
 		<description>Pressurized tubes that improve movement.</description>
-		<hediffClass>HediffResourceFramework.HediffResource</hediffClass>
+		<hediffClass>ART.HediffResource</hediffClass>
 		<keepWhenEmpty>true</keepWhenEmpty>
 		<isBad>false</isBad>
 		<tendable>false</tendable>
@@ -226,13 +226,13 @@
 				</capMods>
 			</li>
 		</stages>
-	</HediffResourceFramework.HediffResourceDef>
+	</ART.HediffResourceDef>
 
-	<HediffResourceFramework.HediffResourceDef>
+	<ART.HediffResourceDef>
 		<defName>FE_RedirectionArrayHediff</defName>
 		<label>steam redirection</label>
 		<description>Redirected steam that insulates the wearer.</description>
-		<hediffClass>HediffResourceFramework.HediffResource</hediffClass>
+		<hediffClass>ART.HediffResource</hediffClass>
 		<keepWhenEmpty>true</keepWhenEmpty>
 		<isBad>false</isBad>
 		<tendable>false</tendable>
@@ -255,13 +255,13 @@
 				</statOffsets>
 			</li>
 		</stages>
-	</HediffResourceFramework.HediffResourceDef>
+	</ART.HediffResourceDef>
 
-	<HediffResourceFramework.HediffResourceDef>
+	<ART.HediffResourceDef>
 		<defName>FE_ZeroLensHediff</defName>
 		<label>zero-lens</label>
 		<description>Telescoping lenses that increase ranged accuracy, lower melee accuracy.</description>
-		<hediffClass>HediffResourceFramework.HediffResource</hediffClass>
+		<hediffClass>ART.HediffResource</hediffClass>
 		<keepWhenEmpty>true</keepWhenEmpty>
 		<isBad>false</isBad>
 		<tendable>false</tendable>
@@ -284,13 +284,13 @@
 				</statOffsets>
 			</li>
 		</stages>
-	</HediffResourceFramework.HediffResourceDef>
+	</ART.HediffResourceDef>
 
-	<HediffResourceFramework.HediffResourceDef>
+	<ART.HediffResourceDef>
 		<defName>FE_SaunaSalletHediff</defName>
 		<label>sauna sallet</label>
 		<description>Soothing mists that lower mental break threshold.</description>
-		<hediffClass>HediffResourceFramework.HediffResource</hediffClass>
+		<hediffClass>ART.HediffResource</hediffClass>
 		<keepWhenEmpty>true</keepWhenEmpty>
 		<isBad>false</isBad>
 		<tendable>false</tendable>
@@ -312,13 +312,13 @@
 				</statOffsets>
 			</li>
 		</stages>
-	</HediffResourceFramework.HediffResourceDef>
+	</ART.HediffResourceDef>
 
-	<HediffResourceFramework.HediffResourceDef>
+	<ART.HediffResourceDef>
 		<defName>FE_SteamBowHediff</defName>
 		<label>steambow</label>
 		<description>Steam used to launch ballista bolts.</description>
-		<hediffClass>HediffResourceFramework.HediffResource</hediffClass>
+		<hediffClass>ART.HediffResource</hediffClass>
 		<keepWhenEmpty>true</keepWhenEmpty>
 		<isBad>false</isBad>
 		<tendable>false</tendable>
@@ -332,7 +332,7 @@
 				<minSeverity>0</minSeverity>
 				<label>inactive</label>
 			</li>
-			<li Class="HediffResourceFramework.HediffStageResource">
+			<li Class="ART.HediffStageResource">
 				<minSeverity>0.01</minSeverity>
 				<label>charging</label>
 				<resourceSettings>
@@ -342,18 +342,18 @@
 					</li>
 				</resourceSettings>
 			</li>
-			<li Class="HediffResourceFramework.HediffStageResource">
+			<li Class="ART.HediffStageResource">
 				<minSeverity>10</minSeverity>
 				<label>ready to fire</label>
 			</li>
 		</stages>
-	</HediffResourceFramework.HediffResourceDef>
+	</ART.HediffResourceDef>
 
-	<HediffResourceFramework.HediffResourceDef>
+	<ART.HediffResourceDef>
 		<defName>FE_HeatCleaverHediff</defName>
 		<label>heat cleaver</label>
 		<description>Heat level of the heat cleaver.</description>
-		<hediffClass>HediffResourceFramework.HediffResource</hediffClass>
+		<hediffClass>ART.HediffResource</hediffClass>
 		<keepWhenEmpty>true</keepWhenEmpty>
 		<isBad>false</isBad>
 		<tendable>false</tendable>
@@ -367,7 +367,7 @@
 				<minSeverity>0</minSeverity>
 				<label>neutral</label>
 			</li>
-			<li Class="HediffResourceFramework.HediffStageResource">
+			<li Class="ART.HediffStageResource">
 				<minSeverity>1</minSeverity>
 				<label>warm</label>
 				<resourceSettings>
@@ -385,7 +385,7 @@
 					</li>
 				</additionalDamages>
 			</li>
-			<li Class="HediffResourceFramework.HediffStageResource">
+			<li Class="ART.HediffStageResource">
 				<minSeverity>2</minSeverity>
 				<label>hot</label>
 				<resourceSettings>
@@ -403,7 +403,7 @@
 					</li>
 				</additionalDamages>
 			</li>	
-			<li Class="HediffResourceFramework.HediffStageResource">
+			<li Class="ART.HediffStageResource">
 				<minSeverity>3</minSeverity>
 				<label>sizzling</label>
 				<resourceSettings>
@@ -421,7 +421,7 @@
 					</li>
 				</additionalDamages>
 			</li>
-			<li Class="HediffResourceFramework.HediffStageResource">
+			<li Class="ART.HediffStageResource">
 				<minSeverity>4</minSeverity>
 				<label>red-hot</label>
 				<additionalDamages>
@@ -434,13 +434,13 @@
 				</additionalDamages>
 			</li>		
 		</stages>
-	</HediffResourceFramework.HediffResourceDef>
+	</ART.HediffResourceDef>
 
-	<HediffResourceFramework.HediffResourceDef>
+	<ART.HediffResourceDef>
 		<defName>FE_StoneFlingerHediff</defName>
 		<label>stone flinger</label>
 		<description>Steam used to launch rocks and pebbles.</description>
-		<hediffClass>HediffResourceFramework.HediffResource</hediffClass>
+		<hediffClass>ART.HediffResource</hediffClass>
 		<keepWhenEmpty>true</keepWhenEmpty>
 		<isBad>false</isBad>
 		<tendable>false</tendable>
@@ -454,7 +454,7 @@
 				<minSeverity>0</minSeverity>
 				<label>inactive</label>
 			</li>
-			<li Class="HediffResourceFramework.HediffStageResource">
+			<li Class="ART.HediffStageResource">
 				<minSeverity>0.01</minSeverity>
 				<label>charging</label>
 				<resourceSettings>
@@ -464,11 +464,11 @@
 					</li>
 				</resourceSettings>
 			</li>
-			<li Class="HediffResourceFramework.HediffStageResource">
+			<li Class="ART.HediffStageResource">
 				<minSeverity>6</minSeverity>
 				<label>ready to fire</label>
 			</li>
 		</stages>
-	</HediffResourceFramework.HediffResourceDef>
+	</ART.HediffResourceDef>
 
 </Defs>

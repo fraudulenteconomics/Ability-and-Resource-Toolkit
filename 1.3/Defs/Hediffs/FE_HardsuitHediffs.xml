@@ -15,11 +15,11 @@
 		</Features>
 	</MVCF.ModDef>
 
-	<HediffResourceFramework.HediffResourceDef>
+	<ART.HediffResourceDef>
 		<defName>FE_FusionReactor</defName>
 		<label>fusion energy</label>
 		<description>Energy from a spacer personal fusion reactor. Used to power compatible devices.</description>
-		<hediffClass>HediffResourceFramework.HediffResource</hediffClass>
+		<hediffClass>ART.HediffResource</hediffClass>
 		<keepWhenEmpty>true</keepWhenEmpty>
 		<isBad>false</isBad>
 		<tendable>false</tendable>
@@ -32,7 +32,7 @@
 		<letterMessageKey>FE.FusionReactorGainedMessage</letterMessageKey>
 		<showInResourceTab>true</showInResourceTab>
 		<stages>
-			<li Class="HediffResourceFramework.HediffStageResource">
+			<li Class="ART.HediffStageResource">
 				<label>Stage One</label>
 				<resourceGainPerDamages>
 					<li>
@@ -182,7 +182,7 @@
 					<qualityOffset>1.5</qualityOffset>
 				</qualityAdjustProperties>
 			</li>
-			<li Class="HediffResourceFramework.HediffStageResource">
+			<li Class="ART.HediffStageResource">
 				<label>Stage Two</label>
 				<minSeverity>50</minSeverity>
 				<preventDeath>true</preventDeath>
@@ -220,13 +220,13 @@
 			<color>(189,169,118)</color>
 		</fallbackTogglingGraphicData>
 		<ignoreTerrain>true</ignoreTerrain>
-	</HediffResourceFramework.HediffResourceDef>
+	</ART.HediffResourceDef>
 
-	<HediffResourceFramework.HediffResourceDef>
+	<ART.HediffResourceDef>
 		<defName>FE_ArchotechJump</defName>
 		<label>arhotech jump</label>
 		<description>Energy from a spacer personal fusion reactor. Used to power compatible devices.</description>
-		<hediffClass>HediffResourceFramework.HediffResource</hediffClass>
+		<hediffClass>ART.HediffResource</hediffClass>
 		<keepWhenEmpty>false</keepWhenEmpty>
 		<isBad>false</isBad>
 		<tendable>false</tendable>
@@ -244,44 +244,44 @@
 				<minSeverity>0</minSeverity>
 			</li>
 		</requiredHediffs>
-	</HediffResourceFramework.HediffResourceDef>
+	</ART.HediffResourceDef>
 
-	<HediffResourceFramework.HediffResourceDef>
+	<ART.HediffResourceDef>
 		<defName>FE_ChargeBurstModule</defName>
 		<label>charge burst capacitor</label>
 		<description>A limited charge capacitor that increases the effectiveness of projectiles shot using excess energy.</description>
-		<hediffClass>HediffResourceFramework.HediffResource</hediffClass>
+		<hediffClass>ART.HediffResource</hediffClass>
 		<keepWhenEmpty>true</keepWhenEmpty>
 		<isBad>false</isBad>
 		<tendable>false</tendable>
 		<makesSickThought>false</makesSickThought>
 		<defaultLabelColor>(0.7,0.9,0.3)</defaultLabelColor>
-	</HediffResourceFramework.HediffResourceDef>
+	</ART.HediffResourceDef>
 
-	<HediffResourceFramework.HediffResourceDef>
+	<ART.HediffResourceDef>
 		<defName>FE_RepulsorRifle</defName>
 		<label>repulsor array</label>
 		<description>A specialized repulsor array that stores excess energy from standard shots, saving them for the powerful repulsor burst function.</description>
-		<hediffClass>HediffResourceFramework.HediffResource</hediffClass>
+		<hediffClass>ART.HediffResource</hediffClass>
 		<keepWhenEmpty>true</keepWhenEmpty>
 		<isBad>false</isBad>
 		<tendable>false</tendable>
 		<makesSickThought>false</makesSickThought>
 		<defaultLabelColor>(0.7,0.2,0.2)</defaultLabelColor>
-	</HediffResourceFramework.HediffResourceDef>
+	</ART.HediffResourceDef>
 
-	<HediffResourceFramework.HediffResourceDef>
+	<ART.HediffResourceDef>
 		<defName>FE_AbsorptionBarrier</defName>
 		<label>absorption barrier</label>
 		<description>An energy field that covers the wearer. Absorbs most incoming damage, but a big enough hit will still get through. The shield will begin to recharge itself about 10 seconds after sustaining any damage.</description>
-		<hediffClass>HediffResourceFramework.HediffResource</hediffClass>
+		<hediffClass>ART.HediffResource</hediffClass>
 		<keepWhenEmpty>true</keepWhenEmpty>
 		<isBad>false</isBad>
 		<tendable>false</tendable>
 		<makesSickThought>false</makesSickThought>
 		<defaultLabelColor>(0.7,0.5,0.2)</defaultLabelColor>
 		<stages>
-			<li Class="HediffResourceFramework.HediffStageResource">
+			<li Class="ART.HediffStageResource">
 				<shieldProperties>
 					<absorbMeleeDamage>true</absorbMeleeDamage>
 					<absorbRangeDamage>true</absorbRangeDamage>
@@ -292,13 +292,13 @@
 			</li>
 		</stages>
 		<showResourceBar>true</showResourceBar>
-	</HediffResourceFramework.HediffResourceDef>
+	</ART.HediffResourceDef>
 
-	<HediffResourceFramework.HediffResourceDef>
+	<ART.HediffResourceDef>
 		<defName>FE_ReactivePlating</defName>
 		<label>reactive plating</label>
 		<description>Reactive armor plates that harden upon sustained impact. Reduces damage taken, but can overheat if overworked, removing the effect.</description>
-		<hediffClass>HediffResourceFramework.HediffResource</hediffClass>
+		<hediffClass>ART.HediffResource</hediffClass>
 		<keepWhenEmpty>true</keepWhenEmpty>
 		<isBad>false</isBad>
 		<tendable>false</tendable>
@@ -308,7 +308,7 @@
 			<li>
 				<label>inactive</label>
 			</li>
-			<li Class="HediffResourceFramework.HediffStageResource">
+			<li Class="ART.HediffStageResource">
 				<resourceGainPerAllDamages>5</resourceGainPerAllDamages>
 				<label>initialized</label>
 				<minSeverity>1</minSeverity>
@@ -328,13 +328,13 @@
 				<minSeverity>95</minSeverity>
 			</li>
 		</stages>
-	</HediffResourceFramework.HediffResourceDef>
+	</ART.HediffResourceDef>
 
-	<HediffResourceFramework.HediffResourceDef>
+	<ART.HediffResourceDef>
 		<defName>FE_MarksmanOptics</defName>
 		<label>marksman optics</label>
 		<description>Integrated targetting systems that adjust the wearer's aim as they shoot. Resets after a short while.</description>
-		<hediffClass>HediffResourceFramework.HediffResource</hediffClass>
+		<hediffClass>ART.HediffResource</hediffClass>
 		<keepWhenEmpty>true</keepWhenEmpty>
 		<isBad>false</isBad>
 		<tendable>false</tendable>
@@ -359,7 +359,7 @@
 					<ShootingAccuracyPawn>10</ShootingAccuracyPawn>
 				</statOffsets>
 			</li>
-			<li Class="HediffResourceFramework.HediffStageResource">
+			<li Class="ART.HediffStageResource">
 				<label>optimized</label>
 				<minSeverity>90</minSeverity>
 				<statOffsets>
@@ -375,13 +375,13 @@
 				</resourceSettings>
 			</li>
 		</stages>
-	</HediffResourceFramework.HediffResourceDef>
+	</ART.HediffResourceDef>
 
-	<HediffResourceFramework.HediffResourceDef>
+	<ART.HediffResourceDef>
 		<defName>FE_ShieldInjector</defName>
 		<label>personal shield</label>
 		<description>An energy field that covers the wearer for about 24 hours. Absorbs most incoming damage, but a big enough hit will still get through. The shield will not recharge once depleted.</description>
-		<hediffClass>HediffResourceFramework.HediffResource</hediffClass>
+		<hediffClass>ART.HediffResource</hediffClass>
 		<keepWhenEmpty>false</keepWhenEmpty>
 		<isBad>false</isBad>
 		<tendable>false</tendable>
@@ -389,7 +389,7 @@
 		<defaultLabelColor>(0.9,0.9,0.9)</defaultLabelColor>
 		<resourceBarTextColor>(25, 25, 50)</resourceBarTextColor>
 		<stages>
-			<li Class="HediffResourceFramework.HediffStageResource">
+			<li Class="ART.HediffStageResource">
 				<shieldProperties>
 					<absorbMeleeDamage>true</absorbMeleeDamage>
 					<absorbRangeDamage>true</absorbRangeDamage>
@@ -402,13 +402,13 @@
 		<showResourceBar>true</showResourceBar>
 		<maxResourceCapacity>100</maxResourceCapacity>
 		<lifetimeTicks>10000</lifetimeTicks>
-	</HediffResourceFramework.HediffResourceDef>
+	</ART.HediffResourceDef>
 
-	<HediffResourceFramework.HediffResourceDef>
+	<ART.HediffResourceDef>
 		<defName>FE_StimHediff</defName>
 		<label>combat stim</label>
 		<description>A concoction of adrenal, neural, and synthetic stims designed to temporarily optimize combat performance.</description>
-		<hediffClass>HediffResourceFramework.HediffResource</hediffClass>
+		<hediffClass>ART.HediffResource</hediffClass>
 		<keepWhenEmpty>false</keepWhenEmpty>
 		<isBad>false</isBad>
 		<tendable>false</tendable>
@@ -454,25 +454,25 @@
 				</capMods>
 			</li>
 		</stages>
-	</HediffResourceFramework.HediffResourceDef>
+	</ART.HediffResourceDef>
 
-	<HediffResourceFramework.HediffResourceDef>
+	<ART.HediffResourceDef>
 		<defName>FE_CutterCharge</defName>
 		<label>fusion cutter capacitor</label>
 		<description>A limited charge capacitor that increases the effectiveness of melee attacks using excess energy.</description>
-		<hediffClass>HediffResourceFramework.HediffResource</hediffClass>
+		<hediffClass>ART.HediffResource</hediffClass>
 		<keepWhenEmpty>true</keepWhenEmpty>
 		<isBad>false</isBad>
 		<tendable>false</tendable>
 		<makesSickThought>false</makesSickThought>
 		<defaultLabelColor>(0.1,0.9,0.9)</defaultLabelColor>
-	</HediffResourceFramework.HediffResourceDef>
+	</ART.HediffResourceDef>
 
-	<HediffResourceFramework.HediffResourceDef>
+	<ART.HediffResourceDef>
 		<defName>FE_FusionSurge</defName>
 		<label>temporary in-fusion</label>
 		<description>A limited charge capacitor that increases the effectiveness of melee attacks using excess energy.</description>
-		<hediffClass>HediffResourceFramework.HediffResource</hediffClass>
+		<hediffClass>ART.HediffResource</hediffClass>
 		<keepWhenEmpty>true</keepWhenEmpty>
 		<isBad>false</isBad>
 		<tendable>false</tendable>
@@ -490,25 +490,25 @@
 				</capMods>
 			</li>
 		</stages>
-	</HediffResourceFramework.HediffResourceDef>
+	</ART.HediffResourceDef>
 
-	<HediffResourceFramework.HediffResourceDef>
+	<ART.HediffResourceDef>
 		<defName>FE_PulseBattery</defName>
 		<label>pulse battery</label>
 		<description>Remaining battery charge for a disposable pulse rifle.</description>
-		<hediffClass>HediffResourceFramework.HediffResource</hediffClass>
+		<hediffClass>ART.HediffResource</hediffClass>
 		<keepWhenEmpty>true</keepWhenEmpty>
 		<isBad>false</isBad>
 		<tendable>false</tendable>
 		<makesSickThought>false</makesSickThought>
 		<defaultLabelColor>(0.1,0.9,0.5)</defaultLabelColor>
-	</HediffResourceFramework.HediffResourceDef>
+	</ART.HediffResourceDef>
 
-	<HediffResourceFramework.HediffResourceDef>
+	<ART.HediffResourceDef>
 		<defName>FE_Synthesizer</defName>
 		<label>synthesizer</label>
 		<description>A temporary nanite infusion that slowly restores needs over time.</description>
-		<hediffClass>HediffResourceFramework.HediffResource</hediffClass>
+		<hediffClass>ART.HediffResource</hediffClass>
 		<keepWhenEmpty>true</keepWhenEmpty>
 		<isBad>false</isBad>
 		<tendable>false</tendable>
@@ -519,13 +519,13 @@
 		<!-- <adjustRestPerSecond>0.25</adjustRestPerSecond>
 		<adjustFoodPerSecond>0.25</adjustFoodPerSecond>
 		<adjustJoyPerSecond>0.25</adjustJoyPerSecond> -->
-	</HediffResourceFramework.HediffResourceDef>
+	</ART.HediffResourceDef>
 
-	<HediffResourceFramework.HediffResourceDef>
+	<ART.HediffResourceDef>
 		<defName>FE_ToxicFumes</defName>
 		<label>toxic fumes</label>
 		<description>Noxious and toxic fumes from certain organic and inorganic materials.</description>
-		<hediffClass>HediffResourceFramework.HediffResource</hediffClass>
+		<hediffClass>ART.HediffResource</hediffClass>
 		<keepWhenEmpty>false</keepWhenEmpty>
 		<isBad>true</isBad>
 		<tendable>false</tendable>
@@ -536,7 +536,7 @@
 		<useAbsoluteSeverity>true</useAbsoluteSeverity>
 		<restrictResourceCap>false</restrictResourceCap>
 		<stages>
-			<li Class="HediffResourceFramework.HediffStageResource">
+			<li Class="ART.HediffStageResource">
 				<minSeverity>0.01</minSeverity>
 				<label>trace</label>
 				<capMods>
@@ -553,7 +553,7 @@
 					</li>
 				</resourceSettings>
 			</li>
-			<li Class="HediffResourceFramework.HediffStageResource">
+			<li Class="ART.HediffStageResource">
 				<minSeverity>0.25</minSeverity>
 				<label>minor</label>
 				<capMods>
@@ -574,7 +574,7 @@
 					</li>
 				</resourceSettings>
 			</li>
-			<li Class="HediffResourceFramework.HediffStageResource">
+			<li Class="ART.HediffStageResource">
 				<minSeverity>0.55</minSeverity>
 				<label>major</label>
 				<capMods>
@@ -595,7 +595,7 @@
 					</li>
 				</resourceSettings>
 			</li>
-			<li Class="HediffResourceFramework.HediffStageResource">
+			<li Class="ART.HediffStageResource">
 				<minSeverity>0.85</minSeverity>
 				<label>acute</label>
 				<capMods>
@@ -617,13 +617,13 @@
 				</resourceSettings>
 			</li>
 		</stages>
-	</HediffResourceFramework.HediffResourceDef>
+	</ART.HediffResourceDef>
 
-	<HediffResourceFramework.HediffResourceDef>
+	<ART.HediffResourceDef>
 		<defName>FE_ToxicWrapper</defName>
 		<label>toxin keeper</label>
 		<description>Hidden toxic wrapper hediffresource for absolute severity.</description>
-		<hediffClass>HediffResourceFramework.HediffResource</hediffClass>
+		<hediffClass>ART.HediffResource</hediffClass>
 		<keepWhenEmpty>true</keepWhenEmpty>
 		<isBad>false</isBad>
 		<tendable>false</tendable>
@@ -631,7 +631,7 @@
 		<defaultLabelColor>(0.1,0.9,0.5)</defaultLabelColor>
 		<maxResourceCapacity>200</maxResourceCapacity>
 		<stages>
-			<li Class="HediffResourceFramework.HediffStageResource">
+			<li Class="ART.HediffStageResource">
 				<minSeverity>0</minSeverity>
 				<label>initial</label>
 				<becomeVisible>false</becomeVisible>
@@ -644,7 +644,7 @@
 					</li>
 				</resourceSettings>
 			</li>
-			<li Class="HediffResourceFramework.HediffStageResource">
+			<li Class="ART.HediffStageResource">
 				<minSeverity>50</minSeverity>
 				<label>lesser</label>
 				<becomeVisible>false</becomeVisible>
@@ -657,7 +657,7 @@
 					</li>
 				</resourceSettings>
 			</li>
-			<li Class="HediffResourceFramework.HediffStageResource">
+			<li Class="ART.HediffStageResource">
 				<minSeverity>100</minSeverity>
 				<label>resistant</label>
 				<becomeVisible>false</becomeVisible>
@@ -670,7 +670,7 @@
 					</li>
 				</resourceSettings>
 			</li>
-			<li Class="HediffResourceFramework.HediffStageResource">
+			<li Class="ART.HediffStageResource">
 				<minSeverity>150</minSeverity>
 				<label>potent</label>
 				<becomeVisible>false</becomeVisible>
@@ -683,7 +683,7 @@
 					</li>
 				</resourceSettings>
 			</li>
-			<li Class="HediffResourceFramework.HediffStageResource">
+			<li Class="ART.HediffStageResource">
 				<minSeverity>200</minSeverity>
 				<label>fortified</label>
 				<becomeVisible>false</becomeVisible>
@@ -697,7 +697,7 @@
 				</resourceSettings>
 			</li>
 		</stages>
-	</HediffResourceFramework.HediffResourceDef>
+	</ART.HediffResourceDef>
 
 
 </Defs>

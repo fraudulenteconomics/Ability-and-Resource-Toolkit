@@ -28,7 +28,7 @@
 		<minRewardCount>10</minRewardCount>
 		<ingestible>
 			<outcomeDoers>
-				<li Class="HediffResourceFramework.IngestionOutcomeDoer_GiveHediffResource">
+				<li Class="ART.IngestionOutcomeDoer_GiveHediffResource">
 					<hediffDef>FE_ShieldInjector</hediffDef>
 					<resourcePercent>1</resourcePercent>
 					<resourceAdjust>100</resourceAdjust>
@@ -76,7 +76,7 @@
 		<minRewardCount>10</minRewardCount>
 		<ingestible>
 			<outcomeDoers>
-				<li Class="HediffResourceFramework.IngestionOutcomeDoer_GiveHediffResource">
+				<li Class="ART.IngestionOutcomeDoer_GiveHediffResource">
 					<hediffDef>FE_FusionReactor</hediffDef>
 					<resourceAdjust>100</resourceAdjust>
 					<addHediffIfMissing>false</addHediffIfMissing>

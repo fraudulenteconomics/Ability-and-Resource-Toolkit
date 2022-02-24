@@ -26,7 +26,7 @@
 			<ComponentSpacer>6</ComponentSpacer>
 		</costList>
 		<comps>
-			<li Class="HediffResourceFramework.CompProperties_AdjustHediffsArea">
+			<li Class="ART.CompProperties_AdjustHediffsArea">
 				<stackEffects>true</stackEffects>
 				<stackMax>2</stackMax>
 				<resourceSettings>
@@ -70,7 +70,7 @@
 			<li Class="CompProperties_Flickable"/>
 		</comps>
 		<placeWorkers>
-			<li>HediffResourceFramework.PlaceWorker_ShowHediffAreaRadius</li>
+			<li>ART.PlaceWorker_ShowHediffAreaRadius</li>
 		</placeWorkers>
 		<altitudeLayer>Building</altitudeLayer>
 		<building>
@@ -157,7 +157,7 @@
 			<li>FE_FusionTechnology</li>
 		</researchPrerequisites>
 		<comps>
-			<li Class="HediffResourceFramework.CompProperties_BuildingStorageAdjustHediffs">
+			<li Class="ART.CompProperties_BuildingStorageAdjustHediffs">
 				<resourceSettings>
 					<li>
 						<hediff>FE_FusionReactor</hediff>

@@ -32,8 +32,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="HediffResourceFramework">
-      <HintPath>..\..\Assemblies\HediffResourceFramework.dll</HintPath>
+    <Reference Include="ART">
+      <HintPath>..\..\Assemblies\ART.dll</HintPath>
     </Reference>
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />

@@ -5,7 +5,7 @@
 			<li Class="PatchOperationAddModExtension">
 				<xpath>/Defs/VFECore.Abilities.AbilityDef[defName="RE_Biotic_Throw"]</xpath>
 				<value>
-					<li Class="HediffResourceFramework.AbilityResourceProps">
+					<li Class="ART.AbilityResourceProps">
 						<resourceSettings>
 							<li>
 								<hediff>FE_FusionReactor</hediff>

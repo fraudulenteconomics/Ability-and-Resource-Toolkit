@@ -33,7 +33,7 @@
 		</costList>
 		<tickerType>Normal</tickerType>
 		<verbs>
-			<li Class="HediffResourceFramework.VerbResourceProps">
+			<li Class="ART.VerbResourceProps">
 				<resourceSettings>
 					<li>
 						<hediff>FE_RepulsorRifle</hediff>
@@ -63,7 +63,7 @@
 				<soundCastTail>GunTail_Medium</soundCastTail>
 				<muzzleFlashScale>9</muzzleFlashScale>
 			</li>
-			<li Class="HediffResourceFramework.VerbResourceProps">
+			<li Class="ART.VerbResourceProps">
 				<resourceSettings>
 					<li>
 						<hediff>FE_RepulsorRifle</hediff>
@@ -129,7 +129,7 @@
 					</li>
 				</verbProps>
 			</li>
-			<li Class="HediffResourceFramework.CompProperties_WeaponAdjustHediffs">
+			<li Class="ART.CompProperties_WeaponAdjustHediffs">
 				<resourceSettings>
 					<li>
 						<hediff>FE_RepulsorRifle</hediff>
@@ -155,7 +155,7 @@
 			</li>
 		</comps>
 		<modExtensions>
-			<li Class="HediffResourceFramework.ResourceOnActionExtension">
+			<li Class="ART.ResourceOnActionExtension">
 				<resourcesOnAction>
 					<li>
 						<hediffApplied>FE_FusionReactor</hediffApplied>
@@ -197,7 +197,7 @@
 		<isRanged>true</isRanged>
 		<makesAnimalsFlee>true</makesAnimalsFlee>
 		<modExtensions>
-			<li Class="HediffResourceFramework.EffectOnImpact">
+			<li Class="ART.EffectOnImpact">
 				<resourceEffects>
 					<li>
 						<hediffDef>FE_AbsorptionBarrier</hediffDef>
@@ -266,7 +266,7 @@
 		</costList>
 		<tickerType>Normal</tickerType>
 		<verbs>
-			<li Class="HediffResourceFramework.VerbResourceProps">
+			<li Class="ART.VerbResourceProps">
 				<resourceSettings>
 					<li>
 						<hediff>FE_FusionReactor</hediff>
@@ -300,7 +300,7 @@
 			<li>FE_FusionWeapon</li>
 		</weaponTags>
 		<tools>
-			<li Class="HediffResourceFramework.ToolResource">
+			<li Class="ART.ToolResource">
 				<label>stock</label>
 				<capacities>
 					<li>Blunt</li>
@@ -319,7 +319,7 @@
 			</li>
 		</tools>
 		<comps>
-			<li Class="HediffResourceFramework.CompProperties_WeaponAdjustHediffs"> 
+			<li Class="ART.CompProperties_WeaponAdjustHediffs"> 
 				<resourceSettings>
 					<li>
 						<hediff>FE_FusionReactor</hediff>
@@ -364,7 +364,7 @@
 			<color>(24,244,200)</color>
 		</graphicData>
 		<tools>
-			<li Class="HediffResourceFramework.ToolResource">
+			<li Class="ART.ToolResource">
 				<label>handle</label>
 				<capacities>
 					<li>Blunt</li>
@@ -382,7 +382,7 @@
 					</li>
 				</resourceSettings>
 			</li>
-			<li Class="HediffResourceFramework.ToolResource">
+			<li Class="ART.ToolResource">
 				<label>point</label>
 				<capacities>
 					<li>Stab</li>
@@ -407,7 +407,7 @@
 					</li>
 				</extraMeleeDamages>
 			</li>
-			<li Class="HediffResourceFramework.ToolResource">
+			<li Class="ART.ToolResource">
 				<label>edge</label>
 				<capacities>
 					<li>Cut</li>
@@ -434,7 +434,7 @@
 			</li>
 		</tools>
 		<verbs>
-			<li Class="HediffResourceFramework.VerbResourceProps">
+			<li Class="ART.VerbResourceProps">
 				<resourceSettings>
 					<li>
 						<hediff>FE_CutterCharge</hediff>
@@ -457,7 +457,7 @@
 						<affectsEnemies>false</affectsEnemies> -->
 					</li>
 				</targetResourceSettings>
-				<verbClass>HediffResourceFramework.Verb_ResourceSelf</verbClass>
+				<verbClass>ART.Verb_ResourceSelf</verbClass>
 				<label>in-fusion surge</label>
 				<hasStandardCommand>true</hasStandardCommand>
 				<violent>false</violent>
@@ -474,7 +474,7 @@
 					<canTargetSelf>true</canTargetSelf>
 				</targetParams>
 			</li>
-			<li Class="HediffResourceFramework.VerbResourceProps">
+			<li Class="ART.VerbResourceProps">
 				<resourceSettings>
 					<li>
 						<hediff>FE_CutterCharge</hediff>
@@ -497,7 +497,7 @@
 						<affectsEnemies>false</affectsEnemies> -->
 					</li>
 				</targetResourceSettings>
-				<verbClass>HediffResourceFramework.Verb_ResourceTarget</verbClass>
+				<verbClass>ART.Verb_ResourceTarget</verbClass>
 				<label>ex-fusion surge</label>
 				<hasStandardCommand>true</hasStandardCommand>
 				<violent>false</violent>
@@ -537,7 +537,7 @@
 					</li>
 				</verbProps>
 			</li>
-			<li Class="HediffResourceFramework.CompProperties_WeaponAdjustHediffs">
+			<li Class="ART.CompProperties_WeaponAdjustHediffs">
 				<resourceSettings>
 					<li>
 						<hediff>FE_CutterCharge</hediff>
@@ -596,7 +596,7 @@
 		</costList>
 		<tickerType>Normal</tickerType>
 		<verbs>
-			<li Class="HediffResourceFramework.VerbResourceProps">
+			<li Class="ART.VerbResourceProps">
 				<resourceSettings>
 					<li>
 						<hediff>FE_PulseBattery</hediff>
@@ -622,7 +622,7 @@
 			<li>FE_FusionWeapon</li>
 		</weaponTags>
 		<tools>
-			<li Class="HediffResourceFramework.ToolResource">
+			<li Class="ART.ToolResource">
 				<label>stock</label>
 				<capacities>
 					<li>Blunt</li>
@@ -641,7 +641,7 @@
 			</li>
 		</tools>
 		<comps>
-			<li Class="HediffResourceFramework.CompProperties_WeaponAdjustHediffs"> 
+			<li Class="ART.CompProperties_WeaponAdjustHediffs"> 
 				<resourceSettings>
 					<li>
 						<hediff>FE_PulseBattery</hediff>
