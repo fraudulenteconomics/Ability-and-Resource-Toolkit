@@ -3,6 +3,7 @@ using Verse;
 
 namespace HediffResourceFramework
 {
+    [StaticConstructorOnStartup]
     public class Command_SwitchHediffStageResource : Command_Action
     {
         private static readonly Texture2D cooldownBarTex = SolidColorMaterials.NewSolidColorTexture(Color.gray.r, Color.gray.g, Color.gray.b, 0.6f);

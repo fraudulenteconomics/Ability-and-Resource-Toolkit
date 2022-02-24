@@ -35,7 +35,6 @@ namespace HediffResourceFramework
             }
             set
             {
-                Log.Message("Incrementing " + this.parent);
                 resourceAmount = value;
                 if (resourceAmount > ResourceCapacity)
                 {
@@ -46,7 +45,6 @@ namespace HediffResourceFramework
                 {
                     resourceAmount = 0;
                 }
-
                 parent.GetResourceFor(hediffOption)?.UpdateData();
             }
         }

@@ -47,9 +47,20 @@ namespace HediffResourceFramework
             {
                 for (var i = 0; i < Props.resourceSettings.Count; i++)
                 {
-                    if (Props.resourceSettings[i].maxResourceStorageAmount > 0 && !resourceStorages.ContainsKey(i))
+                    if (Props.resourceSettings[i].maxResourceStorageAmount > 0)
                     {
-                        resourceStorages[i] = new ResourceStorage(Props.resourceSettings[i], this);
+                        if (!resourceStorages.ContainsKey(i))
+                        {
+                            resourceStorages[i] = new ResourceStorage(Props.resourceSettings[i], this);
+                        }
+                        if (resourceStorages[i].hediffOption is null)
+                        {
+                            resourceStorages[i].hediffOption = Props.resourceSettings[i];
+                        }
+                        if (resourceStorages[i].parent is null)
+                        {
+                            resourceStorages[i].parent = this;
+                        }
                         if (Props.resourceSettings[i].initialResourceAmount != 0)
                         {
                             resourceStorages[i].ResourceAmount = Props.resourceSettings[i].initialResourceAmount;
@@ -214,19 +225,7 @@ namespace HediffResourceFramework
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
                 Register();
-                var resourceSettings = Props.resourceSettings;
-                if (resourceStorages is null)
-                {
-                    resourceStorages = new Dictionary<int, ResourceStorage>();
-                }
-                foreach (var data in resourceStorages)
-                {
-                    if (resourceSettings.Count - 1 <= data.Key)
-                    {
-                        data.Value.hediffOption = resourceSettings[data.Key];
-                        data.Value.parent = this;
-                    }
-                }
+                InitializeResourceStorages();
             }
         }
 
