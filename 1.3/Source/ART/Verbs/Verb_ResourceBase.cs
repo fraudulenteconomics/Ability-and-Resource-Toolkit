@@ -49,13 +49,13 @@ namespace ART
             var targetResourceSettings = ResourceProps.TargetResourceSettings;
             if (targetResourceSettings != null)
             {
-                foreach (var hediffOption in targetResourceSettings)
+                foreach (var resourceProperties in targetResourceSettings)
                 {
-                    if (hediffOption.hediff != null)
+                    if (resourceProperties.hediff != null)
                     {
-                        if (hediffOption.effectRadius != -1f)
+                        if (resourceProperties.effectRadius != -1f)
                         {
-                            GenDraw.DrawFieldEdges((from x in HediffResourceUtils.GetAllCellsAround(hediffOption, new TargetInfo(target.Cell, Find.CurrentMap), CellRect.SingleCell(target.Cell))
+                            GenDraw.DrawFieldEdges((from x in HediffResourceUtils.GetAllCellsAround(resourceProperties, new TargetInfo(target.Cell, Find.CurrentMap), CellRect.SingleCell(target.Cell))
                                                     where x.InBounds(Find.CurrentMap)
                                                     select x).ToList());
                         }

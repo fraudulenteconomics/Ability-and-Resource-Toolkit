@@ -20,8 +20,8 @@
 			<ArmorRating_Sharp>0.24</ArmorRating_Sharp>
 			<ArmorRating_Blunt>0.13</ArmorRating_Blunt>
 			<ArmorRating_Heat>0.15</ArmorRating_Heat>
-			<InsulationCold>4</InsulationCold>
-			<InsulationHeat>4</InsulationHeat>	
+			<Insulation_Cold>4</Insulation_Cold>
+			<Insulation_Heat>4</Insulation_Heat>	
 			<DeteriorationRate>0</DeteriorationRate>
 		</statBases>
 		<equippedStatOffsets>
@@ -1104,7 +1104,6 @@
 				<verbClass>FraudeconCode.Verb_Harvest</verbClass>
 				<label>reaperrazor</label>
 				<hasStandardCommand>true</hasStandardCommand>
-				<defaultProjectile>Things/Projectile/LauncherShot</defaultProjectile>
 				<warmupTime>1.0</warmupTime>
 				<violent>false</violent>
 				<range>4.9</range>
@@ -1437,8 +1436,8 @@
 			<ArmorRating_Sharp>0.94</ArmorRating_Sharp>
 			<ArmorRating_Blunt>0.43</ArmorRating_Blunt>
 			<ArmorRating_Heat>0.35</ArmorRating_Heat>
-			<InsulationCold>6</InsulationCold>
-			<InsulationHeat>6</InsulationHeat>	
+			<Insulation_Cold>6</Insulation_Cold>
+			<Insulation_Heat>6</Insulation_Heat>	
 <DeteriorationRate>0</DeteriorationRate>			
 		</statBases>
 		<apparel>
@@ -1494,8 +1493,8 @@
 			<ArmorRating_Sharp>0.14</ArmorRating_Sharp>
 			<ArmorRating_Blunt>0.94</ArmorRating_Blunt>
 			<ArmorRating_Heat>0.55</ArmorRating_Heat>
-			<InsulationCold>20</InsulationCold>
-			<InsulationHeat>12</InsulationHeat>	
+			<Insulation_Cold>20</Insulation_Cold>
+			<Insulation_Heat>12</Insulation_Heat>	
 <DeteriorationRate>0</DeteriorationRate>			
 		</statBases>
 		<apparel>
@@ -1776,8 +1775,8 @@
 			<ArmorRating_Sharp>0.84</ArmorRating_Sharp>
 			<ArmorRating_Blunt>0.39</ArmorRating_Blunt>
 			<ArmorRating_Heat>0.85</ArmorRating_Heat>
-			<InsulationCold>12</InsulationCold>
-			<InsulationHeat>10</InsulationHeat>
+			<Insulation_Cold>12</Insulation_Cold>
+			<Insulation_Heat>10</Insulation_Heat>
 			<DeteriorationRate>0</DeteriorationRate>
 		</statBases>
 		<apparel>
@@ -1830,8 +1829,8 @@
 			<ArmorRating_Sharp>0.34</ArmorRating_Sharp>
 			<ArmorRating_Blunt>0.29</ArmorRating_Blunt>
 			<ArmorRating_Heat>0.14</ArmorRating_Heat>
-			<InsulationCold>4</InsulationCold>
-			<InsulationHeat>2</InsulationHeat>
+			<Insulation_Cold>4</Insulation_Cold>
+			<Insulation_Heat>2</Insulation_Heat>
 			<DeteriorationRate>0</DeteriorationRate>
 		</statBases>
 		<apparel>

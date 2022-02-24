@@ -36,7 +36,7 @@ namespace ART
             PreInit();
         }
         public HediffStageResource CurStageResource => this.CurStage as HediffStageResource;
-        public IEnumerable<Tuple<CompAdjustHediffs, HediffOption, ResourceStorage>> GetResourceStorages()
+        public IEnumerable<Tuple<CompAdjustHediffs, ResourceProperties, ResourceStorage>> GetResourceStorages()
         {
             foreach (var adjustResource in this.pawn.GetAllAdjustResourceComps())
             {
@@ -44,7 +44,7 @@ namespace ART
                 {
                     foreach (var pair in comp.GetResourceStoragesFor(this.def))
                     {
-                        yield return new Tuple<CompAdjustHediffs, HediffOption, ResourceStorage>(comp, pair.Item2, pair.Item3);
+                        yield return new Tuple<CompAdjustHediffs, ResourceProperties, ResourceStorage>(comp, pair.Item2, pair.Item3);
                     }
                 }
             }
@@ -448,7 +448,7 @@ namespace ART
                     var comp = GetCompAmplifierFor(amplifier.Parent);
                     if (comp != null && !comp.InRadiusFor(this.pawn.Position, this.def))
                     {
-                        var option = comp.GetFirstHediffOptionFor(this.def);
+                        var option = comp.GetFirstResourcePropertiesFor(this.def);
                         if (option.removeOutsideArea)
                         {
                             return true;

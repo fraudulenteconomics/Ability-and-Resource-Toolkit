@@ -186,7 +186,7 @@ namespace ART
         }
 
         public CompProperties_ThingInUse Props => (CompProperties_ThingInUse)this.props;
-        public List<HediffOption> ResourceSettings => null;
+        public List<ResourceProperties> ResourceSettings => null;
         public Dictionary<HediffResource, HediffResouceDisable> PostUseDelayTicks => null;
         public string DisablePostUse => null;
         public Thing Parent => this.parent;

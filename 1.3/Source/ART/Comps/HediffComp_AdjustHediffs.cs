@@ -12,7 +12,7 @@ namespace ART
 
 	public class HediffCompProperties_AdjustHediffs : HediffCompProperties
 	{
-        public List<HediffOption> resourceSettings;
+        public List<ResourceProperties> resourceSettings;
 
         public string disablePostUse;
         public HediffCompProperties_AdjustHediffs()
@@ -25,7 +25,7 @@ namespace ART
 	{
         public HediffCompProperties_AdjustHediffs Props => (HediffCompProperties_AdjustHediffs)this.props;
         public Thing Parent => this.Pawn;
-        public List<HediffOption> ResourceSettings => Props.resourceSettings;
+        public List<ResourceProperties> ResourceSettings => Props.resourceSettings;
         public string DisablePostUse => Props.disablePostUse;
 
         private Dictionary<HediffResource, HediffResouceDisable> postUseDelayTicks;
@@ -85,9 +85,9 @@ namespace ART
             var pawn = this.Pawn;
             if (pawn != null)
             {
-                foreach (var hediffOption in Props.resourceSettings)
+                foreach (var resourceProperties in Props.resourceSettings)
                 {
-                    var hediffResource = pawn.health.hediffSet.GetFirstHediffOfDef(hediffOption.hediff) as HediffResource;
+                    var hediffResource = pawn.health.hediffSet.GetFirstHediffOfDef(resourceProperties.hediff) as HediffResource;
                     if (hediffResource != null && (PostUseDelayTicks.TryGetValue(hediffResource, out var disable) && (disable.delayTicks > Find.TickManager.TicksGame)
                         || !hediffResource.CanGainResource))
                     {
@@ -95,8 +95,8 @@ namespace ART
                     }
                     else
                     {
-                        float num = hediffOption.GetResourceGain(this);
-                        HediffResourceUtils.AdjustResourceAmount(pawn, hediffOption.hediff, num, hediffOption.addHediffIfMissing, hediffOption.applyToPart);
+                        float num = resourceProperties.GetResourceGain(this);
+                        HediffResourceUtils.AdjustResourceAmount(pawn, resourceProperties.hediff, num, resourceProperties.addHediffIfMissing, resourceProperties.applyToPart);
                     }
                 }
             }

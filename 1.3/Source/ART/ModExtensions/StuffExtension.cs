@@ -10,7 +10,7 @@ namespace ART
 {
     public class StuffExtension : DefModExtension
     {
-        public List<HediffOption> resourceSettings;
+        public List<ResourceProperties> resourceSettings;
         public List<AdditionalDamage> additionalDamages;
 
         public void DamageThing(Thing damager, Thing thing, DamageInfo source, bool isRanged, bool isMelee)

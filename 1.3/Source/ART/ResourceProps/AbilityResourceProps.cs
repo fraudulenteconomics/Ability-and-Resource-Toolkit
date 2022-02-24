@@ -5,13 +5,13 @@ namespace ART
 {
     public class AbilityResourceProps : DefModExtension, IResourceProps
     {
-        public List<HediffOption> resourceSettings;
+        public List<ResourceProperties> resourceSettings;
 
-        public List<HediffOption> targetResourceSettings;
+        public List<ResourceProperties> targetResourceSettings;
 
         public List<ChargeSettings> chargeSettings;
-        public List<HediffOption> ResourceSettings => resourceSettings;
-        public List<HediffOption> TargetResourceSettings => targetResourceSettings;
+        public List<ResourceProperties> ResourceSettings => resourceSettings;
+        public List<ResourceProperties> TargetResourceSettings => targetResourceSettings;
         public List<ChargeSettings> ChargeSettings => chargeSettings;
     }
 }

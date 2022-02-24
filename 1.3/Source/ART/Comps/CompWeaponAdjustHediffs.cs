@@ -66,9 +66,9 @@ namespace ART
             var pawn = PawnHost;
             if (pawn != null)
             {
-                foreach (var hediffOption in Props.resourceSettings)
+                foreach (var resourceProperties in Props.resourceSettings)
                 {
-                    var hediffResource = pawn.health.hediffSet.GetFirstHediffOfDef(hediffOption.hediff) as HediffResource;
+                    var hediffResource = pawn.health.hediffSet.GetFirstHediffOfDef(resourceProperties.hediff) as HediffResource;
 
                     if (hediffResource != null && (PostUseDelayTicks.TryGetValue(hediffResource, out var disable) && (disable.delayTicks > Find.TickManager.TicksGame) 
                         || !hediffResource.CanGainResource))
@@ -77,14 +77,14 @@ namespace ART
                     }
                     else
                     {
-                        float num = hediffOption.GetResourceGain(this);
-                        if (this.IsStorageFor(hediffOption, out var resourceStorage))
+                        float num = resourceProperties.GetResourceGain(this);
+                        if (this.IsStorageFor(resourceProperties, out var resourceStorage))
                         {
                             resourceStorage.ResourceAmount += num;
                         }
                         else
                         {
-                            HediffResourceUtils.AdjustResourceAmount(pawn, hediffOption.hediff, num, hediffOption.addHediffIfMissing, hediffOption.applyToPart);
+                            HediffResourceUtils.AdjustResourceAmount(pawn, resourceProperties.hediff, num, resourceProperties.addHediffIfMissing, resourceProperties.applyToPart);
                         }
                     }
                 }

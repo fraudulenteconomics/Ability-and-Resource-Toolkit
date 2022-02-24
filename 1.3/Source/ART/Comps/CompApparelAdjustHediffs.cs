@@ -57,9 +57,9 @@ namespace ART
             var pawn = PawnHost;
             if (pawn != null)
             {
-                foreach (var hediffOption in Props.resourceSettings)
+                foreach (var resourceProperties in Props.resourceSettings)
                 {
-                    var hediffResource = pawn.health.hediffSet.GetFirstHediffOfDef(hediffOption.hediff) as HediffResource;
+                    var hediffResource = pawn.health.hediffSet.GetFirstHediffOfDef(resourceProperties.hediff) as HediffResource;
                     if (hediffResource != null && (PostUseDelayTicks.TryGetValue(hediffResource, out var disable) && (disable.delayTicks > Find.TickManager.TicksGame)
                         || !hediffResource.CanGainResource))
                     {
@@ -68,17 +68,17 @@ namespace ART
                     }
                     else
                     {
-                        float num = hediffOption.GetResourceGain(this);
-                        if (this.IsStorageFor(hediffOption, out var resourceStorage))
+                        float num = resourceProperties.GetResourceGain(this);
+                        if (this.IsStorageFor(resourceProperties, out var resourceStorage))
                         {
-                            if (hediffOption.addHediffIfMissing && pawn.health.hediffSet.GetFirstHediffOfDef(hediffOption.hediff) is null)
+                            if (resourceProperties.addHediffIfMissing && pawn.health.hediffSet.GetFirstHediffOfDef(resourceProperties.hediff) is null)
                             {
                                 BodyPartRecord bodyPartRecord = null;
-                                if (hediffOption.applyToPart != null)
+                                if (resourceProperties.applyToPart != null)
                                 {
-                                    bodyPartRecord = pawn.health.hediffSet.GetNotMissingParts().FirstOrDefault((BodyPartRecord x) => x.def == hediffOption.applyToPart);
+                                    bodyPartRecord = pawn.health.hediffSet.GetNotMissingParts().FirstOrDefault((BodyPartRecord x) => x.def == resourceProperties.applyToPart);
                                 }
-                                var hediff = HediffMaker.MakeHediff(hediffOption.hediff, pawn, bodyPartRecord) as HediffResource;
+                                var hediff = HediffMaker.MakeHediff(resourceProperties.hediff, pawn, bodyPartRecord) as HediffResource;
                                 pawn.health.AddHediff(hediff);
                             }
                             var toRefill = Mathf.Min(num, resourceStorage.ResourceCapacity - resourceStorage.ResourceAmount);
@@ -89,7 +89,7 @@ namespace ART
                         }
                         else
                         {
-                            HediffResourceUtils.AdjustResourceAmount(pawn, hediffOption.hediff, num, hediffOption.addHediffIfMissing, hediffOption.applyToPart);
+                            HediffResourceUtils.AdjustResourceAmount(pawn, resourceProperties.hediff, num, resourceProperties.addHediffIfMissing, resourceProperties.applyToPart);
                         }
                     }
                 }

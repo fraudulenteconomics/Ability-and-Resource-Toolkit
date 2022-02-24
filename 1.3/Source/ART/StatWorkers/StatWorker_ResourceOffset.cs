@@ -21,9 +21,9 @@ namespace ART
 					var comp = thing.TryGetComp<CompApparelAdjustHediffs>();
 					if (comp != null)
 					{
-						foreach (var hediffOption in comp.Props.resourceSettings)
+						foreach (var resourceProperties in comp.Props.resourceSettings)
 						{
-							if (options.hediffResource == hediffOption.hediff && GetValue(hediffOption, thing) != 0)
+							if (options.hediffResource == resourceProperties.hediff && GetValue(resourceProperties, thing) != 0)
 							{
 								return true;
 							}
@@ -35,9 +35,9 @@ namespace ART
 					var comp = thing.TryGetComp<CompWeaponAdjustHediffs>();
 					if (comp != null)
 					{
-						foreach (var hediffOption in comp.Props.resourceSettings)
+						foreach (var resourceProperties in comp.Props.resourceSettings)
 						{
-							if (options.hediffResource == hediffOption.hediff && GetValue(hediffOption, thing) != 0)
+							if (options.hediffResource == resourceProperties.hediff && GetValue(resourceProperties, thing) != 0)
 							{
 								return true;
 							}
@@ -56,11 +56,11 @@ namespace ART
 				var comp = thing.TryGetComp<CompApparelAdjustHediffs>();
 				if (comp != null)
                 {
-					foreach (var hediffOption in comp.Props.resourceSettings)
+					foreach (var resourceProperties in comp.Props.resourceSettings)
                     {
-						if (options.hediffResource == hediffOption.hediff)
+						if (options.hediffResource == resourceProperties.hediff)
                         {
-							val += GetValue(hediffOption, thing);
+							val += GetValue(resourceProperties, thing);
 						}
                     }
                 }
@@ -70,11 +70,11 @@ namespace ART
 				var comp = thing.TryGetComp<CompWeaponAdjustHediffs>();
 				if (comp != null)
 				{
-					foreach (var hediffOption in comp.Props.resourceSettings)
+					foreach (var resourceProperties in comp.Props.resourceSettings)
 					{
-						if (options.hediffResource == hediffOption.hediff)
+						if (options.hediffResource == resourceProperties.hediff)
 						{
-							val += GetValue(hediffOption, thing);
+							val += GetValue(resourceProperties, thing);
 						}
 					}
 				}
@@ -82,15 +82,15 @@ namespace ART
 			base.FinalizeValue(req, ref val, applyPostProcess);
 		}
 
-		public float GetValue(HediffOption hediffOption, Thing thing)
+		public float GetValue(ResourceProperties resourceProperties, Thing thing)
         {
-			if (hediffOption.qualityScalesResourcePerSecond && thing.TryGetQuality(out QualityCategory qc))
+			if (resourceProperties.qualityScalesResourcePerSecond && thing.TryGetQuality(out QualityCategory qc))
 			{
-				return hediffOption.resourcePerSecond * HediffResourceUtils.GetQualityMultiplier(qc);
+				return resourceProperties.resourcePerSecond * HediffResourceUtils.GetQualityMultiplier(qc);
 			}
 			else
 			{
-				return hediffOption.resourcePerSecond;
+				return resourceProperties.resourcePerSecond;
 			}
 		}
         public override string GetExplanationFinalizePart(StatRequest req, ToStringNumberSense numberSense, float finalVal)

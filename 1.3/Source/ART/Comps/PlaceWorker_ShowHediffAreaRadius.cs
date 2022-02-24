@@ -24,7 +24,7 @@ namespace ART
 			}
 		}
 
-        public HashSet<IntVec3> GetAllCells(HediffOption option, CellRect cellRect, ThingDef def)
+        public HashSet<IntVec3> GetAllCells(ResourceProperties option, CellRect cellRect, ThingDef def)
         {
             if (option.worksThroughWalls)
             {
@@ -35,7 +35,7 @@ namespace ART
                 return GetAffectedCells(option, cellRect, def);
             }
         }
-        public HashSet<IntVec3> GetAllCellsInRadius(HediffOption option, CellRect cellRect)
+        public HashSet<IntVec3> GetAllCellsInRadius(ResourceProperties option, CellRect cellRect)
         {
             HashSet<IntVec3> tempCells = new HashSet<IntVec3>();
             foreach (var cell in cellRect.Cells)
@@ -47,7 +47,7 @@ namespace ART
             }
             return tempCells;
         }
-        public HashSet<IntVec3> GetAffectedCells(HediffOption option, CellRect cellRect, ThingDef def)
+        public HashSet<IntVec3> GetAffectedCells(ResourceProperties option, CellRect cellRect, ThingDef def)
         {
             HashSet<IntVec3> affectedCells = new HashSet<IntVec3>();
             HashSet<IntVec3> tempCells = GetAllCellsInRadius(option, cellRect);

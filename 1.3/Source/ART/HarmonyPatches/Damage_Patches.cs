@@ -317,10 +317,10 @@ namespace ART
 						var hediffComp = apparel.GetComp<CompAdjustHediffs>();
 						if (hediffComp != null && hediffComp.Props.resourceSettings != null)
 						{
-							foreach (var hediffOption in hediffComp.Props.resourceSettings)
+							foreach (var resourceProperties in hediffComp.Props.resourceSettings)
 							{
-								var newDelayTicks = (int)(shieldProps.postDamageDelay.Value * hediffOption.postDamageDelayMultiplier);
-								var hediffResource = pawn.health.hediffSet.GetFirstHediffOfDef(hediffOption.hediff) as HediffResource;
+								var newDelayTicks = (int)(shieldProps.postDamageDelay.Value * resourceProperties.postDamageDelayMultiplier);
+								var hediffResource = pawn.health.hediffSet.GetFirstHediffOfDef(resourceProperties.hediff) as HediffResource;
 								if (hediffResource != null && hediffResource.CanHaveDelay(newDelayTicks))
 								{
 									hediffResource.AddDelay(newDelayTicks);
@@ -338,10 +338,10 @@ namespace ART
 						var hediffComp = equipment.GetComp<CompAdjustHediffs>();
 						if (hediffComp != null && hediffComp.Props.resourceSettings != null)
 						{
-							foreach (var hediffOption in hediffComp.Props.resourceSettings)
+							foreach (var resourceProperties in hediffComp.Props.resourceSettings)
 							{
-								var newDelayTicks = (int)(shieldProps.postDamageDelay.Value * hediffOption.postDamageDelayMultiplier);
-								var hediffResource = pawn.health.hediffSet.GetFirstHediffOfDef(hediffOption.hediff) as HediffResource;
+								var newDelayTicks = (int)(shieldProps.postDamageDelay.Value * resourceProperties.postDamageDelayMultiplier);
+								var hediffResource = pawn.health.hediffSet.GetFirstHediffOfDef(resourceProperties.hediff) as HediffResource;
 								if (hediffResource != null && hediffResource.CanHaveDelay(newDelayTicks))
 								{
 									hediffResource.AddDelay(newDelayTicks);

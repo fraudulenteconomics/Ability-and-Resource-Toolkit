@@ -17,14 +17,14 @@ namespace ART
 
         public IResourceStorage parent;
 
-        public HediffOption hediffOption;
+        public ResourceProperties resourceProperties;
         public ResourceStorage()
         {
 
         }
-        public ResourceStorage(HediffOption hediffOption, IResourceStorage parent)
+        public ResourceStorage(ResourceProperties resourceProperties, IResourceStorage parent)
         {
-            this.hediffOption = hediffOption;
+            this.resourceProperties = resourceProperties;
             this.parent = parent;
         }
         public float ResourceAmount
@@ -45,14 +45,14 @@ namespace ART
                 {
                     resourceAmount = 0;
                 }
-                parent.GetResourceFor(hediffOption)?.UpdateData();
+                parent.GetResourceFor(resourceProperties)?.UpdateData();
             }
         }
         public float ResourceCapacity
         {
             get
             {
-                return this.hediffOption.maxResourceStorageAmount;
+                return this.resourceProperties.maxResourceStorageAmount;
             }
         }
 

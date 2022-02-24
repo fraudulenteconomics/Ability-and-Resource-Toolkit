@@ -50,10 +50,10 @@ namespace ART
             var storedThingComps = StoredItems;
             foreach (var storedThingComp in storedThingComps)
             {
-                foreach (var hediffOption in Props.resourceSettings)
+                foreach (var resourceProperties in Props.resourceSettings)
                 {
-                    float num = hediffOption.GetResourceGain(this);
-                    var storage = storedThingComp.GetResourceStoragesFor(hediffOption.hediff).FirstOrDefault();
+                    float num = resourceProperties.GetResourceGain(this);
+                    var storage = storedThingComp.GetResourceStoragesFor(resourceProperties.hediff).FirstOrDefault();
                     if (storage != null)
                     {
                         if (storage.Item3.ResourceAmount < storage.Item3.ResourceCapacity)
@@ -62,8 +62,8 @@ namespace ART
                             storage.Item3.lastChargedTick = Find.TickManager.TicksGame;
                         }
 
-                        if (hediffOption.unforbidWhenEmpty && storage.Item3.ResourceAmount <= 0 ||
-                            hediffOption.unforbidWhenFull && storage.Item3.ResourceAmount >= storage.Item3.ResourceCapacity)
+                        if (resourceProperties.unforbidWhenEmpty && storage.Item3.ResourceAmount <= 0 ||
+                            resourceProperties.unforbidWhenFull && storage.Item3.ResourceAmount >= storage.Item3.ResourceCapacity)
                         {
                             storage.Item1.parent.SetForbidden(false);
                         }

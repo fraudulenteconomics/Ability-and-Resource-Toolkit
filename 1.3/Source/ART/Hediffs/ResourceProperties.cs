@@ -7,9 +7,9 @@ using Verse;
 
 namespace ART
 {
-    public class HediffOption
+    public class ResourceProperties
     {
-        public HediffOption()
+        public ResourceProperties()
         {
 
         }

@@ -19,7 +19,7 @@ namespace ART
         Dictionary<HediffResource, HediffResouceDisable> PostUseDelayTicks { get; }
         Thing Parent { get; }
         Pawn PawnHost { get; }
-        List<HediffOption> ResourceSettings { get; }
+        List<ResourceProperties> ResourceSettings { get; }
         string DisablePostUse { get; }
         bool TryGetQuality(out QualityCategory qc);
         ThingDef GetStuff();

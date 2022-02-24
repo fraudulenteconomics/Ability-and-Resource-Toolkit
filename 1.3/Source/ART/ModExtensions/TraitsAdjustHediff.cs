@@ -9,6 +9,6 @@ namespace ART
 {
     public class TraitsAdjustHediff : DefModExtension
     {
-        public List<HediffOption> resourceSettings;
+        public List<ResourceProperties> resourceSettings;
     }
 }

@@ -10,9 +10,9 @@ namespace ART
 {
     public interface IResourceProps
     {
-        List<HediffOption> ResourceSettings { get; }
+        List<ResourceProperties> ResourceSettings { get; }
 
-        List<HediffOption> TargetResourceSettings { get; }
+        List<ResourceProperties> TargetResourceSettings { get; }
 
         List<ChargeSettings> ChargeSettings { get; }
     }

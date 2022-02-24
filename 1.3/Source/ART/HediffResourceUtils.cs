@@ -343,14 +343,14 @@ namespace ART
 		}
 
 
-		public static float GetCapacityFor(this IAdjustResource props, HediffOption hediffOption)
+		public static float GetCapacityFor(this IAdjustResource props, ResourceProperties resourceProperties)
 		{
 			var num = 0f;
-			if (hediffOption.maxResourceCapacityOffset != 0)
+			if (resourceProperties.maxResourceCapacityOffset != 0)
             {
-				if (hediffOption.qualityScalesCapacityOffset && props.Parent.TryGetQuality(out QualityCategory qc))
+				if (resourceProperties.qualityScalesCapacityOffset && props.Parent.TryGetQuality(out QualityCategory qc))
 				{
-					num = hediffOption.maxResourceCapacityOffset * GetQualityMultiplier(qc);
+					num = resourceProperties.maxResourceCapacityOffset * GetQualityMultiplier(qc);
 
 					var stuff = props.GetStuff();
 					if (stuff != null)
@@ -360,7 +360,7 @@ namespace ART
 						{
 							foreach (var option in extension.resourceSettings)
 							{
-								if (hediffOption.hediff == option.hediff)
+								if (resourceProperties.hediff == option.hediff)
 								{
 									num *= option.resourceCapacityFactor;
 									num += option.resourceCapacityOffset;
@@ -373,9 +373,9 @@ namespace ART
                     {
 						foreach (var option in adjustResourceComp.ResourceSettings)
                         {
-							if (option.hediff == hediffOption.hediff)
+							if (option.hediff == resourceProperties.hediff)
                             {
-								if (hediffOption.hediff == option.hediff)
+								if (resourceProperties.hediff == option.hediff)
 								{
 									num *= option.resourceCapacityFactor;
 									num += option.resourceCapacityOffset;
@@ -386,7 +386,7 @@ namespace ART
 				}
 				else
 				{
-					num = hediffOption.maxResourceCapacityOffset;
+					num = resourceProperties.maxResourceCapacityOffset;
 				}
 			}
 			return num;
@@ -403,11 +403,11 @@ namespace ART
 				var resourceSettings = comp.ResourceSettings;
 				if (comp.Parent != adjuster.Parent && resourceSettings != null)
 				{
-					foreach (var hediffOption in resourceSettings)
+					foreach (var resourceProperties in resourceSettings)
 					{
-						if (hediffOption.addHediffIfMissing && hediffResourcesToRemove.Contains(hediffOption.hediff))
+						if (resourceProperties.addHediffIfMissing && hediffResourcesToRemove.Contains(resourceProperties.hediff))
 						{
-							hediffResourcesToRemove.Remove(hediffOption.hediff);
+							hediffResourcesToRemove.Remove(resourceProperties.hediff);
 						}
 					}
 				}
@@ -452,15 +452,15 @@ namespace ART
 				var resourceSettings = comp.ResourceSettings;
 				if (resourceSettings != null)
 				{
-					foreach (var hediffOption in resourceSettings)
+					foreach (var resourceProperties in resourceSettings)
 					{
-						var hediff = pawn.health.hediffSet.GetFirstHediffOfDef(hediffOption.hediff) as HediffResource;
-						if (hediff != null && hediffOption.dropIfOverCapacity && hediff.ResourceCapacity < 0)
+						var hediff = pawn.health.hediffSet.GetFirstHediffOfDef(resourceProperties.hediff) as HediffResource;
+						if (hediff != null && resourceProperties.dropIfOverCapacity && hediff.ResourceCapacity < 0)
 						{
 							comp.Drop();
-							if (!hediffOption.overCapacityReasonKey.NullOrEmpty())
+							if (!resourceProperties.overCapacityReasonKey.NullOrEmpty())
 							{
-								Messages.Message(hediffOption.overCapacityReasonKey.Translate(pawn.Named("PAWN"), comp.Parent.Named("THING")), MessageTypeDefOf.CautionInput);
+								Messages.Message(resourceProperties.overCapacityReasonKey.Translate(pawn.Named("PAWN"), comp.Parent.Named("THING")), MessageTypeDefOf.CautionInput);
 							}
 						}
 					}
@@ -886,7 +886,7 @@ namespace ART
 			__result = (int)(__result * (1 + (chargeSettings.damagePerCharge * (resourceAmount - chargeSettings.minimumResourcePerUse) / chargeSettings.resourcePerCharge)));
 		}
 
-		public static HashSet<IntVec3> GetAllCellsAround(HediffOption option, TargetInfo targetInfo, CellRect occupiedCells)
+		public static HashSet<IntVec3> GetAllCellsAround(ResourceProperties option, TargetInfo targetInfo, CellRect occupiedCells)
 		{
 			if (option.worksThroughWalls)
 			{
@@ -897,7 +897,7 @@ namespace ART
 				return GetAffectedCells(option, targetInfo, occupiedCells);
 			}
 		}
-		public static HashSet<IntVec3> GetAllCellsInRadius(HediffOption option, CellRect occupiedCells)
+		public static HashSet<IntVec3> GetAllCellsInRadius(ResourceProperties option, CellRect occupiedCells)
 		{
 			HashSet<IntVec3> tempCells = new HashSet<IntVec3>();
 			foreach (var cell in occupiedCells)
@@ -909,7 +909,7 @@ namespace ART
 			}
 			return tempCells;
 		}
-		public static HashSet<IntVec3> GetAffectedCells(HediffOption option, TargetInfo targetInfo, CellRect occupiedCells)
+		public static HashSet<IntVec3> GetAffectedCells(ResourceProperties option, TargetInfo targetInfo, CellRect occupiedCells)
 		{
 			HashSet<IntVec3> affectedCells = new HashSet<IntVec3>();
 			HashSet<IntVec3> tempCells = GetAllCellsInRadius(option, occupiedCells);
@@ -937,10 +937,10 @@ namespace ART
 			return affectedCells;
 		}
 
-		public static float GetResourceGain(this HediffOption hediffOption, IAdjustResource source)
+		public static float GetResourceGain(this ResourceProperties resourceProperties, IAdjustResource source)
 		{
-			float num = hediffOption.resourcePerSecond;
-			if (hediffOption.qualityScalesResourcePerSecond && source.TryGetQuality(out QualityCategory qc))
+			float num = resourceProperties.resourcePerSecond;
+			if (resourceProperties.qualityScalesResourcePerSecond && source.TryGetQuality(out QualityCategory qc))
 			{
 				num *= GetQualityMultiplier(qc);
 			}
@@ -952,7 +952,7 @@ namespace ART
                 {
 					foreach (var option in extension.resourceSettings)
                     {
-						if (option.hediff == hediffOption.hediff)
+						if (option.hediff == resourceProperties.hediff)
                         {
 							num *= option.resourcePerSecondFactor;
 							num += option.resourcePerSecondOffset;
@@ -965,7 +965,7 @@ namespace ART
             {
 				foreach (var option in otherComp.ResourceSettings)
 				{
-					if (option.hediff == hediffOption.hediff)
+					if (option.hediff == resourceProperties.hediff)
 					{
 						num *= option.resourcePerSecondFactor;
 						num += option.resourcePerSecondOffset;
@@ -973,13 +973,13 @@ namespace ART
 				}
 			}
 
-			if (hediffOption.refillOnlyInnerStorage)
+			if (resourceProperties.refillOnlyInnerStorage)
 			{
 				return num;
 			}
 			else
 			{
-				return num * hediffOption.hediff.resourcePerSecondFactor;
+				return num * resourceProperties.hediff.resourcePerSecondFactor;
 			}
 		}
 

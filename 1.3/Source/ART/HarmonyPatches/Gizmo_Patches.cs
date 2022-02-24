@@ -181,7 +181,7 @@ namespace ART
 	//	{
 	//		if (__instance is Command_VerbTarget verbTarget)
     //        {
-	//			if (TryGetAmmoString(verbTarget.verb, out List<Tuple<HediffOption, HediffResource>> hediffs))
+	//			if (TryGetAmmoString(verbTarget.verb, out List<Tuple<ResourceProperties, HediffResource>> hediffs))
 	//			{
 	//				var butRect = new Rect(topLeft.x, topLeft.y, verbTarget.GetWidth(maxWidth), 75f);
 	//				for (var i = 0; i < hediffs.Count; i++)
@@ -198,9 +198,9 @@ namespace ART
 	//		}
 	//	}
 	//
-	//	public static bool TryGetAmmoString(Verb verb, out List<Tuple<HediffOption, HediffResource>> hediffs)
+	//	public static bool TryGetAmmoString(Verb verb, out List<Tuple<ResourceProperties, HediffResource>> hediffs)
 	//	{
-	//		hediffs = new List<Tuple<HediffOption, HediffResource>>();
+	//		hediffs = new List<Tuple<ResourceProperties, HediffResource>>();
 	//		if (verb.CasterIsPawn)
 	//		{
 	//			var resourceProps = verb.GetResourceProps();
@@ -214,7 +214,7 @@ namespace ART
 	//						var resourceHediff = verb.CasterPawn.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
 	//						if (resourceHediff != null)
 	//						{
-	//							hediffs.Add(new Tuple<HediffOption, HediffResource>(option, resourceHediff));
+	//							hediffs.Add(new Tuple<ResourceProperties, HediffResource>(option, resourceHediff));
 	//						}
 	//					}
 	//				}

@@ -12,6 +12,6 @@ namespace ART
 	public interface IResourceStorage
 	{
         Dictionary<int, ResourceStorage> ResourceStorages { get; }
-        HediffResource GetResourceFor(HediffOption hediffOption);
+        HediffResource GetResourceFor(ResourceProperties resourceProperties);
     }
 }

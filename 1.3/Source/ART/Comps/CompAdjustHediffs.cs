@@ -11,7 +11,7 @@ namespace ART
 
     public class CompProperties_AdjustHediffs : CompProperties
     {
-        public List<HediffOption> resourceSettings;
+        public List<ResourceProperties> resourceSettings;
 
         public string disablePostUse;
     }
@@ -19,11 +19,11 @@ namespace ART
     {
         public CompProperties_AdjustHediffs Props => (CompProperties_AdjustHediffs)this.props;
         public Thing Parent => this.parent;
-        public virtual List<HediffOption> ResourceSettings => Props.resourceSettings;
+        public virtual List<ResourceProperties> ResourceSettings => Props.resourceSettings;
         public string DisablePostUse => Props.disablePostUse;
-        public bool IsStorageFor(HediffOption hediffOption, out ResourceStorage resourceStorages)
+        public bool IsStorageFor(ResourceProperties resourceProperties, out ResourceStorage resourceStorages)
         {
-            resourceStorages = GetResourceStoragesFor(hediffOption).FirstOrDefault()?.Item3;
+            resourceStorages = GetResourceStoragesFor(resourceProperties).FirstOrDefault()?.Item3;
             return resourceStorages != null;
         }
 
@@ -53,9 +53,9 @@ namespace ART
                         {
                             resourceStorages[i] = new ResourceStorage(Props.resourceSettings[i], this);
                         }
-                        if (resourceStorages[i].hediffOption is null)
+                        if (resourceStorages[i].resourceProperties is null)
                         {
-                            resourceStorages[i].hediffOption = Props.resourceSettings[i];
+                            resourceStorages[i].resourceProperties = Props.resourceSettings[i];
                         }
                         if (resourceStorages[i].parent is null)
                         {
@@ -77,19 +77,19 @@ namespace ART
             {
                 foreach (var storage in resourceStorages.Values)
                 {
-                    if (storage.hediffOption.addHediffIfMissing)
+                    if (storage.resourceProperties.addHediffIfMissing)
                     {
-                        var hediff = pawn.health.hediffSet.GetFirstHediffOfDef(storage.hediffOption.hediff);
+                        var hediff = pawn.health.hediffSet.GetFirstHediffOfDef(storage.resourceProperties.hediff);
                         if (hediff is null)
                         {
-                            hediff = HediffMaker.MakeHediff(storage.hediffOption.hediff, pawn);
+                            hediff = HediffMaker.MakeHediff(storage.resourceProperties.hediff, pawn);
                             pawn.health.AddHediff(hediff);
                         }
                     }
                 }
             }
         }
-        public IEnumerable<Tuple<CompAdjustHediffs, HediffOption, ResourceStorage>> GetResourceStoragesFor(HediffResourceDef hediffDef)
+        public IEnumerable<Tuple<CompAdjustHediffs, ResourceProperties, ResourceStorage>> GetResourceStoragesFor(HediffResourceDef hediffDef)
         {
             var resourceStorages = ResourceStorages;
             if (Props.resourceSettings != null)
@@ -98,21 +98,21 @@ namespace ART
                 {
                     if (Props.resourceSettings[i].maxResourceStorageAmount > 0 && Props.resourceSettings[i].hediff == hediffDef)
                     {
-                        yield return new Tuple<CompAdjustHediffs, HediffOption, ResourceStorage>(this, Props.resourceSettings[i], resourceStorages[i]);
+                        yield return new Tuple<CompAdjustHediffs, ResourceProperties, ResourceStorage>(this, Props.resourceSettings[i], resourceStorages[i]);
                     }
                 }
             }
         }
-        public IEnumerable<Tuple<CompAdjustHediffs, HediffOption, ResourceStorage>> GetResourceStoragesFor(HediffOption hediffOption)
+        public IEnumerable<Tuple<CompAdjustHediffs, ResourceProperties, ResourceStorage>> GetResourceStoragesFor(ResourceProperties resourceProperties)
         {
             var resourceStorages = ResourceStorages;
             if (Props.resourceSettings != null)
             {
                 for (var i = 0; i < Props.resourceSettings.Count; i++)
                 {
-                    if (Props.resourceSettings[i].maxResourceStorageAmount > 0 && Props.resourceSettings[i].refillOnlyInnerStorage && Props.resourceSettings[i] == hediffOption)
+                    if (Props.resourceSettings[i].maxResourceStorageAmount > 0 && Props.resourceSettings[i].refillOnlyInnerStorage && Props.resourceSettings[i] == resourceProperties)
                     {
-                        yield return new Tuple<CompAdjustHediffs, HediffOption, ResourceStorage>(this, Props.resourceSettings[i], resourceStorages[i]);
+                        yield return new Tuple<CompAdjustHediffs, ResourceProperties, ResourceStorage>(this, Props.resourceSettings[i], resourceStorages[i]);
                     }
                 }
             }
@@ -125,57 +125,57 @@ namespace ART
             {
                 for (var i = 0; i < Props.resourceSettings.Count; i++)
                 {
-                    var hediffOption = Props.resourceSettings[i];
-                    if (hediffOption.maxResourceStorageAmount > 0)
+                    var resourceProperties = Props.resourceSettings[i];
+                    if (resourceProperties.maxResourceStorageAmount > 0)
                     {
-                        foreach (var resourceStorage in GetResourceStoragesFor(hediffOption).ToList())
+                        foreach (var resourceStorage in GetResourceStoragesFor(resourceProperties).ToList())
                         {
                             if ((Find.TickManager.TicksGame - resourceStorage.Item3.lastChargedTick) <= 60)
                             {
-                                sb.AppendLine("ART.StoredAmountCharged".Translate(resourceStorage.Item3.ResourceAmount, hediffOption.maxResourceStorageAmount));
+                                sb.AppendLine("ART.StoredAmountCharged".Translate(resourceStorage.Item3.ResourceAmount, resourceProperties.maxResourceStorageAmount));
                             }
                             else
                             {
-                                sb.AppendLine("ART.StoredAmount".Translate(resourceStorage.Item3.ResourceAmount, hediffOption.maxResourceStorageAmount));
+                                sb.AppendLine("ART.StoredAmount".Translate(resourceStorage.Item3.ResourceAmount, resourceProperties.maxResourceStorageAmount));
                             }
                         }
                     }
 
-                    if (hediffOption.disallowEquipIfHediffMissing || hediffOption.disallowEquipWhenEmpty || hediffOption.disableIfMissingHediff)
+                    if (resourceProperties.disallowEquipIfHediffMissing || resourceProperties.disallowEquipWhenEmpty || resourceProperties.disableIfMissingHediff)
                     {
-                        sb.AppendLine("ART.RequiresResource".Translate(hediffOption.hediff.label));
+                        sb.AppendLine("ART.RequiresResource".Translate(resourceProperties.hediff.label));
                     }
 
                     if (Prefs.DevMode)
                     {
-                        if (hediffOption.minimumResourcePerUse != -1f)
+                        if (resourceProperties.minimumResourcePerUse != -1f)
                         {
-                            sb.AppendLine("ART.MinimumResourcePerUse".Translate(hediffOption.hediff.label, hediffOption.minimumResourcePerUse));
+                            sb.AppendLine("ART.MinimumResourcePerUse".Translate(resourceProperties.hediff.label, resourceProperties.minimumResourcePerUse));
                         }
-                        if (hediffOption.disableAboveResource != -1f)
+                        if (resourceProperties.disableAboveResource != -1f)
                         {
-                            sb.AppendLine("ART.WillBeDisabledWhenResourceAbove".Translate(hediffOption.hediff.label, hediffOption.disableAboveResource));
+                            sb.AppendLine("ART.WillBeDisabledWhenResourceAbove".Translate(resourceProperties.hediff.label, resourceProperties.disableAboveResource));
                         }
 
-                        if (hediffOption.resourcePerUse != 0)
+                        if (resourceProperties.resourcePerUse != 0)
                         {
-                            sb.AppendLine("ART.ResourcePerUse".Translate(hediffOption.hediff.label, -hediffOption.resourcePerUse));
+                            sb.AppendLine("ART.ResourcePerUse".Translate(resourceProperties.hediff.label, -resourceProperties.resourcePerUse));
                         }
-                        if (hediffOption.resourcePerSecond != 0)
+                        if (resourceProperties.resourcePerSecond != 0)
                         {
-                            sb.AppendLine("ART.ResourcePerSecond".Translate(hediffOption.hediff.label, hediffOption.resourcePerSecond));
+                            sb.AppendLine("ART.ResourcePerSecond".Translate(resourceProperties.hediff.label, resourceProperties.resourcePerSecond));
                         }
-                        if (hediffOption.maxResourceCapacityOffset != 0)
+                        if (resourceProperties.maxResourceCapacityOffset != 0)
                         {
-                            sb.AppendLine("ART.MaxResourceCapacityOffset".Translate(hediffOption.hediff.label, hediffOption.maxResourceCapacityOffset.ToStringWithSign()));
+                            sb.AppendLine("ART.MaxResourceCapacityOffset".Translate(resourceProperties.hediff.label, resourceProperties.maxResourceCapacityOffset.ToStringWithSign()));
                         }
-                        if (hediffOption.refillOnlyInnerStorage)
+                        if (resourceProperties.refillOnlyInnerStorage)
                         {
-                            sb.AppendLine("ART.IsBattery".Translate(hediffOption.hediff.label, hediffOption.maxResourceCapacityOffset));
+                            sb.AppendLine("ART.IsBattery".Translate(resourceProperties.hediff.label, resourceProperties.maxResourceCapacityOffset));
                         }
-                        if (hediffOption.maxResourceStorageAmount != 0)
+                        if (resourceProperties.maxResourceStorageAmount != 0)
                         {
-                            sb.AppendLine("ART.MaxResourceStorageAmount".Translate(hediffOption.hediff.label, hediffOption.maxResourceStorageAmount));
+                            sb.AppendLine("ART.MaxResourceStorageAmount".Translate(resourceProperties.hediff.label, resourceProperties.maxResourceStorageAmount));
                         }
                     }
                 }
@@ -299,9 +299,9 @@ namespace ART
             return this.parent.Stuff;
         }
 
-        public HediffResource GetResourceFor(HediffOption hediffOption)
+        public HediffResource GetResourceFor(ResourceProperties resourceProperties)
         {
-            return PawnHost?.health?.hediffSet?.GetFirstHediffOfDef(hediffOption.hediff) as HediffResource;
+            return PawnHost?.health?.hediffSet?.GetFirstHediffOfDef(resourceProperties.hediff) as HediffResource;
         }
     }
 }

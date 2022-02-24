@@ -140,8 +140,10 @@
 			<li>
 				<label>caught</label>
 				<capMods>
-					<capacity>Moving</capacity>
-					<setMax>0.2</setMax>
+					<li>
+						<capacity>Moving</capacity>
+						<setMax>0.2</setMax>
+					</li>
 				</capMods>
 			</li>
 		</stages>
@@ -279,7 +281,7 @@
 				<minSeverity>1</minSeverity>
 				<label>zoomed-in</label>
 				<statOffsets>
-					<RangedAccuracy>5</RangedAccuracy>
+					<ShootingAccuracyPawn>5</ShootingAccuracyPawn>
 					<MeleeHitChance>-10</MeleeHitChance>
 				</statOffsets>
 			</li>

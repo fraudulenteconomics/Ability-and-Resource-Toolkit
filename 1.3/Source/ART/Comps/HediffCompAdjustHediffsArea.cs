@@ -55,7 +55,7 @@ namespace ART
         {
             if (Active)
             {
-                var option = GetFirstHediffOptionFor(hediffResourceDef);
+                var option = GetFirstResourcePropertiesFor(hediffResourceDef);
                 if (option != null && cell.DistanceTo(this.Pawn.Position) <= option.effectRadius)
                 {
                     return true;
@@ -63,10 +63,10 @@ namespace ART
             }
             return false;
         }
-        public void AppendResource(Pawn pawn, HediffOption hediffOption, float num)
+        public void AppendResource(Pawn pawn, ResourceProperties resourceProperties, float num)
         {
             Log.Message("AppendResource: " + pawn);
-            var hediffResource = pawn.health.hediffSet.GetFirstHediffOfDef(hediffOption.hediff) as HediffResource;
+            var hediffResource = pawn.health.hediffSet.GetFirstHediffOfDef(resourceProperties.hediff) as HediffResource;
             if (hediffResource != null && !hediffResource.CanGainResource)
             {
                 return;
@@ -75,7 +75,7 @@ namespace ART
             {
                 if (hediffResource != null)
                 {
-                    var amplifiers = hediffResource.GetAmplifiersFor(hediffOption.hediff);
+                    var amplifiers = hediffResource.GetAmplifiersFor(resourceProperties.hediff);
                     if (!this.Props.stackEffects)
                     {
                         if (amplifiers.Count() > 0 && amplifiers.Any(x => x != this))
@@ -91,10 +91,10 @@ namespace ART
                         }
                     }
                 }
-                hediffResource = HediffResourceUtils.AdjustResourceAmount(pawn, hediffOption.hediff, num, hediffOption.addHediffIfMissing, hediffOption.applyToPart);
+                hediffResource = HediffResourceUtils.AdjustResourceAmount(pawn, resourceProperties.hediff, num, resourceProperties.addHediffIfMissing, resourceProperties.applyToPart);
                 if (hediffResource != null)
                 {
-                    Log.Message(this.parent + " is affecting " + pawn + " - " + hediffOption.hediff);
+                    Log.Message(this.parent + " is affecting " + pawn + " - " + resourceProperties.hediff);
                     hediffResource.TryAddAmplifier(this);
                 }
             }
@@ -104,13 +104,13 @@ namespace ART
         {
             if (Active)
             {
-                var option = GetFirstHediffOptionFor(hediffResourceDef);
+                var option = GetFirstResourcePropertiesFor(hediffResourceDef);
                 return option.maxResourceCapacityOffset;
             }
             return 0f;
         }
         
-        public HediffOption GetFirstHediffOptionFor(HediffResourceDef hediffResourceDef)
+        public ResourceProperties GetFirstResourcePropertiesFor(HediffResourceDef hediffResourceDef)
         {
             return this.Props.resourceSettings.FirstOrDefault(x => x.hediff == hediffResourceDef);
         }

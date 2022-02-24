@@ -152,7 +152,7 @@
     <Compile Include="ModExtensions\TraitsAdjustHediff.cs" />
     <Compile Include="ModExtensions\EffectOnImpact.cs" />
     <Compile Include="ModExtensions\StatWorkerExtender.cs" />
-    <Compile Include="Hediffs\HediffOption.cs" />
+    <Compile Include="Hediffs\ResourceProperties.cs" />
     <Compile Include="Policies\ITab_Pawn_Resource.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Recipes\Bill_ResourceWithUft.cs" />

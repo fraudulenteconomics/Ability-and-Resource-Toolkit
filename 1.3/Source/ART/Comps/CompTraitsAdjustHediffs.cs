@@ -30,11 +30,11 @@ namespace ART
     public class CompTraitsAdjustHediffs : CompAdjustHediffs
     {
         public static Dictionary<TraitDef, TraitsAdjustHediff> cachedModExtensions = new Dictionary<TraitDef, TraitsAdjustHediff>();
-        public override List<HediffOption> ResourceSettings
+        public override List<ResourceProperties> ResourceSettings
         {
             get
             {
-                var resourceSettings = new List<HediffOption>();
+                var resourceSettings = new List<ResourceProperties>();
                 foreach (var trait in PawnHost.story?.traits?.allTraits)
                 {
                     if (!cachedModExtensions.TryGetValue(trait.def, out TraitsAdjustHediff traitAdjustOptions))
@@ -68,9 +68,9 @@ namespace ART
             var pawn = PawnHost;
             if (pawn != null && !pawn.Dead)
             {
-                foreach (var hediffOption in ResourceSettings)
+                foreach (var resourceProperties in ResourceSettings)
                 {
-                    var hediffResource = pawn.health.hediffSet.GetFirstHediffOfDef(hediffOption.hediff) as HediffResource;
+                    var hediffResource = pawn.health.hediffSet.GetFirstHediffOfDef(resourceProperties.hediff) as HediffResource;
                     if (hediffResource != null && (PostUseDelayTicks.TryGetValue(hediffResource, out var disable) && (disable.delayTicks > Find.TickManager.TicksGame)
                         || !hediffResource.CanGainResource))
                     {
@@ -78,8 +78,8 @@ namespace ART
                     }
                     else
                     {
-                        float num = hediffOption.GetResourceGain(this);
-                        HediffResourceUtils.AdjustResourceAmount(PawnHost, hediffOption.hediff, num, hediffOption.addHediffIfMissing, hediffOption.applyToPart);
+                        float num = resourceProperties.GetResourceGain(this);
+                        HediffResourceUtils.AdjustResourceAmount(PawnHost, resourceProperties.hediff, num, resourceProperties.addHediffIfMissing, resourceProperties.applyToPart);
                     }
                 }
             }

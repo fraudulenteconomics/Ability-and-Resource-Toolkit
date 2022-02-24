@@ -22,7 +22,7 @@ namespace ART
 	{
         public HediffCompProperties_AdjustHediffsPerStages Props => (HediffCompProperties_AdjustHediffsPerStages)this.props;
         public Thing Parent => this.Pawn;
-        public List<HediffOption> ResourceSettings
+        public List<ResourceProperties> ResourceSettings
         {
             get
             {
@@ -98,9 +98,9 @@ namespace ART
                     var resourceSetting = ResourceSettings;
                 if (resourceSetting != null)
                 {
-                    foreach (var hediffOption in resourceSetting)
+                    foreach (var resourceProperties in resourceSetting)
                     {
-                        var hediffResource = pawn.health.hediffSet.GetFirstHediffOfDef(hediffOption.hediff) as HediffResource;
+                        var hediffResource = pawn.health.hediffSet.GetFirstHediffOfDef(resourceProperties.hediff) as HediffResource;
                         if (hediffResource != null && (PostUseDelayTicks.TryGetValue(hediffResource, out var disable) && (disable.delayTicks > Find.TickManager.TicksGame) 
                             || !hediffResource.CanGainResource))
                         {
@@ -108,8 +108,8 @@ namespace ART
                         }
                         else
                         {
-                            float num = hediffOption.GetResourceGain(this);
-                            HediffResourceUtils.AdjustResourceAmount(pawn, hediffOption.hediff, num, hediffOption.addHediffIfMissing, hediffOption.applyToPart);
+                            float num = resourceProperties.GetResourceGain(this);
+                            HediffResourceUtils.AdjustResourceAmount(pawn, resourceProperties.hediff, num, resourceProperties.addHediffIfMissing, resourceProperties.applyToPart);
                         }
                     }
                 }
