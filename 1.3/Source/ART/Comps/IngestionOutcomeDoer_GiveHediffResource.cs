@@ -63,7 +63,7 @@ namespace ART
                     {
                         AddictionUtility.ModifyChemicalEffectForToleranceAndBodySize(pawn, toleranceChemical, ref resourceAdjust);
                     }
-                    hediff.ResourceAmount += resourceAdjust;
+                    hediff.ChangeResourceAmount(resourceAdjust);
                 }
                 if (resourcePercent != -1f)
                 {
@@ -72,7 +72,7 @@ namespace ART
                     {
                         AddictionUtility.ModifyChemicalEffectForToleranceAndBodySize(pawn, toleranceChemical, ref resourceAmount);
                     }
-                    hediff.ResourceAmount += resourceAdjust;
+                    hediff.ChangeResourceAmount(resourceAdjust);
                 }
             }
         }

@@ -237,7 +237,7 @@ namespace ART
                                 continue;
                             }
                             var toConsume = diff > 0 ? diff >= curCost ? curCost : diff : diff < curCost ? curCost : diff;
-                            hediff.ResourceAmount -= toConsume;
+                            hediff.ChangeResourceAmount(-toConsume);
                             if (consumedResources.ContainsKey(resourceCost.resource))
                             {
                                 consumedResources[resourceCost.resource] += toConsume;

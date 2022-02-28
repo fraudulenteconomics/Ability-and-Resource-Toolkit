@@ -154,7 +154,7 @@ namespace ART
                 else
                 {
                     __instance.job.GetTarget(TargetIndex.A).Thing.TryGetComp<CompBreakdownable>().Notify_Repaired();
-                    repairData.Item1.ResourceAmount -= repairData.Item2.resourceOnRepair;
+                    repairData.Item1.ChangeResourceAmount(-repairData.Item2.resourceOnRepair);
                 }
             };
             yield return toil2;

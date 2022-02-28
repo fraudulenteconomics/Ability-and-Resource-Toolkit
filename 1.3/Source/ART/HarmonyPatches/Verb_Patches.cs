@@ -60,7 +60,7 @@ namespace ART
                         if (amount != damageInfo.Amount)
                         {
                             damageInfo.SetAmount(amount);
-                            hediffResource.ResourceAmount = 0;
+                            hediffResource.SetResourceAmount(0);
                         }
                     }
                 }

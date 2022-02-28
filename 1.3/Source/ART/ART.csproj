@@ -124,7 +124,6 @@
     <Compile Include="Hediffs\VerbType.cs" />
     <Compile Include="Interfaces\IAdjustResouceInArea.cs" />
     <Compile Include="Interfaces\IResourceStorage.cs" />
-    <Compile Include="Interfaces\IResourceGenerator.cs" />
     <Compile Include="Interfaces\IChargeResource.cs" />
     <Compile Include="Interfaces\IAdjustResource.cs" />
     <Compile Include="Comps\PlaceWorker_ShowHediffAreaRadius.cs" />

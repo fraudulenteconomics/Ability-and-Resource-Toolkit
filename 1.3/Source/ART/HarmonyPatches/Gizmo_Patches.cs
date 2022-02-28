@@ -105,7 +105,7 @@ namespace ART
 					{
 						foreach (var hediffResource in hediffResources)
 						{
-							hediffResource.ResourceAmount = hediffResource.ResourceCapacity;
+							hediffResource.SetResourceAmount(hediffResource.ResourceCapacity);
 						}
 					}
 				};
@@ -120,7 +120,7 @@ namespace ART
 					{
 						foreach (var hediffResource in hediffResources)
 						{
-							hediffResource.ResourceAmount = 0;
+							hediffResource.SetResourceAmount(0);
 						}
 					}
 				};
@@ -135,7 +135,7 @@ namespace ART
 					{
 						foreach (var hediffResource in hediffResources)
 						{
-							hediffResource.ResourceAmount -= 10;
+							hediffResource.ChangeResourceAmount(-10, null);
 						}
 					}
 				};
@@ -150,7 +150,7 @@ namespace ART
 					{
 						foreach (var hediffResource in hediffResources)
 						{
-							hediffResource.ResourceAmount += 10;
+							hediffResource.ChangeResourceAmount(10, null);
 						}
 					}
 				};

@@ -55,7 +55,7 @@ namespace ART
 									compCharge.ProjectilesWithChargedResource[__instance] = new ChargeResources();
 									compCharge.ProjectilesWithChargedResource[__instance].chargeResources = new List<ChargeResource> { new ChargeResource(hediffResource.ResourceAmount, chargeSettings) };
 								}
-								hediffResource.ResourceAmount = 0f;
+								hediffResource.SetResourceAmount(0f, null);
 							}
 						}
 					}
@@ -231,8 +231,8 @@ namespace ART
 			{
 				foreach (var resourceEffect in effectOnImpactOptions.resourceEffects)
 				{
-					var hediffResource = HediffResourceUtils.AdjustResourceAmount(__instance, resourceEffect.hediffDef,
-						resourceEffect.adjustTargetResource, resourceEffect.addHediffIfMissing, resourceEffect.applyToPart);
+					var hediffResource = HediffResourceUtils.AdjustResourceAmount(__instance, resourceEffect.hediff,
+						resourceEffect.adjustTargetResource, resourceEffect.addHediffIfMissing, resourceEffect, resourceEffect.applyToPart);
 					if (hediffResource != null && resourceEffect.delayTargetOnDamage != IntRange.zero)
 					{
 						hediffResource.AddDelay(resourceEffect.delayTargetOnDamage.RandomInRange);
@@ -280,7 +280,7 @@ namespace ART
 				{
 					dinfo.SetAmount(0);
 				}
-				hediff.ResourceAmount -= shieldProps.resourceConsumptionPerDamage.Value;
+				hediff.ChangeResourceAmount(-shieldProps.resourceConsumptionPerDamage.Value, null);
 				damageIsProcessed = true;
 			}
 			else if (shieldProps.damageAbsorbedPerResource.HasValue)
@@ -296,13 +296,13 @@ namespace ART
 				if (resourceAmount >= resourceCost)
 				{
 					dinfo.SetAmount(0f);
-					hediff.ResourceAmount -= resourceCost;
+					hediff.ChangeResourceAmount(-resourceCost, null);
 				}
 				else
 				{
 					damageAmount -= resourceAmount * ratioPerAbsorb;
 					dinfo.SetAmount(damageAmount);
-					hediff.ResourceAmount = 0;
+					hediff.SetResourceAmount(0, null);
 				}
 				damageIsProcessed = true;
 			}

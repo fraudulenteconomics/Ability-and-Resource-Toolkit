@@ -117,7 +117,7 @@ namespace ART
             {
                 quality = CalculateBaseTendQuality(doctor, patient, data.Item2);
                 maxQuality = data.Item2.statBases.First(x => x.stat == StatDefOf.MedicalQualityMax).value;
-                data.Item1.ResourceAmount -= data.Item2.resourceOnTend;
+                data.Item1.ChangeResourceAmount(-data.Item2.resourceOnTend);
             }
         }
 

@@ -39,7 +39,7 @@ namespace ART
                             var hediffResource = worker.health.hediffSet.GetFirstHediffOfDef(useProps.hediff) as HediffResource;
                             if (hediffResource != null && hediffResource.CanUse(useProps, out _))
                             {
-                                hediffResource.ResourceAmount += useProps.resourceOnComplete;
+                                hediffResource.ChangeResourceAmount(useProps.resourceOnComplete);
                             }
                             else
                             {

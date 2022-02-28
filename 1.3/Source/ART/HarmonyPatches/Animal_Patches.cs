@@ -29,7 +29,7 @@ namespace ART
                     {
                         if (useProps.resourceOnTaming != 0)
                         {
-                            HediffResourceUtils.AdjustResourceAmount(initiator, useProps.hediff, useProps.resourceOnTaming, useProps.addHediffIfMissing, null);
+                            HediffResourceUtils.AdjustResourceAmount(initiator, useProps.hediff, useProps.resourceOnTaming, useProps.addHediffIfMissing, null, null);
                         }
                     }
                 }
@@ -78,7 +78,7 @@ namespace ART
                     {
                         if (useProps.resourceOnTraining != 0)
                         {
-                            HediffResourceUtils.AdjustResourceAmount(___pawn, useProps.hediff, useProps.resourceOnTraining, useProps.addHediffIfMissing, null);
+                            HediffResourceUtils.AdjustResourceAmount(___pawn, useProps.hediff, useProps.resourceOnTraining, useProps.addHediffIfMissing, null, null);
                         }
                     }
                 }
@@ -128,7 +128,7 @@ namespace ART
                     {
                         if (useProps.resourceOnGather != 0)
                         {
-                            HediffResourceUtils.AdjustResourceAmount(doer, useProps.hediff, useProps.resourceOnGather, useProps.addHediffIfMissing, null);
+                            HediffResourceUtils.AdjustResourceAmount(doer, useProps.hediff, useProps.resourceOnGather, useProps.addHediffIfMissing, null, null);
                         }
                     }
                 }
@@ -254,7 +254,7 @@ namespace ART
                     PawnUtility.ForceWait(ingester, 270, pawn);
                     Pawn actor = toil.actor;
                     Job curJob = actor.jobs.curJob;
-                    ingestionData.hediffResource.ResourceAmount -= ingestionData.requiredResourceAmount;
+                    ingestionData.hediffResource.ChangeResourceAmount(-ingestionData.requiredResourceAmount);
                     if (!ingester.Dead)
                     {
                         ingester.needs.food.CurLevel += ingestionData.requiredNutrition;

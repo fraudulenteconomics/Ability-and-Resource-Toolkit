@@ -208,7 +208,7 @@ namespace ART
                             {
                                 num *= HediffResourceUtils.GetQualityMultiplierInverted(qc);
                             }
-                            HediffResourceUtils.AdjustResourceAmount(user, useProps.hediff, num, useProps.addHediffIfMissing, useProps.applyToPart);
+                            HediffResourceUtils.AdjustResourceAmount(user, useProps.hediff, num, useProps.addHediffIfMissing, null, useProps.applyToPart);
                         }
 
                     }

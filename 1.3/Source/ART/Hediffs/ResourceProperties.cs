@@ -33,6 +33,13 @@ namespace ART
         public int postUseDelay;
 
         public float resourcePerSecond;
+        public bool canRefillStorage = true;
+
+        public float adjustTargetResource;
+        public IntRange delayTargetOnDamage = IntRange.zero;
+        public float severityPerDamage;
+        public bool applyToDamagedPart;
+
         public bool qualityScalesResourcePerSecond;
         public float maxResourceCapacityOffset;
         public bool qualityScalesCapacityOffset;

@@ -200,12 +200,12 @@
 			<li Class="ART.EffectOnImpact">
 				<resourceEffects>
 					<li>
-						<hediffDef>FE_AbsorptionBarrier</hediffDef>
+						<hediff>FE_AbsorptionBarrier</hediff>
 						<adjustTargetResource>-10</adjustTargetResource>
 						<delayTargetOnDamage>2400</delayTargetOnDamage>
 					</li>
 					<li>
-						<hediffDef>FE_ShieldInjector</hediffDef>
+						<hediff>FE_ShieldInjector</hediff>
 						<adjustTargetResource>-10</adjustTargetResource>
 						<delayTargetOnDamage>2400</delayTargetOnDamage>
 					</li>

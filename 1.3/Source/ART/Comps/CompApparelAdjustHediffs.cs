@@ -23,7 +23,6 @@ namespace ART
         public override Pawn PawnHost => Apparel.Wearer;
         public override void Notify_Removed()
         {
-            Log.Message("Removed: " + PawnHost);
             if (PawnHost != null)
             {
                 HediffResourceUtils.RemoveExcessHediffResources(PawnHost, this);
@@ -69,6 +68,7 @@ namespace ART
                     else
                     {
                         float num = resourceProperties.GetResourceGain(this);
+                        Log.Message(this + " resource gain for " + resourceProperties.hediff + " - " + num);
                         if (this.IsStorageFor(resourceProperties, out var resourceStorage))
                         {
                             if (resourceProperties.addHediffIfMissing && pawn.health.hediffSet.GetFirstHediffOfDef(resourceProperties.hediff) is null)
@@ -81,15 +81,15 @@ namespace ART
                                 var hediff = HediffMaker.MakeHediff(resourceProperties.hediff, pawn, bodyPartRecord) as HediffResource;
                                 pawn.health.AddHediff(hediff);
                             }
+                            Log.Message("refilling storage");
                             var toRefill = Mathf.Min(num, resourceStorage.ResourceCapacity - resourceStorage.ResourceAmount);
-                            if (resourceStorage.ResourceAmount < resourceStorage.ResourceCapacity)
-                            {
-                                resourceStorage.ResourceAmount += toRefill;
-                            }
+                            Log.Message("refilling storage: " + toRefill); ;
+                            resourceStorage.ResourceAmount += toRefill;
                         }
                         else
                         {
-                            HediffResourceUtils.AdjustResourceAmount(pawn, resourceProperties.hediff, num, resourceProperties.addHediffIfMissing, resourceProperties.applyToPart);
+                            Log.Message(this + " adjusting resource for " + resourceProperties.hediff + " - " + num);
+                            HediffResourceUtils.AdjustResourceAmount(pawn, resourceProperties.hediff, num, resourceProperties.addHediffIfMissing, resourceProperties, resourceProperties.applyToPart);
                         }
                     }
                 }

@@ -29,7 +29,7 @@ namespace ART
 
 			if (base.Pawn?.IsHashIntervalTick(60) ?? false && HediffResource.CanGainResource)
 			{
-				HediffResource.ResourceAmount += Props.resourcePerSecond;
+				HediffResource.ChangeResourceAmount(Props.resourcePerSecond);
 			}
 		}
 	}

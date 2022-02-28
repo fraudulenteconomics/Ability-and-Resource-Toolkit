@@ -29,7 +29,7 @@ namespace ART
 						var hediffToApply = hediffStageResource.effectWhenDowned.hediff != null ? hediffStageResource.effectWhenDowned.hediff : hr.def;
 						if (hediffToApply is HediffResourceDef resourceDef)
 						{
-							HediffResourceUtils.AdjustResourceAmount(___pawn, resourceDef, hediffStageResource.effectWhenDowned.apply, true, null);
+							HediffResourceUtils.AdjustResourceAmount(___pawn, resourceDef, hediffStageResource.effectWhenDowned.apply, true, null, null);
 						}
 						else
 						{

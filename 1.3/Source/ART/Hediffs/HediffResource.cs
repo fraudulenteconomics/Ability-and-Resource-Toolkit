@@ -11,7 +11,7 @@ using Verse.Sound;
 
 namespace ART
 {
-    public class HediffResource : HediffWithComps, IResourceGenerator
+    public class HediffResource : HediffWithComps
     {
         public new HediffResourceDef def => base.def as HediffResourceDef;
         private float resourceAmount;
@@ -74,129 +74,155 @@ namespace ART
             }
         }
         public float ResourceAmountNoStorages => resourceAmount;
-        public float ResourceAmount
+        public float ResourceAmount => resourceAmount + ResourceFromStorages;
+
+        public void SetResourceAmount(float value, ResourceProperties source = null)
         {
-            get
+
+        }
+        public void ChangeResourceAmount(float offset, ResourceProperties source = null)
+        {
+            var storages = GetResourceStorages();
+            var totalValue = resourceAmount + ResourceFromStorages;
+            Log.Message("Should change: " + offset);
+            Log.Message("this.ResourceCapacity: " + this.ResourceCapacity);
+            var freeSpace = this.ResourceCapacity - resourceAmount;
+            Log.Message("freeSpace: " + freeSpace);
+            Log.Message("totalValue: " + totalValue);
+            if (offset > 0)
             {
-                return resourceAmount + ResourceFromStorages;
+                var toAdd = Mathf.Min(offset, freeSpace);
+                offset -= toAdd;
+                Log.Message("toAdd: " + toAdd);
+                Log.Message("offset: " + offset);
+                Log.Message("this.resourceAmount: " + this.resourceAmount);
+                resourceAmount += toAdd;
+                Log.Message("this.resourceAmount: " + this.resourceAmount);
             }
-            set
+            else if (offset < 0)
             {
-                var storages = GetResourceStorages();
-                var totalValue = resourceAmount + ResourceFromStorages;
-                var toChange = value - totalValue;
-                if (toChange > 0)
-                {
-                    var toAdd = this.def.restrictResourceCap ? Mathf.Min(toChange, ResourceCapacityInt - resourceAmount) : toChange;
-                    toChange -= toAdd;
-                    resourceAmount += toAdd;
-                    while (toChange > 0)
-                    {
-                        bool changed = false;
-                        foreach (var storage in storages)
-                        {
-                            if (storage.Item2.hediff == this.def)
-                            {
-                                toAdd = Mathf.Min(toChange, storage.Item3.ResourceCapacity - storage.Item3.ResourceAmount);
-                                if (toAdd > 0)
-                                {
-                                    changed = true;
-                                    storage.Item3.ResourceAmount += toAdd;
-                                    toChange -= toAdd;
-                                }
-                                else
-                                {
-                                    break;
-                                }
-                            }
-                        }
-                        if (!changed)
-                        {
-                            break;
-                        }
-                    }
-                }
+                var toSubtract = Mathf.Max(offset, freeSpace);
+                offset -= toAdd;
+                Log.Message("toChange: " + toAdd);
+                Log.Message("offset: " + offset);
+                Log.Message("this.resourceAmount: " + this.resourceAmount);
+                resourceAmount += toAdd;
+                Log.Message("this.resourceAmount: " + this.resourceAmount);
+            }
 
-                if (toChange < 0)
-                {
-                    var toSubtract = resourceAmount >= Math.Abs(toChange) ? toChange : -resourceAmount;
-                    toChange -= toSubtract;
-                    resourceAmount += toSubtract;
-                    while (toChange < 0)
-                    {
-                        bool changed = false;
-                        foreach (var storage in storages)
-                        {
-                            if (storage.Item2.hediff == this.def)
-                            {
-                                toSubtract = storage.Item3.ResourceAmount >= Math.Abs(toChange) ? toChange : -storage.Item3.ResourceAmount;
-                                if (toSubtract < 0)
-                                {
-                                    changed = true;
-                                    storage.Item3.ResourceAmount += toSubtract;
-                                    toChange -= toSubtract;
-                                }
-                            }
-                        }
-                        if (!changed)
-                        {
-                            break;
-                        }
-                    }
-                }
+            //if (offset > 0)
+            //{
+            //    var toAdd = this.def.restrictResourceCap ? Mathf.Min(offset, ResourceCapacityInt - resourceAmount) : offset;
+            //    offset -= toAdd;
+            //    resourceAmount += toAdd;
+            //    while (offset > 0)
+            //    {
+            //        bool changed = false;
+            //        foreach (var storage in storages)
+            //        {
+            //            if (storage.Item2.hediff == this.def)
+            //            {
+            //                toAdd = Mathf.Min(offset, storage.Item3.ResourceCapacity - storage.Item3.ResourceAmount);
+            //                if (toAdd > 0)
+            //                {
+            //                    changed = true;
+            //                    storage.Item3.ResourceAmount += toAdd;
+            //                    offset -= toAdd;
+            //                }
+            //                else
+            //                {
+            //                    break;
+            //                }
+            //            }
+            //        }
+            //        if (!changed)
+            //        {
+            //            break;
+            //        }
+            //    }
+            //}
+            //
+            //if (offset < 0)
+            //{
+            //    var toSubtract = resourceAmount >= Math.Abs(offset) ? offset : -resourceAmount;
+            //    offset -= toSubtract;
+            //    Log.Message("toSubtract: " + toSubtract);
+            //    resourceAmount += toSubtract;
+            //    Log.Message("resourceAmount: " + resourceAmount);
+            //    while (offset < 0)
+            //    {
+            //        bool changed = false;
+            //        foreach (var storage in storages)
+            //        {
+            //            if (storage.Item2.hediff == this.def)
+            //            {
+            //                toSubtract = storage.Item3.ResourceAmount >= Math.Abs(offset) ? offset : -storage.Item3.ResourceAmount;
+            //                if (toSubtract < 0)
+            //                {
+            //                    changed = true;
+            //                    storage.Item3.ResourceAmount += toSubtract;
+            //                    offset -= toSubtract;
+            //                }
+            //            }
+            //        }
+            //        if (!changed)
+            //        {
+            //            break;
+            //        }
+            //    }
+            //}
 
-                var storagesToDestroy = new List<CompAdjustHediffs>();
-                foreach (var storage in storages)
+            var storagesToDestroy = new List<CompAdjustHediffs>();
+            foreach (var storage in storages)
+            {
+                if (storage.Item2.destroyWhenEmpty && storage.Item3.ResourceAmount <= 0 ||
+                    storage.Item2.destroyWhenFull && storage.Item3.ResourceAmount >= storage.Item3.ResourceCapacity)
                 {
-                    if (storage.Item2.destroyWhenEmpty && storage.Item3.ResourceAmount <= 0 ||
-                        storage.Item2.destroyWhenFull && storage.Item3.ResourceAmount >= storage.Item3.ResourceCapacity)
-                    {
-                        storagesToDestroy.Add(storage.Item1);
-                    }
+                    storagesToDestroy.Add(storage.Item1);
                 }
-                foreach (var comp in storagesToDestroy)
-                {
-                    comp.parent.Destroy();
-                }
+            }
+            foreach (var comp in storagesToDestroy)
+            {
+                comp.parent.Destroy();
+            }
 
-                var storagesToDrop = new List<CompAdjustHediffs>();
-                foreach (var storage in storages)
+            var storagesToDrop = new List<CompAdjustHediffs>();
+            foreach (var storage in storages)
+            {
+                if (storage.Item2.dropWhenEmpty && storage.Item3.ResourceAmount <= 0 ||
+                    storage.Item2.dropWhenFull && storage.Item3.ResourceAmount >= storage.Item3.ResourceCapacity)
                 {
-                    if (storage.Item2.dropWhenEmpty && storage.Item3.ResourceAmount <= 0 ||
-                        storage.Item2.dropWhenFull && storage.Item3.ResourceAmount >= storage.Item3.ResourceCapacity)
-                    {
-                        storagesToDrop.Add(storage.Item1);
-                    }
+                    storagesToDrop.Add(storage.Item1);
                 }
+            }
 
-                foreach (var comp in storagesToDrop)
-                {
-                    comp.Drop();
-                }
+            foreach (var comp in storagesToDrop)
+            {
+                comp.Drop();
+            }
 
-                var storagesToUnforbid = new List<CompAdjustHediffs>();
-                foreach (var storage in storages)
+            var storagesToUnforbid = new List<CompAdjustHediffs>();
+            foreach (var storage in storages)
+            {
+                if (storage.Item2.unforbidWhenEmpty && storage.Item3.ResourceAmount <= 0 ||
+                    storage.Item2.unforbidWhenFull && storage.Item3.ResourceAmount >= storage.Item3.ResourceCapacity)
                 {
-                    if (storage.Item2.unforbidWhenEmpty && storage.Item3.ResourceAmount <= 0 ||
-                        storage.Item2.unforbidWhenFull && storage.Item3.ResourceAmount >= storage.Item3.ResourceCapacity)
-                    {
-                        storagesToUnforbid.Add(storage.Item1);
-                    }
+                    storagesToUnforbid.Add(storage.Item1);
                 }
-                
-                foreach (var comp in storagesToUnforbid)
-                {
-                    comp.parent.SetForbidden(false);
-                }
+            }
 
-                if (resourceAmount <= 0 && ResourceFromStorages <= 0 && !this.def.keepWhenEmpty)
-                {
-                    this.pawn.health.RemoveHediff(this);
-                }
-                else
-                {
-                    UpdateData();
-                }
+            foreach (var comp in storagesToUnforbid)
+            {
+                comp.parent.SetForbidden(false);
+            }
+
+            if (resourceAmount <= 0 && ResourceFromStorages <= 0 && !this.def.keepWhenEmpty)
+            {
+                this.pawn.health.RemoveHediff(this);
+            }
+            else
+            {
+                UpdateData();
             }
         }
 
@@ -207,7 +233,8 @@ namespace ART
 
             if (this.def.restrictResourceCap && resourceAmount > resourceCapacity)
             {
-                ResourceAmount = resourceAmount = resourceCapacity;
+                resourceAmount = resourceCapacity;
+                SetResourceAmount(resourceAmount);
             }
             if (this.def.useAbsoluteSeverity)
             {
@@ -501,14 +528,14 @@ namespace ART
                             var hediff = value.hediffToRefill != null ? this.pawn.health.hediffSet.GetFirstHediffOfDef(value.hediffToRefill) as HediffResource : this;
                             if (hediff != null)
                             {
-                                hediff.ResourceAmount += resourceToGain;
+                                hediff.ChangeResourceAmount(resourceToGain);
                             }
                         }
                     }
                 }
                 else if (hediffStageResource.resourceGainPerAllDamages != 0f)
                 {
-                    this.ResourceAmount += hediffStageResource.resourceGainPerAllDamages;
+                    this.ChangeResourceAmount(hediffStageResource.resourceGainPerAllDamages);
                 }
             }
         }
@@ -705,11 +732,13 @@ namespace ART
             var stage = this.def.stages[stageIndex] as HediffStageResource;
             if (this.def.useAbsoluteSeverity)
             {
-                this.Severity = this.ResourceAmount = this.ResourceCapacity * stage.minSeverity;
+                this.SetResourceAmount(this.ResourceCapacity * stage.minSeverity);
+                this.Severity = ResourceAmount;
             }
             else
             {
-                this.Severity = this.ResourceAmount = stage.minSeverity;
+                this.SetResourceAmount(stage.minSeverity);
+                this.Severity = this.ResourceAmount;
             }
             if (stage.togglingProperties.soundOnToggle != null)
             {

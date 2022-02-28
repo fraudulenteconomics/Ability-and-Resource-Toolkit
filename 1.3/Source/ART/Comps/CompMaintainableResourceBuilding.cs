@@ -130,7 +130,7 @@ namespace ART
 					if (useProps.resourceOnComplete != -1)
 					{
 						var hediff = maintainer.health.hediffSet.GetFirstHediffOfDef(useProps.hediff) as HediffResource;
-						hediff.ResourceAmount -= -useProps.resourceOnComplete;
+						hediff.ChangeResourceAmount(useProps.resourceOnComplete);
 					}
 				}
 			}

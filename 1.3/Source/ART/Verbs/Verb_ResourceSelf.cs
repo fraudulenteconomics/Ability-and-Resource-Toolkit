@@ -42,7 +42,8 @@ namespace ART
                         ARTLog.Message("Giving: " + this.CasterPawn + " - " + resourceProperties.hediff + " - " + resourceProperties.resourcePerUse);
                         if (resourceProperties.affectsAllies || !resourceProperties.affectsAllies && !resourceProperties.affectsEnemies)
                         {
-                            HediffResourceUtils.AdjustResourceAmount(this.CasterPawn, resourceProperties.hediff, resourceProperties.resourcePerUse, resourceProperties.addHediffIfMissing, resourceProperties.applyToPart);
+                            HediffResourceUtils.AdjustResourceAmount(this.CasterPawn, resourceProperties.hediff, resourceProperties.resourcePerUse, 
+                                resourceProperties.addHediffIfMissing, resourceProperties, resourceProperties.applyToPart);
                         }
                         if (resourceProperties.effectRadius != -1f)
                         {
@@ -54,11 +55,13 @@ namespace ART
                                     {
                                         if (resourceProperties.affectsAllies && (pawn.Faction == this.CasterPawn.Faction || !pawn.Faction.HostileTo(this.CasterPawn.Faction)))
                                         {
-                                            HediffResourceUtils.AdjustResourceAmount(pawn, resourceProperties.hediff, resourceProperties.resourcePerUse, resourceProperties.addHediffIfMissing, resourceProperties.applyToPart);
+                                            HediffResourceUtils.AdjustResourceAmount(pawn, resourceProperties.hediff, resourceProperties.resourcePerUse, resourceProperties.addHediffIfMissing,
+                                                resourceProperties, resourceProperties.applyToPart);
                                         }
                                         else if (resourceProperties.affectsEnemies && pawn.Faction.HostileTo(this.CasterPawn.Faction))
                                         {
-                                            HediffResourceUtils.AdjustResourceAmount(pawn, resourceProperties.hediff, resourceProperties.resourcePerUse, resourceProperties.addHediffIfMissing, resourceProperties.applyToPart);
+                                            HediffResourceUtils.AdjustResourceAmount(pawn, resourceProperties.hediff, resourceProperties.resourcePerUse, resourceProperties.addHediffIfMissing,
+                                                resourceProperties, resourceProperties.applyToPart);
                                         }
                                     }
                                 }

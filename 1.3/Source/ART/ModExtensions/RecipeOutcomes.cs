@@ -16,7 +16,7 @@ namespace ART
             foreach (var cost in costs)
             {
                 var hediff = pawn.health.hediffSet.GetFirstHediffOfDef(cost.resource) as HediffResource;
-                hediff.ResourceAmount -= cost.cost;
+                hediff.ChangeResourceAmount(-cost.cost);
             }
         }
     }

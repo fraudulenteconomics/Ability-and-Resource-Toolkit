@@ -173,7 +173,7 @@ namespace ART
                 {
                     var compRefuelable = thing.TryGetComp<CompRefuelable>();
                     var toFuel = compRefuelable.GetFuelCountToFullyRefuel();
-                    refuelData.Item1.ResourceAmount -= refuelData.Item2.rate * toFuel;
+                    refuelData.Item1.ChangeResourceAmount(- (refuelData.Item2.rate * toFuel));
                     var fuelThing = ThingMaker.MakeThing(refuelData.Item2.thingDef);
                     fuelThing.stackCount = toFuel;
                     compRefuelable.Refuel(new List<Thing> { fuelThing });

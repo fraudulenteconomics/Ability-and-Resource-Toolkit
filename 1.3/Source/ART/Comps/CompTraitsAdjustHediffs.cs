@@ -79,7 +79,7 @@ namespace ART
                     else
                     {
                         float num = resourceProperties.GetResourceGain(this);
-                        HediffResourceUtils.AdjustResourceAmount(PawnHost, resourceProperties.hediff, num, resourceProperties.addHediffIfMissing, resourceProperties.applyToPart);
+                        HediffResourceUtils.AdjustResourceAmount(PawnHost, resourceProperties.hediff, num, resourceProperties.addHediffIfMissing, resourceProperties, resourceProperties.applyToPart);
                     }
                 }
             }

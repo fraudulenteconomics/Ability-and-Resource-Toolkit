@@ -468,16 +468,18 @@ namespace ART
 			}
 		}
 
-		public static HediffResource AdjustResourceAmount(this Pawn pawn, HediffResourceDef hdDef, float sevOffset, bool addHediffIfMissing, BodyPartDef bodyPartDef, bool applyToDamagedPart = false)
+		public static HediffResource AdjustResourceAmount(this Pawn pawn, HediffResourceDef hdDef, float sevOffset, bool addHediffIfMissing, ResourceProperties resourceProperties, BodyPartDef bodyPartDef, bool applyToDamagedPart = false)
 		{
 			HediffResource hediff = pawn.health.hediffSet.GetFirstHediffOfDef(hdDef) as HediffResource;
 			if (hediff != null)
 			{
 				if (sevOffset > 0 && hediff.def.restrictResourceCap && hediff.ResourceAmount >= hediff.ResourceCapacity)
                 {
+					Log.Message("Can't fill resource: " + hediff);
 					return hediff;
                 }
-				hediff.ResourceAmount += sevOffset;
+				Log.Message("1 Filling resource: " + hediff);
+				hediff.ChangeResourceAmount(sevOffset, resourceProperties);
 				return hediff;
 			}
 			else if (addHediffIfMissing && (sevOffset >= 0 || hdDef.keepWhenEmpty))
@@ -493,7 +495,8 @@ namespace ART
 				}
 				hediff = HediffMaker.MakeHediff(hdDef, pawn, bodyPartRecord) as HediffResource;
 				pawn.health.AddHediff(hediff);
-				hediff.ResourceAmount = sevOffset;
+				Log.Message("2 Filling resource: " + hediff);
+				hediff.ChangeResourceAmount(sevOffset, resourceProperties);
 				return hediff;
 			}
 			return null;
@@ -769,21 +772,22 @@ namespace ART
 				var disablePostUseString = "";
 				var comps = GetAllAdjustResourceComps(casterPawn);
 
-				foreach (var option in props.ResourceSettings)
+				foreach (var resourceProperties in props.ResourceSettings)
 				{
-					var hediffResource = AdjustResourceAmount(casterPawn, option.hediff, option.resourcePerUse, option.addHediffIfMissing, option.applyToPart);
+					var hediffResource = AdjustResourceAmount(casterPawn, resourceProperties.hediff, resourceProperties.resourcePerUse, 
+						resourceProperties.addHediffIfMissing, resourceProperties, resourceProperties.applyToPart);
 					if (hediffResource != null)
 					{
 						var hediffResourcePostUseDelay = new List<int>();
 						var hediffResourcePostUseDelayMultipliers = new List<float>();
 						foreach (var comp in comps)
 						{
-							var compResourseSettings = comp.ResourceSettings?.FirstOrDefault(x => x.hediff == option.hediff);
+							var compResourseSettings = comp.ResourceSettings?.FirstOrDefault(x => x.hediff == resourceProperties.hediff);
 							if (compResourseSettings != null)
 							{
-								if (option.postUseDelay != 0)
+								if (resourceProperties.postUseDelay != 0)
 								{
-									hediffResourcePostUseDelay.Add(option.postUseDelay);
+									hediffResourcePostUseDelay.Add(resourceProperties.postUseDelay);
 									disablePostUseString += comp.DisablePostUse + "\n";
 									if (compResourseSettings.postUseDelayMultiplier != 1)
 									{
@@ -792,15 +796,15 @@ namespace ART
 								}
 							}
 
-							if (option.postUseDelay != 0)
+							if (resourceProperties.postUseDelay != 0)
 							{
 								if (hediffPostUse.ContainsKey(hediffResource))
 								{
-									hediffPostUse[hediffResource].Add(option.postUseDelay);
+									hediffPostUse[hediffResource].Add(resourceProperties.postUseDelay);
 								}
 								else
 								{
-									hediffPostUse[hediffResource] = new List<int> { option.postUseDelay };
+									hediffPostUse[hediffResource] = new List<int> { resourceProperties.postUseDelay };
 								}
 								if (compResourseSettings != null && compResourseSettings.postUseDelayMultiplier != 1)
 								{

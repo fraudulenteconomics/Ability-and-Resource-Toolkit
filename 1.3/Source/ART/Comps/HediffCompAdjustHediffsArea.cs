@@ -91,7 +91,7 @@ namespace ART
                         }
                     }
                 }
-                hediffResource = HediffResourceUtils.AdjustResourceAmount(pawn, resourceProperties.hediff, num, resourceProperties.addHediffIfMissing, resourceProperties.applyToPart);
+                hediffResource = HediffResourceUtils.AdjustResourceAmount(pawn, resourceProperties.hediff, num, resourceProperties.addHediffIfMissing, resourceProperties, resourceProperties.applyToPart);
                 if (hediffResource != null)
                 {
                     Log.Message(this.parent + " is affecting " + pawn + " - " + resourceProperties.hediff);
