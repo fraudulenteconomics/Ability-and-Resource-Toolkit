@@ -33,7 +33,7 @@ namespace ART
         public int postUseDelay;
 
         public float resourcePerSecond;
-        public bool canRefillStorage = true;
+        public bool canRefillStorage = false;
 
         public float adjustTargetResource;
         public IntRange delayTargetOnDamage = IntRange.zero;

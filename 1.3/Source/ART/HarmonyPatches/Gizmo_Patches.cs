@@ -126,6 +126,21 @@ namespace ART
 				};
 				yield return command_Empty;
 
+				Command_Action command_SetTo10= new Command_Action();
+				command_SetTo10.defaultLabel = "Debug: Set all hediff resources to 10";
+				command_SetTo10.action = delegate
+				{
+					var hediffResources = HediffResourceUtils.GetHediffResourcesFor(__instance);
+					if (hediffResources != null)
+					{
+						foreach (var hediffResource in hediffResources)
+						{
+							hediffResource.SetResourceAmount(10);
+						}
+					}
+				};
+				yield return command_SetTo10;
+
 				Command_Action command_ReduceBy10 = new Command_Action();
 				command_ReduceBy10.defaultLabel = "Debug: Reduce all hediff resources by 10";
 				command_ReduceBy10.action = delegate

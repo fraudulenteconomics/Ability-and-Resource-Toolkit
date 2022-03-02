@@ -475,10 +475,8 @@ namespace ART
 			{
 				if (sevOffset > 0 && hediff.def.restrictResourceCap && hediff.ResourceAmount >= hediff.ResourceCapacity)
                 {
-					Log.Message("Can't fill resource: " + hediff);
 					return hediff;
                 }
-				Log.Message("1 Filling resource: " + hediff);
 				hediff.ChangeResourceAmount(sevOffset, resourceProperties);
 				return hediff;
 			}
@@ -495,7 +493,6 @@ namespace ART
 				}
 				hediff = HediffMaker.MakeHediff(hdDef, pawn, bodyPartRecord) as HediffResource;
 				pawn.health.AddHediff(hediff);
-				Log.Message("2 Filling resource: " + hediff);
 				hediff.ChangeResourceAmount(sevOffset, resourceProperties);
 				return hediff;
 			}

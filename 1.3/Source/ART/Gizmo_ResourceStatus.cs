@@ -77,6 +77,8 @@ namespace ART
 		public FloatValueCache resourceAmountCache;
 		public FloatValueCache resourceBatteryAmountCache;
 
+		public static bool updateNow;
+
 		[TweakValue("0ART", 0, 35)] public static float yTest = 23;
 		[TweakValue("0ART", 0, 35)] public static float yTest2 = 17;
 		[TweakValue("0ART", 0, 35)] public static float yTest3 = 25;
@@ -95,12 +97,13 @@ namespace ART
 			}
 			Widgets.Label(rect3, label);
 
-			if (Find.TickManager.TicksGame > resourceCapacityCache.updateTick + 30)
+			if (Find.TickManager.TicksGame > resourceCapacityCache.updateTick + 30 || updateNow)
 			{
 				resourceCapacityCache.Value = hediffResource.ResourceCapacity;
 				resourceAmountCache.Value = hediffResource.ResourceAmountNoStorages;
 				resourceBatteryAmountCache.Value = hediffResource.ResourceFromStorages;
 				resourceStorageCapacityCache.Value = hediffResource.StoragesTotalCapacity;
+				updateNow = false;
 			}
 
 			var resourceAmount = resourceAmountCache.Value;

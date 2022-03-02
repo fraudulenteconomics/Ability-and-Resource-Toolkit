@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UIElements;
 using Verse;
+using Verse.Noise;
 using Verse.Sound;
 
 namespace ART
@@ -75,102 +76,139 @@ namespace ART
         }
         public float ResourceAmountNoStorages => resourceAmount;
         public float ResourceAmount => resourceAmount + ResourceFromStorages;
-
         public void SetResourceAmount(float value, ResourceProperties source = null)
         {
-
+            ChangeResourceAmount(value - this.ResourceAmount, source);
         }
         public void ChangeResourceAmount(float offset, ResourceProperties source = null)
         {
+            var hediffDefnameToCheck = "";
+            var resourceCapacity = this.ResourceCapacity;
+            var resourceFromStorages = this.ResourceFromStorages;
+            if (this.def.defName == hediffDefnameToCheck)
+            {
+                //resourceCapacity = 10;
+                //resourceAmount = 10;
+                //offset = -15;
+            }
+
             var storages = GetResourceStorages();
-            var totalValue = resourceAmount + ResourceFromStorages;
-            Log.Message("Should change: " + offset);
-            Log.Message("this.ResourceCapacity: " + this.ResourceCapacity);
-            var freeSpace = this.ResourceCapacity - resourceAmount;
-            Log.Message("freeSpace: " + freeSpace);
-            Log.Message("totalValue: " + totalValue);
+            var totalValue = resourceAmount + resourceFromStorages;
+
+            if (this.def.defName == hediffDefnameToCheck)
+            {
+                Log.Message("START");
+                Log.Message("1 offset: " + offset);
+                Log.Message("resourceAmount: " + this.resourceAmount);
+                Log.Message("resourceFromStorages: " + resourceFromStorages);
+                Log.Message("resourceCapacity: " + resourceCapacity);
+                Log.Message("totalValue: " + totalValue);
+                Log.Message("-----------------");
+            }
             if (offset > 0)
             {
-                var toAdd = Mathf.Min(offset, freeSpace);
+                var toAdd = Mathf.Min(offset, resourceCapacity - resourceAmount);
+                if (this.def.restrictResourceCap && resourceAmount + toAdd > resourceCapacity)
+                {
+                    toAdd = resourceCapacity - resourceAmount;
+                }
                 offset -= toAdd;
-                Log.Message("toAdd: " + toAdd);
-                Log.Message("offset: " + offset);
-                Log.Message("this.resourceAmount: " + this.resourceAmount);
+                if (this.def.defName == hediffDefnameToCheck)
+                {
+                    Log.Message("toAdd: " + toAdd);
+                    Log.Message("2 offset: " + offset);
+                }
                 resourceAmount += toAdd;
-                Log.Message("this.resourceAmount: " + this.resourceAmount);
             }
             else if (offset < 0)
             {
-                var toSubtract = Mathf.Max(offset, freeSpace);
-                offset -= toAdd;
-                Log.Message("toChange: " + toAdd);
-                Log.Message("offset: " + offset);
+                var toSubtract = -Mathf.Min(-offset, resourceAmount);
+                offset -= toSubtract;
+                if (this.def.defName == hediffDefnameToCheck)
+                {
+                    Log.Message("toSubtract: " + toSubtract);
+                    Log.Message("2 offset: " + offset);
+                }
+                resourceAmount += toSubtract;
+            }
+            if (this.def.defName == hediffDefnameToCheck)
+            {
                 Log.Message("this.resourceAmount: " + this.resourceAmount);
-                resourceAmount += toAdd;
-                Log.Message("this.resourceAmount: " + this.resourceAmount);
+                Find.TickManager.CurTimeSpeed = TimeSpeed.Paused;
+                Log.Message("END");
             }
 
-            //if (offset > 0)
-            //{
-            //    var toAdd = this.def.restrictResourceCap ? Mathf.Min(offset, ResourceCapacityInt - resourceAmount) : offset;
-            //    offset -= toAdd;
-            //    resourceAmount += toAdd;
-            //    while (offset > 0)
-            //    {
-            //        bool changed = false;
-            //        foreach (var storage in storages)
-            //        {
-            //            if (storage.Item2.hediff == this.def)
-            //            {
-            //                toAdd = Mathf.Min(offset, storage.Item3.ResourceCapacity - storage.Item3.ResourceAmount);
-            //                if (toAdd > 0)
-            //                {
-            //                    changed = true;
-            //                    storage.Item3.ResourceAmount += toAdd;
-            //                    offset -= toAdd;
-            //                }
-            //                else
-            //                {
-            //                    break;
-            //                }
-            //            }
-            //        }
-            //        if (!changed)
-            //        {
-            //            break;
-            //        }
-            //    }
-            //}
-            //
-            //if (offset < 0)
-            //{
-            //    var toSubtract = resourceAmount >= Math.Abs(offset) ? offset : -resourceAmount;
-            //    offset -= toSubtract;
-            //    Log.Message("toSubtract: " + toSubtract);
-            //    resourceAmount += toSubtract;
-            //    Log.Message("resourceAmount: " + resourceAmount);
-            //    while (offset < 0)
-            //    {
-            //        bool changed = false;
-            //        foreach (var storage in storages)
-            //        {
-            //            if (storage.Item2.hediff == this.def)
-            //            {
-            //                toSubtract = storage.Item3.ResourceAmount >= Math.Abs(offset) ? offset : -storage.Item3.ResourceAmount;
-            //                if (toSubtract < 0)
-            //                {
-            //                    changed = true;
-            //                    storage.Item3.ResourceAmount += toSubtract;
-            //                    offset -= toSubtract;
-            //                }
-            //            }
-            //        }
-            //        if (!changed)
-            //        {
-            //            break;
-            //        }
-            //    }
-            //}
+            if (source != null && source.canRefillStorage)
+            {
+                while (offset > 0)
+                {
+                    bool changed = false;
+                    foreach (var storage in storages)
+                    {
+                        if (storage.Item2.hediff == this.def)
+                        {
+                            var toAdd = Mathf.Min(offset, storage.Item3.ResourceCapacity - storage.Item3.ResourceAmount);
+                            if (toAdd > 0)
+                            {
+                                changed = true;
+                                storage.Item3.ResourceAmount += toAdd;
+                                offset -= toAdd;
+                            }
+                            else
+                            {
+                                break;
+                            }
+                        }
+                    }
+                    if (!changed)
+                    {
+                        break;
+                    }
+                }
+            }
+
+            while (offset < 0)
+            {
+                if (this.def.defName == hediffDefnameToCheck)
+                    Log.Message("WHILE: offset: " + offset);
+
+                bool changed = false;
+                foreach (var storage in storages)
+                {
+                    if (this.def.defName == hediffDefnameToCheck)
+                        Log.Message("STORAGE: " + storage.Item2.hediff);
+
+                    if (storage.Item2.hediff == this.def)
+                    {
+                        var toSubtract = -Mathf.Min(-offset, storage.Item3.ResourceAmount);
+                        if (this.def.defName == hediffDefnameToCheck)
+                            Log.Message("toSubtract: " + toSubtract);
+
+                        if (toSubtract < 0)
+                        {
+                            changed = true;
+                            if (this.def.defName == hediffDefnameToCheck)
+                            {
+                                Log.Message("storage.Item3: " + storage.Item3.parent + " - " + storage.Item3.resourceProperties.hediff);
+                                Log.Message("1 storage.Item3.ResourceAmount: " + storage.Item3.ResourceAmount);
+                                Log.Message("1 offset: " + offset);
+                            }
+
+                            storage.Item3.ResourceAmount += toSubtract;
+                            offset -= toSubtract;
+                            if (this.def.defName == hediffDefnameToCheck)
+                            {
+                                Log.Message("2 storage.Item3.ResourceAmount: " + storage.Item3.ResourceAmount);
+                                Log.Message("2 offset: " + offset);
+                            }
+                        }
+                    }
+                }
+                if (!changed)
+                {
+                    break;
+                }
+            }
 
             var storagesToDestroy = new List<CompAdjustHediffs>();
             foreach (var storage in storages)
@@ -224,6 +262,7 @@ namespace ART
             {
                 UpdateData();
             }
+            Gizmo_ResourceStatus.updateNow = true;
         }
 
         public void UpdateData()
@@ -247,23 +286,7 @@ namespace ART
         }
 
         public bool CanGainResource => Find.TickManager.TicksGame > this.delayTicks;
-
-        private float ResourceCapacityInt
-        {
-            get
-            {
-                return this.def.maxResourceCapacity + HediffResourceUtils.GetHediffResourceCapacityGainFor(this.pawn, def, out _) + GetHediffResourceCapacityGainFromAmplifiers(out _);
-            }
-        }
-        public float ResourceCapacity
-        {
-            get
-            {
-                var value = ResourceCapacityInt;
-                return value;
-            }
-        }
-
+        public float ResourceCapacity => this.def.maxResourceCapacity + HediffResourceUtils.GetHediffResourceCapacityGainFor(this.pawn, def, out _) + GetHediffResourceCapacityGainFromAmplifiers(out _);
         private void PreInit()
         {
             if (this.amplifiers is null)
