@@ -12,7 +12,7 @@ using Verse.Sound;
 
 namespace ART
 {
-    public class HediffResource : HediffWithComps
+    public class HediffResource : HediffWithComps, IAdjustResource
     {
         public new HediffResourceDef def => base.def as HediffResourceDef;
         private float resourceAmount;
@@ -297,6 +297,7 @@ namespace ART
             {
                 this.savedSkillRecordsByStages = new Dictionary<int, SavedSkillRecordCollection>();
             }
+            this.Register();
         }
         public bool CanGainCapacity(float newCapacity)
         {
@@ -593,13 +594,15 @@ namespace ART
                 }
             }
             this.previousStageIndex = this.CurStageIndex;
+            this.Register();
         }
 
         public override void PostRemoved()
         {
             base.PostRemoved();
             ARTLog.Message(this.def.defName + " removing resource hediff from " + this.pawn);
-
+            Notify_Removed();
+            this.Deregister();
             var comps = HediffResourceUtils.GetAllAdjustResources(this.pawn);
             foreach (var comp in comps)
             {
@@ -1006,9 +1009,13 @@ namespace ART
                 return bubbleMat;
             }
         }
+        public Dictionary<HediffResource, HediffResouceDisable> PostUseDelayTicks => null;
+        public Thing Parent => pawn;
+        public Pawn PawnHost => pawn;
+        public List<ResourceProperties> ResourceSettings => this.CurStageResource?.resourceSettings ?? new List<ResourceProperties>();
+        public string DisablePostUse => "";
 
         private static Dictionary<GraphicData, Material> auraGraphics = new Dictionary<GraphicData, Material>();
-
         public static Material GetAuraMaterial(GraphicData graphicData)
         {
             if (!auraGraphics.TryGetValue(graphicData, out Material material))
@@ -1079,6 +1086,62 @@ namespace ART
                     cachedAmplifiers[amplifier] = amplifier.TryGetComp<CompAdjustHediffsArea>();
                 }
             }
+        }
+
+        public void Register()
+        {
+            ARTManager.Instance.RegisterAdjuster(this);
+        }
+
+        public void Deregister()
+        {
+            ARTManager.Instance.DeregisterAdjuster(this);
+        }
+        public bool TryGetQuality(out QualityCategory qc)
+        {
+            qc = QualityCategory.Normal;
+            return false;
+        }
+
+        public void Drop()
+        {
+            this.PawnHost.health.RemoveHediff(this);
+            Notify_Removed();
+        }
+        public void Notify_Removed()
+        {
+            Deregister();
+            if (this.PawnHost != null)
+            {
+                HediffResourceUtils.RemoveExcessHediffResources(this.PawnHost, this);
+            }
+        }
+        public void ResourceTick()
+        {
+            var pawn = PawnHost;
+            if (pawn != null)
+            {
+                foreach (var resourceProperties in ResourceSettings)
+                {
+                    Log.Message("Ticking resourceProperties: " + resourceProperties.hediff);
+                    resourceProperties.AdjustResource(pawn, this, PostUseDelayTicks);
+                }
+            }
+        }
+
+        public void Update()
+        {
+        }
+
+        public ThingDef GetStuff()
+        {
+            return null;
+        }
+
+        public bool IsStorageFor(ResourceProperties resourceProperties, out ResourceStorage resourceStorages)
+        {
+            resourceStorages = null;
+            return false;
         }
     }
 }

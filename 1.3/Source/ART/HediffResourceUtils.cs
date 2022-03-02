@@ -226,14 +226,14 @@ namespace ART
 				var adjusters = adjustResourcesCache.value;
 				if (Find.TickManager.TicksGame > adjustResourcesCache.updateTick + 60)
 				{
-					adjusters = GetAdjustResourcesInt(pawn);
+					adjusters = GetAdjustResourcesInt(pawn).ToList();
 					adjustResourcesCache.Value = adjusters;
 				}
 				return adjusters;
 			}
 			else
 			{
-				var adjusters = GetAdjustResourcesInt(pawn);
+				var adjusters = GetAdjustResourcesInt(pawn).ToList();
 				resourceCache[pawn] = new ValueCache<List<IAdjustResource>>(adjusters);
 				return adjusters;
 			}
@@ -244,9 +244,8 @@ namespace ART
 		private static Dictionary<Hediff, HediffComp_AdjustHediffs> hediffCompAdjustCache = new Dictionary<Hediff, HediffComp_AdjustHediffs>();
 		private static Dictionary<Hediff, HediffComp_AdjustHediffsPerStages> hediffCompAdjustPerStageCache = new Dictionary<Hediff, HediffComp_AdjustHediffsPerStages>();
 		private static Dictionary<Pawn, CompTraitsAdjustHediffs> compTraitsAdjustHediffsCache = new Dictionary<Pawn, CompTraitsAdjustHediffs>();
-		private static List<IAdjustResource> GetAdjustResourcesInt(Pawn pawn)
+		private static IEnumerable<IAdjustResource> GetAdjustResourcesInt(Pawn pawn)
 		{
-			List<IAdjustResource> adjustHediffs = new List<IAdjustResource>();
 			var apparels = pawn.apparel?.WornApparel?.ToList();
 			if (apparels != null)
 			{
@@ -259,7 +258,7 @@ namespace ART
 					}
 					if (comp != null)
 					{
-						adjustHediffs.Add(comp);
+						yield return comp;
 					}
 				}
 			}
@@ -276,7 +275,7 @@ namespace ART
 					}
 					if (comp != null)
 					{
-						adjustHediffs.Add(comp);
+						yield return comp;
 					}
 				}
 			}
@@ -292,7 +291,7 @@ namespace ART
 					}
 					if (comp != null)
 					{
-						adjustHediffs.Add(comp);
+						yield return comp;
 					}
 					if (!hediffCompAdjustPerStageCache.TryGetValue(hediff, out HediffComp_AdjustHediffsPerStages comp2))
 					{
@@ -301,8 +300,13 @@ namespace ART
 					}
 					if (comp2 != null)
 					{
-						adjustHediffs.Add(comp2);
+						yield return comp2;
 					}
+
+					if (hediff is HediffResource hediffResource)
+                    {
+						yield return hediffResource;
+                    }
 				}
 			}
 
@@ -314,9 +318,8 @@ namespace ART
 
 			if (traitComp != null)
 			{
-				adjustHediffs.Add(traitComp);
+				yield return traitComp;
 			}
-			return adjustHediffs;
 		}
 		public static float GetHediffResourceCapacityGainFor(Pawn pawn, HediffResourceDef hdDef, out StringBuilder explanation)
 		{
