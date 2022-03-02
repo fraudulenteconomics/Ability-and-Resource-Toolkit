@@ -70,17 +70,7 @@ namespace ART
             {
                 foreach (var resourceProperties in ResourceSettings)
                 {
-                    var hediffResource = pawn.health.hediffSet.GetFirstHediffOfDef(resourceProperties.hediff) as HediffResource;
-                    if (hediffResource != null && (PostUseDelayTicks.TryGetValue(hediffResource, out var disable) && (disable.delayTicks > Find.TickManager.TicksGame)
-                        || !hediffResource.CanGainResource))
-                    {
-                        continue;
-                    }
-                    else
-                    {
-                        float num = resourceProperties.GetResourceGain(this);
-                        HediffResourceUtils.AdjustResourceAmount(PawnHost, resourceProperties.hediff, num, resourceProperties.addHediffIfMissing, resourceProperties, resourceProperties.applyToPart);
-                    }
+                    resourceProperties.AdjustResource(pawn, this, PostUseDelayTicks);
                 }
             }
         }

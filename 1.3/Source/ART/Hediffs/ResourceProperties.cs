@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 using Verse;
 
 namespace ART
@@ -81,5 +82,40 @@ namespace ART
         public float resourcePerSecondFactor = 1f;
         public float resourceCapacityOffset;
         public float resourcePerSecondOffset;
+
+        public void AdjustResource(Pawn pawn, IAdjustResource source, Dictionary<HediffResource, HediffResouceDisable> postUseDelayTicks) 
+        {
+            var hediffResource = pawn.health.hediffSet.GetFirstHediffOfDef(this.hediff) as HediffResource;
+            if (hediffResource != null && 
+                (postUseDelayTicks != null && postUseDelayTicks.TryGetValue(hediffResource, out var disable) && (disable.delayTicks > Find.TickManager.TicksGame)
+                || !hediffResource.CanGainResource))
+            {
+                Log.Message("Can't gain resource: " + hediffResource);
+                return;
+            }
+            else
+            {
+                float num = this.GetResourceGain();
+                if (source.IsStorageFor(this, out var resourceStorage))
+                {
+                    if (this.addHediffIfMissing && pawn.health.hediffSet.GetFirstHediffOfDef(this.hediff) is null)
+                    {
+                        BodyPartRecord bodyPartRecord = null;
+                        if (this.applyToPart != null)
+                        {
+                            bodyPartRecord = pawn.health.hediffSet.GetNotMissingParts().FirstOrDefault((BodyPartRecord x) => x.def == this.applyToPart);
+                        }
+                        var hediff = HediffMaker.MakeHediff(this.hediff, pawn, bodyPartRecord) as HediffResource;
+                        pawn.health.AddHediff(hediff);
+                    }
+                    var toRefill = Mathf.Min(num, resourceStorage.ResourceCapacity - resourceStorage.ResourceAmount);
+                    resourceStorage.ResourceAmount += toRefill;
+                }
+                else
+                {
+                    HediffResourceUtils.AdjustResourceAmount(pawn, this.hediff, num, this.addHediffIfMissing, this, this.applyToPart);
+                }
+            }
+        }
     }
 }

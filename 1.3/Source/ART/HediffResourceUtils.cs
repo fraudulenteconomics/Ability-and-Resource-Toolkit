@@ -219,7 +219,7 @@ namespace ART
 		}
 
 		private static Dictionary<Pawn, ValueCache<List<IAdjustResource>>> resourceCache = new Dictionary<Pawn, ValueCache<List<IAdjustResource>>>();
-		public static List<IAdjustResource> GetAllAdjustResourceComps(this Pawn pawn)
+		public static List<IAdjustResource> GetAllAdjustResources(this Pawn pawn)
 		{
 			if (resourceCache.TryGetValue(pawn, out var adjustResourcesCache))
 			{
@@ -322,7 +322,7 @@ namespace ART
 		{
 			explanation = new StringBuilder();
 			float result = 0;
-			var comps = GetAllAdjustResourceComps(pawn);
+			var comps = GetAllAdjustResources(pawn);
 			foreach (var comp in comps)
 			{
 				var resourceSettings = comp.ResourceSettings;
@@ -397,7 +397,7 @@ namespace ART
 			List<HediffResourceDef> hediffResourcesToRemove = pawn.health.hediffSet.hediffs.OfType<HediffResource>()
 					.Select(x => x.def).Where(x => adjuster.ResourceSettings?.Any(y => y.hediff == x) ?? false).ToList();
 
-			var comps = GetAllAdjustResourceComps(pawn);
+			var comps = GetAllAdjustResources(pawn);
 			foreach (var comp in comps)
 			{
 				var resourceSettings = comp.ResourceSettings;
@@ -446,7 +446,7 @@ namespace ART
 
 		public static void TryDropExcessHediffGears(Pawn pawn)
 		{
-			var comps = GetAllAdjustResourceComps(pawn);
+			var comps = GetAllAdjustResources(pawn);
 			foreach (var comp in comps)
 			{
 				var resourceSettings = comp.ResourceSettings;
@@ -767,7 +767,7 @@ namespace ART
 				var hediffPostUseDelayMultipliers = new Dictionary<HediffResource, List<float>>();
 
 				var disablePostUseString = "";
-				var comps = GetAllAdjustResourceComps(casterPawn);
+				var comps = GetAllAdjustResources(casterPawn);
 
 				foreach (var resourceProperties in props.ResourceSettings)
 				{
@@ -938,14 +938,14 @@ namespace ART
 			return affectedCells;
 		}
 
-		public static float GetResourceGain(this ResourceProperties resourceProperties, IAdjustResource source)
+		public static float GetResourceGain(this ResourceProperties resourceProperties, IAdjustResource source = null)
 		{
 			float num = resourceProperties.resourcePerSecond;
-			if (resourceProperties.qualityScalesResourcePerSecond && source.TryGetQuality(out QualityCategory qc))
+			if (source != null && resourceProperties.qualityScalesResourcePerSecond && source.TryGetQuality(out QualityCategory qc))
 			{
 				num *= GetQualityMultiplier(qc);
 			}
-			var stuff = source.GetStuff();
+			var stuff = source?.GetStuff();
 			if (stuff != null)
             {
 				var extension = stuff.GetModExtension<StuffExtension>();
@@ -962,14 +962,17 @@ namespace ART
 				}
             }
 
-			foreach (var otherComp in source.GetOtherResources())
+			if (source != null)
             {
-				foreach (var option in otherComp.ResourceSettings)
+				foreach (var otherComp in source.GetOtherResources())
 				{
-					if (option.hediff == resourceProperties.hediff)
+					foreach (var option in otherComp.ResourceSettings)
 					{
-						num *= option.resourcePerSecondFactor;
-						num += option.resourcePerSecondOffset;
+						if (option.hediff == resourceProperties.hediff)
+						{
+							num *= option.resourcePerSecondFactor;
+							num += option.resourcePerSecondOffset;
+						}
 					}
 				}
 			}
@@ -989,7 +992,7 @@ namespace ART
 			var pawnHost = comp.PawnHost;
 			if (pawnHost != null)
             {
-				foreach (var otherResourceComp in pawnHost.GetAllAdjustResourceComps())
+				foreach (var otherResourceComp in pawnHost.GetAllAdjustResources())
                 {
 					if (otherResourceComp != comp)
                     {

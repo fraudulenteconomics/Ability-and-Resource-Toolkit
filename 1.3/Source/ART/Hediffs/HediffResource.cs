@@ -39,7 +39,7 @@ namespace ART
         public HediffStageResource CurStageResource => this.CurStage as HediffStageResource;
         public IEnumerable<Tuple<CompAdjustHediffs, ResourceProperties, ResourceStorage>> GetResourceStorages()
         {
-            foreach (var adjustResource in this.pawn.GetAllAdjustResourceComps())
+            foreach (var adjustResource in this.pawn.GetAllAdjustResources())
             {
                 if (adjustResource is CompAdjustHediffs comp)
                 {
@@ -512,7 +512,7 @@ namespace ART
         {
             float num = 0;
 
-            var comps = HediffResourceUtils.GetAllAdjustResourceComps(this.pawn);
+            var comps = HediffResourceUtils.GetAllAdjustResources(this.pawn);
             foreach (var comp in comps)
             {
                 var resourceSettings = comp.ResourceSettings;
@@ -600,7 +600,7 @@ namespace ART
             base.PostRemoved();
             ARTLog.Message(this.def.defName + " removing resource hediff from " + this.pawn);
 
-            var comps = HediffResourceUtils.GetAllAdjustResourceComps(this.pawn);
+            var comps = HediffResourceUtils.GetAllAdjustResources(this.pawn);
             foreach (var comp in comps)
             {
                 var resourceSettings = comp.ResourceSettings;

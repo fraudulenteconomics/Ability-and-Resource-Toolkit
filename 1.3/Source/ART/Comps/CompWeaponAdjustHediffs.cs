@@ -68,25 +68,7 @@ namespace ART
             {
                 foreach (var resourceProperties in Props.resourceSettings)
                 {
-                    var hediffResource = pawn.health.hediffSet.GetFirstHediffOfDef(resourceProperties.hediff) as HediffResource;
-
-                    if (hediffResource != null && (PostUseDelayTicks.TryGetValue(hediffResource, out var disable) && (disable.delayTicks > Find.TickManager.TicksGame) 
-                        || !hediffResource.CanGainResource))
-                    {
-                        continue;
-                    }
-                    else
-                    {
-                        float num = resourceProperties.GetResourceGain(this);
-                        if (this.IsStorageFor(resourceProperties, out var resourceStorage))
-                        {
-                            resourceStorage.ResourceAmount += num;
-                        }
-                        else
-                        {
-                            HediffResourceUtils.AdjustResourceAmount(pawn, resourceProperties.hediff, num, resourceProperties.addHediffIfMissing, resourceProperties, resourceProperties.applyToPart);
-                        }
-                    }
+                    resourceProperties.AdjustResource(pawn, this, PostUseDelayTicks);
                 }
             }
         }

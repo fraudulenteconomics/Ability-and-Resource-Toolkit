@@ -24,5 +24,6 @@ namespace ART
         bool TryGetQuality(out QualityCategory qc);
         ThingDef GetStuff();
         void Drop();
+        bool IsStorageFor(ResourceProperties resourceProperties, out ResourceStorage resourceStorages);
     }
 }

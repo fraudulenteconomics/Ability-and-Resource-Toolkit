@@ -166,7 +166,9 @@ namespace ART
                 }
             }
         }
-        private IEnumerable<Reservation> Reservations => this.parent.Map.reservationManager.ReservationsReadOnly.Where(x => x.Target.Thing == this.parent);
+        private IEnumerable<Reservation> Reservations => this.parent.Map != null 
+            ? this.parent.Map.reservationManager.ReservationsReadOnly.Where(x => x.Target.Thing == this.parent)
+            : Enumerable.Empty<Reservation>();
 
         private IEnumerable<Pawn> cachedClaimants;
 
@@ -422,6 +424,12 @@ namespace ART
         public ThingDef GetStuff()
         {
             return this.parent.Stuff;
+        }
+
+        public bool IsStorageFor(ResourceProperties resourceProperties, out ResourceStorage resourceStorages)
+        {
+            resourceStorages = null;
+            return false;
         }
     }
 }

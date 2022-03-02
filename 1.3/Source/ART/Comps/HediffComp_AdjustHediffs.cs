@@ -122,6 +122,12 @@ namespace ART
             return null;
         }
 
+        public bool IsStorageFor(ResourceProperties resourceProperties, out ResourceStorage resourceStorages)
+        {
+            resourceStorages = null;
+            return false;
+        }
+
         private List<HediffResource> hediffResourceKeys;
         private List<HediffResouceDisable> hediffResourceDisablesValues;
     }
