@@ -82,7 +82,7 @@ namespace ART
         }
         public void ChangeResourceAmount(float offset, ResourceProperties source = null)
         {
-            var hediffDefnameToCheck = "";
+            var hediffDefnameToCheck = "";// "FE_FuelPackHediff";
             var resourceCapacity = this.ResourceCapacity;
             var resourceFromStorages = this.ResourceFromStorages;
             if (this.def.defName == hediffDefnameToCheck)
@@ -134,11 +134,10 @@ namespace ART
             if (this.def.defName == hediffDefnameToCheck)
             {
                 Log.Message("this.resourceAmount: " + this.resourceAmount);
-                Find.TickManager.CurTimeSpeed = TimeSpeed.Paused;
                 Log.Message("END");
             }
 
-            if (source != null && source.canRefillStorage)
+            if (source is null || source.canRefillStorage)
             {
                 while (offset > 0)
                 {
@@ -213,6 +212,9 @@ namespace ART
             var storagesToDestroy = new List<CompAdjustHediffs>();
             foreach (var storage in storages)
             {
+                if (this.def.defName == hediffDefnameToCheck)
+                    Log.Message(storage.Item2.hediff + " - storage.Item3.ResourceAmount: " + storage.Item3.ResourceAmount);
+
                 if (storage.Item2.destroyWhenEmpty && storage.Item3.ResourceAmount <= 0 ||
                     storage.Item2.destroyWhenFull && storage.Item3.ResourceAmount >= storage.Item3.ResourceCapacity)
                 {
@@ -260,28 +262,20 @@ namespace ART
             }
             else
             {
-                UpdateData();
+                UpdateResourceData();
             }
             Gizmo_ResourceStatus.updateNow = true;
         }
 
-        public void UpdateData()
+        public void UpdateResourceData()
         {
-            var resourceAmount = ResourceAmountNoStorages;
-            var resourceCapacity = ResourceCapacity;
-
-            if (this.def.restrictResourceCap && resourceAmount > resourceCapacity)
-            {
-                resourceAmount = resourceCapacity;
-                SetResourceAmount(resourceAmount);
-            }
             if (this.def.useAbsoluteSeverity)
             {
-                this.Severity = resourceAmount / resourceCapacity;
+                this.Severity = ResourceAmount / ResourceCapacity;
             }
             else
             {
-                this.Severity = resourceAmount;
+                this.Severity = ResourceAmount;
             }
         }
 
@@ -568,7 +562,7 @@ namespace ART
             base.PostAdd(dinfo);
             ARTLog.Message(this.def.defName + " adding resource hediff to " + this.pawn);
             this.resourceAmount = this.def.initialResourceAmount;
-            UpdateData();
+            UpdateResourceData();
             this.duration = 0;
             if (this.def.sendLetterWhenGained && this.pawn.Faction == Faction.OfPlayer)
             {
@@ -626,7 +620,7 @@ namespace ART
             this.duration++;
             if (this.pawn.IsHashIntervalTick(30))
             {
-                UpdateData();
+                UpdateResourceData();
                 if (ResourceCapacity < 0)
                 {
                     HediffResourceUtils.TryDropExcessHediffGears(this.pawn);
@@ -1123,7 +1117,6 @@ namespace ART
             {
                 foreach (var resourceProperties in ResourceSettings)
                 {
-                    Log.Message("Ticking resourceProperties: " + resourceProperties.hediff);
                     resourceProperties.AdjustResource(pawn, this, PostUseDelayTicks);
                 }
             }

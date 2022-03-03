@@ -45,7 +45,7 @@ namespace ART
                 {
                     resourceAmount = 0;
                 }
-                parent.GetResourceFor(resourceProperties)?.UpdateData();
+                parent.GetResourceFor(resourceProperties)?.UpdateResourceData();
             }
         }
         public float ResourceCapacity
