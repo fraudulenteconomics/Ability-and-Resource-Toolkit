@@ -119,7 +119,7 @@
     <Compile Include="Policies\HediffResourcePolicy.cs" />
     <Compile Include="Policies\HediffResourceSatisfyPolicy.cs" />
     <Compile Include="Hediffs\RequiredHediff.cs" />
-    <Compile Include="Hediffs\ResourceGainPerDamage.cs" />
+    <Compile Include="Hediffs\ResourceAdjustPerDamage.cs" />
     <Compile Include="Hediffs\ShieldProperties.cs" />
     <Compile Include="Hediffs\VerbType.cs" />
     <Compile Include="Interfaces\IAdjustResouceInArea.cs" />

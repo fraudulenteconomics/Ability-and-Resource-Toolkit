@@ -2,6 +2,21 @@
 <Patch>
 	<Operation Class="PatchOperationSequence">
 		<operations>
+		
+			<li Class="PatchOperationAddModExtension">
+				<xpath>/Defs/PawnKindDef</xpath>
+				<value>
+					<li Class="ART.PawnKindExtension">
+						<hediffsOnGeneration>
+							<li>
+								<hediff>FE_FusionReactor</hediff>
+								<initialSeverity>50</initialSeverity>
+							</li>
+						</hediffsOnGeneration>
+					</li>
+				</value>
+			</li>
+
 			<li Class="PatchOperationAdd">
 				<xpath>/Defs/ThingDef[defName="Campfire"]/recipes</xpath>
 				<value>

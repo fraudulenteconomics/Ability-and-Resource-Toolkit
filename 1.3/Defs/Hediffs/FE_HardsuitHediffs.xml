@@ -34,7 +34,21 @@
 		<stages>
 			<li Class="ART.HediffStageResource">
 				<label>Stage One</label>
-				<resourceGainPerDamages>
+				<resourceSettings>
+					<li>
+						<hediff>FE_FusionReactor</hediff>
+						<resourcePerSecond>1</resourcePerSecond>
+
+						<temperatureRange>10~50</temperatureRange>
+						<activeAboveTemperature>false</activeAboveTemperature>
+						<activeBelowTemperature>false</activeBelowTemperature>
+						
+						<lightRange>0.1~0.5</lightRange>
+						<activeAboveLight>false</activeAboveLight>
+						<activeBelowLight>false</activeBelowLight>
+					</li>
+				</resourceSettings>
+				<resourceAdjustPerDamages>
 					<li>
 						<damageDef>Burn</damageDef>
 						<flat>5</flat>
@@ -43,7 +57,7 @@
 						<damageDef>Flame</damageDef>
 						<point>5</point>
 					</li>
-				</resourceGainPerDamages>
+				</resourceAdjustPerDamages>
 				<tendProperties>
 					<statBases>
 						<MedicalPotency>1.00</MedicalPotency>
@@ -71,14 +85,6 @@
 						</resourcesPerFuelUnit>
 					</li>
 				</refuelProperties>
-				<additionalDamages>
-					<li>
-						<damage>Burn</damage>
-						<amount>1~5.5</amount>
-						<damageMelee>true</damageMelee>
-						<damageRange>true</damageRange>
-					</li>
-				</additionalDamages>
 				<preventDeath>true</preventDeath>
 				<preventDowning>true</preventDowning>
 				<ingestibleProperties>
@@ -213,6 +219,14 @@
 				<qualityAdjustProperties>
 					<qualityOffset>1.5</qualityOffset>
 				</qualityAdjustProperties>
+				<additionalDamages>
+					<li>
+						<damage>Burn</damage>
+						<amount>1~5.5</amount>
+						<damageMelee>true</damageMelee>
+						<damageRange>true</damageRange>
+					</li>
+				</additionalDamages>
 			</li>
 		</stages>
 		<fallbackTogglingGraphicData>
@@ -288,6 +302,9 @@
 					<maxAbsorb>25</maxAbsorb>
 					<damageAbsorbedPerResource>1</damageAbsorbedPerResource>
 					<postDamageDelay>600</postDamageDelay>
+					<texPath>Other/ShieldBubble</texPath>
+					<shieldColor>(154, 145, 145)</shieldColor>
+					<showGraphic>true</showGraphic>
 				</shieldProperties>
 			</li>
 		</stages>
@@ -309,7 +326,11 @@
 				<label>inactive</label>
 			</li>
 			<li Class="ART.HediffStageResource">
-				<resourceGainPerAllDamages>5</resourceGainPerAllDamages>
+				<resourceAdjustPerDamages>
+					<li>
+						<flat>5</flat>
+					</li>
+				</resourceAdjustPerDamages>
 				<label>initialized</label>
 				<minSeverity>1</minSeverity>
 				<statFactors>

@@ -11,6 +11,8 @@ namespace ART
 		public int? resourceConsumptionPerDamage;
 		public float? damageAbsorbedPerResource;
 		public int? postDamageDelay;
+		public bool showGraphic = true;
+		public string texPath = "Other/ShieldBubble";
 		public Color shieldColor = Color.white;
 		public VerbType cannotUseVerbType;
 		public List<HediffResourceDef> activeWithHediffs;

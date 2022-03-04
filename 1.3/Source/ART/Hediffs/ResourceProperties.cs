@@ -10,13 +10,7 @@ namespace ART
 {
     public class ResourceProperties
     {
-        public ResourceProperties()
-        {
-
-        }
-
         public HediffResourceDef hediff;
-
         public float resourcePerUse;
         public bool disableIfMissingHediff;
         public float minimumResourcePerUse = -1f;
@@ -83,17 +77,16 @@ namespace ART
         public float resourceCapacityOffset;
         public float resourcePerSecondOffset;
 
+        public FloatRange? temperatureRange;
+        public bool activeAboveTemperature;
+        public bool activeBelowTemperature;
+
+        public FloatRange? lightRange;
+        public bool activeAboveLight;
+        public bool activeBelowLight;
         public void AdjustResource(Pawn pawn, IAdjustResource source, Dictionary<HediffResource, HediffResouceDisable> postUseDelayTicks) 
         {
-            var hediffResource = pawn.health.hediffSet.GetFirstHediffOfDef(this.hediff) as HediffResource;
-            if (hediffResource != null && 
-                (postUseDelayTicks != null && postUseDelayTicks.TryGetValue(hediffResource, out var disable) && (disable.delayTicks > Find.TickManager.TicksGame)
-                || !hediffResource.CanGainResource))
-            {
-                Log.Message("Can't gain resource: " + hediffResource);
-                return;
-            }
-            else
+            if (CanAdjustResource(pawn, postUseDelayTicks))
             {
                 float num = this.GetResourceGain();
                 if (source.IsStorageFor(this, out var resourceStorage))
@@ -116,6 +109,63 @@ namespace ART
                     HediffResourceUtils.AdjustResourceAmount(pawn, this.hediff, num, this.addHediffIfMissing, this, this.applyToPart);
                 }
             }
+        }
+
+        public bool CanAdjustResource(Pawn pawn, Dictionary<HediffResource, HediffResouceDisable> postUseDelayTicks)
+        {
+            var hediffResource = pawn.health.hediffSet.GetFirstHediffOfDef(this.hediff) as HediffResource;
+            if (hediffResource != null &&
+                (postUseDelayTicks != null && postUseDelayTicks.TryGetValue(hediffResource, out var disable) && (disable.delayTicks > Find.TickManager.TicksGame)
+                || !hediffResource.CanGainResource))
+            {
+                return false;
+            }
+
+            if (this.temperatureRange.HasValue)
+            {
+                var curTemperature = pawn.AmbientTemperature;
+                if (!RangeAllowed(this.activeAboveTemperature, this.activeBelowTemperature, this.temperatureRange.Value, curTemperature))
+                {
+                    return false;
+                }
+            }
+
+            if (this.lightRange.HasValue)
+            {
+                var curLight = pawn.Map.glowGrid.GameGlowAt(pawn.Position);
+                if (!RangeAllowed(this.activeAboveLight, this.activeBelowLight, this.lightRange.Value, curLight))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public bool RangeAllowed(bool activeAbove, bool activeBelow, FloatRange range, float value)
+        {
+            if (activeAbove && activeBelow)
+            {
+                if (range.Includes(value))
+                {
+                    return false;
+                }
+            }
+            else if (activeAbove)
+            {
+                if (value <= range.max)
+                {
+                    return false;
+                }
+            }
+            else if (activeBelow && value >= range.min)
+            {
+                return false;
+            }
+            else if (!range.Includes(value))
+            {
+                return false;
+            }
+            return true;
         }
     }
 }

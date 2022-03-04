@@ -18,8 +18,7 @@ namespace ART
     public class HediffStageResource : HediffStage
     {
         public List<ResourceProperties> resourceSettings;
-        public List<ResourceGainPerDamage> resourceGainPerDamages;
-        public float resourceGainPerAllDamages;
+        public List<ResourceAdjustPerDamage> resourceAdjustPerDamages;
         public ShieldProperties shieldProperties;
         public TendProperties tendProperties;
         public EffectWhenDowned effectWhenDowned;

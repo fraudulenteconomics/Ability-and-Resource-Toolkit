@@ -35,22 +35,57 @@ namespace ART
 			}
 		}
 	}
-
-	[HarmonyPatch(typeof(Pawn), "SpawnSetup")]
-	public static class Patch_SpawnSetup
+	public class HediffGenerationData
 	{
-		private static void Postfix(Pawn __instance)
+		public HediffDef hediff;
+
+		public float initialSeverity;
+	}
+
+	public class PawnKindExtension : DefModExtension
+	{
+		public List<HediffGenerationData> hediffsOnGeneration;
+	}
+
+	[HarmonyPatch(typeof(PawnGenerator))]
+	[HarmonyPatch("GeneratePawn", new Type[]
+	{
+		typeof(PawnGenerationRequest)
+	})]
+	[StaticConstructorOnStartup]
+	public static class PawnGenerator_GeneratePawn
+	{
+		private static void Postfix(ref Pawn __result)
 		{
-			if (__instance?.Faction == Faction.OfPlayer && __instance.RaceProps.Humanlike)
+			if (__result?.Faction == Faction.OfPlayer && __result.RaceProps.Humanlike)
 			{
-				ARTManager.Instance.RegisterAndRecheckForPolicies(__instance);
+				ARTManager.Instance.RegisterAndRecheckForPolicies(__result);
 			}
-			if (__instance.skills?.skills != null)
-            {
-				foreach (var skill in __instance.skills.skills)
+			if (__result.skills?.skills != null)
+			{
+				foreach (var skill in __result.skills.skills)
 				{
-					HediffResourceUtils.TryAssignNewSkillRelatedHediffs(skill, __instance);
+					HediffResourceUtils.TryAssignNewSkillRelatedHediffs(skill, __result);
 				}
+			}
+
+			var extension = __result.kindDef.GetModExtension<PawnKindExtension>();
+			if (extension != null)
+			{
+				if (extension.hediffsOnGeneration != null)
+                {
+					foreach (var hediffData in extension.hediffsOnGeneration)
+                    {
+						if (hediffData.hediff is HediffResourceDef resourceDef)
+                        {
+							HediffResourceUtils.AdjustResourceAmount(__result, resourceDef, hediffData.initialSeverity, true, null, null);
+                        }
+						else
+                        {
+							HealthUtility.AdjustSeverity(__result, hediffData.hediff, hediffData.initialSeverity);
+                        }
+                    }
+                }
 			}
 		}
 	}

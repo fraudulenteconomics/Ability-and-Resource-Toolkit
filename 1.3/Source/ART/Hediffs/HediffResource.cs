@@ -536,24 +536,20 @@ namespace ART
             base.Notify_PawnPostApplyDamage(dinfo, totalDamageDealt);
             if (this.CurStage is HediffStageResource hediffStageResource)
             {
-                if (hediffStageResource.resourceGainPerDamages != null)
+                if (hediffStageResource.resourceAdjustPerDamages != null)
                 {
-                    foreach (var value in hediffStageResource.resourceGainPerDamages)
+                    foreach (var value in hediffStageResource.resourceAdjustPerDamages)
                     {
-                        if (dinfo.Def != null && value.damageDef == dinfo.Def)
+                        if (value.damageDef is null || dinfo.Def != null && value.damageDef == dinfo.Def)
                         {
                             var resourceToGain = value.GetResourceGain(totalDamageDealt);
-                            var hediff = value.hediffToRefill != null ? this.pawn.health.hediffSet.GetFirstHediffOfDef(value.hediffToRefill) as HediffResource : this;
+                            var hediff = value.hediff != null ? this.pawn.health.hediffSet.GetFirstHediffOfDef(value.hediff) as HediffResource : this;
                             if (hediff != null)
                             {
                                 hediff.ChangeResourceAmount(resourceToGain);
                             }
                         }
                     }
-                }
-                else if (hediffStageResource.resourceGainPerAllDamages != 0f)
-                {
-                    this.ChangeResourceAmount(hediffStageResource.resourceGainPerAllDamages);
                 }
             }
         }
@@ -770,24 +766,24 @@ namespace ART
         private void DoDamage(DamageAuraProperties damagingProperties)
         {
             lastDamagingEffectTick = Find.TickManager.TicksGame;
-            foreach (var pawn in GetPawns(damagingProperties))
+            foreach (var victim in GetPawns(damagingProperties))
             {
-                Log.Message($"Checking {pawn} to damage");
-                if (CanDamage(pawn, damagingProperties))
+                Log.Message($"Checking {victim} to damage");
+                if (CanDamage(victim, damagingProperties))
                 {
-                    pawn.TakeDamage(new DamageInfo(damagingProperties.damageDef, damagingProperties.damageAmount));
-                    if (damagingProperties.selfDamageMote != null && this.pawn == pawn)
+                    victim.TakeDamage(new DamageInfo(damagingProperties.damageDef, damagingProperties.damageAmount, instigator: this.pawn, weapon: this.pawn.def));
+                    if (damagingProperties.selfDamageMote != null && this.pawn == victim)
                     {
                         MoteMaker.MakeStaticMote(this.pawn.Position, this.pawn.Map, damagingProperties.selfDamageMote);
                     }
-                    else if (damagingProperties.otherDamageMote != null && this.pawn != pawn)
+                    else if (damagingProperties.otherDamageMote != null && this.pawn != victim)
                     {
-                        MoteMaker.MakeStaticMote(pawn.Position, pawn.Map, damagingProperties.otherDamageMote);
+                        MoteMaker.MakeStaticMote(victim.Position, victim.Map, damagingProperties.otherDamageMote);
                     }
 
                     if (damagingProperties.soundOnEffect != null)
                     {
-                        damagingProperties.soundOnEffect.PlayOneShot(new TargetInfo(pawn.Position, pawn.Map));
+                        damagingProperties.soundOnEffect.PlayOneShot(new TargetInfo(victim.Position, victim.Map));
                     }
                 }
             }
@@ -998,7 +994,8 @@ namespace ART
             {
                 if (bubbleMat is null)
                 {
-                    bubbleMat = MaterialPool.MatFrom("Other/ShieldBubble", ShaderDatabase.Transparent, CurStageResource.shieldProperties.shieldColor);
+                    var stage = CurStageResource;
+                    bubbleMat = MaterialPool.MatFrom(stage.shieldProperties.texPath, ShaderDatabase.Transparent, stage.shieldProperties.shieldColor);
                 }
                 return bubbleMat;
             }

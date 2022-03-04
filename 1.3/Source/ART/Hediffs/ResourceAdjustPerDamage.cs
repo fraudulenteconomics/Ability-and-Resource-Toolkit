@@ -5,12 +5,12 @@ using Verse;
 namespace ART
 {
 
-    public class ResourceGainPerDamage
+    public class ResourceAdjustPerDamage
     {
 		public float? flat;
 		public float? point;
 		public DamageDef damageDef;
-        public HediffResourceDef hediffToRefill;
+        public HediffResourceDef hediff;
 		public float GetResourceGain(float damageAmount)
         {
             float num = 0f;

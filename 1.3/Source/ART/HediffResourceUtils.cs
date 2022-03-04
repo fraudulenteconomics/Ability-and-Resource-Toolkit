@@ -1023,6 +1023,10 @@ namespace ART
 
 		public static IEnumerable<Pawn> GetPawnsAround(Pawn checker, float effectRadius)
 		{
+			if (checker.MapHeld is null)
+            {
+				yield break;
+            }
 			if (effectRadius <= 0)
 			{
 				yield return checker;
