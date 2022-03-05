@@ -13,7 +13,6 @@ using Verse.AI;
 
 namespace ART
 {
-
 	[HarmonyPatch(typeof(Pawn_EquipmentTracker), "TryDropEquipment")]
 	public static class Patch_TryDropEquipment
 	{

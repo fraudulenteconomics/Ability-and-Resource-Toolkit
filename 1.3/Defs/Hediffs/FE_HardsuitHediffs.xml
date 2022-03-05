@@ -31,6 +31,12 @@
 		<letterTitleKey>FE.FusionReactorGainedTitle</letterTitleKey>
 		<letterMessageKey>FE.FusionReactorGainedMessage</letterMessageKey>
 		<showInResourceTab>true</showInResourceTab>
+		
+		<randomAbilitiesPool>
+			<li>RE_SpectreArmor_AdrenalineRush</li>
+		</randomAbilitiesPool>
+		<retainRandomLearnedAbilities>true</retainRandomLearnedAbilities>
+		
 		<stages>
 			<li Class="ART.HediffStageResource">
 				<label>Stage One</label>
@@ -187,6 +193,10 @@
 				<qualityAdjustProperties>
 					<qualityOffset>1.5</qualityOffset>
 				</qualityAdjustProperties>
+				<staticAbilitiesToGain>
+					<li>RE_SpectreArmor_CombatMastery</li>
+				</staticAbilitiesToGain>
+				<randomAbilitiesAmountToGain>1~3</randomAbilitiesAmountToGain>
 			</li>
 			<li Class="ART.HediffStageResource">
 				<label>Stage Two</label>
@@ -227,6 +237,10 @@
 						<damageRange>true</damageRange>
 					</li>
 				</additionalDamages>
+				<staticAbilitiesToGain>
+					<li>RE_SpectreArmor_CombatMastery</li>
+				</staticAbilitiesToGain>
+				<randomAbilitiesAmountToGain>1~3</randomAbilitiesAmountToGain>
 			</li>
 		</stages>
 		<fallbackTogglingGraphicData>

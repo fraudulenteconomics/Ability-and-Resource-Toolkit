@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using UnityEngine;
 using Verse;
+using VFECore.Abilities;
 
 namespace ART
 {
@@ -38,5 +39,8 @@ namespace ART
 		public bool restrictResourceCap = true;
 
 		public GraphicData fallbackTogglingGraphicData;
+
+		public List<VFECore.Abilities.AbilityDef> randomAbilitiesPool;
+		public bool retainRandomLearnedAbilities;
 	}
 }

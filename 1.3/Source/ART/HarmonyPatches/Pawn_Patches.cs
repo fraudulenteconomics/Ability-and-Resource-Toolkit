@@ -29,7 +29,7 @@ namespace ART
 	{
 		private static void Postfix(Pawn __instance)
 		{
-			if (__instance?.Faction == Faction.OfPlayer && __instance.RaceProps.Humanlike)
+			if (__instance?.Faction == Faction.OfPlayerSilentFail && __instance.RaceProps.Humanlike)
 			{
 				ARTManager.Instance.RegisterAndRecheckForPolicies(__instance);
 			}
@@ -57,7 +57,7 @@ namespace ART
 	{
 		private static void Postfix(ref Pawn __result)
 		{
-			if (__result?.Faction == Faction.OfPlayer && __result.RaceProps.Humanlike)
+			if (__result?.Faction == Faction.OfPlayerSilentFail && __result.RaceProps.Humanlike)
 			{
 				ARTManager.Instance.RegisterAndRecheckForPolicies(__result);
 			}

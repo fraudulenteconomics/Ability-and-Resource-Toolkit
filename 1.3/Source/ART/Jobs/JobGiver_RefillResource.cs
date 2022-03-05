@@ -14,7 +14,7 @@ namespace ART
     {
         public override float GetPriority(Pawn pawn)
         {
-            if (pawn.RaceProps.Humanlike && pawn.Faction == Faction.OfPlayer)
+            if (pawn.RaceProps.Humanlike && pawn.Faction == Faction.OfPlayerSilentFail)
             {
                 if (ARTManager.Instance.hediffResourcesPolicies.ContainsKey(pawn))
                 {

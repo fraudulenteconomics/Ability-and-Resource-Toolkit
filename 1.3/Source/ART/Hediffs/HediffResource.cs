@@ -1,6 +1,7 @@
 ﻿using RimWorld;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,7 +10,7 @@ using UnityEngine.UIElements;
 using Verse;
 using Verse.Noise;
 using Verse.Sound;
-
+using VFECore.Abilities;
 namespace ART
 {
     public class HediffResource : HediffWithComps, IAdjustResource
@@ -28,14 +29,12 @@ namespace ART
         public int stageIndexToActivate = -1;
         public int curCooldownPeriod;
         public int curChangeTime;
-        public int previousStageIndex;
+        public int previousStageIndex = -1;
+        public List<VFECore.Abilities.AbilityDef> grantedRandomAbilities;
+        public List<VFECore.Abilities.AbilityDef> grantedStaticAbilities;
 
         public Dictionary<int, SavedSkillRecordCollection> savedSkillRecordsByStages;
         public List<Thing> amplifiers = new List<Thing>();
-        public HediffResource()
-        {
-            PreInit();
-        }
         public HediffStageResource CurStageResource => this.CurStage as HediffStageResource;
         public IEnumerable<Tuple<CompAdjustHediffs, ResourceProperties, ResourceStorage>> GetResourceStorages()
         {
@@ -281,8 +280,11 @@ namespace ART
 
         public bool CanGainResource => Find.TickManager.TicksGame > this.delayTicks;
         public float ResourceCapacity => this.def.maxResourceCapacity + HediffResourceUtils.GetHediffResourceCapacityGainFor(this.pawn, def, out _) + GetHediffResourceCapacityGainFromAmplifiers(out _);
+
+        public CompAbilities compAbilities;
         private void PreInit()
         {
+            compAbilities = pawn?.GetComp<CompAbilities>();
             if (this.amplifiers is null)
             {
                 this.amplifiers = new List<Thing>();
@@ -290,6 +292,14 @@ namespace ART
             if (this.savedSkillRecordsByStages is null)
             {
                 this.savedSkillRecordsByStages = new Dictionary<int, SavedSkillRecordCollection>();
+            }
+            if (this.grantedStaticAbilities is null)
+            {
+                this.grantedStaticAbilities = new List<VFECore.Abilities.AbilityDef>();
+            }
+            if (this.grantedRandomAbilities is null)
+            {
+                this.grantedRandomAbilities = new List<VFECore.Abilities.AbilityDef>();
             }
             this.Register();
         }
@@ -337,7 +347,6 @@ namespace ART
             float num = 0;
             foreach (var compAmplifier in Amplifiers)
             {
-                Log.Message("compAmplifier: " + compAmplifier);
                 var gain = compAmplifier.GetResourceCapacityGainFor(this.def);
                 explanation.AppendLine("ART.CapacityAmplifier".Translate(compAmplifier.Parent, gain));
                 num += gain;
@@ -556,16 +565,17 @@ namespace ART
         public override void PostAdd(DamageInfo? dinfo)
         {
             base.PostAdd(dinfo);
-            ARTLog.Message(this.def.defName + " adding resource hediff to " + this.pawn);
+            PreInit();
             this.resourceAmount = this.def.initialResourceAmount;
             UpdateResourceData();
             this.duration = 0;
-            if (this.def.sendLetterWhenGained && this.pawn.Faction == Faction.OfPlayer)
+            if (this.def.sendLetterWhenGained && this.pawn.Faction == Faction.OfPlayerSilentFail)
             {
                 Find.LetterStack.ReceiveLetter(this.def.letterTitleKey.Translate(this.pawn.Named("PAWN"), this.def.Named("RESOURCE")),
                     this.def.letterMessageKey.Translate(this.pawn.Named("PAWN"), this.def.Named("RESOURCE")), this.def.letterType, this.pawn);
             }
-            if (this.CurStage is HediffStageResource hediffStageResource)
+            var hediffStageResource = this.CurStageResource;
+            if (hediffStageResource != null)
             {
                 if (hediffStageResource.healingProperties != null && hediffStageResource.healingProperties.healOnApply)
                 {
@@ -575,22 +585,15 @@ namespace ART
                 {
                     DoTend(hediffStageResource.tendingProperties);
                 }
-                if (hediffStageResource.skillAdjustProperties != null)
-                {
-                    foreach (var skillAdjust in hediffStageResource.skillAdjustProperties)
-                    {
-                        AddSkillAdjust(this.CurStageIndex, skillAdjust);
-                    }
-                }
             }
-            this.previousStageIndex = this.CurStageIndex;
+            Log.Message("PostAdd");
+            OnStageSwitch(hediffStageResource);
             this.Register();
         }
 
         public override void PostRemoved()
         {
             base.PostRemoved();
-            ARTLog.Message(this.def.defName + " removing resource hediff from " + this.pawn);
             Notify_Removed();
             this.Deregister();
             var comps = HediffResourceUtils.GetAllAdjustResources(this.pawn);
@@ -622,28 +625,12 @@ namespace ART
                     HediffResourceUtils.TryDropExcessHediffGears(this.pawn);
                 }
             }
+
             var hediffStageResource = this.CurStage as HediffStageResource;
             if (this.previousStageIndex != this.CurStageIndex)
             {
-                var previousStage = def.stages[this.previousStageIndex] as HediffStageResource;
-                if (previousStage != null)
-                {
-                    if (previousStage.skillAdjustProperties != null)
-                    {
-                        foreach (var skillAdjust in previousStage.skillAdjustProperties)
-                        {
-                            RemoveSkillAdjust(this.previousStageIndex, skillAdjust);
-                        }
-                    }
-                }
-                this.previousStageIndex = this.CurStageIndex;
-                if (hediffStageResource != null && hediffStageResource.skillAdjustProperties != null)
-                {
-                    foreach (var skillAdjust in hediffStageResource.skillAdjustProperties)
-                    {
-                        AddSkillAdjust(this.CurStageIndex, skillAdjust);
-                    }
-                }
+                Log.Message("Tick");
+                OnStageSwitch(hediffStageResource);
             }
 
             if (hediffStageResource != null)
@@ -679,6 +666,113 @@ namespace ART
             }
         }
 
+        private void OnStageSwitch(HediffStageResource hediffStageResource)
+        {
+            Log.Message(pawn + " - " + pawn.HashOffset() + " switching stage " + this.CurStageIndex + " - " + this.previousStageIndex);
+            var previousStage = this.previousStageIndex > -1 ? def.stages[this.previousStageIndex] as HediffStageResource : null;
+            if (previousStage != null)
+            {
+                if (previousStage.skillAdjustProperties != null)
+                {
+                    foreach (var skillAdjust in previousStage.skillAdjustProperties)
+                    {
+                        RemoveSkillAdjust(this.previousStageIndex, skillAdjust);
+                    }
+                }
+            }
+
+            this.previousStageIndex = this.CurStageIndex;
+            if (hediffStageResource != null && hediffStageResource.skillAdjustProperties != null)
+            {
+                foreach (var skillAdjust in hediffStageResource.skillAdjustProperties)
+                {
+                    AddSkillAdjust(this.CurStageIndex, skillAdjust);
+                }
+            }
+
+            if (this.compAbilities != null)
+            {
+                Log.Message("Switching to stage: " + this.CurStageIndex);
+                if (hediffStageResource != null)
+                {
+                    if (this.def.randomAbilitiesPool != null)
+                    {
+                        var amount = hediffStageResource.randomAbilitiesAmountToGain.RandomInRange;
+                        var abilityCandidates = this.def.randomAbilitiesPool.Where(x => !this.compAbilities.HasAbility(x)).Take(amount);
+                        if (!def.retainRandomLearnedAbilities)
+                        {
+                            var abilitiesToRemove = this.compAbilities.LearnedAbilities.Where(x => this.grantedRandomAbilities.Contains(x.def));
+                            foreach (var ability in abilitiesToRemove)
+                            {
+                                Log.Message(pawn + " - removing random ability: " + ability);
+                                this.compAbilities.LearnedAbilities.Remove(ability);
+                            }
+                        }
+
+                        foreach (var ability in abilityCandidates)
+                        {
+                            Log.Message(pawn + " - gaining random ability: " + ability);
+                            this.compAbilities.GiveAbility(ability);
+                            this.grantedRandomAbilities.Add(ability);
+                        }
+                    }
+                    else
+                    {
+                        var abilitiesToRemove = this.compAbilities.LearnedAbilities.Where(x => this.grantedRandomAbilities.Contains(x.def));
+                        foreach (var ability in abilitiesToRemove)
+                        {
+                            Log.Message(pawn + " - removing random ability: " + ability);
+                            this.compAbilities.LearnedAbilities.Remove(ability);
+                        }
+                    }
+
+                    if (hediffStageResource.staticAbilitiesToGain != null)
+                    {
+                        var abilitiesToRemove = this.compAbilities.LearnedAbilities.Where(x => this.grantedStaticAbilities.Contains(x.def)
+                            && !hediffStageResource.staticAbilitiesToGain.Contains(x.def));
+                        foreach (var ability in abilitiesToRemove)
+                        {
+                            Log.Message(pawn + " - removing static ability: " + ability);
+                            this.compAbilities.LearnedAbilities.Remove(ability);
+                        }
+
+                        var abilityCandidates = hediffStageResource.staticAbilitiesToGain.Where(x => !this.compAbilities.HasAbility(x));
+                        foreach (var ability in abilityCandidates)
+                        {
+                            Log.Message(pawn + " - gaining static ability: " + ability);
+                            this.compAbilities.GiveAbility(ability);
+                            this.grantedStaticAbilities.Add(ability);
+                        }
+                    }
+                    else
+                    {
+                        var abilitiesToRemove = this.compAbilities.LearnedAbilities.Where(x => this.grantedStaticAbilities.Contains(x.def));
+                        foreach (var ability in abilitiesToRemove)
+                        {
+                            Log.Message(pawn + " - removing static ability: " + ability);
+                            this.compAbilities.LearnedAbilities.Remove(ability);
+                        }
+                    }
+                }
+                else
+                {
+                    var abilitiesToRemove = this.compAbilities.LearnedAbilities.Where(x => this.grantedRandomAbilities.Contains(x.def));
+                    foreach (var ability in abilitiesToRemove)
+                    {
+                        Log.Message(pawn + " - removing random ability: " + ability);
+                        this.compAbilities.LearnedAbilities.Remove(ability);
+                    }
+                    abilitiesToRemove = this.compAbilities.LearnedAbilities.Where(x => this.grantedStaticAbilities.Contains(x.def));
+                    foreach (var ability in abilitiesToRemove)
+                    {
+                        Log.Message(pawn + " - removing static ability: " + ability);
+                        this.compAbilities.LearnedAbilities.Remove(ability);
+                    }
+
+                }
+            }
+        }
+
         public override IEnumerable<Gizmo> GetGizmos()
         {
             if (this.def.stages != null)
@@ -703,7 +797,6 @@ namespace ART
                                     curChangeTime = otherStage.togglingProperties.changeTime;
                                     curCooldownPeriod = otherStage.togglingProperties.cooldownTime;
                                     stageIndexToActivate = this.def.stages.IndexOf(otherStage);
-                                    Log.Message("Activating " + stageIndexToActivate);
                                 }));
                             }
                             Find.WindowStack.Add(new FloatMenu(options));
@@ -766,43 +859,32 @@ namespace ART
         private void DoDamage(DamageAuraProperties damagingProperties)
         {
             lastDamagingEffectTick = Find.TickManager.TicksGame;
-            foreach (var victim in GetPawns(damagingProperties))
+            foreach (var victim in HediffResourceUtils.GetPawnsAround(pawn, damagingProperties.effectRadius))
             {
-                Log.Message($"Checking {victim} to damage");
                 if (CanDamage(victim, damagingProperties))
                 {
                     victim.TakeDamage(new DamageInfo(damagingProperties.damageDef, damagingProperties.damageAmount, instigator: this.pawn, weapon: this.pawn.def));
-                    if (damagingProperties.selfDamageMote != null && this.pawn == victim)
+                    if (victim.MapHeld != null)
                     {
-                        MoteMaker.MakeStaticMote(this.pawn.Position, this.pawn.Map, damagingProperties.selfDamageMote);
-                    }
-                    else if (damagingProperties.otherDamageMote != null && this.pawn != victim)
-                    {
-                        MoteMaker.MakeStaticMote(victim.Position, victim.Map, damagingProperties.otherDamageMote);
+                        if (damagingProperties.selfDamageMote != null && this.pawn == victim)
+                        {
+                            MoteMaker.MakeStaticMote(this.pawn.Position, this.pawn.Map, damagingProperties.selfDamageMote);
+                        }
+                        else if (damagingProperties.otherDamageMote != null && this.pawn != victim)
+                        {
+                            MoteMaker.MakeStaticMote(victim.PositionHeld, victim.MapHeld, damagingProperties.otherDamageMote);
+                        }
+
+                        if (damagingProperties.soundOnEffect != null)
+                        {
+                            damagingProperties.soundOnEffect.PlayOneShot(new TargetInfo(victim.PositionHeld, victim.MapHeld));
+                        }
                     }
 
-                    if (damagingProperties.soundOnEffect != null)
-                    {
-                        damagingProperties.soundOnEffect.PlayOneShot(new TargetInfo(victim.Position, victim.Map));
-                    }
                 }
             }
         }
 
-        private IEnumerable<Pawn> GetPawns(DamageAuraProperties damagingProperties)
-        {
-            if (damagingProperties.effectRadius <= 0)
-            {
-                yield return this.pawn;
-            }
-            else
-            {
-                foreach (var pawn in GenRadial.RadialDistinctThingsAround(this.pawn.PositionHeld, this.pawn.MapHeld, damagingProperties.effectRadius, true).OfType<Pawn>())
-                {
-                    yield return pawn;
-                }
-            }
-        }
         private bool CanDamage(Pawn pawn, DamageAuraProperties damagingProperties)
         {
             if (!damagingProperties.affectsSelf && this.pawn == pawn)
@@ -826,28 +908,29 @@ namespace ART
         }
         private void AddSkillAdjust(int stageIndex, SkillAdjustProperties skillAdjust)
         {
-            var skillRecord = pawn.skills.GetSkill(skillAdjust.skill);
-            if (skillRecord != null && !skillRecord.TotallyDisabled)
+            if (pawn.skills != null)
             {
-                Log.Message("BEFORE: " + this.pawn + " - adding skill adjust: " + skillAdjust.skill + " - " + skillRecord.levelInt + " - " + skillRecord.passion + ", severity: " + this.Severity);
-                if (!savedSkillRecordsByStages.TryGetValue(stageIndex, out var list))
+                var skillRecord = pawn.skills.GetSkill(skillAdjust.skill);
+                if (skillRecord != null && !skillRecord.TotallyDisabled)
                 {
-                    savedSkillRecordsByStages[stageIndex] = list = new SavedSkillRecordCollection();
+                    if (!savedSkillRecordsByStages.TryGetValue(stageIndex, out var list))
+                    {
+                        savedSkillRecordsByStages[stageIndex] = list = new SavedSkillRecordCollection();
+                    }
+                    list.savedSkillRecords.Add(new SavedSkillRecord
+                    {
+                        def = skillAdjust.skill,
+                        levelInt = skillRecord.levelInt,
+                        passion = skillRecord.passion
+                    });
+                    skillRecord.levelInt += skillAdjust.skillLevelOffset;
+                    skillRecord.passion = skillAdjust.forcedPassion;
+                    if (skillRecord.levelInt > skillAdjust.maxSkillLevel)
+                    {
+                        skillRecord.levelInt = skillAdjust.maxSkillLevel;
+                    }
+                    skillRecord.levelInt = Mathf.Clamp(skillRecord.levelInt, 0, 20);
                 }
-                list.savedSkillRecords.Add(new SavedSkillRecord
-                {
-                    def = skillAdjust.skill,
-                    levelInt = skillRecord.levelInt,
-                    passion = skillRecord.passion
-                });
-                skillRecord.levelInt += skillAdjust.skillLevelOffset;
-                skillRecord.passion = skillAdjust.forcedPassion;
-                if (skillRecord.levelInt > skillAdjust.maxSkillLevel)
-                {
-                    skillRecord.levelInt = skillAdjust.maxSkillLevel;
-                }
-                skillRecord.levelInt = Mathf.Clamp(skillRecord.levelInt, 0, 20);
-                Log.Message("AFTER: " + this.pawn + " - adding skill adjust: " + skillAdjust.skill + " - " + skillRecord.levelInt + " - " + skillRecord.passion + ", severity: " + this.Severity);
             }
         }
 
@@ -858,7 +941,6 @@ namespace ART
             {
                 if (savedSkillRecordsByStages.ContainsKey(stageIndex))
                 {
-                    Log.Message("BEFORE: " + this.pawn + " - removing skill adjust: " + skillAdjust.skill + " - " + skillRecord.levelInt + " - " + skillRecord.passion + ", severity: " + this.Severity);
                     var savedSkillRecord = savedSkillRecordsByStages[stageIndex].savedSkillRecords.FirstOrDefault(x => x.def == skillAdjust.skill);
                     if (savedSkillRecord != null)
                     {
@@ -868,14 +950,12 @@ namespace ART
                         skillRecord.levelInt = Mathf.Clamp(skillRecord.levelInt, 0, 20);
                         skillRecord.passion = savedSkillRecord.passion;
                     }
-                    Log.Message("AFTER: " + this.pawn + " - removing skill adjust: " + skillAdjust.skill + " - " + skillRecord.levelInt + " - " + skillRecord.passion + ", severity: " + this.Severity);
                 }
             }
         }
 
         public void DoTend(TendingProperties tendingProperties)
         {
-            Log.Message(pawn + " tending");
             lastTendingEffectTick = Find.TickManager.TicksGame;
             var hediffs = tendingProperties.affectConditions 
                 ? pawn.health.hediffSet.hediffs.Where(x => x.TendableNow()).ToList() 
@@ -890,7 +970,6 @@ namespace ART
                 };
                 foreach (var hediff in hediffs)
                 {
-                    Log.Message("Tending " + hediff);
                     TendUtility.DoTend(null, pawn, null);
                 }
                 TendUtility_DoTend_Patch.hardCodedTendData = null;
@@ -903,11 +982,9 @@ namespace ART
             float totalSpentPoints = healingProperties.healPoints;
             foreach (var pawn in HediffResourceUtils.GetPawnsAround(this.pawn, healingProperties.effectRadius))
             {
-                Log.Message($"Checking {pawn} to heal");
                 if (CanHeal(pawn, healingProperties))
                 {
                     var hediffs = GetHediffsToHeal(pawn, healingProperties).ToList();
-                    Log.Message($"Can heal {pawn}, checking hediffs: " + String.Join(", ", hediffs));
                     if (hediffs.Any())
                     {
                         var hediffsToHeal = healingProperties.hediffsToHeal > 0 ? hediffs.Take(healingProperties.hediffsToHeal).ToList() : hediffs;
@@ -1066,9 +1143,12 @@ namespace ART
             Scribe_Values.Look(ref curChangeTime, "curChangeTime");
             Scribe_Values.Look(ref lastStageSwitchTick, "lastStageSwitchTick");
 
-            Scribe_Values.Look(ref previousStageIndex, "previousStageIndex");
+            Scribe_Values.Look(ref previousStageIndex, "previousStageIndex", -1);
             Scribe_Collections.Look(ref amplifiers, "amplifiers", LookMode.Reference);
             Scribe_Collections.Look(ref savedSkillRecordsByStages, "savedSkillRecordsByStages", LookMode.Value, LookMode.Deep);
+
+            Scribe_Collections.Look(ref grantedStaticAbilities, "grantedStaticAbilities", LookMode.Def);
+            Scribe_Collections.Look(ref grantedRandomAbilities, "grantedRandomAbilities", LookMode.Def);
             PreInit();
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
@@ -1077,6 +1157,8 @@ namespace ART
                     cachedAmplifiers[amplifier] = amplifier.TryGetComp<CompAdjustHediffsArea>();
                 }
             }
+
+            Log.Message("ExposeData");
         }
 
         public void Register()

@@ -68,7 +68,7 @@ namespace ART
             {
 				yield return g;
             }
-			if (__instance.Faction == Faction.OfPlayer)
+			if (__instance.Faction == Faction.OfPlayerSilentFail)
 			{
 				var hediffResources = HediffResourceUtils.GetHediffResourcesFor(__instance);
 				if (hediffResources != null)

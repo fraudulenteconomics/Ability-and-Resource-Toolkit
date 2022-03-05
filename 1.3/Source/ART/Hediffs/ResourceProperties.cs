@@ -130,7 +130,7 @@ namespace ART
                 }
             }
 
-            if (this.lightRange.HasValue)
+            if (this.lightRange.HasValue && pawn.Map != null)
             {
                 var curLight = pawn.Map.glowGrid.GameGlowAt(pawn.Position);
                 if (!RangeAllowed(this.activeAboveLight, this.activeBelowLight, this.lightRange.Value, curLight))

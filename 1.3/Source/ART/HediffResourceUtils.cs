@@ -1049,13 +1049,10 @@ namespace ART
 			{
 				hediffsToHeal = hediffsToHeal.InRandomOrder().ToList();
 			}
-			Log.Message("Working on hediffs to cure: " + String.Join(", ", hediffsToHeal));
 			foreach (var hediff in hediffsToHeal)
 			{
-				Log.Message("Curing hediff: " + hediff + ", Severity: " + hediff.Severity + ", totalSpentPoints: " + healPoints);
 				if (healAll)
 				{
-					Log.Message("1 Cured hediff: " + hediff + ", Severity: " + hediff.Severity + ", totalSpentPoints: " + healPoints);
 					pawn.health.RemoveHediff(hediff);
 
 					if (soundOnEffect != null)
@@ -1070,7 +1067,6 @@ namespace ART
 					healPoints -= toHealPoints;
 					if (hediff.Severity == 0)
 					{
-						Log.Message("2 Cured hediff: " + hediff + ", Severity: " + hediff.Severity + ", healPoints: " + healPoints);
 						pawn.health.RemoveHediff(hediff);
 					}
 
@@ -1082,7 +1078,6 @@ namespace ART
 
 				if (!healAll && (!pointsOverflow || healPoints == 0))
 				{
-					Log.Message("Spent all points. Stopping now.");
 					return;
 				}
 			}

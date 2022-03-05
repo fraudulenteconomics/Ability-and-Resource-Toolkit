@@ -53,7 +53,7 @@ namespace ART
             {
                 return false;
             }
-            if (pawn.Faction == Faction.OfPlayer && !pawn.Map.areaManager.Home[t.Position])
+            if (pawn.Faction == Faction.OfPlayerSilentFail && !pawn.Map.areaManager.Home[t.Position])
             {
                 JobFailReason.Is(WorkGiver_FixBrokenDownBuilding.NotInHomeAreaTrans);
                 return false;
