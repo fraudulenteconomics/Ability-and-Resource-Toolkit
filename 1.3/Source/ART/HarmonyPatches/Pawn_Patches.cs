@@ -40,6 +40,8 @@ namespace ART
 		public HediffDef hediff;
 
 		public float initialSeverity;
+
+		public float chance = 1f;
 	}
 
 	public class PawnKindExtension : DefModExtension
@@ -76,14 +78,17 @@ namespace ART
                 {
 					foreach (var hediffData in extension.hediffsOnGeneration)
                     {
-						if (hediffData.hediff is HediffResourceDef resourceDef)
+						if (Rand.Chance(hediffData.chance))
                         {
-							HediffResourceUtils.AdjustResourceAmount(__result, resourceDef, hediffData.initialSeverity, true, null, null);
-                        }
-						else
-                        {
-							HealthUtility.AdjustSeverity(__result, hediffData.hediff, hediffData.initialSeverity);
-                        }
+							if (hediffData.hediff is HediffResourceDef resourceDef)
+							{
+								HediffResourceUtils.AdjustResourceAmount(__result, resourceDef, hediffData.initialSeverity, true, null, null);
+							}
+							else
+							{
+								HealthUtility.AdjustSeverity(__result, hediffData.hediff, hediffData.initialSeverity);
+							}
+						}
                     }
                 }
 			}

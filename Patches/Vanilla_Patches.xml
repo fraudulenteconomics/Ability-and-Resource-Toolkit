@@ -11,6 +11,7 @@
 							<li>
 								<hediff>FE_FusionReactor</hediff>
 								<initialSeverity>50</initialSeverity>
+								<chance>0.5</chance>
 							</li>
 						</hediffsOnGeneration>
 					</li>
