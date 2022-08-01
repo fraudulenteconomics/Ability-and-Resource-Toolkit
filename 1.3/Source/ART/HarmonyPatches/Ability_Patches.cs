@@ -1,6 +1,6 @@
 ﻿using HarmonyLib;
 using MVCF.Utilities;
-using RimWorld;
+using RimWorld.Planet;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,14 +10,15 @@ using System.Threading.Tasks;
 using UnityEngine;
 using Verse;
 using Verse.AI;
+using VFECore.Abilities;
 
 namespace ART
 {
 
-    [HarmonyPatch(typeof(VFECore.Abilities.Ability), "IsEnabledForPawn")]
+    [HarmonyPatch(typeof(Ability), "IsEnabledForPawn")]
     public static class Patch_IsEnabledForPawn
     {
-        private static void Postfix(ref bool __result, VFECore.Abilities.Ability __instance, ref string reason)
+        private static void Postfix(ref bool __result, Ability __instance, ref string reason)
         {
             var extension = __instance.def.GetModExtension<AbilityResourceProps>();
             if (extension != null)
@@ -31,23 +32,24 @@ namespace ART
         }
     }
 
-    [HarmonyPatch(typeof(VFECore.Abilities.Ability), "Cast")]
+    [HarmonyPatch(typeof(Ability), "Cast", new Type[] { typeof(GlobalTargetInfo[]) })]
     public static class Patch_Cast
     {
-        private static void Postfix(VFECore.Abilities.Ability __instance, LocalTargetInfo target)
+        private static void Postfix(Ability __instance, GlobalTargetInfo[] targets)
         {
             var extension = __instance.def.GetModExtension<AbilityResourceProps>();
             if (extension != null)
             {
-                HediffResourceUtils.ApplyResourceSettings(target.Thing, __instance.pawn, extension);
+                var targetThings = targets.Where(x => x.HasThing).Select(x => x.Thing).ToList();
+                HediffResourceUtils.ApplyResourceSettings(targetThings, __instance.pawn, extension);
             }
         }
     }
 
-    [HarmonyPatch(typeof(VFECore.Abilities.Ability), "GetDescriptionForPawn")]
+    [HarmonyPatch(typeof(Ability), "GetDescriptionForPawn")]
     public static class Patch_GetDescriptionForPawn
     {
-        private static void Postfix(VFECore.Abilities.Ability __instance, ref string __result)
+        private static void Postfix(Ability __instance, ref string __result)
         {
             var extension = __instance.def.GetModExtension<AbilityResourceProps>();
             if (extension != null)

@@ -741,126 +741,143 @@ namespace ART
 		}
 
 		public static void ApplyResourceSettings(Thing target, Pawn casterPawn, IResourceProps props)
+        {
+            ApplyTargetResourceSettings(target, props);
+            ApplyResourceSettings(casterPawn, props);
+        }
+		public static void ApplyResourceSettings(List<Thing> targets, Pawn casterPawn, IResourceProps props)
 		{
-			if (props.TargetResourceSettings != null)
-			{
-				var targetPawn = target as Pawn;
-				if (targetPawn != null)
-				{
-					foreach (var option in props.TargetResourceSettings)
-					{
-						if (option.resetLifetimeTicks)
-						{
-							var targetHediff = targetPawn.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
-							if (targetHediff != null)
-							{
-								targetHediff.duration = 0;
-							}
-						}
-					}
-				}
-
+			foreach (var target in targets)
+            {
+				ApplyTargetResourceSettings(target, props);
 			}
-
-			if (props.ResourceSettings != null)
-			{
-				var hediffResourceManage = ARTManager.Instance;
-
-				var hediffPostUse = new Dictionary<HediffResource, List<int>>();
-				var hediffPostUseDelayMultipliers = new Dictionary<HediffResource, List<float>>();
-
-				var disablePostUseString = "";
-				var comps = GetAllAdjustResources(casterPawn);
-
-				foreach (var resourceProperties in props.ResourceSettings)
-				{
-					var hediffResource = AdjustResourceAmount(casterPawn, resourceProperties.hediff, resourceProperties.resourcePerUse, 
-						resourceProperties.addHediffIfMissing, resourceProperties, resourceProperties.applyToPart);
-					if (hediffResource != null)
-					{
-						var hediffResourcePostUseDelay = new List<int>();
-						var hediffResourcePostUseDelayMultipliers = new List<float>();
-						foreach (var comp in comps)
-						{
-							var compResourseSettings = comp.ResourceSettings?.FirstOrDefault(x => x.hediff == resourceProperties.hediff);
-							if (compResourseSettings != null)
-							{
-								if (resourceProperties.postUseDelay != 0)
-								{
-									hediffResourcePostUseDelay.Add(resourceProperties.postUseDelay);
-									disablePostUseString += comp.DisablePostUse + "\n";
-									if (compResourseSettings.postUseDelayMultiplier != 1)
-									{
-										hediffResourcePostUseDelayMultipliers.Add(compResourseSettings.postUseDelayMultiplier);
-									}
-								}
-							}
-
-							if (resourceProperties.postUseDelay != 0)
-							{
-								if (hediffPostUse.ContainsKey(hediffResource))
-								{
-									hediffPostUse[hediffResource].Add(resourceProperties.postUseDelay);
-								}
-								else
-								{
-									hediffPostUse[hediffResource] = new List<int> { resourceProperties.postUseDelay };
-								}
-								if (compResourseSettings != null && compResourseSettings.postUseDelayMultiplier != 1)
-								{
-									if (hediffPostUseDelayMultipliers.ContainsKey(hediffResource))
-									{
-										hediffPostUseDelayMultipliers[hediffResource].Add(compResourseSettings.postUseDelayMultiplier);
-									}
-									else
-									{
-										hediffPostUseDelayMultipliers[hediffResource] = new List<float> { compResourseSettings.postUseDelayMultiplier };
-									}
-								}
-							}
-						}
-
-						if (hediffResourcePostUseDelay.Any() && hediffResourcePostUseDelayMultipliers.Any())
-						{
-							foreach (var comp in comps)
-							{
-								comp.PostUseDelayTicks[hediffResource] = new HediffResouceDisable((int)((Find.TickManager.TicksGame + hediffResourcePostUseDelay.Average()) * hediffResourcePostUseDelayMultipliers.Average()), disablePostUseString);
-							}
-						}
-						else if (hediffResourcePostUseDelay.Any())
-						{
-							foreach (var comp in comps)
-							{
-								comp.PostUseDelayTicks[hediffResource] = new HediffResouceDisable((int)((Find.TickManager.TicksGame + hediffResourcePostUseDelay.Average())), disablePostUseString);
-							}
-						}
-					}
-				}
-
-				foreach (var hediffData in hediffPostUse)
-				{
-					if (hediffData.Key != null && hediffPostUse.TryGetValue(hediffData.Key, out List<int> hediffPostUseList))
-					{
-						int newDelayTicks;
-						if (hediffPostUseDelayMultipliers.TryGetValue(hediffData.Key, out List<float> hediffPostUseMultipliers) && hediffPostUseMultipliers.Any())
-						{
-							newDelayTicks = (int)(hediffPostUseList.Average() * hediffPostUseMultipliers.Average());
-						}
-						else
-						{
-							newDelayTicks = (int)(hediffPostUseList.Average());
-						}
-
-						if (hediffData.Key.CanHaveDelay(newDelayTicks))
-						{
-							hediffData.Key.AddDelay(newDelayTicks);
-						}
-					}
-				}
-			}
+			ApplyResourceSettings(casterPawn, props);
 		}
 
-		public static void ApplyChargeResource(ref float damageAmount, ChargeResources chargeResources)
+
+		private static void ApplyTargetResourceSettings(Thing target, IResourceProps props)
+        {
+            if (props.TargetResourceSettings != null)
+            {
+                var targetPawn = target as Pawn;
+                if (targetPawn != null)
+                {
+                    foreach (var option in props.TargetResourceSettings)
+                    {
+                        if (option.resetLifetimeTicks)
+                        {
+                            var targetHediff = targetPawn.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
+                            if (targetHediff != null)
+                            {
+                                targetHediff.duration = 0;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private static void ApplyResourceSettings(Pawn casterPawn, IResourceProps props)
+        {
+            if (props.ResourceSettings != null)
+            {
+                var hediffResourceManage = ARTManager.Instance;
+
+                var hediffPostUse = new Dictionary<HediffResource, List<int>>();
+                var hediffPostUseDelayMultipliers = new Dictionary<HediffResource, List<float>>();
+
+                var disablePostUseString = "";
+                var comps = GetAllAdjustResources(casterPawn);
+
+                foreach (var resourceProperties in props.ResourceSettings)
+                {
+                    var hediffResource = AdjustResourceAmount(casterPawn, resourceProperties.hediff, resourceProperties.resourcePerUse,
+                        resourceProperties.addHediffIfMissing, resourceProperties, resourceProperties.applyToPart);
+                    if (hediffResource != null)
+                    {
+                        var hediffResourcePostUseDelay = new List<int>();
+                        var hediffResourcePostUseDelayMultipliers = new List<float>();
+                        foreach (var comp in comps)
+                        {
+                            var compResourseSettings = comp.ResourceSettings?.FirstOrDefault(x => x.hediff == resourceProperties.hediff);
+                            if (compResourseSettings != null)
+                            {
+                                if (resourceProperties.postUseDelay != 0)
+                                {
+                                    hediffResourcePostUseDelay.Add(resourceProperties.postUseDelay);
+                                    disablePostUseString += comp.DisablePostUse + "\n";
+                                    if (compResourseSettings.postUseDelayMultiplier != 1)
+                                    {
+                                        hediffResourcePostUseDelayMultipliers.Add(compResourseSettings.postUseDelayMultiplier);
+                                    }
+                                }
+                            }
+
+                            if (resourceProperties.postUseDelay != 0)
+                            {
+                                if (hediffPostUse.ContainsKey(hediffResource))
+                                {
+                                    hediffPostUse[hediffResource].Add(resourceProperties.postUseDelay);
+                                }
+                                else
+                                {
+                                    hediffPostUse[hediffResource] = new List<int> { resourceProperties.postUseDelay };
+                                }
+                                if (compResourseSettings != null && compResourseSettings.postUseDelayMultiplier != 1)
+                                {
+                                    if (hediffPostUseDelayMultipliers.ContainsKey(hediffResource))
+                                    {
+                                        hediffPostUseDelayMultipliers[hediffResource].Add(compResourseSettings.postUseDelayMultiplier);
+                                    }
+                                    else
+                                    {
+                                        hediffPostUseDelayMultipliers[hediffResource] = new List<float> { compResourseSettings.postUseDelayMultiplier };
+                                    }
+                                }
+                            }
+                        }
+
+                        if (hediffResourcePostUseDelay.Any() && hediffResourcePostUseDelayMultipliers.Any())
+                        {
+                            foreach (var comp in comps)
+                            {
+                                comp.PostUseDelayTicks[hediffResource] = new HediffResouceDisable((int)((Find.TickManager.TicksGame + hediffResourcePostUseDelay.Average()) * hediffResourcePostUseDelayMultipliers.Average()), disablePostUseString);
+                            }
+                        }
+                        else if (hediffResourcePostUseDelay.Any())
+                        {
+                            foreach (var comp in comps)
+                            {
+                                comp.PostUseDelayTicks[hediffResource] = new HediffResouceDisable((int)((Find.TickManager.TicksGame + hediffResourcePostUseDelay.Average())), disablePostUseString);
+                            }
+                        }
+                    }
+                }
+
+                foreach (var hediffData in hediffPostUse)
+                {
+                    if (hediffData.Key != null && hediffPostUse.TryGetValue(hediffData.Key, out List<int> hediffPostUseList))
+                    {
+                        int newDelayTicks;
+                        if (hediffPostUseDelayMultipliers.TryGetValue(hediffData.Key, out List<float> hediffPostUseMultipliers) && hediffPostUseMultipliers.Any())
+                        {
+                            newDelayTicks = (int)(hediffPostUseList.Average() * hediffPostUseMultipliers.Average());
+                        }
+                        else
+                        {
+                            newDelayTicks = (int)(hediffPostUseList.Average());
+                        }
+
+                        if (hediffData.Key.CanHaveDelay(newDelayTicks))
+                        {
+                            hediffData.Key.AddDelay(newDelayTicks);
+                        }
+                    }
+                }
+            }
+        }
+
+        public static void ApplyChargeResource(ref float damageAmount, ChargeResources chargeResources)
 		{
 			Log.Message("Old damage: " + damageAmount);
 			foreach (var chargeResource in chargeResources.chargeResources)

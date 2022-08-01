@@ -11,6 +11,8 @@ using Verse;
 using Verse.Noise;
 using Verse.Sound;
 using VFECore.Abilities;
+using AbilityDef = VFECore.Abilities.AbilityDef;
+
 namespace ART
 {
     public class HediffResource : HediffWithComps, IAdjustResource
@@ -30,8 +32,8 @@ namespace ART
         public int curCooldownPeriod;
         public int curChangeTime;
         public int previousStageIndex = -1;
-        public List<VFECore.Abilities.AbilityDef> grantedRandomAbilities;
-        public List<VFECore.Abilities.AbilityDef> grantedStaticAbilities;
+        public List<AbilityDef> grantedRandomAbilities;
+        public List<AbilityDef> grantedStaticAbilities;
 
         public Dictionary<int, SavedSkillRecordCollection> savedSkillRecordsByStages;
         public List<Thing> amplifiers = new List<Thing>();
@@ -295,11 +297,11 @@ namespace ART
             }
             if (this.grantedStaticAbilities is null)
             {
-                this.grantedStaticAbilities = new List<VFECore.Abilities.AbilityDef>();
+                this.grantedStaticAbilities = new List<AbilityDef>();
             }
             if (this.grantedRandomAbilities is null)
             {
-                this.grantedRandomAbilities = new List<VFECore.Abilities.AbilityDef>();
+                this.grantedRandomAbilities = new List<AbilityDef>();
             }
             this.Register();
         }

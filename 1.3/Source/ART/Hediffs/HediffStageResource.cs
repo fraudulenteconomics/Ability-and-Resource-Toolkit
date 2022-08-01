@@ -7,7 +7,7 @@ using System.Security.Cryptography;
 using UnityEngine.Networking.Types;
 using UnityEngine;
 using Verse;
-
+using VFECore.Abilities;
 
 namespace ART
 {
@@ -39,7 +39,7 @@ namespace ART
         public QualityAdjustProperties qualityAdjustProperties;
 
         public IntRange randomAbilitiesAmountToGain;
-        public List<VFECore.Abilities.AbilityDef> staticAbilitiesToGain;
+        public List<AbilityDef> staticAbilitiesToGain;
         public bool ShieldIsActive(Pawn pawn)
         {
             if (shieldProperties != null)

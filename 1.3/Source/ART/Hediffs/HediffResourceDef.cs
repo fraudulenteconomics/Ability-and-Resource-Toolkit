@@ -8,6 +8,7 @@ using System.Xml;
 using UnityEngine;
 using Verse;
 using VFECore.Abilities;
+using AbilityDef = VFECore.Abilities.AbilityDef;
 
 namespace ART
 {
@@ -40,7 +41,7 @@ namespace ART
 
 		public GraphicData fallbackTogglingGraphicData;
 
-		public List<VFECore.Abilities.AbilityDef> randomAbilitiesPool;
+		public List<AbilityDef> randomAbilitiesPool;
 		public bool retainRandomLearnedAbilities;
 	}
 }
