@@ -18,8 +18,9 @@ namespace ART
 		{
 			foreach (var thingDef in DefDatabase<ThingDef>.AllDefs.Where(x => x.race?.Humanlike ?? false))
 			{
-				thingDef.inspectorTabsResolved.Add(InspectTabManager.GetSharedInstance(typeof(ITab_Pawn_Resource)));
-				thingDef.comps.Add(new CompProperties_PawnClass());
+                thingDef.inspectorTabsResolved.Add(InspectTabManager.GetSharedInstance(typeof(ITab_Pawn_Resource)));
+                thingDef.inspectorTabsResolved.Add(InspectTabManager.GetSharedInstance(typeof(ITab_Pawn_Class)));
+                thingDef.comps.Add(new CompProperties_PawnClass());
 			}
 		}
 

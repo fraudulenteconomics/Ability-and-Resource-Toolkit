@@ -64,6 +64,7 @@ namespace ART
 
         public void Init(ClassTraitDef trait)
         {
+            pawn.health.AddHediff(trait.resourceHediff);
             abilityLevels = new Dictionary<AbilityTreeDef, int>();
             foreach (var tree in trait.classAbilities)
             {
@@ -150,8 +151,12 @@ namespace ART
             }
         }
 
-        public void Erase()
+        public void Erase(ClassTraitDef classTrait)
         {
+            var hediff = pawn.health.hediffSet.GetFirstHediffOfDef(classTrait.resourceHediff);
+            if (hediff != null)
+                pawn.health.RemoveHediff(hediff);
+
             var comp = compAbilities;
             foreach (var kvp in abilityLevels)
             {

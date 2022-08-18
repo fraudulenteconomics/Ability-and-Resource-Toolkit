@@ -82,7 +82,7 @@ namespace ART
 		{
 			get
 			{
-				return this.PawnToShowInfoAbout?.health?.hediffSet?.hediffs?.OfType<HediffResource>().Any() ?? false;
+				return this.PawnToShowInfoAbout?.health?.hediffSet?.hediffs?.OfType<HediffResource>().Any(x => x.def.showInResourceTab) ?? false;
 			}
 		}
 		private Pawn PawnToShowInfoAbout

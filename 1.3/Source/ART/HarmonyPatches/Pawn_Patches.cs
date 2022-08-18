@@ -144,7 +144,7 @@ namespace ART
             if (trait.def is ClassTraitDef traitDef)
             {
                 var comp = ___pawn.GetComp<CompPawnClass>();
-                comp.Erase();
+                comp.Erase(traitDef);
             }
         }
     }
