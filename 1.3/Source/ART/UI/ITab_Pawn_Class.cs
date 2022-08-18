@@ -84,7 +84,9 @@ namespace ART
                     var abilityData = comp.GetAbilityDataFrom(abilityDef);
 
                     var iconBox = new Rect(pos.x, pos.y, 100, 100);
+                    GUI.color = learnedAbility ? Color.white : Color.gray;
                     GUI.DrawTexture(iconBox, abilityDef.icon);
+                    GUI.color = Color.white;
 
                     Text.Anchor = TextAnchor.MiddleCenter;
                     var abilityNameRect = new Rect(pos.x - 40, iconBox.yMax + 5, 100 + 80, 32);

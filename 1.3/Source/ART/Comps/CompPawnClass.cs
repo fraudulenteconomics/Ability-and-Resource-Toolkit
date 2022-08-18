@@ -136,10 +136,8 @@ namespace ART
             abilityPointsToUnlock = 0;
             var abilityTier = GetAbilityDataFrom(abilityDef).abilityTier;
             var ability = this.GetLearnedAbility(abilityDef);
-            Log.Message("ability: " + ability);
             if (ability != null)
             {
-                Log.Message("FullyLearned(abilityDef): " + FullyLearned(abilityDef));
                 if (FullyLearned(abilityDef))
                 {
                     fullyUnlocked = true;

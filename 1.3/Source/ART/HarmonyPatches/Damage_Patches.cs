@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using Verse;
 using Verse.AI;
+using static Verse.DamageWorker;
 
 namespace ART
 {
@@ -371,4 +372,16 @@ namespace ART
 			}
 		}
 	}
+
+    [HarmonyPatch(typeof(DamageResult), "AssociateWithLog")]
+    public static class DamageResult_AssociateWithLog
+    {
+        public static void Prefix(LogEntry_DamageResult log)
+        {
+            if (log is BattleLogEntry_RangedImpact battleLog && battleLog.weaponDef is null)
+            {
+                battleLog.weaponDef = battleLog.initiatorPawn.def;
+            }
+        }
+    }
 }
