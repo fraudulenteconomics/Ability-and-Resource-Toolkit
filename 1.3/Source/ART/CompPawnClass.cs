@@ -1,4 +1,5 @@
 ﻿using RimWorld;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Verse;
@@ -8,6 +9,11 @@ using AbilityDef = VFECore.Abilities.AbilityDef;
 
 namespace ART
 {
+    public class AbilityData
+    {
+        public AbilityTreeDef abilityTree;
+        public AbilityTier abilityTier;
+    }
     public class CompProperties_PawnClass : CompProperties
     {
         public CompProperties_PawnClass()
@@ -74,81 +80,74 @@ namespace ART
         {
             if (Learned(abilityDef))
             {
-                AbilityTreeDef abilityTree = null;
-                foreach (var tree in ClassTrait.classAbilities)
-                {
-                    var abilityTierDef = tree.abilityTiers.First(x => x.abilityDef == abilityDef);
-                    if (abilityTierDef != null)
-                    {
-                        abilityTree = tree;
-                    }
-                }
-
+                AbilityTreeDef abilityTree = GetAbilityDataFrom(abilityDef).abilityTree;
                 var result = abilityTree.abilityTiers.Count - 1 == abilityLevels[abilityTree];
                 return result;
             }
             return false;
         }
 
+        public AbilityData GetAbilityDataFrom(AbilityDef abilityDef)
+        {
+            AbilityTreeDef abilityTree = null;
+            AbilityTier abilityTier = null;
+            foreach (var tree in ClassTrait.classAbilities)
+            {
+                abilityTier = tree.abilityTiers.First(x => x.abilityDef == abilityDef);
+                if (abilityTier != null)
+                {
+                    abilityTree = tree;
+                }
+            }
+            return new AbilityData { abilityTree = abilityTree, abilityTier = abilityTier };
+        }
 
-
-        public bool CanUnlockNextTier(AbilityDef kIAbilityDef, out int skillPointsToUnlock, out bool fullyUnlocked)
+        public bool CanUnlockNextTier(AbilityDef abilityDef, out int abilityPointsToUnlock, out bool fullyUnlocked)
         {
             fullyUnlocked = false;
-            skillPointsToUnlock = 0;
-            var ability = this.GetLearnedAbility(kIAbilityDef);
+            abilityPointsToUnlock = 0;
+            var abilityTier = GetAbilityDataFrom(abilityDef).abilityTier;
+            var ability = this.GetLearnedAbility(abilityDef);
             if (ability != null)
             {
-                if (FullyLearned(kIAbilityDef))
+                if (FullyLearned(abilityDef))
                 {
                     fullyUnlocked = true;
                     return false;
                 }
-                if (DebugSettings.godMode)
-                {
-                    return true;
-                }
-                var abilityTier = kIAbilityDef.abilityTiers[ability.level + 1];
-                if (!abilityTier.isLearnable)
-                {
-                    return false;
-                }
-                skillPointsToUnlock = abilityTier.skillPointsToUnlock;
-                if (skillPoints < skillPointsToUnlock)
-                {
-                    return false;
-                }
-                if (curSpentSkillPoints + skillPointsToUnlock > MaxSPPoints)
-                {
-                    return false;
-                }
             }
-            else
+            if (DebugSettings.godMode)
             {
-                if (DebugSettings.godMode)
-                {
-                    return true;
-                }
-                var abilityTier = kIAbilityDef.abilityTiers[0];
-                if (!abilityTier.isLearnable)
-                {
-                    return false;
-                }
-                if (abilityTier.requiresAbilities != null && !abilityTier.requiresAbilities.All(x => Learned(x)))
-                {
-                    return false;
-                }
-                skillPointsToUnlock = abilityTier.skillPointsToUnlock;
-                if (skillPoints < skillPointsToUnlock)
-                {
-                    return false;
-                }
-                if (curSpentSkillPoints + skillPointsToUnlock > MaxSPPoints)
-                {
-                    return false;
-                }
+                return true;
+            }
+            abilityPointsToUnlock = abilityTier.abilityPointsToLearn;
+            if (abilityPoints < abilityPointsToUnlock)
+            {
+                return false;
             }
             return true;
+        }
+
+        public void LearnAbility(AbilityDef abilityDef, bool spendAbilityPoints = true)
+        {
+            var comp = compAbilities;
+            var abilityData = GetAbilityDataFrom(abilityDef);
+            foreach (var tier in abilityData.abilityTree.abilityTiers)
+            {
+                var ability = GetLearnedAbility(tier.abilityDef);
+                if (ability != null)
+                {
+                    comp.LearnedAbilities.Remove(ability);
+                }
+            }
+
+            comp.GiveAbility(abilityDef);
+
+            if (spendAbilityPoints)
+            {
+                var abilityPointsToSpent = abilityData.abilityTier.abilityPointsToLearn;
+                abilityPoints -= abilityPointsToSpent;
+            }
         }
 
         public void Erase()
@@ -204,7 +203,7 @@ namespace ART
         public float xpPerNonhumanValue;
         public float xpPerSkillGain;
         public bool sendMessageOnLevelUp;
-        public string levelUpMessageKeyf;
+        public string levelUpMessageKey;
         public string moteOnLevelUp;
         public string soundOnLevelUp;
         public float baseValue;
@@ -213,7 +212,7 @@ namespace ART
         public List<AbilityTreeDef> classAbilities;
     }
 
-    public class AbilityTreeDef
+    public class AbilityTreeDef : Def
     {
         public List<AbilityTier> abilityTiers;
     }

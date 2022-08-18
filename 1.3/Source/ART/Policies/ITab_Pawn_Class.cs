@@ -29,16 +29,16 @@ namespace ART
 
             Rect innerMenu = new Rect(15f, 15f, rect.width - 30f, rect.height - 15f);
             Vector2 pos = new Vector2(innerMenu.x, innerMenu.y);
-            var skillPointsRect = new Rect(pos.x, pos.y, 180, 28f);
-            Widgets.Label(skillPointsRect, "ART.SkillPointsAvailable".Translate(comp.abilityPoints));
+            var abilityPointsRect = new Rect(pos.x, pos.y, 180, 28f);
+            Widgets.Label(abilityPointsRect, "ART.AbilityPointsAvailable".Translate(comp.abilityPoints));
 
-            var nextLevelProgress = new Rect(skillPointsRect.x, skillPointsRect.yMax, 150, 28f);
+            var nextLevelProgress = new Rect(abilityPointsRect.x, abilityPointsRect.yMax, 150, 28f);
             Widgets.Label(nextLevelProgress, "ART.ProgressToNextLevel".Translate());
             var nextLevelProgressBar = new Rect(nextLevelProgress.xMax, nextLevelProgress.y, 120, 20f);
             Widgets.FillableBar(nextLevelProgressBar, comp.GainedXPSinceLastLevel / comp.RequiredXPtoGain);
             TooltipHandler.TipRegion(nextLevelProgressBar, "ART.CurrentXP".Translate(comp.GainedXPSinceLastLevel, comp.RequiredXPtoGain));
 
-            var curLevelRect = new Rect(nextLevelProgressBar.xMax + 30, skillPointsRect.y, 180, 28f);
+            var curLevelRect = new Rect(nextLevelProgressBar.xMax + 30, abilityPointsRect.y, 180, 28f);
             Widgets.Label(curLevelRect, "ART.Level".Translate(comp.level));
             pos.y += 60;
 
@@ -77,14 +77,14 @@ namespace ART
                     var ability = comp.GetLearnedAbility(abilityDef);
 
                     bool learnedAbility = ability != null;
-                    var abilityTier = learnedAbility ? comp.GetAbilityTier(abilityDef) : abilityDef.abilityTiers[0];
+                    var abilityData = comp.GetAbilityDataFrom(abilityDef);
 
                     Text.Anchor = TextAnchor.MiddleCenter;
                     var abilityNameRect = new Rect(pos.x - 20, pos.y, 50 + 40, 32);
                     Widgets.Label(abilityNameRect, abilityDef.label);
 
                     var iconBox = new Rect(pos.x, abilityNameRect.yMax, 50, 50);
-                    GUI.DrawTexture(iconBox, abilityDef.icon ?? abilityTier.icon);
+                    GUI.DrawTexture(iconBox, abilityDef.icon);
 
                     var infoRect = new Rect(iconBox.x - 20, iconBox.yMax, iconBox.width + 40, 21f);
                     if (comp.FullyLearned(abilityDef))
@@ -93,7 +93,8 @@ namespace ART
                     }
                     else if (learnedAbility)
                     {
-                        Widgets.Label(infoRect, "ART.AbilityLevel".Translate(ability.LevelHumanReadable, abilityDef.abilityTiers.Count));
+                        Widgets.Label(infoRect, "ART.AbilityLevel".Translate(comp.abilityLevels[abilityData.abilityTree] + 1, 
+                            abilityData.abilityTree.abilityTiers.Count));
                     }
                     else
                     {
@@ -103,7 +104,7 @@ namespace ART
                     TooltipHandler.TipRegion(iconBox, ability.GetDescriptionForPawn());
 
 
-                    var canLearnNextTier = comp.CanUnlockNextTier(abilityDef, out var skillPointsRequirement, out var fullyUnlocked);
+                    var canLearnNextTier = comp.CanUnlockNextTier(abilityDef, out var abilityPointsRequirement, out var fullyUnlocked);
                     if ((pawn.HostFaction == Faction.OfPlayer || pawn.Faction == Faction.OfPlayer) && !fullyUnlocked)
                     {
                         var plusRect = new Rect(iconBox.xMax + 10, iconBox.y + ((iconBox.height / 2) - 12), 24, 24);
@@ -112,14 +113,7 @@ namespace ART
                         {
                             if (canLearnNextTier)
                             {
-                                if (learnedAbility)
-                                {
-                                    comp.LearnAbility(abilityDef, ability.level + 1);
-                                }
-                                else
-                                {
-                                    comp.LearnAbility(abilityDef, 0);
-                                }
+                                comp.LearnAbility(abilityDef);
                             }
                         }
                     }

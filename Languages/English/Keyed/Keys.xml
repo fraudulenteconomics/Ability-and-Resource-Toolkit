@@ -44,4 +44,11 @@
 	<ART.CapacityAdjuster>Capacity adjuster: {0} - {1}</ART.CapacityAdjuster>
 	<ART.CapacityAmplifier>Capacity amplifier: {0} - {1}</ART.CapacityAmplifier>
 	<ART.Class>Class</ART.Class>
+	<ART.AbilityPointsAvailable>Available ability points: {0}</ART.AbilityPointsAvailable>
+	<ART.NotUnlocked>Not unlocked</ART.NotUnlocked>
+	<ART.Level>Level: {0}</ART.Level>
+	<ART.Mastered>Mastered</ART.Mastered>
+	<ART.CurrentXP>XP {0} / {1}</ART.CurrentXP>
+	<ART.PawnLevelUp>{PAWN_nameDef} has grown stronger.</ART.PawnLevelUp>
+
 </LanguageData>
