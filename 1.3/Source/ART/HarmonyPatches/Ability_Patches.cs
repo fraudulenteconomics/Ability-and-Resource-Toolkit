@@ -23,7 +23,7 @@ namespace ART
             var extension = __instance.def.GetModExtension<AbilityResourceProps>();
             if (extension != null)
             {
-                var isUsable = HediffResourceUtils.IsUsableForProps(__instance.pawn, extension, out reason);
+                var isUsable = Utils.IsUsableForProps(__instance.pawn, extension, out reason);
                 if (!isUsable)
                 {
                     __result = false;
@@ -41,7 +41,7 @@ namespace ART
             if (extension != null)
             {
                 var targetThings = targets.Where(x => x.HasThing).Select(x => x.Thing).ToList();
-                HediffResourceUtils.ApplyResourceSettings(targetThings, __instance.pawn, extension);
+                Utils.ApplyResourceSettings(targetThings, __instance.pawn, extension);
             }
         }
     }
@@ -55,7 +55,7 @@ namespace ART
             if (extension != null)
             {
                 StringBuilder sb = new StringBuilder(__result);
-                sb.AppendLine(HediffResourceUtils.GetPropsDescriptions(__instance.pawn, extension));
+                sb.AppendLine(Utils.GetPropsDescriptions(__instance.pawn, extension));
                 __result = sb.ToString().TrimEndNewlines();
             }
         }

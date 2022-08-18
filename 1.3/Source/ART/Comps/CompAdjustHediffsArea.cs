@@ -41,8 +41,8 @@ namespace ART
             {
                 foreach (var option in Props.resourceSettings)
                 {
-                    var num = HediffResourceUtils.GetResourceGain(option, this);
-                    var affectedCells = HediffResourceUtils.GetAllCellsAround(option, this.parent, this.parent.OccupiedRect());
+                    var num = Utils.GetResourceGain(option, this);
+                    var affectedCells = Utils.GetAllCellsAround(option, this.parent, this.parent.OccupiedRect());
                     foreach (var cell in affectedCells)
                     {
                         foreach (var pawn in cell.GetThingList(this.parent.Map).OfType<Pawn>())
@@ -121,7 +121,7 @@ namespace ART
                         }
                     }
                 }
-                hediffResource = HediffResourceUtils.AdjustResourceAmount(pawn, resourceProperties.hediff, num, resourceProperties.addHediffIfMissing, resourceProperties, resourceProperties.applyToPart);
+                hediffResource = Utils.AdjustResourceAmount(pawn, resourceProperties.hediff, num, resourceProperties.addHediffIfMissing, resourceProperties, resourceProperties.applyToPart);
                 if (hediffResource != null)
                 {
                     Log.Message(this.parent + " is affecting " + pawn + " - " + resourceProperties.hediff);
@@ -146,7 +146,7 @@ namespace ART
             {
                 foreach (var option in this.Props.resourceSettings)
                 {
-                    GenDraw.DrawFieldEdges(HediffResourceUtils.GetAllCellsAround(option, this.parent, this.parent.OccupiedRect()).ToList());
+                    GenDraw.DrawFieldEdges(Utils.GetAllCellsAround(option, this.parent, this.parent.OccupiedRect()).ToList());
                 }
             }
         }

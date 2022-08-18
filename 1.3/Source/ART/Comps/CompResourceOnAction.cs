@@ -22,7 +22,7 @@ namespace ART
             {
                 if (hediffApplied is HediffResourceDef def)
                 {
-                    HediffResourceUtils.AdjustResourceAmount(pawn, def, adjustResource, true, null, null);
+                    Utils.AdjustResourceAmount(pawn, def, adjustResource, true, null, null);
                 }
                 else
                 {

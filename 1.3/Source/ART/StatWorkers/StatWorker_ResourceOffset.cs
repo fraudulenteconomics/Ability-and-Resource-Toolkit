@@ -86,7 +86,7 @@ namespace ART
         {
 			if (resourceProperties.qualityScalesResourcePerSecond && thing.TryGetQuality(out QualityCategory qc))
 			{
-				return resourceProperties.resourcePerSecond * HediffResourceUtils.GetQualityMultiplier(qc);
+				return resourceProperties.resourcePerSecond * Utils.GetQualityMultiplier(qc);
 			}
 			else
 			{

@@ -281,7 +281,7 @@ namespace ART
         }
 
         public bool CanGainResource => Find.TickManager.TicksGame > this.delayTicks;
-        public float ResourceCapacity => this.def.maxResourceCapacity + HediffResourceUtils.GetHediffResourceCapacityGainFor(this.pawn, def, out _) + GetHediffResourceCapacityGainFromAmplifiers(out _);
+        public float ResourceCapacity => this.def.maxResourceCapacity + Utils.GetHediffResourceCapacityGainFor(this.pawn, def, out _) + GetHediffResourceCapacityGainFromAmplifiers(out _);
 
         public CompAbilities compAbilities;
         private void PreInit()
@@ -453,7 +453,7 @@ namespace ART
             get
             {
                 var allCapacityAdjusters = "ART.NativeCapacity".Translate(this.def.maxResourceCapacity);
-                HediffResourceUtils.GetHediffResourceCapacityGainFor(this.pawn, def, out var sbExplanation);
+                Utils.GetHediffResourceCapacityGainFor(this.pawn, def, out var sbExplanation);
                 var explanation = sbExplanation.ToString().TrimEndNewlines();
                 if (!explanation.NullOrEmpty())
                 {
@@ -518,7 +518,7 @@ namespace ART
         {
             float num = 0;
 
-            var comps = HediffResourceUtils.GetAllAdjustResources(this.pawn);
+            var comps = Utils.GetAllAdjustResources(this.pawn);
             foreach (var comp in comps)
             {
                 var resourceSettings = comp.ResourceSettings;
@@ -598,7 +598,7 @@ namespace ART
             base.PostRemoved();
             Notify_Removed();
             this.Deregister();
-            var comps = HediffResourceUtils.GetAllAdjustResources(this.pawn);
+            var comps = Utils.GetAllAdjustResources(this.pawn);
             foreach (var comp in comps)
             {
                 var resourceSettings = comp.ResourceSettings;
@@ -624,7 +624,7 @@ namespace ART
                 UpdateResourceData();
                 if (ResourceCapacity < 0)
                 {
-                    HediffResourceUtils.TryDropExcessHediffGears(this.pawn);
+                    Utils.TryDropExcessHediffGears(this.pawn);
                 }
             }
 
@@ -861,7 +861,7 @@ namespace ART
         private void DoDamage(DamageAuraProperties damagingProperties)
         {
             lastDamagingEffectTick = Find.TickManager.TicksGame;
-            foreach (var victim in HediffResourceUtils.GetPawnsAround(pawn, damagingProperties.effectRadius))
+            foreach (var victim in Utils.GetPawnsAround(pawn, damagingProperties.effectRadius))
             {
                 if (CanDamage(victim, damagingProperties))
                 {
@@ -982,7 +982,7 @@ namespace ART
         {
             lastHealingEffectTick = Find.TickManager.TicksGame;
             float totalSpentPoints = healingProperties.healPoints;
-            foreach (var pawn in HediffResourceUtils.GetPawnsAround(this.pawn, healingProperties.effectRadius))
+            foreach (var pawn in Utils.GetPawnsAround(this.pawn, healingProperties.effectRadius))
             {
                 if (CanHeal(pawn, healingProperties))
                 {
@@ -990,7 +990,7 @@ namespace ART
                     if (hediffs.Any())
                     {
                         var hediffsToHeal = healingProperties.hediffsToHeal > 0 ? hediffs.Take(healingProperties.hediffsToHeal).ToList() : hediffs;
-                        HediffResourceUtils.HealHediffs(this.pawn, ref totalSpentPoints, hediffsToHeal, healingProperties.pointsOverflow,
+                        Utils.HealHediffs(this.pawn, ref totalSpentPoints, hediffsToHeal, healingProperties.pointsOverflow,
                             healingProperties.healPriority, healingProperties.hediffsToHeal > 0, healingProperties.soundOnEffect);
                     }
                 }
@@ -1188,7 +1188,7 @@ namespace ART
             Deregister();
             if (this.PawnHost != null)
             {
-                HediffResourceUtils.RemoveExcessHediffResources(this.PawnHost, this);
+                Utils.RemoveExcessHediffResources(this.PawnHost, this);
             }
         }
         public void ResourceTick()

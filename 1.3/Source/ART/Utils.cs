@@ -3,71 +3,44 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 using Verse;
 using Verse.Sound;
+using VFECore.Abilities;
+using AbilityDef = VFECore.Abilities.AbilityDef;
 
 namespace ART
 {
-	public class ValueCache<T> 
+    [StaticConstructorOnStartup]
+	public static class Utils
 	{
-		public ValueCache(T value)
-		{
-			this.value = value;
-		}
-		public T value;
-
-		public T Value
-		{
-			get
-			{
-				return value;
-			}
-			set
-			{
-				this.value = value;
-				updateTick = Find.TickManager.TicksGame;
-			}
-		}
-		public int updateTick;
-	}
-
-	public class BoolPawnsValueCache
-	{
-		public BoolPawnsValueCache(bool value, IEnumerable<Pawn> pawns)
-		{
-			this.value = value;
-			this.pawns = pawns;
-		}
-		public bool value;
-
-		public IEnumerable<Pawn> pawns;
-		public bool Value
-		{
-			get
-			{
-				return value;
-			}
-			set
-			{
-				this.value = value;
-				updateTick = Find.TickManager.TicksGame;
-			}
-		}
-		public int updateTick;
-	}
-	[StaticConstructorOnStartup]
-	public static class HediffResourceUtils
-	{
-		static HediffResourceUtils()
+		static Utils()
 		{
 			foreach (var thingDef in DefDatabase<ThingDef>.AllDefs.Where(x => x.race?.Humanlike ?? false))
 			{
 				thingDef.inspectorTabsResolved.Add(InspectTabManager.GetSharedInstance(typeof(ITab_Pawn_Resource)));
+				thingDef.comps.Add(new CompProperties_PawnClass());
 			}
 		}
-		public static void TryAssignNewSkillRelatedHediffs(SkillRecord skillRecord, Pawn pawn)
+
+		public static bool HasClass(this Pawn pawn, out CompPawnClass comp)
+		{
+			comp = pawn.TryGetComp<CompPawnClass>();
+			return comp?.HasClass(out _) ?? false;
+        }
+
+		public static IEnumerable<AbilityDef> GetAllLearnableAbilities(this Pawn pawn)
+		{
+            var comp = pawn.TryGetComp<CompPawnClass>();
+			foreach (var tree in comp.abilityLevels)
+			{
+				var index = tree.Value + 1;
+				if (tree.Key.abilityTiers.Count == index)
+					index--;
+                yield return tree.Key.abilityTiers[index].abilityDef;
+            }
+        }
+        public static void TryAssignNewSkillRelatedHediffs(SkillRecord skillRecord, Pawn pawn)
 		{
 			var options = skillRecord.def.GetModExtension<SkillHediffGrantOptions>();
 			if (options != null)

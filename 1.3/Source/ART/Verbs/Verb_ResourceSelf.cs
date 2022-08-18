@@ -42,12 +42,12 @@ namespace ART
                         ARTLog.Message("Giving: " + this.CasterPawn + " - " + resourceProperties.hediff + " - " + resourceProperties.resourcePerUse);
                         if (resourceProperties.affectsAllies || !resourceProperties.affectsAllies && !resourceProperties.affectsEnemies)
                         {
-                            HediffResourceUtils.AdjustResourceAmount(this.CasterPawn, resourceProperties.hediff, resourceProperties.resourcePerUse, 
+                            Utils.AdjustResourceAmount(this.CasterPawn, resourceProperties.hediff, resourceProperties.resourcePerUse, 
                                 resourceProperties.addHediffIfMissing, resourceProperties, resourceProperties.applyToPart);
                         }
                         if (resourceProperties.effectRadius != -1f)
                         {
-                            foreach (var cell in HediffResourceUtils.GetAllCellsAround(resourceProperties, new TargetInfo(this.CasterPawn.Position, this.CasterPawn.Map), CellRect.SingleCell(this.CasterPawn.Position)))
+                            foreach (var cell in Utils.GetAllCellsAround(resourceProperties, new TargetInfo(this.CasterPawn.Position, this.CasterPawn.Map), CellRect.SingleCell(this.CasterPawn.Position)))
                             {
                                 foreach (var pawn in cell.GetThingList(this.CasterPawn.Map).OfType<Pawn>())
                                 {
@@ -55,12 +55,12 @@ namespace ART
                                     {
                                         if (resourceProperties.affectsAllies && (pawn.Faction == this.CasterPawn.Faction || !pawn.Faction.HostileTo(this.CasterPawn.Faction)))
                                         {
-                                            HediffResourceUtils.AdjustResourceAmount(pawn, resourceProperties.hediff, resourceProperties.resourcePerUse, resourceProperties.addHediffIfMissing,
+                                            Utils.AdjustResourceAmount(pawn, resourceProperties.hediff, resourceProperties.resourcePerUse, resourceProperties.addHediffIfMissing,
                                                 resourceProperties, resourceProperties.applyToPart);
                                         }
                                         else if (resourceProperties.affectsEnemies && pawn.Faction.HostileTo(this.CasterPawn.Faction))
                                         {
-                                            HediffResourceUtils.AdjustResourceAmount(pawn, resourceProperties.hediff, resourceProperties.resourcePerUse, resourceProperties.addHediffIfMissing,
+                                            Utils.AdjustResourceAmount(pawn, resourceProperties.hediff, resourceProperties.resourcePerUse, resourceProperties.addHediffIfMissing,
                                                 resourceProperties, resourceProperties.applyToPart);
                                         }
                                     }

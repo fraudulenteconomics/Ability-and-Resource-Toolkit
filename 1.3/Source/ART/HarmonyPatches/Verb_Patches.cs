@@ -23,7 +23,7 @@ namespace ART
         {
             if (__result)
             {
-                __result = HediffResourceUtils.IsUsableBy(__instance, out string disableReason);
+                __result = Utils.IsUsableBy(__instance, out string disableReason);
             }
         }
     }
@@ -35,7 +35,7 @@ namespace ART
         {
             if (__result)
             {
-                __result = HediffResourceUtils.IsUsableBy(__instance, out string disableReason);
+                __result = Utils.IsUsableBy(__instance, out string disableReason);
             }
         }
     }
@@ -56,7 +56,7 @@ namespace ART
                         var chargeResources = new ChargeResources();
                         chargeResources.chargeResources = new List<ChargeResource> { new ChargeResource(hediffResource.ResourceAmount, chargeSettings) };
                         var amount = damageInfo.Amount;
-                        HediffResourceUtils.ApplyChargeResource(ref amount, chargeResources);
+                        Utils.ApplyChargeResource(ref amount, chargeResources);
                         if (amount != damageInfo.Amount)
                         {
                             damageInfo.SetAmount(amount);
@@ -171,11 +171,11 @@ namespace ART
             {
                 if (__instance.verbProps is IResourceProps verbProps)
                 {
-                    HediffResourceUtils.ApplyResourceSettings(__instance.CurrentTarget.Thing, __instance.CasterPawn, verbProps);
+                    Utils.ApplyResourceSettings(__instance.CurrentTarget.Thing, __instance.CasterPawn, verbProps);
                 }
                 else if (__instance.tool is IResourceProps toolProps)
                 {
-                    HediffResourceUtils.ApplyResourceSettings(__instance.CurrentTarget.Thing, __instance.CasterPawn, toolProps);
+                    Utils.ApplyResourceSettings(__instance.CurrentTarget.Thing, __instance.CasterPawn, toolProps);
                 }
                 var comp = __instance.EquipmentSource?.def.GetModExtension<ResourceOnActionExtension>();
                 if (comp != null)

@@ -55,7 +55,7 @@ namespace ART
                     {
                         if (resourceProperties.effectRadius != -1f)
                         {
-                            GenDraw.DrawFieldEdges((from x in HediffResourceUtils.GetAllCellsAround(resourceProperties, new TargetInfo(target.Cell, Find.CurrentMap), CellRect.SingleCell(target.Cell))
+                            GenDraw.DrawFieldEdges((from x in Utils.GetAllCellsAround(resourceProperties, new TargetInfo(target.Cell, Find.CurrentMap), CellRect.SingleCell(target.Cell))
                                                     where x.InBounds(Find.CurrentMap)
                                                     select x).ToList());
                         }

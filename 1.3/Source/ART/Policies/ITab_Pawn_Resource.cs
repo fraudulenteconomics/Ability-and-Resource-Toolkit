@@ -1,15 +1,19 @@
 ﻿using RimWorld;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using Verse;
+using VFECore.Abilities;
 
 namespace ART
 {
-	public class ITab_Pawn_Resource : ITab
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct)]
+    public class HotSwappableAttribute : Attribute
+    {
+    }
+    public class ITab_Pawn_Resource : ITab
 	{
 		public ITab_Pawn_Resource()
 		{

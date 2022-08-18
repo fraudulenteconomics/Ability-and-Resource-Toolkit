@@ -72,7 +72,7 @@ namespace ART
                 {
                     if (useProps.resourceOnStrike != 0)
                     {
-                        HediffResourceUtils.AdjustResourceAmount(jobDriver_Mine.pawn, useProps.hediff, useProps.resourceOnStrike, useProps.addHediffIfMissing, null, null);
+                        Utils.AdjustResourceAmount(jobDriver_Mine.pawn, useProps.hediff, useProps.resourceOnStrike, useProps.addHediffIfMissing, null, null);
                     }
                 }
             }

@@ -29,7 +29,7 @@ namespace ART
                     {
                         if (useProps.resourceOnTaming != 0)
                         {
-                            HediffResourceUtils.AdjustResourceAmount(initiator, useProps.hediff, useProps.resourceOnTaming, useProps.addHediffIfMissing, null, null);
+                            Utils.AdjustResourceAmount(initiator, useProps.hediff, useProps.resourceOnTaming, useProps.addHediffIfMissing, null, null);
                         }
                     }
                 }
@@ -78,7 +78,7 @@ namespace ART
                     {
                         if (useProps.resourceOnTraining != 0)
                         {
-                            HediffResourceUtils.AdjustResourceAmount(___pawn, useProps.hediff, useProps.resourceOnTraining, useProps.addHediffIfMissing, null, null);
+                            Utils.AdjustResourceAmount(___pawn, useProps.hediff, useProps.resourceOnTraining, useProps.addHediffIfMissing, null, null);
                         }
                     }
                 }
@@ -128,7 +128,7 @@ namespace ART
                     {
                         if (useProps.resourceOnGather != 0)
                         {
-                            HediffResourceUtils.AdjustResourceAmount(doer, useProps.hediff, useProps.resourceOnGather, useProps.addHediffIfMissing, null, null);
+                            Utils.AdjustResourceAmount(doer, useProps.hediff, useProps.resourceOnGather, useProps.addHediffIfMissing, null, null);
                         }
                     }
                 }

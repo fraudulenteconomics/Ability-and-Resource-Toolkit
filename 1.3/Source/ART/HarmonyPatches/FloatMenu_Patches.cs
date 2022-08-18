@@ -26,7 +26,7 @@ namespace ART
                 TaggedString toCheck = "ForceWear".Translate(apparel.LabelCap, apparel);
                 FloatMenuOption floatMenuOption = opts.FirstOrDefault((FloatMenuOption x) => x.Label.Contains
                 (toCheck));
-                if (floatMenuOption != null && !HediffResourceUtils.CanWear(pawn, apparel, out string reason))
+                if (floatMenuOption != null && !Utils.CanWear(pawn, apparel, out string reason))
                 {
                     opts.Remove(floatMenuOption);
                     var newOption = new FloatMenuOption("ART.CannotWear".Translate(apparel.def.label) + " (" + reason + ")", null, MenuOptionPriority.Default, null, null, 0f, null, null);
@@ -44,7 +44,7 @@ namespace ART
                         TaggedString toCheck = "Equip".Translate(equipment.LabelShort);
                         FloatMenuOption floatMenuOption = opts.FirstOrDefault((FloatMenuOption x) => x.Label.Contains
                         (toCheck));
-                        if (floatMenuOption != null && !HediffResourceUtils.CanEquip(pawn, equipment, out string reason))
+                        if (floatMenuOption != null && !Utils.CanEquip(pawn, equipment, out string reason))
                         {
                             opts.Remove(floatMenuOption);
                             var newOption = new FloatMenuOption("CannotEquip".Translate(equipment.LabelShort) + " (" + reason + ")", null, MenuOptionPriority.Default, null, null, 0f, null, null);
@@ -61,7 +61,7 @@ namespace ART
                 {
                     string text = (!t.def.ingestible.ingestCommandString.NullOrEmpty()) ? string.Format(t.def.ingestible.ingestCommandString, t.LabelShort) : ((string)"ConsumeThing".Translate(t.LabelShort, t));
                     FloatMenuOption floatMenuOption = opts.FirstOrDefault((FloatMenuOption x) => x.Label.Contains(text));
-                    if (floatMenuOption != null && !HediffResourceUtils.CanDrink(pawn, t, out string reason))
+                    if (floatMenuOption != null && !Utils.CanDrink(pawn, t, out string reason))
                     {
                         floatMenuOption.Label += "ART.DrinkWarning".Translate();
                     }

@@ -49,6 +49,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CompPawnClass.cs" />
     <Compile Include="Comps\CompResourceOnAction.cs" />
     <Compile Include="Comps\CompMaintainableResourceBuilding.cs" />
     <Compile Include="Comps\CompThingInUse.cs" />
@@ -111,6 +112,7 @@
     <Compile Include="ModExtensions\RecipeOutcomes.cs" />
     <Compile Include="ModExtensions\Extension_ThingInUse.cs" />
     <Compile Include="ModExtensions\StuffExtension.cs" />
+    <Compile Include="Policies\ITab_Pawn_Class.cs" />
     <Compile Include="Recipes\Bill_ResourceMedical.cs" />
     <Compile Include="UseHelper.cs" />
     <Compile Include="HarmonyPatches\ThingDefGenerator_Patches.cs" />
@@ -135,7 +137,7 @@
     <Compile Include="HarmonyPatches\Hediff_Patches.cs" />
     <Compile Include="HarmonyPatches\Verb_Patches.cs" />
     <Compile Include="ARTManager.cs" />
-    <Compile Include="HediffResourceUtils.cs" />
+    <Compile Include="BoolPawnsValueCache.cs" />
     <Compile Include="Hediffs\HediffResource.cs" />
     <Compile Include="Hediffs\HediffResourceDef.cs" />
     <Compile Include="Jobs\JobDriver_MaintainResourceBuilding.cs" />
@@ -163,6 +165,8 @@
     <Compile Include="StatWorkers\StatWorker_ResourceOffset.cs" />
     <Compile Include="Interfaces\IResourceProps.cs" />
     <Compile Include="ResourceProps\ToolResource.cs" />
+    <Compile Include="Utils.cs" />
+    <Compile Include="ValueCache.cs" />
     <Compile Include="Verbs\Verb_ResourceSelf.cs" />
     <Compile Include="ResourceProps\VerbResourceProps.cs" />
     <Compile Include="Verbs\Verb_ResourceBase.cs" />

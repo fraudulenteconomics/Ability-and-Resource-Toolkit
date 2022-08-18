@@ -78,11 +78,11 @@ namespace ART
 		{
 			if (__instance.Launcher is Pawn launcher)
 			{
-				var compCharge = HediffResourceUtils.GetCompChargeSourceFor(launcher, __instance);
+				var compCharge = Utils.GetCompChargeSourceFor(launcher, __instance);
 				if (compCharge?.ProjectilesWithChargedResource != null && compCharge.ProjectilesWithChargedResource.TryGetValue(__instance, out ChargeResources chargeResources) && chargeResources != null)
 				{
 					var amount = (float)__result;
-					HediffResourceUtils.ApplyChargeResource(ref amount, chargeResources);
+					Utils.ApplyChargeResource(ref amount, chargeResources);
 					__result = (int)amount;
 					compCharge.ProjectilesWithChargedResource.Remove(__instance);
 				}
@@ -231,7 +231,7 @@ namespace ART
 			{
 				foreach (var resourceEffect in effectOnImpactOptions.resourceEffects)
 				{
-					var hediffResource = HediffResourceUtils.AdjustResourceAmount(__instance, resourceEffect.hediff,
+					var hediffResource = Utils.AdjustResourceAmount(__instance, resourceEffect.hediff,
 						resourceEffect.adjustTargetResource, resourceEffect.addHediffIfMissing, resourceEffect, resourceEffect.applyToPart);
 					if (hediffResource != null && resourceEffect.delayTargetOnDamage != IntRange.zero)
 					{

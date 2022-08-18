@@ -106,7 +106,7 @@ namespace ART
                 }
                 else
                 {
-                    HediffResourceUtils.AdjustResourceAmount(pawn, this.hediff, num, this.addHediffIfMissing, this, this.applyToPart);
+                    Utils.AdjustResourceAmount(pawn, this.hediff, num, this.addHediffIfMissing, this, this.applyToPart);
                 }
             }
         }

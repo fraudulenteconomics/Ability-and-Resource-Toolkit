@@ -75,7 +75,7 @@ namespace ART
             Deregister();
             if (this.Pawn != null)
             {
-                HediffResourceUtils.RemoveExcessHediffResources(this.Pawn, this);
+                Utils.RemoveExcessHediffResources(this.Pawn, this);
             }
         }
 
@@ -109,7 +109,7 @@ namespace ART
                         else
                         {
                             float num = resourceProperties.GetResourceGain(this);
-                            HediffResourceUtils.AdjustResourceAmount(pawn, resourceProperties.hediff, num, resourceProperties.addHediffIfMissing, resourceProperties, resourceProperties.applyToPart);
+                            Utils.AdjustResourceAmount(pawn, resourceProperties.hediff, num, resourceProperties.addHediffIfMissing, resourceProperties, resourceProperties.applyToPart);
                         }
                     }
                 }

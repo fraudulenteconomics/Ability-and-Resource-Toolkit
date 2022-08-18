@@ -43,4 +43,5 @@
 	<ART.NativeCapacity>Native capacity: {0}</ART.NativeCapacity>
 	<ART.CapacityAdjuster>Capacity adjuster: {0} - {1}</ART.CapacityAdjuster>
 	<ART.CapacityAmplifier>Capacity amplifier: {0} - {1}</ART.CapacityAmplifier>
+	<ART.Class>Class</ART.Class>
 </LanguageData>

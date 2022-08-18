@@ -26,7 +26,7 @@ namespace ART
             Log.Message("Stealing life: " + instigator + " - " + targetPawn + " - " + source);
             if (damageDef is null || damageDef == source.Def)
             {
-                foreach (var pawn in HediffResourceUtils.GetPawnsAround(instigator, effectRadius))
+                foreach (var pawn in Utils.GetPawnsAround(instigator, effectRadius))
                 {
                     Log.Message("Checking pawn: " + pawn);
                     if (CanExtractLife(instigator, pawn, targetPawn))
@@ -34,7 +34,7 @@ namespace ART
                         Log.Message("Healing pawn: " + pawn);
                         var hediffsToHeal = pawn.health.hediffSet.hediffs.Where(x => x is Hediff_Injury).ToList();
                         var healPoints = flatHeal > 0 ? flatHeal : source.Amount * percentHeal;
-                        HediffResourceUtils.HealHediffs(pawn, ref healPoints, hediffsToHeal, healOverflow, healPriority, false, soundOnEffect);
+                        Utils.HealHediffs(pawn, ref healPoints, hediffsToHeal, healOverflow, healPriority, false, soundOnEffect);
                     }
                     else
                     {

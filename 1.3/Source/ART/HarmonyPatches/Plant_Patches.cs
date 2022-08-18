@@ -58,7 +58,7 @@ namespace ART
                         {
                             if (useProps.resourceOnSow != 0)
                             {
-                                HediffResourceUtils.AdjustResourceAmount(__instance.pawn, useProps.hediff, useProps.resourceOnSow, useProps.addHediffIfMissing, null, null);
+                                Utils.AdjustResourceAmount(__instance.pawn, useProps.hediff, useProps.resourceOnSow, useProps.addHediffIfMissing, null, null);
                             }
                         }
                     }
@@ -134,7 +134,7 @@ namespace ART
                     if (useProps.resourceOnHarvest != 0)
                     {
                         var resourceOnHarvest = useProps.scaleWithGrowthRate ? useProps.resourceOnHarvest * __instance.Growth : useProps.resourceOnHarvest;
-                        HediffResourceUtils.AdjustResourceAmount(by, useProps.hediff, resourceOnHarvest, useProps.addHediffIfMissing, null, null);
+                        Utils.AdjustResourceAmount(by, useProps.hediff, resourceOnHarvest, useProps.addHediffIfMissing, null, null);
                     }
                 }
             }

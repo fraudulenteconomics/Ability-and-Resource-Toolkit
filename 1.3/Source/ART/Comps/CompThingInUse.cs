@@ -208,9 +208,9 @@ namespace ART
                             float num = useProps.resourcePerSecond;
                             if (useProps.qualityScalesResourcePerSecond && this.parent.TryGetQuality(out QualityCategory qc))
                             {
-                                num *= HediffResourceUtils.GetQualityMultiplierInverted(qc);
+                                num *= Utils.GetQualityMultiplierInverted(qc);
                             }
-                            HediffResourceUtils.AdjustResourceAmount(user, useProps.hediff, num, useProps.addHediffIfMissing, null, useProps.applyToPart);
+                            Utils.AdjustResourceAmount(user, useProps.hediff, num, useProps.addHediffIfMissing, null, useProps.applyToPart);
                         }
 
                     }

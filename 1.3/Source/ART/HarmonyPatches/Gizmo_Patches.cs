@@ -20,14 +20,14 @@ namespace ART
 		{
 			if (__result != null && verb.CasterIsPawn)
 			{
-				if (!HediffResourceUtils.IsUsableBy(verb, out string disableReason))
+				if (!Utils.IsUsableBy(verb, out string disableReason))
 				{
-					HediffResourceUtils.DisableGizmo(__result, disableReason);
+					Utils.DisableGizmo(__result, disableReason);
 				}
 				var resourceProps = verb.GetResourceProps();
 				if (resourceProps != null)
 				{
-					__result.defaultDesc += "\n" + HediffResourceUtils.GetPropsDescriptions(verb.CasterPawn, resourceProps);
+					__result.defaultDesc += "\n" + Utils.GetPropsDescriptions(verb.CasterPawn, resourceProps);
 				}
 			}
 		}
@@ -38,19 +38,19 @@ namespace ART
 	{
 		private static IEnumerable<Gizmo> Postfix(IEnumerable<Gizmo> __result, Verb verb)
 		{
-			bool isUsable = HediffResourceUtils.IsUsableBy(verb, out string disableReason);
+			bool isUsable = Utils.IsUsableBy(verb, out string disableReason);
 			foreach (var gizmo in __result)
             {
 				if (!isUsable)
 				{
-					HediffResourceUtils.DisableGizmo(gizmo, disableReason);
+					Utils.DisableGizmo(gizmo, disableReason);
 				}
 				if (gizmo is Command command)
                 {
 					var resourceProps = verb.GetResourceProps();
 					if (resourceProps != null)
                     {
-						command.defaultDesc += "\n" + HediffResourceUtils.GetPropsDescriptions(verb.CasterPawn, resourceProps);
+						command.defaultDesc += "\n" + Utils.GetPropsDescriptions(verb.CasterPawn, resourceProps);
 					}
 				}
 				yield return gizmo;
@@ -70,7 +70,7 @@ namespace ART
             }
 			if (__instance.Faction == Faction.OfPlayerSilentFail)
 			{
-				var hediffResources = HediffResourceUtils.GetHediffResourcesFor(__instance);
+				var hediffResources = Utils.GetHediffResourcesFor(__instance);
 				if (hediffResources != null)
                 {
 					foreach (var hediffResource in hediffResources)
@@ -100,7 +100,7 @@ namespace ART
 				command_Action.defaultLabel = "Debug: Charge all hediff resources";
 				command_Action.action = delegate
 				{
-					var hediffResources = HediffResourceUtils.GetHediffResourcesFor(__instance);
+					var hediffResources = Utils.GetHediffResourcesFor(__instance);
 					if (hediffResources != null)
 					{
 						foreach (var hediffResource in hediffResources)
@@ -115,7 +115,7 @@ namespace ART
 				command_Empty.defaultLabel = "Debug: Empty all hediff resources";
 				command_Empty.action = delegate
 				{
-					var hediffResources = HediffResourceUtils.GetHediffResourcesFor(__instance);
+					var hediffResources = Utils.GetHediffResourcesFor(__instance);
 					if (hediffResources != null)
 					{
 						foreach (var hediffResource in hediffResources)
@@ -130,7 +130,7 @@ namespace ART
 				command_SetTo10.defaultLabel = "Debug: Set all hediff resources to 10";
 				command_SetTo10.action = delegate
 				{
-					var hediffResources = HediffResourceUtils.GetHediffResourcesFor(__instance);
+					var hediffResources = Utils.GetHediffResourcesFor(__instance);
 					if (hediffResources != null)
 					{
 						foreach (var hediffResource in hediffResources)
@@ -145,7 +145,7 @@ namespace ART
 				command_ReduceBy10.defaultLabel = "Debug: Reduce all hediff resources by 10";
 				command_ReduceBy10.action = delegate
 				{
-					var hediffResources = HediffResourceUtils.GetHediffResourcesFor(__instance);
+					var hediffResources = Utils.GetHediffResourcesFor(__instance);
 					if (hediffResources != null)
 					{
 						foreach (var hediffResource in hediffResources)
@@ -160,7 +160,7 @@ namespace ART
 				command_AddBy10.defaultLabel = "Debug: Add all hediff resources by 10";
 				command_AddBy10.action = delegate
 				{
-					var hediffResources = HediffResourceUtils.GetHediffResourcesFor(__instance);
+					var hediffResources = Utils.GetHediffResourcesFor(__instance);
 					if (hediffResources != null)
 					{
 						foreach (var hediffResource in hediffResources)
@@ -175,7 +175,7 @@ namespace ART
 				command_Action3.defaultLabel = "Debug: Remove all hediff resources";
 				command_Action3.action = delegate
 				{
-					var hediffResources = HediffResourceUtils.GetHediffResourcesFor(__instance);
+					var hediffResources = Utils.GetHediffResourcesFor(__instance);
 					if (hediffResources != null)
 					{
 						foreach (var hediffResource in hediffResources)

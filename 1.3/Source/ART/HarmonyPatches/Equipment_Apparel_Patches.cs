@@ -46,7 +46,7 @@ namespace ART
 	{
 		private static bool Prefix(ref float __result, Pawn pawn, Apparel ap, List<float> wornScoresCache)
 		{
-			if (!HediffResourceUtils.CanWear(pawn, ap, out string tmp))
+			if (!Utils.CanWear(pawn, ap, out string tmp))
             {
 				__result = -1000f;
 				return false;

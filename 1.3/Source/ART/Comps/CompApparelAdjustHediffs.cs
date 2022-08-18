@@ -25,7 +25,7 @@ namespace ART
         {
             if (PawnHost != null)
             {
-                HediffResourceUtils.RemoveExcessHediffResources(PawnHost, this);
+                Utils.RemoveExcessHediffResources(PawnHost, this);
             }
         }
 

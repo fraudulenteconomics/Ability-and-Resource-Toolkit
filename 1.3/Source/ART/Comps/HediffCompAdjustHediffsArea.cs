@@ -28,7 +28,7 @@ namespace ART
                 foreach (var option in Props.resourceSettings)
                 {
                     var num = option.GetResourceGain(this);
-                    var affectedCells = HediffResourceUtils.GetAllCellsAround(option, this.Pawn, this.Pawn.OccupiedRect());
+                    var affectedCells = Utils.GetAllCellsAround(option, this.Pawn, this.Pawn.OccupiedRect());
                     foreach (var cell in affectedCells)
                     {
                         foreach (var pawn in cell.GetThingList(this.Pawn.Map).OfType<Pawn>())
@@ -91,7 +91,7 @@ namespace ART
                         }
                     }
                 }
-                hediffResource = HediffResourceUtils.AdjustResourceAmount(pawn, resourceProperties.hediff, num, resourceProperties.addHediffIfMissing, resourceProperties, resourceProperties.applyToPart);
+                hediffResource = Utils.AdjustResourceAmount(pawn, resourceProperties.hediff, num, resourceProperties.addHediffIfMissing, resourceProperties, resourceProperties.applyToPart);
                 if (hediffResource != null)
                 {
                     Log.Message(this.parent + " is affecting " + pawn + " - " + resourceProperties.hediff);

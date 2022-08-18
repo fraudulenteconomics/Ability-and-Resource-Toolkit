@@ -18,7 +18,7 @@ namespace ART
 	{
 		public static void Postfix(Pawn ___pawn)
 		{
-			foreach (var hediff in HediffResourceUtils.GetHediffResourcesFor(___pawn))
+			foreach (var hediff in Utils.GetHediffResourcesFor(___pawn))
 			{
 				hediff.Draw();
 			}
@@ -67,7 +67,7 @@ namespace ART
 			{
 				foreach (var skill in __result.skills.skills)
 				{
-					HediffResourceUtils.TryAssignNewSkillRelatedHediffs(skill, __result);
+					Utils.TryAssignNewSkillRelatedHediffs(skill, __result);
 				}
 			}
 
@@ -82,7 +82,7 @@ namespace ART
                         {
 							if (hediffData.hediff is HediffResourceDef resourceDef)
 							{
-								HediffResourceUtils.AdjustResourceAmount(__result, resourceDef, hediffData.initialSeverity, true, null, null);
+								Utils.AdjustResourceAmount(__result, resourceDef, hediffData.initialSeverity, true, null, null);
 							}
 							else
 							{
@@ -100,7 +100,7 @@ namespace ART
 	{
 		private static void Postfix(SkillRecord __instance, Pawn ___pawn)
 		{
-			HediffResourceUtils.TryAssignNewSkillRelatedHediffs(__instance, ___pawn);
+			Utils.TryAssignNewSkillRelatedHediffs(__instance, ___pawn);
 		}
 	}
 
@@ -122,4 +122,30 @@ namespace ART
 			return true;
 		}
 	}
+
+    [HarmonyPatch(typeof(TraitSet), "GainTrait")]
+    public static class TraitSet_GainTrait_Patch
+    {
+        private static void Postfix(Pawn ___pawn, Trait trait)
+        {
+			if (trait.def is ClassTraitDef traitDef)
+			{
+				var comp = ___pawn.GetComp<CompPawnClass>();
+				comp.Init(traitDef);
+			}
+        }
+    }
+
+    [HarmonyPatch(typeof(TraitSet), "RemoveTrait")]
+    public static class TraitSet_RemoveTrait_Patch
+    {
+        private static void Postfix(Pawn ___pawn, Trait trait)
+        {
+            if (trait.def is ClassTraitDef traitDef)
+            {
+                var comp = ___pawn.GetComp<CompPawnClass>();
+                comp.Erase();
+            }
+        }
+    }
 }
