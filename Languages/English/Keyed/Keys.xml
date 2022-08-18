@@ -49,9 +49,8 @@
 	<ART.Level>Level: {0}</ART.Level>
 	<ART.Mastered>Mastered</ART.Mastered>
 	<ART.CurrentXP>XP {0} / {1}</ART.CurrentXP>
-	<ART.PawnLevelUp>{PAWN_nameDef} has grown stronger.</ART.PawnLevelUp>
+	<ART.PawnLevelUp>{PAWN_nameDef} reached a new level.</ART.PawnLevelUp>
 	<ART.AbilityLevel>Level {0} / {1}</ART.AbilityLevel>
 	<ART.Experience>Experience progress: </ART.Experience>
 	<ART.ClassName>Class: {0}</ART.ClassName>
-
 </LanguageData>

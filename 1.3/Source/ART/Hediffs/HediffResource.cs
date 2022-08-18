@@ -280,6 +280,20 @@ namespace ART
             }
         }
 
+        public override float Severity
+        {
+            get
+            {
+                return base.Severity;
+            }
+            set
+            {
+                base.Severity = value;
+                Log.Message("Setting " + this + " with value: " + value);
+
+            }
+        }
+
         public bool CanGainResource => Find.TickManager.TicksGame > this.delayTicks;
         public float ResourceCapacity => this.def.maxResourceCapacity + Utils.GetHediffResourceCapacityGainFor(this.pawn, def, out _) + GetHediffResourceCapacityGainFromAmplifiers(out _);
 
@@ -670,7 +684,7 @@ namespace ART
 
         private void OnStageSwitch(HediffStageResource hediffStageResource)
         {
-            Log.Message(pawn + " - " + pawn.HashOffset() + " switching stage " + this.CurStageIndex + " - " + this.previousStageIndex);
+            Log.Message(pawn + " switching stage " + this.CurStageIndex + " - " + this.previousStageIndex);
             var previousStage = this.previousStageIndex > -1 ? def.stages[this.previousStageIndex] as HediffStageResource : null;
             if (previousStage != null)
             {
@@ -694,7 +708,6 @@ namespace ART
 
             if (this.compAbilities != null)
             {
-                Log.Message("Switching to stage: " + this.CurStageIndex);
                 if (hediffStageResource != null)
                 {
                     if (this.def.randomAbilitiesPool != null)

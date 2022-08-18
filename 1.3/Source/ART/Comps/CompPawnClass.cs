@@ -37,6 +37,18 @@ namespace ART
 
         public Dictionary<AbilityTreeDef, int> abilityLevels;
         public int MaxLevel => ClassTraitDef.maxLevel;
+        public HediffResource HediffResource
+        {
+            get
+            {
+                var classTrait = ClassTraitDef;
+                if (classTrait.resourceHediff != null)
+                {
+                    return this.pawn.health.hediffSet.GetFirstHediffOfDef(classTrait.resourceHediff) as HediffResource;
+                }
+                return null;
+            }
+        }
         public Ability GetLearnedAbility(AbilityDef abilityDef) => compAbilities.LearnedAbilities.FirstOrDefault(x => x.def == abilityDef);
         public bool HasClass(out ClassTraitDef classTrait)
         {
@@ -51,7 +63,7 @@ namespace ART
                 xpPoints += xp;
                 while (xpPoints >= previousXp + RequiredXPtoGain)
                 {
-                    level++;
+                    SetLevel(level + 1);
                     if (pawn.Spawned && PawnUtility.ShouldSendNotificationAbout(pawn) && classTrait.sendMessageOnLevelUp)
                     {
                         Messages.Message((classTrait.levelUpMessageKey ?? "ART.PawnLevelUp").Translate(pawn.Named("PAWN")), pawn, MessageTypeDefOf.PositiveEvent);
@@ -66,9 +78,19 @@ namespace ART
             }
         }
 
+        public void SetLevel(int newLevel)
+        {
+            this.level = newLevel;
+            var hediffResouce = HediffResource;
+            if (hediffResouce != null)
+            {
+                hediffResouce.SetResourceAmount(newLevel);
+            }
+        }
         public void Init(ClassTraitDef trait)
         {
-            pawn.health.AddHediff(trait.resourceHediff);
+            if (trait.resourceHediff != null)
+                pawn.health.AddHediff(trait.resourceHediff);
             abilityLevels = new Dictionary<AbilityTreeDef, int>();
             foreach (var tree in trait.classAbilities)
             {
@@ -114,8 +136,10 @@ namespace ART
             abilityPointsToUnlock = 0;
             var abilityTier = GetAbilityDataFrom(abilityDef).abilityTier;
             var ability = this.GetLearnedAbility(abilityDef);
+            Log.Message("ability: " + ability);
             if (ability != null)
             {
+                Log.Message("FullyLearned(abilityDef): " + FullyLearned(abilityDef));
                 if (FullyLearned(abilityDef))
                 {
                     fullyUnlocked = true;
@@ -147,8 +171,8 @@ namespace ART
                 }
             }
 
+            abilityLevels[abilityData.abilityTree] = abilityData.abilityTree.abilityTiers.IndexOf(abilityData.abilityTier);
             comp.GiveAbility(abilityDef);
-
             if (spendAbilityPoints)
             {
                 var abilityPointsToSpent = abilityData.abilityTier.abilityPointsToLearn;
@@ -158,9 +182,12 @@ namespace ART
 
         public void Erase(ClassTraitDef classTrait)
         {
-            var hediff = pawn.health.hediffSet.GetFirstHediffOfDef(classTrait.resourceHediff);
-            if (hediff != null)
-                pawn.health.RemoveHediff(hediff);
+            if (classTrait.resourceHediff != null)
+            {
+                var hediff = pawn.health.hediffSet.GetFirstHediffOfDef(classTrait.resourceHediff);
+                if (hediff != null)
+                    pawn.health.RemoveHediff(hediff);
+            }
 
             var comp = compAbilities;
             foreach (var kvp in abilityLevels)
@@ -173,6 +200,7 @@ namespace ART
             }
             abilityLevels.Clear();
             level = 0;
+            SetLevel(0);
             xpPoints = 0;
             abilityPoints = 0;
         }
