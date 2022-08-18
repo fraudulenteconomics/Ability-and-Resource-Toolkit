@@ -90,8 +90,6 @@ namespace ART
 						}
 					}
                 }
-
-
 			}
 
 			if (Prefs.DevMode)
@@ -185,7 +183,23 @@ namespace ART
 					}
 				};
 				yield return command_Action3;
-			}
+
+                var comp = __instance.GetComp<CompPawnClass>();
+                if (comp != null)
+                {
+                    if (comp.HasClass(out _))
+                    {
+                        yield return new Command_Action
+                        {
+                            defaultLabel = "DEV: Gain 1000 xp",
+                            action = delegate
+                            {
+                                comp.GainXP(1000f);
+                            }
+                        };
+                    }
+                }
+            }
 		}
 	}
 

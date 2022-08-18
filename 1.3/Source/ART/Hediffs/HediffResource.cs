@@ -1159,8 +1159,6 @@ namespace ART
                     cachedAmplifiers[amplifier] = amplifier.TryGetComp<CompAdjustHediffsArea>();
                 }
             }
-
-            Log.Message("ExposeData");
         }
 
         public void Register()

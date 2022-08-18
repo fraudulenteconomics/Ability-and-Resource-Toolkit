@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 using Verse;
 using VFECore.Abilities;
 using Ability = VFECore.Abilities.Ability;
@@ -21,6 +22,8 @@ namespace ART
             this.compClass = typeof(CompPawnClass);
         }
     }
+
+    [HotSwappable]
     public class CompPawnClass : ThingComp
     {
         public int level;
@@ -33,26 +36,27 @@ namespace ART
         public CompAbilities compAbilities => pawn.GetComp<CompAbilities>();
 
         public Dictionary<AbilityTreeDef, int> abilityLevels;
-        public int MaxLevel => ClassTrait.maxLevel;
+        public int MaxLevel => ClassTraitDef.maxLevel;
         public Ability GetLearnedAbility(AbilityDef abilityDef) => compAbilities.LearnedAbilities.FirstOrDefault(x => x.def == abilityDef);
         public bool HasClass(out ClassTraitDef classTrait)
         {
-            classTrait = ClassTrait;
+            classTrait = ClassTraitDef;
             return classTrait != null;
         }
         public void GainXP(float xp)
         {
+            var classTrait = ClassTraitDef;
             if (level < MaxLevel)
             {
                 xpPoints += xp;
                 while (xpPoints >= previousXp + RequiredXPtoGain)
                 {
                     level++;
-                    if (pawn.Spawned && PawnUtility.ShouldSendNotificationAbout(pawn))
+                    if (pawn.Spawned && PawnUtility.ShouldSendNotificationAbout(pawn) && classTrait.sendMessageOnLevelUp)
                     {
-                        Messages.Message("ART.PawnLevelUp".Translate(pawn.Named("PAWN")), pawn, MessageTypeDefOf.PositiveEvent);
+                        Messages.Message((classTrait.levelUpMessageKey ?? "ART.PawnLevelUp").Translate(pawn.Named("PAWN")), pawn, MessageTypeDefOf.PositiveEvent);
                     }
-                    abilityPoints += ClassTrait.abilityPointsPerLevel;
+                    abilityPoints += ClassTraitDef.abilityPointsPerLevel;
                     previousXp += RequiredXPtoGain;
                     if (level >= MaxLevel)
                     {
@@ -92,12 +96,13 @@ namespace ART
         {
             AbilityTreeDef abilityTree = null;
             AbilityTier abilityTier = null;
-            foreach (var tree in ClassTrait.classAbilities)
+            foreach (var tree in ClassTraitDef.classAbilities)
             {
-                abilityTier = tree.abilityTiers.First(x => x.abilityDef == abilityDef);
+                abilityTier = tree.abilityTiers.FirstOrDefault(x => x.abilityDef == abilityDef);
                 if (abilityTier != null)
                 {
                     abilityTree = tree;
+                    break;
                 }
             }
             return new AbilityData { abilityTree = abilityTree, abilityTier = abilityTier };
@@ -171,8 +176,21 @@ namespace ART
             xpPoints = 0;
             abilityPoints = 0;
         }
-
-        public ClassTraitDef ClassTrait
+        public Trait ClassTrait
+        {
+            get
+            {
+                foreach (var trait in pawn.story.traits.allTraits)
+                {
+                    if (trait.def is ClassTraitDef classTraitDef)
+                    {
+                        return trait;
+                    }
+                }
+                return null;
+            }
+        }
+        public ClassTraitDef ClassTraitDef
         {
             get
             {
@@ -215,6 +233,21 @@ namespace ART
         public float valuePerLevelOffset;
         public HediffResourceDef resourceHediff;
         public List<AbilityTreeDef> classAbilities;
+
+        [NoTranslate]
+        public string iconPath;
+
+        public Texture2D uiIcon = BaseContent.BadTex;
+        public override void PostLoad()
+        {
+            if (!string.IsNullOrEmpty(iconPath))
+            {
+                LongEventHandler.ExecuteWhenFinished(delegate
+                {
+                    uiIcon = ContentFinder<Texture2D>.Get(iconPath);
+                });
+            }
+        }
     }
 
     public class AbilityTreeDef : Def

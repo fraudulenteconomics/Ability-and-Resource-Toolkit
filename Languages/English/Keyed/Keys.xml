@@ -51,6 +51,7 @@
 	<ART.CurrentXP>XP {0} / {1}</ART.CurrentXP>
 	<ART.PawnLevelUp>{PAWN_nameDef} has grown stronger.</ART.PawnLevelUp>
 	<ART.AbilityLevel>Level {0} / {1}</ART.AbilityLevel>
-	<ART.ProgressToNextLevel>Progress to next level: </ART.ProgressToNextLevel>
+	<ART.Experience>Experience progress: </ART.Experience>
+	<ART.ClassName>Class: {0}</ART.ClassName>
 
 </LanguageData>
