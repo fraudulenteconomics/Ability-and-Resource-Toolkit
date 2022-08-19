@@ -86,6 +86,7 @@
     <Compile Include="DownedStateData.cs" />
     <Compile Include="FiredData.cs" />
     <Compile Include="FloatValueCache.cs" />
+    <Compile Include="StatWorker_MarketValuePerPawnClass.cs" />
     <Compile Include="UI\Gizmo_ResourceStatus.cs" />
     <Compile Include="HarmonyPatches\Recipe_Patches.cs" />
     <Compile Include="HarmonyPatches\Pawn_Patches.cs" />

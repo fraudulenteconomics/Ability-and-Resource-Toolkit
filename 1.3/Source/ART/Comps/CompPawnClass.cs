@@ -31,7 +31,7 @@ namespace ART
         public int abilityPoints;
         private float previousXp;
         public float GainedXPSinceLastLevel => xpPoints - previousXp;
-        public float RequiredXPtoGain => 100 * (level + 1);
+        public float RequiredXPtoGain => ClassTraitDef.xpPerLevelRequirement * (level + 1);
         public Pawn pawn => this.parent as Pawn;
         public CompAbilities compAbilities => pawn.GetComp<CompAbilities>();
 
@@ -50,6 +50,12 @@ namespace ART
             }
         }
         public Ability GetLearnedAbility(AbilityDef abilityDef) => compAbilities.LearnedAbilities.FirstOrDefault(x => x.def == abilityDef);
+        public bool HasClassTrait(out Trait classTrait)
+        {
+            classTrait = ClassTrait;
+            return classTrait != null;
+        }
+
         public bool HasClass(out ClassTraitDef classTrait)
         {
             classTrait = ClassTraitDef;
@@ -57,6 +63,7 @@ namespace ART
         }
         public void GainXP(float xp)
         {
+            Log.Message("Gaining xp: " + xp);
             var classTrait = ClassTraitDef;
             if (level < MaxLevel)
             {
@@ -70,11 +77,19 @@ namespace ART
                     }
                     abilityPoints += ClassTraitDef.abilityPointsPerLevel;
                     previousXp += RequiredXPtoGain;
-                    if (level >= MaxLevel)
+                    if (level == MaxLevel)
                     {
-                        return;
+                        break;
                     }
                 }
+            }
+
+            Log.Message("xpPoints: " + xpPoints);
+            Log.Message("previousXp: " + previousXp);
+            Log.Message("GainedXPSinceLastLevel + RequiredXPtoGain: " + (GainedXPSinceLastLevel + RequiredXPtoGain));
+            if (level == MaxLevel && xpPoints > previousXp + RequiredXPtoGain)
+            {
+                xpPoints = previousXp + RequiredXPtoGain;
             }
         }
 
@@ -246,16 +261,14 @@ namespace ART
     {
         public int maxLevel;
         public int abilityPointsPerLevel;
-        public float baseXp;
-        public float xpPerLevelOffset;
-        public float xpPerPawnValue;
-        public float xpPerNonhumanValue;
+        public float xpPerLevelRequirement;
+        public float xpPerHumanlikeValueWhenKilling;
+        public float xpPerNonHumanValueWhenKilling;
         public float xpPerSkillGain;
         public bool sendMessageOnLevelUp;
         public string levelUpMessageKey;
         public string moteOnLevelUp;
         public string soundOnLevelUp;
-        public float baseValue;
         public float valuePerLevelOffset;
         public HediffResourceDef resourceHediff;
         public List<AbilityTreeDef> classAbilities;

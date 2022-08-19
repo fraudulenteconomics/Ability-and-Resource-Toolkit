@@ -53,4 +53,5 @@
 	<ART.AbilityLevel>Level {0} / {1}</ART.AbilityLevel>
 	<ART.Experience>Experience progress: </ART.Experience>
 	<ART.ClassName>Class: {0}</ART.ClassName>
+	<ART.MarketValuePerLevel>Level {0} of {1}: +{2}</ART.MarketValuePerLevel>
 </LanguageData>

@@ -98,9 +98,14 @@ namespace ART
 	[HarmonyPatch(typeof(SkillRecord), "Learn")]
 	public static class Patch_Learn
 	{
-		private static void Postfix(SkillRecord __instance, Pawn ___pawn)
+		private static void Postfix(SkillRecord __instance, Pawn ___pawn, float xp)
 		{
 			Utils.TryAssignNewSkillRelatedHediffs(__instance, ___pawn);
+			if (___pawn.HasPawnClassComp(out var comp) && comp.HasClass(out var classTrait) && classTrait.xpPerSkillGain > 0 && xp > 0)
+			{
+				comp.GainXP(xp * classTrait.xpPerSkillGain);
+
+            }
 		}
 	}
 
@@ -121,7 +126,29 @@ namespace ART
             }
 			return true;
 		}
-	}
+        private static void Postfix(Pawn __instance, DamageInfo? dinfo, Hediff exactCulprit = null)
+		{
+            if (__instance.Dead)
+            {
+                if (dinfo.HasValue && dinfo.Value.Instigator is Pawn killer)
+                {
+                    var comp = killer.GetComp<CompPawnClass>();
+                    if (comp != null && comp.HasClass(out var traitDef))
+                    {
+                        if (__instance.RaceProps.Humanlike && traitDef.xpPerHumanlikeValueWhenKilling > 0)
+                        {
+                            comp.GainXP(__instance.MarketValue * traitDef.xpPerHumanlikeValueWhenKilling);
+                        }
+                        else if (traitDef.xpPerNonHumanValueWhenKilling > 0)
+                        {
+                            comp.GainXP(__instance.MarketValue * traitDef.xpPerNonHumanValueWhenKilling);
+                        }
+                    }
+                }
+            }
+        }
+
+    }
 
     [HarmonyPatch(typeof(TraitSet), "GainTrait")]
     public static class TraitSet_GainTrait_Patch

@@ -24,7 +24,7 @@ namespace ART
 			}
 		}
 
-		public static bool HasClass(this Pawn pawn, out CompPawnClass comp)
+		public static bool HasPawnClassComp(this Pawn pawn, out CompPawnClass comp)
 		{
 			comp = pawn.TryGetComp<CompPawnClass>();
 			return comp?.HasClass(out _) ?? false;

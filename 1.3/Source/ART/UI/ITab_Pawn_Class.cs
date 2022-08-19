@@ -121,7 +121,7 @@ namespace ART
         }
 
         private Vector2 scrollPosition;
-        public override bool IsVisible => this.PawnToShowInfoAbout?.HasClass(out _) ?? false;
+        public override bool IsVisible => this.PawnToShowInfoAbout?.HasPawnClassComp(out _) ?? false;
         private Pawn PawnToShowInfoAbout
         {
             get
