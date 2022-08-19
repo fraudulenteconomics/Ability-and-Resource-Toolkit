@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Verse;
+using Verse.Sound;
 using VFECore.Abilities;
 using Ability = VFECore.Abilities.Ability;
 using AbilityDef = VFECore.Abilities.AbilityDef;
@@ -73,6 +74,17 @@ namespace ART
                     if (PawnUtility.ShouldSendNotificationAbout(pawn) && classTrait.sendMessageOnLevelUp)
                     {
                         Messages.Message((classTrait.levelUpMessageKey ?? "ART.PawnLevelUp").Translate(pawn.Named("PAWN")), pawn, MessageTypeDefOf.PositiveEvent);
+                        if (pawn.Spawned)
+                        {
+                            if (classTrait.moteOnLevelUp != null)
+                            {
+                                MoteMaker.MakeStaticMote(pawn.Position, pawn.Map, classTrait.moteOnLevelUp);
+                            }
+                            if (classTrait.soundOnLevelUp != null)
+                            {
+                                classTrait.soundOnLevelUp.PlayOneShot(pawn);
+                            }
+                        }
                     }
                     abilityPoints += ClassTraitDef.abilityPointsPerLevel;
                     previousXp += RequiredXPtoGain;
@@ -101,6 +113,9 @@ namespace ART
         {
             if (trait.resourceHediff != null)
                 pawn.health.AddHediff(trait.resourceHediff);
+            if (trait.addHediff != null)
+                pawn.health.AddHediff(trait.addHediff);
+
             abilityLevels = new Dictionary<AbilityTreeDef, int>();
             foreach (var tree in trait.classAbilities)
             {
@@ -262,11 +277,12 @@ namespace ART
         public float xpPerSkillGain;
         public bool sendMessageOnLevelUp;
         public string levelUpMessageKey;
-        public string moteOnLevelUp;
-        public string soundOnLevelUp;
+        public ThingDef moteOnLevelUp;
+        public SoundDef soundOnLevelUp;
         public float valuePerLevelOffset;
         public HediffResourceDef resourceHediff;
         public List<AbilityTreeDef> classAbilities;
+        public HediffDef addHediff;
 
         [NoTranslate]
         public string iconPath;

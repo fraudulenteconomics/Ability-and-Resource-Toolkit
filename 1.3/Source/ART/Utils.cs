@@ -512,7 +512,7 @@ namespace ART
 			}
 		}
 
-		private static Dictionary<Pawn, ValueCache<List<HediffResource>>> hediffResourcesCache = new Dictionary<Pawn, ValueCache<List<HediffResource>>>();
+		public static Dictionary<Pawn, ValueCache<List<HediffResource>>> hediffResourcesCache = new Dictionary<Pawn, ValueCache<List<HediffResource>>>();
 		public static List<HediffResource> GetHediffResourcesFor(Pawn pawn)
 		{
 			if (hediffResourcesCache.TryGetValue(pawn, out var hediffResourceCache))
@@ -648,8 +648,12 @@ namespace ART
 				foreach (var option in resourceSettings)
 				{
 					if (option.requiredForUse)
-					{
-						if (option.disableIfMissingHediff)
+                    {
+                        if (option.resourcePerUse < 0)
+                        {
+                            description.AppendLine("ART.ConsumesPerUse".Translate(-option.resourcePerUse, option.hediff.label).Colorize(option.hediff.defaultLabelColor));
+                        }
+                        else if (option.disableIfMissingHediff)
 						{
 							description.AppendLine("ART.WillBeDisabledIfMissingResource".Translate(option.hediff.label).Colorize(option.hediff.defaultLabelColor));
 						}
@@ -663,10 +667,7 @@ namespace ART
 							description.AppendLine("ART.WillBeDisabledWhenResourceAbove".Translate(option.hediff.label, option.disableAboveResource).Colorize(option.hediff.defaultLabelColor));
 						}
 
-						if (option.resourcePerUse < 0)
-						{
-							description.AppendLine("ART.ConsumesPerUse".Translate(-option.resourcePerUse, option.hediff.label).Colorize(option.hediff.defaultLabelColor));
-						}
+
 					}
 				}
 			}

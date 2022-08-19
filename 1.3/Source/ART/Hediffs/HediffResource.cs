@@ -289,8 +289,7 @@ namespace ART
             set
             {
                 base.Severity = value;
-                Log.Message("Setting " + this + " with value: " + value);
-
+                //Log.Message("Setting " + this + " with value: " + value);
             }
         }
 

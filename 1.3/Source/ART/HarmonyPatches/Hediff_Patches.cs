@@ -51,9 +51,10 @@ namespace ART
 	{
 		private static void Postfix(Hediff __instance)
 		{
-			var pawn = __instance?.pawn;
+            var pawn = __instance?.pawn;
 			if (pawn != null)
 			{
+				Utils.hediffResourcesCache.Remove(pawn);
 				foreach (var hediffDef in DefDatabase<HediffResourceDef>.AllDefs)
                 {
 					if (hediffDef.requiredHediffs != null && pawn.health.hediffSet.GetFirstHediffOfDef(hediffDef) is null)
