@@ -16,14 +16,13 @@ namespace ART
 
         public float resourcePercent = -1f;
         public BodyPartDef applyToPart;
-        public List<HediffResourceDef> blacklistHediffsPreventAdd;
+        public List<HediffDef> blacklistHediffsPreventAdd;
         public HediffDef blacklistHediffPoison;
         public string blacklistHediffPoisonMessage;
         public string cannotDrinkReason;
         public bool addHediffIfMissing;
-
         public ChemicalDef toleranceChemical;
-
+        public bool preventFromUsageIfHasBlacklistedHediff;
         public override void DoIngestionOutcomeSpecial(Pawn pawn, Thing ingested)
         {
             if (blacklistHediffsPreventAdd != null)

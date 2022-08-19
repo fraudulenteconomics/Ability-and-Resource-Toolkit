@@ -80,21 +80,27 @@ namespace ART
 			}
 			return true;
 		}
-		public static bool CanDrink(Pawn pawn, Thing potion, out string reason)
+		public static bool CanDrink(Pawn pawn, Thing potion, out string reason, out bool preventFromUsage)
 		{
 			var comp = potion.def?.ingestible?.outcomeDoers?.OfType<IngestionOutcomeDoer_GiveHediffResource>().FirstOrDefault();
+			Log.Message("Comp: " + comp);
 			if (comp?.blacklistHediffsPreventAdd != null)
 			{
 				foreach (var hediff in comp.blacklistHediffsPreventAdd)
 				{
-					if (pawn.health.hediffSet.GetFirstHediffOfDef(hediff) != null)
+                    Log.Message(pawn + " hediff " + hediff);
+
+                    if (pawn.health.hediffSet.GetFirstHediffOfDef(hediff) != null)
 					{
+						Log.Message(pawn + " can't drink " + potion);
 						reason = comp.cannotDrinkReason;
-						return false;
+						preventFromUsage = comp.preventFromUsageIfHasBlacklistedHediff;
+                        return false;
 					}
 				}
 			}
-			reason = "";
+			preventFromUsage = false;
+            reason = "";
 			return true;
 		}
 		public static bool CanWear(Pawn pawn, Apparel apparel, out string reason)

@@ -61,9 +61,13 @@ namespace ART
                 {
                     string text = (!t.def.ingestible.ingestCommandString.NullOrEmpty()) ? string.Format(t.def.ingestible.ingestCommandString, t.LabelShort) : ((string)"ConsumeThing".Translate(t.LabelShort, t));
                     FloatMenuOption floatMenuOption = opts.FirstOrDefault((FloatMenuOption x) => x.Label.Contains(text));
-                    if (floatMenuOption != null && !Utils.CanDrink(pawn, t, out string reason))
+                    if (floatMenuOption != null && !Utils.CanDrink(pawn, t, out string reason, out bool preventFromUsage))
                     {
-                        floatMenuOption.Label += "ART.DrinkWarning".Translate();
+                        floatMenuOption.Label += ": " + reason;
+                        if (preventFromUsage)
+                        {
+                            floatMenuOption.action = null;
+                        }
                     }
                 }
             }

@@ -63,7 +63,6 @@ namespace ART
         }
         public void GainXP(float xp)
         {
-            Log.Message("Gaining xp: " + xp);
             var classTrait = ClassTraitDef;
             if (level < MaxLevel)
             {
@@ -71,7 +70,7 @@ namespace ART
                 while (xpPoints >= previousXp + RequiredXPtoGain)
                 {
                     SetLevel(level + 1);
-                    if (pawn.Spawned && PawnUtility.ShouldSendNotificationAbout(pawn) && classTrait.sendMessageOnLevelUp)
+                    if (PawnUtility.ShouldSendNotificationAbout(pawn) && classTrait.sendMessageOnLevelUp)
                     {
                         Messages.Message((classTrait.levelUpMessageKey ?? "ART.PawnLevelUp").Translate(pawn.Named("PAWN")), pawn, MessageTypeDefOf.PositiveEvent);
                     }
@@ -83,10 +82,6 @@ namespace ART
                     }
                 }
             }
-
-            Log.Message("xpPoints: " + xpPoints);
-            Log.Message("previousXp: " + previousXp);
-            Log.Message("GainedXPSinceLastLevel + RequiredXPtoGain: " + (GainedXPSinceLastLevel + RequiredXPtoGain));
             if (level == MaxLevel && xpPoints > previousXp + RequiredXPtoGain)
             {
                 xpPoints = previousXp + RequiredXPtoGain;
