@@ -13,7 +13,7 @@ namespace ART
 {
 	public static class Log
 	{
-		[TweakValue("0ART")] public static bool debug = true;
+		[TweakValue("0ART")] public static bool debug = false;
 		public static void Message(string message)
 		{
 			if (debug) Verse.Log.Message(message);

@@ -23,9 +23,10 @@ namespace ART
             var extension = __instance.def.GetModExtension<AbilityResourceProps>();
             if (extension != null)
             {
-                var isUsable = Utils.IsUsableForProps(__instance.pawn, extension, out reason);
+                var isUsable = Utils.IsUsableForProps(__instance.pawn, extension, out var reason2);
                 if (!isUsable)
                 {
+                    reason = reason2;
                     __result = false;
                 }
             }
