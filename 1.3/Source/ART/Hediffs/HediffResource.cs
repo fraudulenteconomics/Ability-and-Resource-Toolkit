@@ -15,7 +15,7 @@ using AbilityDef = VFECore.Abilities.AbilityDef;
 
 namespace ART
 {
-    public class HediffResource : HediffWithComps, IAdjustResource
+    public class HediffResource : HediffWithComps, IAdjustResource, IDrawable
     {
         public new HediffResourceDef def => base.def as HediffResourceDef;
         private float resourceAmount;
@@ -1106,7 +1106,7 @@ namespace ART
             }
             return material;
         }
-        public void Draw()
+        public virtual void Draw()
         {
             if (this.CurStage is HediffStageResource hediffStageResource)
             {

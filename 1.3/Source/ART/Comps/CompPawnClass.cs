@@ -160,6 +160,10 @@ namespace ART
             fullyUnlocked = false;
             abilityPointsToUnlock = 0;
             var abilityTier = GetAbilityDataFrom(abilityDef).abilityTier;
+            if (abilityTier.minimumLevel > level)
+            {
+                return false;
+            }
             var ability = this.GetLearnedAbility(abilityDef);
             if (ability != null)
             {

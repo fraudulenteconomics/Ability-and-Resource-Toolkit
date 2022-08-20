@@ -32,23 +32,24 @@ namespace ART
             {
                 foreach (var hediffResource in pawn.health?.hediffSet.hediffs.OfType<HediffResource>())
                 {
-                    var satisfyPolicy = policy.satisfyPolicies[hediffResource.def];
-                    if (satisfyPolicy.seekingIsEnabled && (hediffResource.ResourceAmount / hediffResource.ResourceCapacity) < satisfyPolicy.resourceSeekingThreshold.max)
+                    if (policy.satisfyPolicies.TryGetValue(hediffResource.def, out var satisfyPolicy))
                     {
-                        var ingestibles = IngestiblesFor(pawn, hediffResource);
-                        var ingestible = GenClosest.ClosestThing_Global_Reachable(pawn.Position, pawn.Map, ingestibles, PathEndMode.OnCell, TraverseParms.For(pawn));
-                        if (ingestible != null)
+                        if (satisfyPolicy.seekingIsEnabled && (hediffResource.ResourceAmount / hediffResource.ResourceCapacity) < satisfyPolicy.resourceSeekingThreshold.max)
                         {
-                            Job job = JobMaker.MakeJob(JobDefOf.Ingest, ingestible);
-                            job.count = 1;
-                            return job;
+                            var ingestibles = IngestiblesFor(pawn, hediffResource);
+                            var ingestible = GenClosest.ClosestThing_Global_Reachable(pawn.Position, pawn.Map, ingestibles, PathEndMode.OnCell, TraverseParms.For(pawn));
+                            if (ingestible != null)
+                            {
+                                Job job = JobMaker.MakeJob(JobDefOf.Ingest, ingestible);
+                                job.count = 1;
+                                return job;
+                            }
                         }
                     }
                 }
             }
             return null;
         }
-
         private IEnumerable<Thing> IngestiblesFor(Pawn pawn, HediffResource hediffResource)
         {
             foreach (var thing in pawn.Map.listerThings.AllThings)

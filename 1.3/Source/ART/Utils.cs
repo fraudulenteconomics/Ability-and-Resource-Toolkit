@@ -11,6 +11,19 @@ using AbilityDef = VFECore.Abilities.AbilityDef;
 
 namespace ART
 {
+	public static class Log
+	{
+		[TweakValue("0ART")] public static bool debug = true;
+		public static void Message(string message)
+		{
+			if (debug) Verse.Log.Message(message);
+		}
+
+        public static void Error(string message)
+        {
+            if (debug) Verse.Log.Error(message);
+        }
+    }
     [StaticConstructorOnStartup]
 	public static class Utils
 	{
@@ -598,7 +611,7 @@ namespace ART
 							bool hediffResourceIsEmptyOrNull = resourceHediff != null ? resourceHediff.ResourceAmount <= 0 : true;
 							if (hediffResourceIsEmptyOrNull)
 							{
-								disableReason = option.disableReason;
+								disableReason = option.disableReasonKey.Translate();
 								return false;
 							}
 						}
@@ -607,7 +620,7 @@ namespace ART
 						{
 							if (resourceHediff != null && resourceHediff.ResourceAmount < option.minimumResourcePerUse)
 							{
-								disableReason = option.disableReason;
+								disableReason = option.disableReasonKey.Translate();
 								return false;
 							}
 						}
@@ -615,7 +628,7 @@ namespace ART
 						{
 							if (resourceHediff != null && resourceHediff.ResourceAmount > option.disableAboveResource)
 							{
-								disableReason = option.disableReason;
+								disableReason = option.disableReasonKey.Translate();
 								return false;
 							}
 						}
@@ -627,7 +640,7 @@ namespace ART
 								var num = resourceHediff.ResourceAmount - option.resourcePerUse;
 								if (num < 0)
 								{
-									disableReason = option.disableReason;
+									disableReason = option.disableReasonKey.Translate();
 									return false;
 								}
 							}

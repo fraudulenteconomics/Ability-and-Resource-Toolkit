@@ -18,10 +18,13 @@ namespace ART
 	{
 		public static void Postfix(Pawn ___pawn)
 		{
-			foreach (var hediff in Utils.GetHediffResourcesFor(___pawn))
+			foreach (var hediff in ___pawn.health.hediffSet.hediffs)
 			{
-				hediff.Draw();
-			}
+				if (hediff is IDrawable drawable)
+				{
+                    drawable.Draw();
+                }
+            }
 		}
 	}
 	[HarmonyPatch(typeof(Pawn), "SetFaction")]
