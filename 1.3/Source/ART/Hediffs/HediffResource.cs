@@ -98,13 +98,13 @@ namespace ART
 
             if (this.def.defName == hediffDefnameToCheck)
             {
-                Log.Message("START");
-                Log.Message("1 offset: " + offset);
-                Log.Message("resourceAmount: " + this.resourceAmount);
-                Log.Message("resourceFromStorages: " + resourceFromStorages);
-                Log.Message("resourceCapacity: " + resourceCapacity);
-                Log.Message("totalValue: " + totalValue);
-                Log.Message("-----------------");
+                ARTLog.Message("START");
+                ARTLog.Message("1 offset: " + offset);
+                ARTLog.Message("resourceAmount: " + this.resourceAmount);
+                ARTLog.Message("resourceFromStorages: " + resourceFromStorages);
+                ARTLog.Message("resourceCapacity: " + resourceCapacity);
+                ARTLog.Message("totalValue: " + totalValue);
+                ARTLog.Message("-----------------");
             }
             if (offset > 0)
             {
@@ -116,8 +116,8 @@ namespace ART
                 offset -= toAdd;
                 if (this.def.defName == hediffDefnameToCheck)
                 {
-                    Log.Message("toAdd: " + toAdd);
-                    Log.Message("2 offset: " + offset);
+                    ARTLog.Message("toAdd: " + toAdd);
+                    ARTLog.Message("2 offset: " + offset);
                 }
                 resourceAmount += toAdd;
             }
@@ -127,15 +127,15 @@ namespace ART
                 offset -= toSubtract;
                 if (this.def.defName == hediffDefnameToCheck)
                 {
-                    Log.Message("toSubtract: " + toSubtract);
-                    Log.Message("2 offset: " + offset);
+                    ARTLog.Message("toSubtract: " + toSubtract);
+                    ARTLog.Message("2 offset: " + offset);
                 }
                 resourceAmount += toSubtract;
             }
             if (this.def.defName == hediffDefnameToCheck)
             {
-                Log.Message("this.resourceAmount: " + this.resourceAmount);
-                Log.Message("END");
+                ARTLog.Message("this.resourceAmount: " + this.resourceAmount);
+                ARTLog.Message("END");
             }
 
             if (source is null || source.canRefillStorage)
@@ -170,36 +170,36 @@ namespace ART
             while (offset < 0)
             {
                 if (this.def.defName == hediffDefnameToCheck)
-                    Log.Message("WHILE: offset: " + offset);
+                    ARTLog.Message("WHILE: offset: " + offset);
 
                 bool changed = false;
                 foreach (var storage in storages)
                 {
                     if (this.def.defName == hediffDefnameToCheck)
-                        Log.Message("STORAGE: " + storage.Item2.hediff);
+                        ARTLog.Message("STORAGE: " + storage.Item2.hediff);
 
                     if (storage.Item2.hediff == this.def)
                     {
                         var toSubtract = -Mathf.Min(-offset, storage.Item3.ResourceAmount);
                         if (this.def.defName == hediffDefnameToCheck)
-                            Log.Message("toSubtract: " + toSubtract);
+                            ARTLog.Message("toSubtract: " + toSubtract);
 
                         if (toSubtract < 0)
                         {
                             changed = true;
                             if (this.def.defName == hediffDefnameToCheck)
                             {
-                                Log.Message("storage.Item3: " + storage.Item3.parent + " - " + storage.Item3.resourceProperties.hediff);
-                                Log.Message("1 storage.Item3.ResourceAmount: " + storage.Item3.ResourceAmount);
-                                Log.Message("1 offset: " + offset);
+                                ARTLog.Message("storage.Item3: " + storage.Item3.parent + " - " + storage.Item3.resourceProperties.hediff);
+                                ARTLog.Message("1 storage.Item3.ResourceAmount: " + storage.Item3.ResourceAmount);
+                                ARTLog.Message("1 offset: " + offset);
                             }
 
                             storage.Item3.ResourceAmount += toSubtract;
                             offset -= toSubtract;
                             if (this.def.defName == hediffDefnameToCheck)
                             {
-                                Log.Message("2 storage.Item3.ResourceAmount: " + storage.Item3.ResourceAmount);
-                                Log.Message("2 offset: " + offset);
+                                ARTLog.Message("2 storage.Item3.ResourceAmount: " + storage.Item3.ResourceAmount);
+                                ARTLog.Message("2 offset: " + offset);
                             }
                         }
                     }
@@ -214,7 +214,7 @@ namespace ART
             foreach (var storage in storages)
             {
                 if (this.def.defName == hediffDefnameToCheck)
-                    Log.Message(storage.Item2.hediff + " - storage.Item3.ResourceAmount: " + storage.Item3.ResourceAmount);
+                    ARTLog.Message(storage.Item2.hediff + " - storage.Item3.ResourceAmount: " + storage.Item3.ResourceAmount);
 
                 if (storage.Item2.destroyWhenEmpty && storage.Item3.ResourceAmount <= 0 ||
                     storage.Item2.destroyWhenFull && storage.Item3.ResourceAmount >= storage.Item3.ResourceCapacity)
@@ -601,7 +601,7 @@ namespace ART
                     DoTend(hediffStageResource.tendingProperties);
                 }
             }
-            Log.Message("PostAdd");
+            ARTLog.Message("PostAdd");
             OnStageSwitch(hediffStageResource);
             this.Register();
         }
@@ -644,7 +644,7 @@ namespace ART
             var hediffStageResource = this.CurStage as HediffStageResource;
             if (this.previousStageIndex != this.CurStageIndex)
             {
-                Log.Message("Tick");
+                ARTLog.Message("Tick");
                 OnStageSwitch(hediffStageResource);
             }
 
@@ -683,7 +683,7 @@ namespace ART
 
         private void OnStageSwitch(HediffStageResource hediffStageResource)
         {
-            Log.Message(pawn + " switching stage " + this.CurStageIndex + " - " + this.previousStageIndex);
+            ARTLog.Message(pawn + " switching stage " + this.CurStageIndex + " - " + this.previousStageIndex);
             var previousStage = this.previousStageIndex > -1 ? def.stages[this.previousStageIndex] as HediffStageResource : null;
             if (previousStage != null)
             {
@@ -718,14 +718,14 @@ namespace ART
                             var abilitiesToRemove = this.compAbilities.LearnedAbilities.Where(x => this.grantedRandomAbilities.Contains(x.def));
                             foreach (var ability in abilitiesToRemove)
                             {
-                                Log.Message(pawn + " - removing random ability: " + ability);
+                                ARTLog.Message(pawn + " - removing random ability: " + ability);
                                 this.compAbilities.LearnedAbilities.Remove(ability);
                             }
                         }
 
                         foreach (var ability in abilityCandidates)
                         {
-                            Log.Message(pawn + " - gaining random ability: " + ability);
+                            ARTLog.Message(pawn + " - gaining random ability: " + ability);
                             this.compAbilities.GiveAbility(ability);
                             this.grantedRandomAbilities.Add(ability);
                         }
@@ -735,7 +735,7 @@ namespace ART
                         var abilitiesToRemove = this.compAbilities.LearnedAbilities.Where(x => this.grantedRandomAbilities.Contains(x.def));
                         foreach (var ability in abilitiesToRemove)
                         {
-                            Log.Message(pawn + " - removing random ability: " + ability);
+                            ARTLog.Message(pawn + " - removing random ability: " + ability);
                             this.compAbilities.LearnedAbilities.Remove(ability);
                         }
                     }
@@ -746,14 +746,14 @@ namespace ART
                             && !hediffStageResource.staticAbilitiesToGain.Contains(x.def));
                         foreach (var ability in abilitiesToRemove)
                         {
-                            Log.Message(pawn + " - removing static ability: " + ability);
+                            ARTLog.Message(pawn + " - removing static ability: " + ability);
                             this.compAbilities.LearnedAbilities.Remove(ability);
                         }
 
                         var abilityCandidates = hediffStageResource.staticAbilitiesToGain.Where(x => !this.compAbilities.HasAbility(x));
                         foreach (var ability in abilityCandidates)
                         {
-                            Log.Message(pawn + " - gaining static ability: " + ability);
+                            ARTLog.Message(pawn + " - gaining static ability: " + ability);
                             this.compAbilities.GiveAbility(ability);
                             this.grantedStaticAbilities.Add(ability);
                         }
@@ -763,7 +763,7 @@ namespace ART
                         var abilitiesToRemove = this.compAbilities.LearnedAbilities.Where(x => this.grantedStaticAbilities.Contains(x.def));
                         foreach (var ability in abilitiesToRemove)
                         {
-                            Log.Message(pawn + " - removing static ability: " + ability);
+                            ARTLog.Message(pawn + " - removing static ability: " + ability);
                             this.compAbilities.LearnedAbilities.Remove(ability);
                         }
                     }
@@ -773,13 +773,13 @@ namespace ART
                     var abilitiesToRemove = this.compAbilities.LearnedAbilities.Where(x => this.grantedRandomAbilities.Contains(x.def));
                     foreach (var ability in abilitiesToRemove)
                     {
-                        Log.Message(pawn + " - removing random ability: " + ability);
+                        ARTLog.Message(pawn + " - removing random ability: " + ability);
                         this.compAbilities.LearnedAbilities.Remove(ability);
                     }
                     abilitiesToRemove = this.compAbilities.LearnedAbilities.Where(x => this.grantedStaticAbilities.Contains(x.def));
                     foreach (var ability in abilitiesToRemove)
                     {
-                        Log.Message(pawn + " - removing static ability: " + ability);
+                        ARTLog.Message(pawn + " - removing static ability: " + ability);
                         this.compAbilities.LearnedAbilities.Remove(ability);
                     }
 

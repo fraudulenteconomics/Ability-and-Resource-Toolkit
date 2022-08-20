@@ -23,22 +23,22 @@ namespace ART
 
         public void StealLife(Pawn instigator, Pawn targetPawn, DamageInfo source)
         {
-            Log.Message("Stealing life: " + instigator + " - " + targetPawn + " - " + source);
+            ARTLog.Message("Stealing life: " + instigator + " - " + targetPawn + " - " + source);
             if (damageDef is null || damageDef == source.Def)
             {
                 foreach (var pawn in Utils.GetPawnsAround(instigator, effectRadius))
                 {
-                    Log.Message("Checking pawn: " + pawn);
+                    ARTLog.Message("Checking pawn: " + pawn);
                     if (CanExtractLife(instigator, pawn, targetPawn))
                     {
-                        Log.Message("Healing pawn: " + pawn);
+                        ARTLog.Message("Healing pawn: " + pawn);
                         var hediffsToHeal = pawn.health.hediffSet.hediffs.Where(x => x is Hediff_Injury).ToList();
                         var healPoints = flatHeal > 0 ? flatHeal : source.Amount * percentHeal;
                         Utils.HealHediffs(pawn, ref healPoints, hediffsToHeal, healOverflow, healPriority, false, soundOnEffect);
                     }
                     else
                     {
-                        Log.Message("Cannot work on " + pawn);
+                        ARTLog.Message("Cannot work on " + pawn);
                     }
                 }
             }

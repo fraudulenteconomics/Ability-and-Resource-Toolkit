@@ -1,23 +1,18 @@
-﻿using RimWorld;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
-using Verse;
+﻿using Verse;
 
 namespace ART
 {
-	public static class ARTLog
+    public static class ARTLog
 	{
-		private static bool enabled = true;
+		[TweakValue("0ART")] public static bool debug = false;
 		public static void Message(string message)
+		{
+			if (debug) Verse.Log.Message(message);
+		}
+
+        public static void Error(string message)
         {
-			if (enabled)
-            {
-				Log.Message(message);
-            }
+            if (debug) Verse.Log.Error(message);
         }
-	}
+    }
 }

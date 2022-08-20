@@ -15,14 +15,14 @@ namespace ART
 
         public void DamageThing(Thing damager, Thing thing, DamageInfo source, bool isRanged, bool isMelee)
         {
-            Log.Message("source: " + source);
+            ARTLog.Message("source: " + source);
             foreach (var additionalDamage in additionalDamages)
             {
                 if (isRanged && additionalDamage.damageRange || isMelee && additionalDamage.damageMelee)
                 {
                     var damageAmount = GetDamageAmount(additionalDamage, damager, thing);
                     var damage = new DamageInfo(additionalDamage.damage, damageAmount, instigator: source.Instigator, hitPart: source.HitPart, weapon: source.Weapon);
-                    Log.Message("Damaging " + thing + " with " + damage);
+                    ARTLog.Message("Damaging " + thing + " with " + damage);
                    thing.TakeDamage(damage);
                 }
             }

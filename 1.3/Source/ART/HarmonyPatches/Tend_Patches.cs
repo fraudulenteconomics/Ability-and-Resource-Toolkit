@@ -23,7 +23,7 @@ namespace ART
         {
             if (healer.HasEnoughResourceToTend(out _))
             {
-                Log.Message("Has enough resource to tend");
+                ARTLog.Message("Has enough resource to tend");
                 return false;
             }
             return true;

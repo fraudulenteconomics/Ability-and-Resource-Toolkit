@@ -114,7 +114,7 @@ namespace ART
                                 {
                                     var damageAmount = additionalDamage.amount.RandomInRange;
                                     var damage = new DamageInfo(additionalDamage.damage, damageAmount, instigator: dinfoSource.Instigator, hitPart: dinfoSource.HitPart, weapon: dinfoSource.Weapon);
-                                    Log.Message("Damaging " + target.Thing + " with " + damage);
+                                    ARTLog.Message("Damaging " + target.Thing + " with " + damage);
                                     target.Thing.TakeDamage(damage);
                                 }
                             }

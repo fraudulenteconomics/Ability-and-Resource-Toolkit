@@ -23,7 +23,7 @@ namespace ART
         {
             if (pawn.HasEnoughResourceToRepair(out _))
             {
-                Log.Message("Has enough resource to repair");
+                ARTLog.Message("Has enough resource to repair");
                 __result = HasJobOnThing(pawn, t, forced);
                 return false;
             }
@@ -105,7 +105,7 @@ namespace ART
         {
             if (__instance.pawn.HasEnoughResourceToRepair(out _))
             {
-                Log.Message("Has enough resource to repair");
+                ARTLog.Message("Has enough resource to repair");
                 __result = __instance.pawn.Reserve(__instance.job.GetTarget(TargetIndex.A).Thing, __instance.job, 1, -1, null, errorOnFailed);
                 return false;
             }
@@ -120,7 +120,7 @@ namespace ART
         {
             if (__instance.pawn.HasEnoughResourceToRepair(out _))
             {
-                Log.Message("Has enough resource to repair");
+                ARTLog.Message("Has enough resource to repair");
                 __result = MakeNewToils(__instance).ToList();
                 return false;
             }

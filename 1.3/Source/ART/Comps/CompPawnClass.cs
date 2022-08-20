@@ -36,7 +36,7 @@ namespace ART
         public Pawn pawn => this.parent as Pawn;
         public CompAbilities compAbilities => pawn.GetComp<CompAbilities>();
 
-        public Dictionary<AbilityTreeDef, int> abilityLevels;
+        public List<AbilityDef> learnedAbilities = new List<AbilityDef>();
         public int MaxLevel => ClassTraitDef.maxLevel;
         public HediffResource HediffResource
         {
@@ -115,12 +115,7 @@ namespace ART
                 pawn.health.AddHediff(trait.resourceHediff);
             if (trait.addHediff != null)
                 pawn.health.AddHediff(trait.addHediff);
-
-            abilityLevels = new Dictionary<AbilityTreeDef, int>();
-            foreach (var tree in trait.classAbilities)
-            {
-                abilityLevels[tree] = -1;
-            }
+            learnedAbilities = new List<AbilityDef>();
         }
 
         public bool Learned(AbilityDef abilityDef)
@@ -132,9 +127,8 @@ namespace ART
         {
             if (Learned(abilityDef))
             {
-                AbilityTreeDef abilityTree = GetAbilityDataFrom(abilityDef).abilityTree;
-                var result = abilityTree.abilityTiers.Count - 1 == abilityLevels[abilityTree];
-                return result;
+                var abilityData = GetAbilityDataFrom(abilityDef);
+                return abilityData.abilityTree.abilityTiers.Last() == abilityData.abilityTier;
             }
             return false;
         }
@@ -155,30 +149,18 @@ namespace ART
             return new AbilityData { abilityTree = abilityTree, abilityTier = abilityTier };
         }
 
-        public bool CanUnlockNextTier(AbilityDef abilityDef, out int abilityPointsToUnlock, out bool fullyUnlocked)
+        public bool CanUnlockAbility(AbilityDef abilityDef)
         {
-            fullyUnlocked = false;
-            abilityPointsToUnlock = 0;
+            if (DebugSettings.godMode)
+            {
+                return true;
+            }
             var abilityTier = GetAbilityDataFrom(abilityDef).abilityTier;
             if (abilityTier.minimumLevel > level)
             {
                 return false;
             }
-            var ability = this.GetLearnedAbility(abilityDef);
-            if (ability != null)
-            {
-                if (FullyLearned(abilityDef))
-                {
-                    fullyUnlocked = true;
-                    return false;
-                }
-            }
-            if (DebugSettings.godMode)
-            {
-                return true;
-            }
-            abilityPointsToUnlock = abilityTier.abilityPointsToLearn;
-            if (abilityPoints < abilityPointsToUnlock)
+            if (abilityPoints < abilityTier.abilityPointsToLearn)
             {
                 return false;
             }
@@ -191,14 +173,14 @@ namespace ART
             var abilityData = GetAbilityDataFrom(abilityDef);
             foreach (var tier in abilityData.abilityTree.abilityTiers)
             {
+                learnedAbilities.Remove(tier.abilityDef);
                 var ability = GetLearnedAbility(tier.abilityDef);
                 if (ability != null)
                 {
                     comp.LearnedAbilities.Remove(ability);
                 }
             }
-
-            abilityLevels[abilityData.abilityTree] = abilityData.abilityTree.abilityTiers.IndexOf(abilityData.abilityTier);
+            learnedAbilities.Add(abilityDef);
             comp.GiveAbility(abilityDef);
             if (spendAbilityPoints)
             {
@@ -217,15 +199,15 @@ namespace ART
             }
 
             var comp = compAbilities;
-            foreach (var kvp in abilityLevels)
+            foreach (var abilityDef in learnedAbilities)
             {
-                var ability = this.GetLearnedAbility(kvp.Key.abilityTiers[kvp.Value].abilityDef);
+                var ability = this.GetLearnedAbility(abilityDef);
                 if (ability != null)
                 {
                     comp.LearnedAbilities.Remove(ability);
                 }
             }
-            abilityLevels.Clear();
+            learnedAbilities.Clear();
             level = 0;
             SetLevel(0);
             xpPoints = 0;
@@ -267,7 +249,12 @@ namespace ART
             Scribe_Values.Look(ref xpPoints, "CompPawnClass_" + nameof(xpPoints));
             Scribe_Values.Look(ref previousXp, "CompPawnClass_" + nameof(previousXp));
             Scribe_Values.Look(ref abilityPoints, "CompPawnClass_" + nameof(abilityPoints));
-            Scribe_Collections.Look(ref abilityLevels, "CompPawnClass_" + nameof(abilityLevels), LookMode.Def, LookMode.Value);
+            Scribe_Collections.Look(ref learnedAbilities, "CompPawnClass_" + nameof(learnedAbilities), LookMode.Def);
+            if (Scribe.mode == LoadSaveMode.PostLoadInit)
+            {
+                if (learnedAbilities is null)
+                    learnedAbilities = new List<AbilityDef>();
+            }
         }
     }
 

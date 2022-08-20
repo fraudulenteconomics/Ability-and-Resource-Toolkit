@@ -31,7 +31,7 @@ namespace ART
 		{
 			if (xmlRoot.ChildNodes.Count != 1)
 			{
-				Log.Error("Misconfigured ThingDefCountClass: " + xmlRoot.OuterXml);
+				ARTLog.Error("Misconfigured ThingDefCountClass: " + xmlRoot.OuterXml);
 				return;
 			}
 			DirectXmlCrossRefLoader.RegisterObjectWantsCrossRef(this, "thingDef", xmlRoot.Name);

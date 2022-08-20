@@ -65,7 +65,7 @@ namespace ART
         }
         public void AppendResource(Pawn pawn, ResourceProperties resourceProperties, float num)
         {
-            Log.Message("AppendResource: " + pawn);
+            ARTLog.Message("AppendResource: " + pawn);
             var hediffResource = pawn.health.hediffSet.GetFirstHediffOfDef(resourceProperties.hediff) as HediffResource;
             if (hediffResource != null && !hediffResource.CanGainResource)
             {
@@ -94,7 +94,7 @@ namespace ART
                 hediffResource = Utils.AdjustResourceAmount(pawn, resourceProperties.hediff, num, resourceProperties.addHediffIfMissing, resourceProperties, resourceProperties.applyToPart);
                 if (hediffResource != null)
                 {
-                    Log.Message(this.parent + " is affecting " + pawn + " - " + resourceProperties.hediff);
+                    ARTLog.Message(this.parent + " is affecting " + pawn + " - " + resourceProperties.hediff);
                     hediffResource.TryAddAmplifier(this);
                 }
             }

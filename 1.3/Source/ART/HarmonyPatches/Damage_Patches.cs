@@ -155,37 +155,37 @@ namespace ART
 						stuffExtension.DamageThing(firedData.caster, hitThing, source, true, false);
 					}
 
-					Log.Message("Projectile fire data: __instance: " + __instance + " - hitThing: " + hitThing + " - source: " + source + " - caster: " + firedData.caster);
+					ARTLog.Message("Projectile fire data: __instance: " + __instance + " - hitThing: " + hitThing + " - source: " + source + " - caster: " + firedData.caster);
 
 					if (firedData.caster is Pawn instigator)
 					{
-						Log.Message("Iterating over pawn: " + instigator);
+						ARTLog.Message("Iterating over pawn: " + instigator);
 						if (instigator.health?.hediffSet.hediffs != null)
 						{
-							Log.Message("Checking hediffs on: " + instigator);
+							ARTLog.Message("Checking hediffs on: " + instigator);
 							for (int i = instigator.health.hediffSet.hediffs.Count - 1; i >= 0; i--)
 							{
 								var hediff = instigator.health.hediffSet.hediffs[i];
-								Log.Message("Checking hediff on: " + hediff);
+								ARTLog.Message("Checking hediff on: " + hediff);
 								if (hediff is HediffResource hediffResource && hediffResource.CurStage is HediffStageResource hediffStageResource)
 								{
-									Log.Message("Passed hediff: " + hediff);
+									ARTLog.Message("Passed hediff: " + hediff);
 									if (hediffStageResource.additionalDamages != null)
 									{
 										foreach (var additionalDamage in hediffStageResource.additionalDamages)
 										{
-											Log.Message("Looking at : " + additionalDamage.damage + " - " + additionalDamage.damageRange);
+											ARTLog.Message("Looking at : " + additionalDamage.damage + " - " + additionalDamage.damageRange);
 											if (additionalDamage.damageRange)
 											{
 												var damageAmount = additionalDamage.amount.RandomInRange;
 												var damage = new DamageInfo(additionalDamage.damage, damageAmount, instigator: source.Instigator, hitPart: source.HitPart, weapon: source.Weapon);
-												Log.Message(hitThing + " should take damage: " + damage);
+												ARTLog.Message(hitThing + " should take damage: " + damage);
 												hitThing.TakeDamage(damage);
-												Log.Message(hitThing + " 2 should take damage: " + damage);
+												ARTLog.Message(hitThing + " 2 should take damage: " + damage);
 											}
 											else
 											{
-												Log.Message(hitThing + " won't take damage: " + additionalDamage.damage);
+												ARTLog.Message(hitThing + " won't take damage: " + additionalDamage.damage);
 											}
 										}
 									}
@@ -200,7 +200,7 @@ namespace ART
 				}
 				else
 				{
-					Log.Error("Projectile fire data isn't found: __instance: " + __instance + " - hitThing: " + hitThing + " - source: " + source);
+					ARTLog.Error("Projectile fire data isn't found: __instance: " + __instance + " - hitThing: " + hitThing + " - source: " + source);
 				}
 			}
 		}

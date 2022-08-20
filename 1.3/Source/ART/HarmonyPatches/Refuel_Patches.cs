@@ -23,7 +23,7 @@ namespace ART
         {
             if (pawn.HasEnoughResourceToRefuel(t, out _))
             {
-                Log.Message("Has enough resource to refuel");
+                ARTLog.Message("Has enough resource to refuel");
                 __result = CanRefuel(pawn, t, forced);
                 return false;
             }
@@ -101,7 +101,7 @@ namespace ART
         {
             if (pawn.HasEnoughResourceToRefuel(t, out _))
             {
-                Log.Message("Has enough resource to refuel");
+                ARTLog.Message("Has enough resource to refuel");
                 __result = RefuelJob(pawn, t, forced, customRefuelJob, customAtomicRefuelJob);
                 return false;
             }
@@ -126,7 +126,7 @@ namespace ART
         {
             if (__instance.pawn.HasEnoughResourceToRefuel(__instance.job.targetA.Thing, out _))
             {
-                Log.Message("Has enough resource to refuel");
+                ARTLog.Message("Has enough resource to refuel");
                 __result = __instance.pawn.Reserve(__instance.job.GetTarget(TargetIndex.A).Thing, __instance.job, 1, -1, null, errorOnFailed);
                 return false;
             }
@@ -141,7 +141,7 @@ namespace ART
         {
             if (__instance.pawn.HasEnoughResourceToRefuel(__instance.job.targetA.Thing, out _))
             {
-                Log.Message("Has enough resource to refuel");
+                ARTLog.Message("Has enough resource to refuel");
                 __result = MakeNewToils(__instance).ToList();
                 return false;
             }

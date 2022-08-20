@@ -34,9 +34,9 @@ namespace ART
         }
         public override void ResourceTick()
         {
-            Log.Message("Active: " + Active + " - " + this);
-            Log.Message("this.parent.Map: " + this.parent.Map);
-            Log.Message(" IsEnabled(): " + IsEnabled());
+            ARTLog.Message("Active: " + Active + " - " + this);
+            ARTLog.Message("this.parent.Map: " + this.parent.Map);
+            ARTLog.Message(" IsEnabled(): " + IsEnabled());
             if (Active)
             {
                 foreach (var option in Props.resourceSettings)
@@ -95,7 +95,7 @@ namespace ART
         }
         public void AppendResource(Pawn pawn, ResourceProperties resourceProperties, float num)
         {
-            Log.Message("AppendResource: " + pawn);
+            ARTLog.Message("AppendResource: " + pawn);
             var hediffResource = pawn.health.hediffSet.GetFirstHediffOfDef(resourceProperties.hediff) as HediffResource;
             if (hediffResource != null && !hediffResource.CanGainResource)
             {
@@ -124,7 +124,7 @@ namespace ART
                 hediffResource = Utils.AdjustResourceAmount(pawn, resourceProperties.hediff, num, resourceProperties.addHediffIfMissing, resourceProperties, resourceProperties.applyToPart);
                 if (hediffResource != null)
                 {
-                    Log.Message(this.parent + " is affecting " + pawn + " - " + resourceProperties.hediff);
+                    ARTLog.Message(this.parent + " is affecting " + pawn + " - " + resourceProperties.hediff);
                     hediffResource.TryAddAmplifier(this);
                 }
             }

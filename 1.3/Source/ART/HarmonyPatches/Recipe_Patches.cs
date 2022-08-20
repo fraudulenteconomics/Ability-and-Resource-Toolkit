@@ -188,7 +188,7 @@ namespace ART
             {
                 if (jobDriver_DoBill.BillGiver is Thing thing && !p.CanUseIt(thing, out _))
                 {
-                    Log.Message("Ending job: " + p.CurJob + " - cannot use it");
+                    ARTLog.Message("Ending job: " + p.CurJob + " - cannot use it");
                     p.jobs.EndCurrentJob(JobCondition.Incompletable);
                     return;
                 }
@@ -226,7 +226,7 @@ namespace ART
                         var hediff = p.health.hediffSet.GetFirstHediffOfDef(resourceCost.resource) as HediffResource;
                         if (hediff is null || diff > 0 && (int)hediff.ResourceAmount < (int)diff)
                         {
-                            Log.Message("Ending job: " + p.CurJob + " - hediff.ResourceAmount: " + hediff.ResourceAmount + " - diff: " + diff);
+                            ARTLog.Message("Ending job: " + p.CurJob + " - hediff.ResourceAmount: " + hediff.ResourceAmount + " - diff: " + diff);
                             p.jobs.EndCurrentJob(JobCondition.Incompletable);
                             return;
                         }

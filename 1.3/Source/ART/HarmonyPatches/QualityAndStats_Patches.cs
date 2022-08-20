@@ -165,9 +165,9 @@ namespace ART
                             {
                                 result = (int)QualityCategory.Legendary;
                             }
-                            Log.Message("Old result: " + __result);
+                            ARTLog.Message("Old result: " + __result);
                             __result = (QualityCategory)result;
-                            Log.Message("New result: " + __result);
+                            ARTLog.Message("New result: " + __result);
                         }
                     }
                 }

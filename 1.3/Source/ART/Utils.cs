@@ -1,7 +1,9 @@
-﻿using RimWorld;
+﻿using Ionic.Zlib;
+using RimWorld;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using UnityEngine;
 using Verse;
@@ -11,20 +13,13 @@ using AbilityDef = VFECore.Abilities.AbilityDef;
 
 namespace ART
 {
-	public static class Log
-	{
-		[TweakValue("0ART")] public static bool debug = false;
-		public static void Message(string message)
-		{
-			if (debug) Verse.Log.Message(message);
-		}
-
-        public static void Error(string message)
-        {
-            if (debug) Verse.Log.Error(message);
-        }
+    public struct AbilityLearnState
+    {
+        public AbilityDef abilityDef;
+        public bool learned;
     }
-    [StaticConstructorOnStartup]
+    [HotSwappable]
+	[StaticConstructorOnStartup]
 	public static class Utils
 	{
 		static Utils()
@@ -42,17 +37,24 @@ namespace ART
 			comp = pawn.TryGetComp<CompPawnClass>();
 			return comp?.HasClass(out _) ?? false;
         }
-
-		public static IEnumerable<AbilityDef> GetAllLearnableAbilities(this Pawn pawn)
+        public static IEnumerable<AbilityLearnState> GetAbilities(this Pawn pawn)
 		{
             var comp = pawn.TryGetComp<CompPawnClass>();
-			foreach (var tree in comp.abilityLevels)
+			var traitDef = comp.ClassTraitDef;
+			var unlockedTrees = new List<AbilityTreeDef>();
+			foreach (var tree in traitDef.classAbilities)
 			{
-				var index = tree.Value + 1;
-				if (tree.Key.abilityTiers.Count == index)
-					index--;
-                yield return tree.Key.abilityTiers[index].abilityDef;
-            }
+				var allAbilitiesFromTier = tree.abilityTiers.Select(x => x.abilityDef);
+				var existingAbility = allAbilitiesFromTier.FirstOrDefault(x => comp.learnedAbilities.Contains(x));
+				if (existingAbility != null)
+				{
+                    yield return new AbilityLearnState { abilityDef = existingAbility, learned = true };
+                }
+				else
+				{
+                    yield return new AbilityLearnState { abilityDef = tree.abilityTiers[0].abilityDef, learned = false };
+                }
+			}
         }
         public static void TryAssignNewSkillRelatedHediffs(SkillRecord skillRecord, Pawn pawn)
 		{
@@ -96,16 +98,16 @@ namespace ART
 		public static bool CanDrink(Pawn pawn, Thing potion, out string reason, out bool preventFromUsage)
 		{
 			var comp = potion.def?.ingestible?.outcomeDoers?.OfType<IngestionOutcomeDoer_GiveHediffResource>().FirstOrDefault();
-			Log.Message("Comp: " + comp);
+			ARTLog.Message("Comp: " + comp);
 			if (comp?.blacklistHediffsPreventAdd != null)
 			{
 				foreach (var hediff in comp.blacklistHediffsPreventAdd)
 				{
-                    Log.Message(pawn + " hediff " + hediff);
+                    ARTLog.Message(pawn + " hediff " + hediff);
 
                     if (pawn.health.hediffSet.GetFirstHediffOfDef(hediff) != null)
 					{
-						Log.Message(pawn + " can't drink " + potion);
+						ARTLog.Message(pawn + " can't drink " + potion);
 						reason = comp.cannotDrinkReason;
 						preventFromUsage = comp.preventFromUsageIfHasBlacklistedHediff;
                         return false;
@@ -873,7 +875,7 @@ namespace ART
 
         public static void ApplyChargeResource(ref float damageAmount, ChargeResources chargeResources)
 		{
-			Log.Message("Old damage: " + damageAmount);
+			ARTLog.Message("Old damage: " + damageAmount);
 			foreach (var chargeResource in chargeResources.chargeResources)
 			{
 				switch (chargeResource.chargeSettings.damageScaling)
@@ -884,7 +886,7 @@ namespace ART
 					default: break;
 				}
 			}
-			Log.Message("New damage: " + damageAmount);
+			ARTLog.Message("New damage: " + damageAmount);
 		}
 
 		private static void DoFlatDamage(ref float __result, float resourceAmount, ChargeSettings chargeSettings)

@@ -49,6 +49,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ARTLog.cs" />
     <Compile Include="Comps\CompPawnClass.cs" />
     <Compile Include="Comps\CompResourceOnAction.cs" />
     <Compile Include="Comps\CompMaintainableResourceBuilding.cs" />
@@ -108,7 +109,6 @@
     <Compile Include="Hediffs\TendingProperties.cs" />
     <Compile Include="Hediffs\TendProperties.cs" />
     <Compile Include="Hediffs\TogglingProperties.cs" />
-    <Compile Include="ARTLog.cs" />
     <Compile Include="ART_DefOf.cs" />
     <Compile Include="ModExtensions\EquipmentExtension.cs" />
     <Compile Include="ModExtensions\RecipeOutcomes.cs" />

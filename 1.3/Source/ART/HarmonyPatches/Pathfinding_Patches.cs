@@ -105,7 +105,7 @@ namespace ART
             }
             if (!found)
             {
-                Log.Error("PathFinder.FindPath Transpiler failed. The code won't work.");
+                ARTLog.Error("PathFinder.FindPath Transpiler failed. The code won't work.");
             }
         }
 

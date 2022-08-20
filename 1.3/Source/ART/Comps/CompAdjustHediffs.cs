@@ -52,7 +52,7 @@ namespace ART
                         if (!resourceStorages.ContainsKey(i))
                         {
                             resourceStorages[i] = new ResourceStorage(Props.resourceSettings[i], this);
-                            Log.Message("Initializing storage for " + Props.resourceSettings[i].hediff);
+                            ARTLog.Message("Initializing storage for " + Props.resourceSettings[i].hediff);
                             if (Props.resourceSettings[i].initialResourceAmount != 0)
                             {
                                 resourceStorages[i].ResourceAmount = Props.resourceSettings[i].initialResourceAmount;
