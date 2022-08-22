@@ -15,7 +15,7 @@ using AbilityDef = VFECore.Abilities.AbilityDef;
 
 namespace ART
 {
-    public class HediffResource : HediffWithComps, IAdjustResource, IDrawable
+    public class HediffResource : Hediff_Ability, IAdjustResource, IDrawable
     {
         public new HediffResourceDef def => base.def as HediffResourceDef;
         private float resourceAmount;
@@ -627,7 +627,6 @@ namespace ART
                 }
             }
         }
-
         public override void Tick()
         {
             base.Tick();
@@ -644,7 +643,6 @@ namespace ART
             var hediffStageResource = this.CurStage as HediffStageResource;
             if (this.previousStageIndex != this.CurStageIndex)
             {
-                ARTLog.Message("Tick");
                 OnStageSwitch(hediffStageResource);
             }
 
@@ -1004,6 +1002,7 @@ namespace ART
                         var hediffsToHeal = healingProperties.hediffsToHeal > 0 ? hediffs.Take(healingProperties.hediffsToHeal).ToList() : hediffs;
                         Utils.HealHediffs(this.pawn, ref totalSpentPoints, hediffsToHeal, healingProperties.pointsOverflow,
                             healingProperties.healPriority, healingProperties.hediffsToHeal > 0, healingProperties.soundOnEffect);
+
                     }
                 }
             }

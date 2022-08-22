@@ -1066,9 +1066,8 @@ namespace ART
 			{
 				if (healAll)
 				{
-					pawn.health.RemoveHediff(hediff);
-
-					if (soundOnEffect != null)
+					hediff.Severity = 0;
+                    if (soundOnEffect != null)
 					{
 						soundOnEffect.PlayOneShot(new TargetInfo(pawn.Position, pawn.Map));
 					}
@@ -1078,11 +1077,6 @@ namespace ART
 					var toHealPoints = Mathf.Min(healPoints, hediff.Severity);
 					hediff.Severity -= toHealPoints;
 					healPoints -= toHealPoints;
-					if (hediff.Severity == 0)
-					{
-						pawn.health.RemoveHediff(hediff);
-					}
-
 					if (soundOnEffect != null)
 					{
 						soundOnEffect.PlayOneShot(new TargetInfo(pawn.Position, pawn.Map));
