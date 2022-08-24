@@ -501,13 +501,23 @@ namespace ART
                 {
                     return true;
                 }
-                if (this.def.keepWhenEmpty)
-                {
-                    return false;
-                }
                 if (SourceOnlyAmplifiers())
                 {
                     return true;
+                }
+                if (this.def.keepWhenEmpty)
+                {
+                    if (comps != null)
+                    {
+                        for (int i = 0; i < comps.Count; i++)
+                        {
+                            if (comps[i].CompShouldRemove)
+                            {
+                                return true;
+                            }
+                        }
+                    }
+                    return false;
                 }
                 var value = base.ShouldRemove;
                 if (value)
