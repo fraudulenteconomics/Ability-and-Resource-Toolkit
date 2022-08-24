@@ -1,8 +1,6 @@
-﻿using Verse;
-
-namespace ART
+﻿namespace ART
 {
-    public class HealingProperties
+    public class HealingProperties : GeneralProperties
     {
         public float healPoints;
         public int hediffsToHeal;
@@ -14,11 +12,8 @@ namespace ART
         public HealPriority healPriority;
         public bool affectMechanical;
         public bool affectOrganic = true;
-        public float effectRadius;
         public bool affectsAllies = true;
-        public bool affectsEnemies = false;
-        public int ticksPerEffect;
+        public bool affectsEnemies;
         public bool healOnApply;
-        public SoundDef soundOnEffect;
     }
 }

@@ -1,9 +1,11 @@
-﻿using RimWorld;
+﻿using HarmonyLib;
+using RimWorld;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 using Verse;
 
 namespace ART
@@ -14,17 +16,20 @@ namespace ART
         public int stackMax = -1;
         public HediffCompProperties_AdjustHediffsArea()
         {
-            this.compClass = typeof(CompAdjustHediffsArea);
+            this.compClass = typeof(HediffCompAdjustHediffsArea);
         }
     }
 
+    [HotSwappable]
     public class HediffCompAdjustHediffsArea : HediffComp_AdjustHediffs, IAdjustResouceInArea
     {
         public new HediffCompProperties_AdjustHediffsArea Props => this.props as HediffCompProperties_AdjustHediffsArea;
         public override void ResourceTick()
         {
+            Log.Message("ResourceTick 1");
             if (Active)
             {
+                Log.Message("ResourceTick 2");
                 foreach (var option in Props.resourceSettings)
                 {
                     var num = option.GetResourceGain(this);
@@ -65,10 +70,11 @@ namespace ART
         }
         public void AppendResource(Pawn pawn, ResourceProperties resourceProperties, float num)
         {
-            ARTLog.Message("AppendResource: " + pawn);
+            Log.Message("AppendResource 0");
             var hediffResource = pawn.health.hediffSet.GetFirstHediffOfDef(resourceProperties.hediff) as HediffResource;
             if (hediffResource != null && !hediffResource.CanGainResource)
             {
+                Log.Message("Fail 0");
                 return;
             }
             else
@@ -78,8 +84,9 @@ namespace ART
                     var amplifiers = hediffResource.GetAmplifiersFor(resourceProperties.hediff);
                     if (!this.Props.stackEffects)
                     {
-                        if (amplifiers.Count() > 0 && amplifiers.Any(x => x != this))
+                        if (amplifiers.Any(x => x != this))
                         {
+                            Log.Message("Fail 1: " + String.Join(", ", amplifiers.Cast<HediffCompAdjustHediffsArea>().Select(x => x.parent)));
                             return;
                         }
                     }
@@ -87,14 +94,17 @@ namespace ART
                     {
                         if (amplifiers.Count() >= this.Props.stackMax && !amplifiers.Contains(this))
                         {
+                            Log.Message("Fail 2");
                             return;
                         }
                     }
                 }
+
+                Log.Message(this.parent + " 0 is affecting " + pawn + " - " + resourceProperties.hediff);
                 hediffResource = Utils.AdjustResourceAmount(pawn, resourceProperties.hediff, num, resourceProperties.addHediffIfMissing, resourceProperties, resourceProperties.applyToPart);
                 if (hediffResource != null)
                 {
-                    ARTLog.Message(this.parent + " is affecting " + pawn + " - " + resourceProperties.hediff);
+                    Log.Message(this.parent + " 1 is affecting " + pawn + " - " + resourceProperties.hediff);
                     hediffResource.TryAddAmplifier(this);
                 }
             }
@@ -114,5 +124,7 @@ namespace ART
         {
             return this.Props.resourceSettings.FirstOrDefault(x => x.hediff == hediffResourceDef);
         }
+
+        
     }
 }

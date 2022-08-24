@@ -468,15 +468,27 @@ namespace ART
 
 		public static HediffResource AdjustResourceAmount(this Pawn pawn, HediffResourceDef hdDef, float sevOffset, bool addHediffIfMissing, ResourceProperties resourceProperties, BodyPartDef bodyPartDef, bool applyToDamagedPart = false)
 		{
-			HediffResource hediff = pawn.health.hediffSet.GetFirstHediffOfDef(hdDef) as HediffResource;
-			if (hediff != null)
-			{
-				if (sevOffset > 0 && hediff.def.restrictResourceCap && hediff.ResourceAmount >= hediff.ResourceCapacity)
+			HediffResource hediffResource = pawn.health.hediffSet.GetFirstHediffOfDef(hdDef) as HediffResource;
+			if (resourceProperties.fixedResourceAmount != -1)
+            {
+                if (hediffResource != null)
                 {
-					return hediff;
+                    sevOffset = resourceProperties.fixedResourceAmount - hediffResource.ResourceAmount;
                 }
-				hediff.ChangeResourceAmount(sevOffset, resourceProperties);
-				return hediff;
+                else
+                {
+                    sevOffset = resourceProperties.fixedResourceAmount;
+                }
+            }
+
+            if (hediffResource != null)
+			{
+				if (sevOffset > 0 && hediffResource.def.restrictResourceCap && hediffResource.ResourceAmount >= hediffResource.ResourceCapacity)
+                {
+					return hediffResource;
+                }
+				hediffResource.ChangeResourceAmount(sevOffset, resourceProperties);
+				return hediffResource;
 			}
 			else if (addHediffIfMissing && (sevOffset >= 0 || hdDef.keepWhenEmpty))
 			{
@@ -489,10 +501,10 @@ namespace ART
 						return null;
 					}
 				}
-				hediff = HediffMaker.MakeHediff(hdDef, pawn, bodyPartRecord) as HediffResource;
-				pawn.health.AddHediff(hediff);
-				hediff.ChangeResourceAmount(sevOffset, resourceProperties);
-				return hediff;
+				hediffResource = HediffMaker.MakeHediff(hdDef, pawn, bodyPartRecord) as HediffResource;
+				pawn.health.AddHediff(hediffResource);
+				hediffResource.ChangeResourceAmount(sevOffset, resourceProperties);
+				return hediffResource;
 			}
 			return null;
 		}

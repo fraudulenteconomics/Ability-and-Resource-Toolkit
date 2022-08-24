@@ -78,8 +78,10 @@
     <Compile Include="HarmonyPatches\Plant_Patches.cs" />
     <Compile Include="HarmonyPatches\Mining_Patches.cs" />
     <Compile Include="Hediffs\Command_SwitchHediffStageResource.cs" />
-    <Compile Include="Hediffs\DamageAuraProperties.cs" />
-    <Compile Include="Hediffs\HealingProperties.cs" />
+    <Compile Include="Hediffs\HediffResource_AbilityLink.cs" />
+    <Compile Include="Props\DamageAuraProperties.cs" />
+    <Compile Include="Props\GeneralProperties.cs" />
+    <Compile Include="Props\HealingProperties.cs" />
     <Compile Include="Hediffs\HealPriority.cs" />
     <Compile Include="Hediffs\HediffResouceDisable.cs" />
     <Compile Include="Hediffs\HediffStageResource.cs" />
@@ -96,19 +98,19 @@
     <Compile Include="HarmonyPatches\Repair_Patches.cs" />
     <Compile Include="HarmonyPatches\Tend_Patches.cs" />
     <Compile Include="Hediffs\EffectWhenDowned.cs" />
-    <Compile Include="Hediffs\IngestibleProperties.cs" />
-    <Compile Include="Hediffs\LifeStealProperties.cs" />
-    <Compile Include="Hediffs\NeedAdjustProperties.cs" />
+    <Compile Include="Props\IngestibleProperties.cs" />
+    <Compile Include="Props\LifeStealProperties.cs" />
+    <Compile Include="Props\NeedAdjustProperties.cs" />
     <Compile Include="Hediffs\NeedAdjustRecord.cs" />
-    <Compile Include="Hediffs\PlantSowingProperties.cs" />
-    <Compile Include="Hediffs\RefuelProperties.cs" />
-    <Compile Include="Hediffs\RepairProperties.cs" />
+    <Compile Include="Props\PlantSowingProperties.cs" />
+    <Compile Include="Props\RefuelProperties.cs" />
+    <Compile Include="Props\RepairProperties.cs" />
     <Compile Include="Hediffs\SavedSkillRecord.cs" />
     <Compile Include="Hediffs\SavedSkillRecordCollection.cs" />
-    <Compile Include="Hediffs\SkillAdjustProperties.cs" />
-    <Compile Include="Hediffs\TendingProperties.cs" />
-    <Compile Include="Hediffs\TendProperties.cs" />
-    <Compile Include="Hediffs\TogglingProperties.cs" />
+    <Compile Include="Props\SkillAdjustProperties.cs" />
+    <Compile Include="Props\TendingProperties.cs" />
+    <Compile Include="Props\TendProperties.cs" />
+    <Compile Include="Props\TogglingProperties.cs" />
     <Compile Include="ART_DefOf.cs" />
     <Compile Include="ModExtensions\EquipmentExtension.cs" />
     <Compile Include="ModExtensions\RecipeOutcomes.cs" />
@@ -123,7 +125,7 @@
     <Compile Include="Policies\HediffResourceSatisfyPolicy.cs" />
     <Compile Include="Hediffs\RequiredHediff.cs" />
     <Compile Include="Hediffs\ResourceAdjustPerDamage.cs" />
-    <Compile Include="Hediffs\ShieldProperties.cs" />
+    <Compile Include="Props\ShieldProperties.cs" />
     <Compile Include="Hediffs\VerbType.cs" />
     <Compile Include="Interfaces\IAdjustResouceInArea.cs" />
     <Compile Include="Interfaces\IResourceStorage.cs" />
@@ -154,7 +156,7 @@
     <Compile Include="ModExtensions\TraitsAdjustHediff.cs" />
     <Compile Include="ModExtensions\EffectOnImpact.cs" />
     <Compile Include="ModExtensions\StatWorkerExtender.cs" />
-    <Compile Include="Hediffs\ResourceProperties.cs" />
+    <Compile Include="Props\ResourceProperties.cs" />
     <Compile Include="UI\ITab_Pawn_Resource.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Recipes\Bill_ResourceWithUft.cs" />
@@ -191,5 +193,6 @@
   <ItemGroup>
     <Publicize Include="Assembly-CSharp" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

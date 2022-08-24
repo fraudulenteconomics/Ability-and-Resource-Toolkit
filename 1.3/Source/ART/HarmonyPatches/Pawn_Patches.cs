@@ -150,7 +150,6 @@ namespace ART
                 }
             }
         }
-
     }
 
     [HarmonyPatch(typeof(TraitSet), "GainTrait")]

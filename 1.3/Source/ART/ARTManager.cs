@@ -11,8 +11,8 @@ namespace ART
     public class ARTManager : GameComponent
     {
         public Dictionary<Pawn, HediffResourcePolicy> hediffResourcesPolicies = new Dictionary<Pawn, HediffResourcePolicy>();
-        private List<IAdjustResource> resourceAdjusters = new List<IAdjustResource>();
-        private List<IAdjustResource> resourceAdjustersToUpdate = new List<IAdjustResource>();
+        public List<IAdjustResource> resourceAdjusters = new List<IAdjustResource>();
+        public List<IAdjustResource> resourceAdjustersToUpdate = new List<IAdjustResource>();
         public Dictionary<Thing, StatBonuses> thingsWithBonuses = new Dictionary<Thing, StatBonuses>();
         public Dictionary<Projectile, FiredData> firedProjectiles = new Dictionary<Projectile, FiredData>();
         public Dictionary<Pawn, DownedStateData> pawnDownedStates = new Dictionary<Pawn, DownedStateData>();

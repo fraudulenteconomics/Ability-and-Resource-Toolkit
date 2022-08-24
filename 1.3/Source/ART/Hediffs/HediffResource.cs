@@ -83,6 +83,10 @@ namespace ART
         }
         public void ChangeResourceAmount(float offset, ResourceProperties source = null)
         {
+            if (this.def.isResource is false)
+            {
+                return;
+            }
             var hediffDefnameToCheck = "";// "FE_FuelPackHediff";
             var resourceCapacity = this.ResourceCapacity;
             var resourceFromStorages = this.ResourceFromStorages;
@@ -270,13 +274,16 @@ namespace ART
 
         public void UpdateResourceData()
         {
-            if (this.def.useAbsoluteSeverity)
+            if (this.def.isResource)
             {
-                this.Severity = ResourceAmount / ResourceCapacity;
-            }
-            else
-            {
-                this.Severity = ResourceAmount;
+                if (this.def.useAbsoluteSeverity)
+                {
+                    this.Severity = ResourceAmount / ResourceCapacity;
+                }
+                else
+                {
+                    this.Severity = ResourceAmount;
+                }
             }
         }
 
@@ -289,7 +296,6 @@ namespace ART
             set
             {
                 base.Severity = value;
-                //Log.Message("Setting " + this + " with value: " + value);
             }
         }
 
@@ -391,7 +397,7 @@ namespace ART
                     else
                     {
                         var comp = GetCompAmplifierFor(amplifier);
-                        if (comp != null && comp.InRadiusFor(this.pawn.Position, this.def))
+                        if (comp != null && comp.InRadiusFor(this.pawn.Position, this.def) && ARTManager.Instance.resourceAdjusters.Contains(comp))
                         {
                             yield return comp;
                         }
@@ -465,20 +471,25 @@ namespace ART
         {
             get
             {
-                var allCapacityAdjusters = "ART.NativeCapacity".Translate(this.def.maxResourceCapacity);
-                Utils.GetHediffResourceCapacityGainFor(this.pawn, def, out var sbExplanation);
-                var explanation = sbExplanation.ToString().TrimEndNewlines();
-                if (!explanation.NullOrEmpty())
+                var baseText = base.TipStringExtra;
+                if (this.def.isResource)
                 {
-                    allCapacityAdjusters += "\n" + explanation;
+                    var allCapacityAdjusters = "ART.NativeCapacity".Translate(this.def.maxResourceCapacity);
+                    Utils.GetHediffResourceCapacityGainFor(this.pawn, def, out var sbExplanation);
+                    var explanation = sbExplanation.ToString().TrimEndNewlines();
+                    if (!explanation.NullOrEmpty())
+                    {
+                        allCapacityAdjusters += "\n" + explanation;
+                    }
+                    GetHediffResourceCapacityGainFromAmplifiers(out sbExplanation);
+                    explanation = sbExplanation.ToString().TrimEndNewlines();
+                    if (!explanation.NullOrEmpty())
+                    {
+                        allCapacityAdjusters += "\n" + explanation;
+                    }
+                    return baseText + allCapacityAdjusters;
                 }
-                GetHediffResourceCapacityGainFromAmplifiers(out sbExplanation);
-                explanation = sbExplanation.ToString().TrimEndNewlines();
-                if (!explanation.NullOrEmpty())
-                {
-                    allCapacityAdjusters += "\n" + explanation;
-                }
-                return base.TipStringExtra + allCapacityAdjusters;
+                return baseText;
             }
         }
 
@@ -488,6 +499,7 @@ namespace ART
             {
                 if (this.def.lifetimeTicks != -1 && duration > this.def.lifetimeTicks)
                 {
+                    Log.Message(this + " - should remove 1");
                     return true;
                 }
                 if (this.def.keepWhenEmpty)
@@ -496,13 +508,16 @@ namespace ART
                 }
                 if (SourceOnlyAmplifiers())
                 {
+                    Log.Message(this + " - should remove 2");
                     return true;
                 }
                 var value = base.ShouldRemove;
                 if (value)
                 {
-                    ARTLog.Message("Removing: " + this + " this.ResourceAmount: " + this.ResourceAmount + " - this.Severity: " + this.Severity);
+                    Log.Message(this + " - should remove 3");
+                    Log.Message("Removing: " + this + " this.ResourceAmount: " + this.ResourceAmount + " - this.Severity: " + this.Severity);
                 }
+
                 return value;
             }
         }
@@ -899,6 +914,10 @@ namespace ART
 
         private bool CanDamage(Pawn pawn, DamageAuraProperties damagingProperties)
         {
+            if (!damagingProperties.CanApplyOn(pawn))
+            {
+                return false;
+            }
             if (!damagingProperties.affectsSelf && this.pawn == pawn)
             {
                 return false;
@@ -1007,9 +1026,12 @@ namespace ART
                 }
             }
         }
-
         private bool CanHeal(Pawn pawn, HealingProperties healingProperties)
         {
+            if (!healingProperties.CanApplyOn(pawn))
+            {
+                return false;
+            }
             if (pawn.health?.hediffSet?.hediffs is null)
             {
                 return false;
@@ -1032,6 +1054,7 @@ namespace ART
             {
                 return false;
             }
+
             return true;
         }
         private IEnumerable<Hediff> GetHediffsToHeal(Pawn pawn, HealingProperties healingProperties)

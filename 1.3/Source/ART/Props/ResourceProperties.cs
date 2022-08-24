@@ -28,6 +28,7 @@ namespace ART
         public int postUseDelay;
 
         public float resourcePerSecond;
+        public float fixedResourceAmount = -1;
         public bool canRefillStorage = false;
 
         public float adjustTargetResource;

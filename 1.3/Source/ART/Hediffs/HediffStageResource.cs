@@ -26,6 +26,7 @@ namespace ART
         public List<RefuelProperties> refuelProperties;
         public List<AdditionalDamage> additionalDamages;
         public bool preventDeath;
+        public bool preventDamage;
         public bool preventDowning;
         public IngestibleProperties ingestibleProperties;
         public PlantSowingProperties plantSowingProperties;

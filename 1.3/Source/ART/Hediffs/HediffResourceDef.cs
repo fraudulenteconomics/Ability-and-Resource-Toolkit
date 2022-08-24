@@ -19,6 +19,7 @@ namespace ART
 		public bool keepWhenEmpty;
 		public int lifetimeTicks = -1;
 		public bool hideResourceAmount;
+		public bool isResource = true;
 
 		public bool showResourceBar;
 		public Color? backgroundBarColor;

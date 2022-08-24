@@ -208,8 +208,16 @@ namespace ART
 
 	[HarmonyPatch(typeof(Thing), "TakeDamage")]
 	public static class Patch_TakeDamage
-	{
-		public static bool preventRecursion;
+    {
+        public static bool Prefix(Thing __instance, DamageInfo dinfo)
+        {
+            if (__instance is Pawn pawn && pawn.health.hediffSet.hediffs.Any(x => x.CurStage is HediffStageResource hediffStageResource && hediffStageResource.preventDamage))
+            {
+                return false;
+            }
+            return true;
+        }
+        public static bool preventRecursion;
 		public static void Postfix(Thing __instance, DamageInfo dinfo)
 		{
 			if (!preventRecursion && Impact_Patch.hitThingStatic != null && __instance == Impact_Patch.hitThingStatic && Impact_Patch.curProjectileStatic != null)
