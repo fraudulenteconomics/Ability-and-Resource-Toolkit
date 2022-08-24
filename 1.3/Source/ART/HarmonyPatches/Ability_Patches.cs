@@ -14,14 +14,14 @@ using VFECore.Abilities;
 
 namespace ART
 {
-
+    [HotSwappable]
     [HarmonyPatch(typeof(Ability), "IsEnabledForPawn")]
     public static class Patch_IsEnabledForPawn
     {
         private static void Postfix(ref bool __result, Ability __instance, ref string reason)
         {
             var extension = __instance.def.GetModExtension<AbilityResourceProps>();
-            if (extension != null)
+            if (extension != null && __result)
             {
                 var isUsable = Utils.IsUsableForProps(__instance.pawn, extension, out var reason2);
                 if (!isUsable)

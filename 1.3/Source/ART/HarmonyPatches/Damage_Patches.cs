@@ -209,10 +209,11 @@ namespace ART
 	[HarmonyPatch(typeof(Thing), "TakeDamage")]
 	public static class Patch_TakeDamage
     {
-        public static bool Prefix(Thing __instance, DamageInfo dinfo)
+        public static bool Prefix(ref DamageWorker.DamageResult __result, Thing __instance, DamageInfo dinfo)
         {
             if (__instance is Pawn pawn && pawn.health.hediffSet.hediffs.Any(x => x.CurStage is HediffStageResource hediffStageResource && hediffStageResource.preventDamage))
             {
+				__result = new DamageResult();
                 return false;
             }
             return true;

@@ -499,7 +499,6 @@ namespace ART
             {
                 if (this.def.lifetimeTicks != -1 && duration > this.def.lifetimeTicks)
                 {
-                    Log.Message(this + " - should remove 1");
                     return true;
                 }
                 if (this.def.keepWhenEmpty)
@@ -508,16 +507,13 @@ namespace ART
                 }
                 if (SourceOnlyAmplifiers())
                 {
-                    Log.Message(this + " - should remove 2");
                     return true;
                 }
                 var value = base.ShouldRemove;
                 if (value)
                 {
-                    Log.Message(this + " - should remove 3");
                     Log.Message("Removing: " + this + " this.ResourceAmount: " + this.ResourceAmount + " - this.Severity: " + this.Severity);
                 }
-
                 return value;
             }
         }

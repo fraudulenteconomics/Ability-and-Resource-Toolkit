@@ -651,7 +651,7 @@ namespace ART
 						{
 							if (resourceHediff != null)
 							{
-								var num = resourceHediff.ResourceAmount - option.resourcePerUse;
+								var num = resourceHediff.ResourceAmount - -option.resourcePerUse;
 								if (num < 0)
 								{
 									disableReason = option.disableReasonKey.Translate();
