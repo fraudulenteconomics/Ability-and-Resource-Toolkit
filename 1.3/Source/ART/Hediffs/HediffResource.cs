@@ -896,7 +896,8 @@ namespace ART
             {
                 if (CanDamage(victim, damagingProperties))
                 {
-                    victim.TakeDamage(new DamageInfo(damagingProperties.damageDef, damagingProperties.damageAmount, instigator: this.pawn, weapon: this.pawn.def));
+                    var damageInfo = new DamageInfo(damagingProperties.damageDef, damagingProperties.damageAmount, 1f, instigator: this.pawn, weapon: this.pawn.def);
+                    victim.TakeDamage(damageInfo);
                     if (victim.MapHeld != null)
                     {
                         if (damagingProperties.selfDamageMote != null && this.pawn == victim)
@@ -913,33 +914,51 @@ namespace ART
                             damagingProperties.soundOnEffect.PlayOneShot(new TargetInfo(victim.PositionHeld, victim.MapHeld));
                         }
                     }
-
                 }
             }
         }
 
+        public bool CanApplyOn(GeneralProperties properties, Thing thing)
+        {
+            if (thing.def.tradeTags.NullOrEmpty() is false)
+            {
+                if (properties.blacklistTradeTags.NullOrEmpty() is false && properties.blacklistTradeTags.Any(x => thing.def.tradeTags.Contains(x)))
+                {
+                    return false;
+                }
+                if (properties.whitelistTradeTags.NullOrEmpty() is false && !properties.whitelistTradeTags.Any(x => thing.def.tradeTags.Contains(x)))
+                {
+                    return false;
+                }
+            }
+            if (!properties.affectsSelf && this.pawn == thing)
+            {
+                return false;
+            }
+            if (!properties.affectsSelf && !properties.worksThroughWalls && !GenSight.LineOfSight(this.pawn.Position, thing.Position, this.pawn.Map))
+            {
+                return false;
+            }
+            return true;
+        }
+
         private bool CanDamage(Pawn pawn, DamageAuraProperties damagingProperties)
         {
-            if (!damagingProperties.CanApplyOn(pawn))
+            if (!CanApplyOn(damagingProperties, pawn))
             {
                 return false;
             }
-            if (!damagingProperties.affectsSelf && this.pawn == pawn)
+            if (!damagingProperties.affectsSelf)
             {
-                return false;
-            }
-            if (!damagingProperties.worksThroughWalls && !GenSight.LineOfSight(this.pawn.Position, pawn.Position, this.pawn.Map))
-            {
-                return false;
-            }
-            bool isAllyOrColonist = pawn.Faction != null && !pawn.HostileTo(this.pawn);
-            if (!damagingProperties.affectsAllies && isAllyOrColonist)
-            {
-                return false;
-            }
-            if (!damagingProperties.affectsEnemies && isAllyOrColonist == false)
-            {
-                return false;
+                bool isAllyOrColonist = pawn.Faction != null && !pawn.HostileTo(this.pawn);
+                if (!damagingProperties.affectsAllies && isAllyOrColonist)
+                {
+                    return false;
+                }
+                if (!damagingProperties.affectsEnemies && isAllyOrColonist == false)
+                {
+                    return false;
+                }
             }
             return true;
         }
@@ -1017,7 +1036,7 @@ namespace ART
         {
             lastHealingEffectTick = Find.TickManager.TicksGame;
             float totalSpentPoints = healingProperties.healPoints;
-            foreach (var pawn in Utils.GetPawnsAround(this.pawn, healingProperties.effectRadius))
+            foreach (var pawn in Utils.GetPawnsAround(this.pawn, healingProperties))
             {
                 if (CanHeal(pawn, healingProperties))
                 {
@@ -1027,14 +1046,14 @@ namespace ART
                         var hediffsToHeal = healingProperties.hediffsToHeal > 0 ? hediffs.Take(healingProperties.hediffsToHeal).ToList() : hediffs;
                         Utils.HealHediffs(this.pawn, ref totalSpentPoints, hediffsToHeal, healingProperties.pointsOverflow,
                             healingProperties.healPriority, healingProperties.hediffsToHeal > 0, healingProperties.soundOnEffect);
-
                     }
                 }
             }
         }
+
         private bool CanHeal(Pawn pawn, HealingProperties healingProperties)
         {
-            if (!healingProperties.CanApplyOn(pawn))
+            if (!CanApplyOn(healingProperties, pawn))
             {
                 return false;
             }
@@ -1051,18 +1070,21 @@ namespace ART
             {
                 return false;
             }
-            bool isAllyOrColonist = pawn.Faction != null && !pawn.HostileTo(this.pawn);
-            if (!healingProperties.affectsAllies && isAllyOrColonist)
+            if (!healingProperties.affectsSelf)
             {
-                return false;
+                bool isAllyOrColonist = pawn.Faction != null && !pawn.HostileTo(this.pawn);
+                if (!healingProperties.affectsAllies && isAllyOrColonist)
+                {
+                    return false;
+                }
+                if (!healingProperties.affectsEnemies && isAllyOrColonist == false)
+                {
+                    return false;
+                }
             }
-            if (!healingProperties.affectsEnemies && isAllyOrColonist == false)
-            {
-                return false;
-            }
-
             return true;
         }
+
         private IEnumerable<Hediff> GetHediffsToHeal(Pawn pawn, HealingProperties healingProperties)
         {
             foreach (var hediff in pawn.health.hediffSet.hediffs)

@@ -1046,24 +1046,36 @@ namespace ART
 			return false;
         }
 
-		public static IEnumerable<Pawn> GetPawnsAround(Pawn checker, float effectRadius)
+		public static IEnumerable<Pawn> GetPawnsAround(Pawn checker, GeneralProperties properties)
 		{
 			if (checker.MapHeld is null)
             {
 				yield break;
             }
-			if (effectRadius <= 0)
-			{
-				yield return checker;
-			}
 			else
 			{
-				foreach (var pawn in GenRadial.RadialDistinctThingsAround(checker.PositionHeld, checker.MapHeld, effectRadius, true).OfType<Pawn>())
+				if (properties.effectRadius > 0)
 				{
-					yield return pawn;
+					foreach (var pawn in GetPawnsAround(checker, properties.effectRadius))
+					{
+						yield return pawn;
+
+                    }
+                }
+				else if (properties.affectsSelf)
+				{
+					yield return checker;
 				}
 			}
 		}
+
+		public static IEnumerable<Pawn> GetPawnsAround(Pawn checker, float effectRadius)
+		{
+            foreach (var pawn in GenRadial.RadialDistinctThingsAround(checker.PositionHeld, checker.MapHeld, effectRadius, true).OfType<Pawn>())
+            {
+                yield return pawn;
+            }
+        }
 		public static void HealHediffs(Pawn pawn, ref float healPoints, List<Hediff> hediffsToHeal, bool pointsOverflow, HealPriority healPriority, bool healAll, SoundDef soundOnEffect)
 		{
 			if (healPriority == HealPriority.TendablesFirst)
