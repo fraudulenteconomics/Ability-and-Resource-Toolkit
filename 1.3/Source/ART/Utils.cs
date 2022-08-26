@@ -35,7 +35,7 @@ namespace ART
 		public static bool HasPawnClassComp(this Pawn pawn, out CompPawnClass comp)
 		{
 			comp = pawn.TryGetComp<CompPawnClass>();
-			return comp?.HasClass(out _) ?? false;
+			return comp != null;
         }
         public static IEnumerable<AbilityLearnState> GetAbilities(this Pawn pawn)
 		{
