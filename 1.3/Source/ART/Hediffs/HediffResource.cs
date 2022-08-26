@@ -896,7 +896,11 @@ namespace ART
             {
                 if (CanDamage(victim, damagingProperties))
                 {
-                    var damageInfo = new DamageInfo(damagingProperties.damageDef, damagingProperties.damageAmount, 1f, instigator: this.pawn, weapon: this.pawn.def);
+                    var damageDef = damagingProperties.damageFromEquippedWeapon 
+                        ? this.pawn.equipment.PrimaryEq.PrimaryVerb.GetDamageDef() 
+                        : damagingProperties.damageDef;
+                    var damageInfo = new DamageInfo(damageDef, damagingProperties.damageAmount, 1f, instigator: this.pawn, 
+                        weapon: damagingProperties.damageFromEquippedWeapon ? this.pawn.equipment.Primary.def : this.pawn.def);
                     victim.TakeDamage(damageInfo);
                     if (victim.MapHeld != null)
                     {
