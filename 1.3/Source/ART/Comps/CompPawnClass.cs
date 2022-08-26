@@ -87,7 +87,6 @@ namespace ART
                         }
                     }
                     abilityPoints += ClassTraitDef.abilityPointsPerLevel;
-                    previousXp += RequiredXPtoGain;
                     if (level == MaxLevel)
                     {
                         break;
@@ -102,6 +101,7 @@ namespace ART
 
         public void SetLevel(int newLevel)
         {
+            previousXp += RequiredXPtoGain;
             this.level = newLevel;
             var hediffResouce = HediffResource;
             if (hediffResouce != null)
@@ -116,6 +116,10 @@ namespace ART
             if (trait.addHediff != null)
                 pawn.health.AddHediff(trait.addHediff);
             learnedAbilities = new List<AbilityDef>();
+            while (trait.initialLevel > level)
+            {
+                GainXP(RequiredXPtoGain);
+            }
         }
 
         public bool Learned(AbilityDef abilityDef)
@@ -151,10 +155,6 @@ namespace ART
 
         public bool CanUnlockAbility(AbilityDef abilityDef)
         {
-            if (DebugSettings.godMode)
-            {
-                return true;
-            }
             var abilityTier = GetAbilityDataFrom(abilityDef).abilityTier;
             if (abilityTier.minimumLevel > level)
             {
@@ -260,6 +260,7 @@ namespace ART
 
     public class ClassTraitDef : TraitDef
     {
+        public int initialLevel;
         public int maxLevel;
         public int abilityPointsPerLevel;
         public float xpPerLevelRequirement;

@@ -191,6 +191,22 @@ namespace ART
                     {
                         yield return new Command_Action
                         {
+                            defaultLabel = "DEV: Gain 10 xp",
+                            action = delegate
+                            {
+                                comp.GainXP(10f);
+                            }
+                        };
+                        yield return new Command_Action
+                        {
+                            defaultLabel = "DEV: Gain 100 xp",
+                            action = delegate
+                            {
+                                comp.GainXP(100f);
+                            }
+                        };
+                        yield return new Command_Action
+                        {
                             defaultLabel = "DEV: Gain 1000 xp",
                             action = delegate
                             {

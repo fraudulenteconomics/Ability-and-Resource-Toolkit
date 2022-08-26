@@ -43,11 +43,14 @@ namespace ART
                 pos.y += 24;
                 Widgets.Label(new Rect(pos.x, pos.y, 180, 24), "ART.AbilityPointsAvailable".Translate(comp.abilityPoints));
                 pos.y += 24;
-                var nextLevelProgress = new Rect(pos.x, pos.y, 150, 24);
-                Widgets.Label(nextLevelProgress, "ART.Experience".Translate());
-                var nextLevelProgressBar = new Rect(nextLevelProgress.xMax, nextLevelProgress.y, 120, 24);
-                Widgets.FillableBar(nextLevelProgressBar, comp.GainedXPSinceLastLevel / comp.RequiredXPtoGain);
-                TooltipHandler.TipRegion(nextLevelProgressBar, "ART.CurrentXP".Translate(comp.GainedXPSinceLastLevel, comp.RequiredXPtoGain));
+                if (pawnClass.maxLevel > comp.level)
+                {
+                    var nextLevelProgress = new Rect(pos.x, pos.y, 150, 24);
+                    Widgets.Label(nextLevelProgress, "ART.Experience".Translate());
+                    var nextLevelProgressBar = new Rect(nextLevelProgress.xMax, nextLevelProgress.y, 120, 24);
+                    Widgets.FillableBar(nextLevelProgressBar, comp.GainedXPSinceLastLevel / comp.RequiredXPtoGain);
+                    TooltipHandler.TipRegion(nextLevelProgressBar, "ART.CurrentXP".Translate(comp.GainedXPSinceLastLevel, comp.RequiredXPtoGain));
+                }
                 pos.y += 75;
 
                 var abilities = pawn.GetAbilities();
