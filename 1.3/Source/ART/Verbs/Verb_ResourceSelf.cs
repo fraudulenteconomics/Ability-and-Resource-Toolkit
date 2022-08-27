@@ -45,7 +45,7 @@ namespace ART
                             Utils.AdjustResourceAmount(this.CasterPawn, resourceProperties.hediff, resourceProperties.resourcePerUse, 
                                 resourceProperties.addHediffIfMissing, resourceProperties, resourceProperties.applyToPart);
                         }
-                        if (resourceProperties.effectRadius != -1f)
+                        if (resourceProperties.effectRadius > 0)
                         {
                             foreach (var cell in Utils.GetAllCellsAround(resourceProperties, new TargetInfo(this.CasterPawn.Position, this.CasterPawn.Map), CellRect.SingleCell(this.CasterPawn.Position)))
                             {

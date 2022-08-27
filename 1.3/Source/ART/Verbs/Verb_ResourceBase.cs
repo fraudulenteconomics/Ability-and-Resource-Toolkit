@@ -53,7 +53,7 @@ namespace ART
                 {
                     if (resourceProperties.hediff != null)
                     {
-                        if (resourceProperties.effectRadius != -1f)
+                        if (resourceProperties.effectRadius > 0)
                         {
                             GenDraw.DrawFieldEdges((from x in Utils.GetAllCellsAround(resourceProperties, new TargetInfo(target.Cell, Find.CurrentMap), CellRect.SingleCell(target.Cell))
                                                     where x.InBounds(Find.CurrentMap)

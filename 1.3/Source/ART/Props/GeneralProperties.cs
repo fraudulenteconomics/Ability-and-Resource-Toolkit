@@ -6,7 +6,7 @@ namespace ART
     public class GeneralProperties
     {
         public int ticksPerEffect;
-        public float effectRadius;
+        public float effectRadius = -1f;
         public bool worksThroughWalls;
         public List<string> blacklistTradeTags;
         public List<string> whitelistTradeTags;

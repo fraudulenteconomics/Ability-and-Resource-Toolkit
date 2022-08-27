@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using UnityEngine;
 using Verse;
 using Verse.Sound;
@@ -116,7 +117,12 @@ namespace ART
             if (trait.addHediff != null)
                 pawn.health.AddHediff(trait.addHediff);
             learnedAbilities = new List<AbilityDef>();
-            while (trait.initialLevel > level)
+            UpgradeTo(trait.initialLevel);
+        }
+
+        public void UpgradeTo(int levelTarget)
+        {
+            while (levelTarget > level)
             {
                 GainXP(RequiredXPtoGain);
             }
@@ -261,6 +267,7 @@ namespace ART
     public class ClassTraitDef : TraitDef
     {
         public int initialLevel;
+        public SimpleCurve randomLevelAtPawnGeneration;
         public int maxLevel;
         public int abilityPointsPerLevel;
         public float xpPerLevelRequirement;

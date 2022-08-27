@@ -56,6 +56,17 @@ namespace ART
                 }
 			}
         }
+
+        public static AbilityDef GetLearnableAbility(this AbilityLearnState learnedState, AbilityData abilityData)
+        {
+            if (!learnedState.learned)
+            {
+                return learnedState.abilityDef;
+            }
+            return abilityData.abilityTree.abilityTiers.Last() != abilityData.abilityTier
+                ? abilityData.abilityTree.abilityTiers[abilityData.abilityTree.abilityTiers
+                .IndexOf(abilityData.abilityTier) + 1].abilityDef : null;
+        }
         public static void TryAssignNewSkillRelatedHediffs(SkillRecord skillRecord, Pawn pawn)
 		{
 			var options = skillRecord.def.GetModExtension<SkillHediffGrantOptions>();

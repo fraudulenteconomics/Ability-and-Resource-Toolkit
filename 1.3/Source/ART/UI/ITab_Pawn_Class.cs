@@ -86,7 +86,7 @@ namespace ART
                     {
                         var entry = row[i];
                         var abilityData = comp.GetAbilityDataFrom(entry.abilityDef);
-                        var nextAbility = GetNextAbility(entry, abilityData);
+                        var nextAbility = entry.GetLearnableAbility(abilityData);
                         var ability = entry.learned ? comp.GetLearnedAbility(entry.abilityDef) : null;
                         bool learnedAbility = ability != null;
                         var iconBox = new Rect(pos.x, pos.y, 100, 100);
@@ -126,17 +126,6 @@ namespace ART
             {
                 Log.Error("Exception: " + ex);
             }
-        }
-
-        private static AbilityDef GetNextAbility(AbilityLearnState learnedState, AbilityData abilityData)
-        {
-            if (!learnedState.learned)
-            {
-                return learnedState.abilityDef;
-            }
-            return abilityData.abilityTree.abilityTiers.Last() != abilityData.abilityTier
-                ? abilityData.abilityTree.abilityTiers[abilityData.abilityTree.abilityTiers
-                .IndexOf(abilityData.abilityTier) + 1].abilityDef : null;
         }
 
         private Vector2 scrollPosition;

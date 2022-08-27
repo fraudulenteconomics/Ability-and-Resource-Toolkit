@@ -161,7 +161,42 @@ namespace ART
 			{
 				var comp = ___pawn.GetComp<CompPawnClass>();
 				comp.Init(traitDef);
-			}
+				if (traitDef.randomLevelAtPawnGeneration != null && PawnGenerator.IsBeingGenerated(___pawn))
+				{
+					var point = traitDef.randomLevelAtPawnGeneration.RandomElementByWeight(x => x.y);
+					var randomLevel = (int)point.x;
+					if (randomLevel > comp.level)
+					{
+						comp.UpgradeTo(randomLevel);
+                    }
+                    while (true)
+					{
+                        var abilities = ___pawn.GetAbilities();
+						bool learned = false;
+                        foreach (var entry in abilities)
+                        {
+                            var abilityData = comp.GetAbilityDataFrom(entry.abilityDef);
+                            var nextAbility = entry.GetLearnableAbility(abilityData);
+                            var ability = entry.learned ? comp.GetLearnedAbility(entry.abilityDef) : null;
+                            bool learnedAbility = ability != null;
+                            bool fullyUnlocked = nextAbility is null && ability != null;
+                            var canLearnNextTier = fullyUnlocked ? false : comp.CanUnlockAbility(nextAbility);
+                            if (canLearnNextTier)
+                            {
+                                comp.LearnAbility(nextAbility);
+								learned = true;
+                                break;
+                            }
+                            else continue;
+                        }
+						if (!learned)
+						{
+							break;
+						}
+                    }
+
+                }
+            }
         }
     }
 

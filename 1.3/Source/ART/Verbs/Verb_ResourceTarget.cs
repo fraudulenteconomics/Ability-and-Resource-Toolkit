@@ -31,7 +31,7 @@ namespace ART
                             Utils.AdjustResourceAmount(target, resourceProperties.hediff, resourceProperties.resourcePerUse, resourceProperties.addHediffIfMissing, 
                                 resourceProperties, resourceProperties.applyToPart);
                         }
-                        if (resourceProperties.effectRadius != -1f)
+                        if (resourceProperties.effectRadius > 0)
                         {
                             foreach (var cell in Utils.GetAllCellsAround(resourceProperties, new TargetInfo(currentTarget.Cell, this.Caster.Map), CellRect.SingleCell(currentTarget.Cell)))
                             {

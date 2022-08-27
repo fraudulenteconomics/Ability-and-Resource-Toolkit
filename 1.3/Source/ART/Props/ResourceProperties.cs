@@ -8,7 +8,8 @@ using Verse;
 
 namespace ART
 {
-    public class ResourceProperties
+
+    public class ResourceProperties : GeneralProperties
     {
         public HediffResourceDef hediff;
         public float resourcePerUse;
@@ -18,9 +19,7 @@ namespace ART
         public bool addHediffIfMissing = false;
         public BodyPartDef applyToPart;
         public string disableReasonKey;
-        public float effectRadius = -1f;
 
-        public bool worksThroughWalls;
         public bool affectsAllies;
         public bool affectsEnemies;
 
@@ -50,9 +49,7 @@ namespace ART
         public float postDamageDelayMultiplier = 1f;
         public float postUseDelayMultiplier = 1f;
 
-        public bool addToCaster;
         public bool removeOutsideArea;
-
         public bool disallowEquipIfOverCapacity;
         public bool dropIfOverCapacity;
         public string overCapacityReasonKey;

@@ -36,7 +36,7 @@ namespace ART
                     {
                         foreach (var pawn in cell.GetThingList(this.Pawn.Map).OfType<Pawn>())
                         {
-                            if (pawn == this.Pawn && !option.addToCaster) continue;
+                            if (pawn == this.Pawn && !option.affectsSelf) continue;
 
                             if (option.affectsAllies && (pawn.Faction == this.Pawn.Faction || !pawn.Faction.HostileTo(this.Pawn.Faction)))
                             {
