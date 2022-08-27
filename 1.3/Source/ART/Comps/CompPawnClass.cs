@@ -72,7 +72,7 @@ namespace ART
                 while (xpPoints >= previousXp + RequiredXPtoGain)
                 {
                     SetLevel(level + 1);
-                    if (PawnUtility.ShouldSendNotificationAbout(pawn) && classTrait.sendMessageOnLevelUp)
+                    if (level > classTrait.initialLevel && PawnUtility.ShouldSendNotificationAbout(pawn) && classTrait.sendMessageOnLevelUp)
                     {
                         Messages.Message((classTrait.levelUpMessageKey ?? "ART.PawnLevelUp").Translate(pawn.Named("PAWN")), pawn, MessageTypeDefOf.PositiveEvent);
                         if (pawn.Spawned)
