@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 using Verse;
 using Verse.AI;
-using Verse.Sound;
 
 namespace ART
 {
@@ -45,15 +43,7 @@ namespace ART
 				{
 					var fuel = Fuel;
 					var hediff = Utils.HediffResourcesRefuelable(pawn, Fuel).FirstOrDefault();
-					float toRefuel = hediff.ResourceCapacity - hediff.ResourceAmount;
-					int countToRefuel = Mathf.Min(fuel.stackCount, Mathf.CeilToInt(toRefuel / hediff.def.refuelHediff.resourcePerThing));
-					var newThing = fuel.SplitOff(countToRefuel);
-					hediff.ChangeResourceAmount(countToRefuel * hediff.def.refuelHediff.resourcePerThing);
-					newThing.Destroy();
-					if (hediff.def.refuelHediff.refuelSound != null)
-					{
-						hediff.def.refuelHediff.refuelSound.PlayOneShot(pawn);
-					}
+					Utils.RefuelHediff(fuel, hediff);
 				},
 				defaultCompleteMode = ToilCompleteMode.Instant
 			};

@@ -10,14 +10,11 @@ namespace ART
     {
         public override float GetPriority(Pawn pawn)
         {
-            if (pawn.RaceProps.Humanlike && pawn.Faction == Faction.OfPlayerSilentFail)
+            if (pawn.RaceProps.Humanlike)
             {
-                if (ARTManager.Instance.hediffResourcesPolicies.ContainsKey(pawn))
+                if (pawn.health?.hediffSet.hediffs.OfType<HediffResource>().Any() ?? false)
                 {
-                    if (pawn.health?.hediffSet.hediffs.OfType<HediffResource>().Any() ?? false)
-                    {
-                        return 8f;
-                    }
+                    return 8f;
                 }
             }
             return 0f;
@@ -30,7 +27,8 @@ namespace ART
                 {
                     if (policy.satisfyPolicies.TryGetValue(hediffResource.def, out var satisfyPolicy))
                     {
-                        if (satisfyPolicy.seekingIsEnabled && (hediffResource.ResourceAmount / hediffResource.ResourceCapacity) < satisfyPolicy.resourceSeekingThreshold.max)
+                        if (satisfyPolicy.seekingIsEnabled && (hediffResource.ResourceAmount / hediffResource.ResourceCapacity)
+                            < satisfyPolicy.resourceSeekingThreshold.max)
                         {
                             var ingestibles = IngestiblesFor(pawn, hediffResource);
                             var ingestible = GenClosest.ClosestThing_Global_Reachable(pawn.Position, pawn.Map, ingestibles, PathEndMode.OnCell, TraverseParms.For(pawn));
@@ -40,6 +38,25 @@ namespace ART
                                 job.count = 1;
                                 return job;
                             }
+                        }
+                    }
+                }
+            }
+
+            foreach (var item in pawn.inventory.innerContainer.ToList())
+            {
+                foreach (var hediffResource in Utils.HediffResourcesRefuelable(pawn, item))
+                {
+                    if (hediffResource.def.refuelHediff.useFromInventory)
+                    {
+                        float pctFilled = hediffResource.ResourceAmount / hediffResource.ResourceCapacity;
+                        if (hediffResource.def.refuelHediff.useType == RefuelUseType.Over && pctFilled > hediffResource.def.refuelHediff.useThreshold)
+                        {
+                            Utils.RefuelHediff(item, hediffResource);
+                        }
+                        else if (hediffResource.def.refuelHediff.useType == RefuelUseType.Under && pctFilled < hediffResource.def.refuelHediff.useThreshold)
+                        {
+                            Utils.RefuelHediff(item, hediffResource);
                         }
                     }
                 }

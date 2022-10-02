@@ -59,7 +59,7 @@ namespace ART
                 return amount;
             }
         }
-        public float StoragesTotalCapacity
+        public float CapacityFromStorages
         {
             get
             {
@@ -84,7 +84,7 @@ namespace ART
                 return;
             }
             string hediffDefnameToCheck = "";// "FE_FuelPackHediff";
-            float resourceCapacity = ResourceCapacity;
+            float resourceCapacity = ResourceCapacityNoStorages;
             float resourceFromStorages = ResourceFromStorages;
             if (def.defName == hediffDefnameToCheck)
             {
@@ -298,7 +298,8 @@ namespace ART
         }
 
         public bool CanGainResource => Find.TickManager.TicksGame > delayTicks;
-        public float ResourceCapacity => def.maxResourceCapacity + Utils.GetHediffResourceCapacityGainFor(pawn, def, out _) + GetHediffResourceCapacityGainFromAmplifiers(out _);
+        public float ResourceCapacityNoStorages => def.maxResourceCapacity + Utils.GetHediffResourceCapacityGainFor(pawn, def, out _) + GetHediffResourceCapacityGainFromAmplifiers(out _);
+        public float ResourceCapacity => ResourceCapacityNoStorages + CapacityFromStorages;
 
         public CompAbilities compAbilities;
         private void PreInit()
@@ -437,10 +438,10 @@ namespace ART
                 string label = base.Label;
                 if (!def.hideResourceAmount)
                 {
-                    label += ": " + resourceAmount.ToStringDecimalIfSmall() + "/" + ResourceCapacity.ToStringDecimalIfSmall();
-                    if (StoragesTotalCapacity > 0)
+                    label += ": " + resourceAmount.ToStringDecimalIfSmall() + "/" + ResourceCapacityNoStorages.ToStringDecimalIfSmall();
+                    if (CapacityFromStorages > 0)
                     {
-                        label += " (" + ResourceFromStorages.ToStringDecimalIfSmall() + "/" + StoragesTotalCapacity.ToStringDecimalIfSmall() + " " + "ART.Stored".Translate() + ")";
+                        label += " (" + ResourceFromStorages.ToStringDecimalIfSmall() + "/" + CapacityFromStorages.ToStringDecimalIfSmall() + " " + "ART.Stored".Translate() + ")";
                     }
                 }
                 if (def.lifetimeTicks != -1)

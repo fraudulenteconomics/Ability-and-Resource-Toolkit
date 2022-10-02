@@ -97,7 +97,7 @@ namespace ART
 						{
 							foreach (var hediffResource in hediffResources)
 							{
-								hediffResource.SetResourceAmount(hediffResource.ResourceCapacity + hediffResource.StoragesTotalCapacity);
+								hediffResource.SetResourceAmount(hediffResource.ResourceCapacity);
 							}
 						}
 					}

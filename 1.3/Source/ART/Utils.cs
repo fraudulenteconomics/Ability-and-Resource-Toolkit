@@ -222,6 +222,19 @@ namespace ART
 			}
 		}
 
+		public static void RefuelHediff(Thing fuel, HediffResource hediff)
+		{
+			float toRefuel = hediff.ResourceCapacity - hediff.ResourceAmount;
+			int countToRefuel = Mathf.Min(fuel.stackCount, Mathf.CeilToInt(toRefuel / hediff.def.refuelHediff.resourcePerThing));
+			var newThing = fuel.SplitOff(countToRefuel);
+			hediff.ChangeResourceAmount(countToRefuel * hediff.def.refuelHediff.resourcePerThing);
+			newThing.Destroy();
+			if (hediff.def.refuelHediff.refuelSound != null)
+			{
+				hediff.def.refuelHediff.refuelSound.PlayOneShot(hediff.pawn);
+			}
+		}
+
 		public static bool IsHediffUser(this Pawn pawn)
 		{
 			return pawn.health.hediffSet.hediffs.Any(x => x is HediffResource);
@@ -481,7 +494,6 @@ namespace ART
 						if (hediff != null && resourceProperties.dropIfOverCapacity && hediff.ResourceCapacity < 0)
 						{
 							comp.Drop();
-							Log.Message(pawn + " is dropping " + comp);
 							if (!resourceProperties.overCapacityReasonKey.NullOrEmpty() && PawnUtility.ShouldSendNotificationAbout(pawn))
 							{
 								Messages.Message(resourceProperties.overCapacityReasonKey.Translate(pawn.Named("PAWN"), comp.Parent.Named("THING")), MessageTypeDefOf.CautionInput);

@@ -13,10 +13,11 @@ namespace ART
         {
             order = -100f;
             this.hediffResource = hediffResource;
-            resourceStorageCapacityCache = new FloatValueCache(hediffResource.StoragesTotalCapacity);
-            resourceCapacityCache = new FloatValueCache(hediffResource.ResourceCapacity);
-            resourceAmountCache = new FloatValueCache(hediffResource.ResourceAmountNoStorages);
+            resourceStorageCapacityCache = new FloatValueCache(hediffResource.CapacityFromStorages);
             resourceBatteryAmountCache = new FloatValueCache(hediffResource.ResourceFromStorages);
+
+            resourceCapacityCache = new FloatValueCache(hediffResource.ResourceCapacityNoStorages);
+            resourceAmountCache = new FloatValueCache(hediffResource.ResourceAmountNoStorages);
         }
         public override float GetWidth(float maxWidth)
         {
@@ -99,10 +100,10 @@ namespace ART
 
             if (Find.TickManager.TicksGame > resourceCapacityCache.updateTick + 30 || updateNow)
             {
-                resourceCapacityCache.Value = hediffResource.ResourceCapacity;
+                resourceCapacityCache.Value = hediffResource.ResourceCapacityNoStorages;
                 resourceAmountCache.Value = hediffResource.ResourceAmountNoStorages;
                 resourceBatteryAmountCache.Value = hediffResource.ResourceFromStorages;
-                resourceStorageCapacityCache.Value = hediffResource.StoragesTotalCapacity;
+                resourceStorageCapacityCache.Value = hediffResource.CapacityFromStorages;
                 updateNow = false;
             }
 
