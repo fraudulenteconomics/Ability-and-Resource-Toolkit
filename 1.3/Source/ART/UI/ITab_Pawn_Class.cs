@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Verse;
-using VFECore.Abilities;
-using AbilityDef = VFECore.Abilities.AbilityDef;
 
 namespace ART
 {
@@ -15,8 +13,8 @@ namespace ART
     {
         public ITab_Pawn_Class()
         {
-            this.size = new Vector2(500f, 470f);
-            this.labelKey = "ART.Class";
+            size = new Vector2(500f, 470f);
+            labelKey = "ART.Class";
         }
         public override void FillTab()
         {
@@ -27,12 +25,12 @@ namespace ART
                 var pawnClass = comp.ClassTraitDef;
                 var trait = comp.ClassTrait;
 
-                var rect = new Rect(0f, 0f, this.size.x, this.size.y);
+                var rect = new Rect(0f, 0f, size.x, size.y);
                 GUI.BeginGroup(rect);
                 Text.Font = GameFont.Small;
 
-                Rect innerMenu = new Rect(15f, 15f, rect.width - 30f, rect.height - 15f);
-                Vector2 pos = new Vector2(innerMenu.x, innerMenu.y);
+                var innerMenu = new Rect(15f, 15f, rect.width - 30f, rect.height - 15f);
+                var pos = new Vector2(innerMenu.x, innerMenu.y);
                 var classIconRect = new Rect(pos.x, pos.y, 90, 90);
                 GUI.DrawTexture(classIconRect, pawnClass.uiIcon);
 
@@ -76,13 +74,13 @@ namespace ART
                 }
 
                 var lowerRect = new Rect(innerMenu.x, pos.y, innerMenu.width, innerMenu.height - 70);
-                var totalRect = new Rect(lowerRect.x, lowerRect.y, lowerRect.width - 16, (list.Count * 42f));
+                var totalRect = new Rect(lowerRect.x, lowerRect.y, lowerRect.width - 16, list.Count * 42f);
                 Widgets.BeginScrollView(lowerRect, ref scrollPosition, totalRect);
 
                 foreach (var row in list)
                 {
                     pos.x = 75;
-                    for (var i = 0; i < row.Count; i++)
+                    for (int i = 0; i < row.Count; i++)
                     {
                         var entry = row[i];
                         var abilityData = comp.GetAbilityDataFrom(entry.abilityDef);
@@ -102,10 +100,10 @@ namespace ART
                         Text.Anchor = TextAnchor.UpperLeft;
                         TooltipHandler.TipRegion(iconBox, ability != null ? ability.GetDescriptionForPawn() : entry.abilityDef.description);
                         bool fullyUnlocked = nextAbility is null && ability != null;
-                        var canLearnNextTier = fullyUnlocked ? false : comp.CanUnlockAbility(nextAbility);
+                        bool canLearnNextTier = !fullyUnlocked && comp.CanUnlockAbility(nextAbility);
                         if ((pawn.HostFaction == Faction.OfPlayer || pawn.Faction == Faction.OfPlayer) && !fullyUnlocked)
                         {
-                            var iconSize = 50;
+                            int iconSize = 50;
                             var plusRect = new Rect(iconBox.xMax + (iconSize / 3f), iconBox.y + ((iconBox.height / 2f) - (iconSize / 2f)), iconSize, iconSize);
                             var plusSignTexture = ContentFinder<Texture2D>.Get("UI/Buttons/Plus");
                             if (canLearnNextTier && Widgets.ButtonImage(plusRect, plusSignTexture))
@@ -129,7 +127,7 @@ namespace ART
         }
 
         private Vector2 scrollPosition;
-        public override bool IsVisible => this.PawnToShowInfoAbout is Pawn pawn && pawn.HasPawnClassComp(out var comp) 
+        public override bool IsVisible => PawnToShowInfoAbout is Pawn pawn && pawn.HasPawnClassComp(out var comp)
             && comp.HasClass(out _);
         private Pawn PawnToShowInfoAbout
         {
@@ -143,7 +141,7 @@ namespace ART
                 }
                 else
                 {
-                    Corpse corpse = base.SelThing as Corpse;
+                    var corpse = base.SelThing as Corpse;
                     bool flag2 = corpse != null;
                     if (flag2)
                     {

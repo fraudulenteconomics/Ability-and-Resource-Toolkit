@@ -1,10 +1,4 @@
-﻿using RimWorld;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Verse;
+﻿using Verse;
 
 namespace ART
 {
@@ -12,7 +6,7 @@ namespace ART
     {
         public CompProperties_WeaponAdjustHediffs()
         {
-            this.compClass = typeof(CompWeaponAdjustHediffs);
+            compClass = typeof(CompWeaponAdjustHediffs);
         }
     }
     public class CompWeaponAdjustHediffs : CompAdjustHediffs
@@ -24,7 +18,7 @@ namespace ART
             {
                 if (compEquippable is null)
                 {
-                    compEquippable = this.parent.GetComp<CompEquippable>();
+                    compEquippable = parent.GetComp<CompEquippable>();
                 }
                 return compEquippable;
             }
@@ -47,17 +41,17 @@ namespace ART
             {
                 if (pawn.Map != null)
                 {
-                    pawn.equipment.TryDropEquipment(this.parent, out ThingWithComps result, pawn.Position);
+                    pawn.equipment.TryDropEquipment(parent, out _, pawn.Position);
                 }
                 else
                 {
-                    pawn.inventory.TryAddItemNotForSale(this.parent);
+                    pawn.inventory.TryAddItemNotForSale(parent);
                 }
             }
         }
         public override void PostDestroy(DestroyMode mode, Map previousMap)
         {
-            this.Notify_Removed();
+            Notify_Removed();
             base.PostDestroy(mode, previousMap);
         }
         public override void ResourceTick()

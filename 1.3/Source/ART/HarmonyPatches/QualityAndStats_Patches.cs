@@ -1,15 +1,9 @@
 ﻿using HarmonyLib;
-using MVCF.Utilities;
 using RimWorld;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
 using Verse;
-using Verse.AI;
 
 namespace ART
 {
@@ -29,15 +23,14 @@ namespace ART
         {
             if (billGiver is Thing workBench && CompThingInUse.things.TryGetValue(workBench, out var comp))
             {
-                Dictionary<StatDef, StatBonus> statValues = new Dictionary<StatDef, StatBonus>();
+                var statValues = new Dictionary<StatDef, StatBonus>();
                 foreach (var useProps in comp.Props.useProperties)
                 {
                     if (comp.UseIsEnabled(useProps))
                     {
                         if (useProps.resourceOnComplete != -1f)
                         {
-                            var hediffResource = worker.health.hediffSet.GetFirstHediffOfDef(useProps.hediff) as HediffResource;
-                            if (hediffResource != null && hediffResource.CanUse(useProps, out _))
+                            if (worker.health.hediffSet.GetFirstHediffOfDef(useProps.hediff) is HediffResource hediffResource && hediffResource.CanUse(useProps, out _))
                             {
                                 hediffResource.ChangeResourceAmount(useProps.resourceOnComplete);
                             }
@@ -56,8 +49,10 @@ namespace ART
                                 }
                                 else
                                 {
-                                    statValues[statModifier.stat] = new StatBonus(statModifier.stat);
-                                    statValues[statModifier.stat].statOffset = statModifier.value;
+                                    statValues[statModifier.stat] = new StatBonus(statModifier.stat)
+                                    {
+                                        statOffset = statModifier.value
+                                    };
                                 }
                             }
                         }
@@ -71,8 +66,10 @@ namespace ART
                                 }
                                 else
                                 {
-                                    statValues[statModifier.stat] = new StatBonus(statModifier.stat);
-                                    statValues[statModifier.stat].statFactor = statModifier.value;
+                                    statValues[statModifier.stat] = new StatBonus(statModifier.stat)
+                                    {
+                                        statFactor = statModifier.value
+                                    };
                                 }
                             }
                         }
@@ -81,14 +78,18 @@ namespace ART
                 if (statValues.Any())
                 {
                     var hediffResourceManager = ARTManager.Instance;
-                    var statBonuses = new StatBonuses();
-                    statBonuses.statBonuses = new Dictionary<StatDef, StatBonus>();
+                    var statBonuses = new StatBonuses
+                    {
+                        statBonuses = new Dictionary<StatDef, StatBonus>()
+                    };
                     foreach (var statValue in statValues)
                     {
-                        var statBonus = new StatBonus();
-                        statBonus.stat = statValue.Key;
-                        statBonus.statOffset = statValue.Value.statOffset;
-                        statBonus.statFactor = statValue.Value.statFactor;
+                        var statBonus = new StatBonus
+                        {
+                            stat = statValue.Key,
+                            statOffset = statValue.Value.statOffset,
+                            statFactor = statValue.Value.statFactor
+                        };
                         statBonuses.statBonuses[statValue.Key] = statBonus;
                     }
 
@@ -130,10 +131,9 @@ namespace ART
                     {
                         if (comp.UseIsEnabled(useProps) && useProps.increaseQuality != -1 && __result < useProps.increaseQualityCeiling)
                         {
-                            var hediffResource = pawn.health.hediffSet.GetFirstHediffOfDef(useProps.hediff) as HediffResource;
-                            if (hediffResource != null && hediffResource.CanUse(useProps, out _))
+                            if (pawn.health.hediffSet.GetFirstHediffOfDef(useProps.hediff) is HediffResource hediffResource && hediffResource.CanUse(useProps, out _))
                             {
-                                var result = (int)__result + (int)useProps.increaseQuality;
+                                int result = (int)__result + useProps.increaseQuality;
                                 if (result > (int)QualityCategory.Legendary)
                                 {
                                     result = (int)QualityCategory.Legendary;
@@ -154,13 +154,13 @@ namespace ART
                     {
                         if (hediff is HediffResource hediffResource && hediffResource.CurStage is HediffStageResource hediffStageResource && hediffStageResource.qualityAdjustProperties != null)
                         {
-                            var qualityBonus = (int)Math.Truncate(hediffStageResource.qualityAdjustProperties.qualityOffset);
-                            var decimalPart = hediffStageResource.qualityAdjustProperties.qualityOffset - qualityBonus;
+                            int qualityBonus = (int)Math.Truncate(hediffStageResource.qualityAdjustProperties.qualityOffset);
+                            float decimalPart = hediffStageResource.qualityAdjustProperties.qualityOffset - qualityBonus;
                             if (Rand.Chance(decimalPart))
                             {
                                 qualityBonus += 1;
                             }
-                            var result = (int)__result + (int)qualityBonus;
+                            int result = (int)__result + qualityBonus;
                             if (result > (int)QualityCategory.Legendary)
                             {
                                 result = (int)QualityCategory.Legendary;
@@ -182,7 +182,7 @@ namespace ART
         {
             if (ARTManager.Instance.thingsWithBonuses.TryGetValue(thing, out var statBonuses))
             {
-                if (statBonuses.statBonuses.TryGetValue(stat, out StatBonus statBonus))
+                if (statBonuses.statBonuses.TryGetValue(stat, out var statBonus))
                 {
                     __result += statBonus.statOffset;
                     __result *= statBonus.statFactor;
@@ -191,7 +191,7 @@ namespace ART
             if (CompThingInUse.things.TryGetValue(thing, out var comp) && comp.InUse(out var claimants))
             {
                 IEnumerable<Pawn> users = null;
-                Dictionary<Pawn, Dictionary<UseProps, HediffResource>> checkedPawnsResources = new Dictionary<Pawn, Dictionary<UseProps, HediffResource>>();
+                var checkedPawnsResources = new Dictionary<Pawn, Dictionary<UseProps, HediffResource>>();
                 foreach (var useProps in comp.Props.useProperties)
                 {
                     if (!comp.UseIsEnabled(useProps))

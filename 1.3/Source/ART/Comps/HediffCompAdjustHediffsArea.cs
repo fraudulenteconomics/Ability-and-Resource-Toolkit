@@ -1,11 +1,5 @@
-﻿using HarmonyLib;
-using RimWorld;
-using System;
-using System.Collections.Generic;
+﻿using RimWorld;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
 using Verse;
 
 namespace ART
@@ -16,33 +10,36 @@ namespace ART
         public int stackMax = -1;
         public HediffCompProperties_AdjustHediffsArea()
         {
-            this.compClass = typeof(HediffCompAdjustHediffsArea);
+            compClass = typeof(HediffCompAdjustHediffsArea);
         }
     }
 
     [HotSwappable]
     public class HediffCompAdjustHediffsArea : HediffComp_AdjustHediffs, IAdjustResouceInArea
     {
-        public new HediffCompProperties_AdjustHediffsArea Props => this.props as HediffCompProperties_AdjustHediffsArea;
+        public new HediffCompProperties_AdjustHediffsArea Props => props as HediffCompProperties_AdjustHediffsArea;
         public override void ResourceTick()
         {
             if (Active)
             {
                 foreach (var option in Props.resourceSettings)
                 {
-                    var num = option.GetResourceGain(this);
-                    var affectedCells = Utils.GetAllCellsAround(option, this.Pawn, this.Pawn.OccupiedRect());
+                    float num = option.GetResourceGain(this);
+                    var affectedCells = Utils.GetAllCellsAround(option, Pawn, Pawn.OccupiedRect());
                     foreach (var cell in affectedCells)
                     {
-                        foreach (var pawn in cell.GetThingList(this.Pawn.Map).OfType<Pawn>())
+                        foreach (var pawn in cell.GetThingList(Pawn.Map).OfType<Pawn>())
                         {
-                            if (pawn == this.Pawn && !option.affectsSelf) continue;
+                            if (pawn == Pawn && !option.affectsSelf)
+                            {
+                                continue;
+                            }
 
-                            if (option.affectsAllies && (pawn.Faction == this.Pawn.Faction || !pawn.Faction.HostileTo(this.Pawn.Faction)))
+                            if (option.affectsAllies && (pawn.Faction == Pawn.Faction || !pawn.Faction.HostileTo(Pawn.Faction)))
                             {
                                 AppendResource(pawn, option, num);
                             }
-                            else if (option.affectsEnemies && pawn.Faction.HostileTo(this.Pawn.Faction))
+                            else if (option.affectsEnemies && pawn.Faction.HostileTo(Pawn.Faction))
                             {
                                 AppendResource(pawn, option, num);
                             }
@@ -52,14 +49,14 @@ namespace ART
             }
         }
 
-        public bool Active => this.Pawn.Map != null;
+        public bool Active => Pawn.Map != null;
 
         public bool InRadiusFor(IntVec3 cell, HediffResourceDef hediffResourceDef)
         {
             if (Active)
             {
                 var option = GetFirstResourcePropertiesFor(hediffResourceDef);
-                if (option != null && cell.DistanceTo(this.Pawn.Position) <= option.effectRadius)
+                if (option != null && cell.DistanceTo(Pawn.Position) <= option.effectRadius)
                 {
                     return true;
                 }
@@ -78,16 +75,16 @@ namespace ART
                 if (hediffResource != null)
                 {
                     var amplifiers = hediffResource.GetAmplifiersFor(resourceProperties.hediff);
-                    if (!this.Props.stackEffects)
+                    if (!Props.stackEffects)
                     {
                         if (amplifiers.Any(x => x != this))
                         {
                             return;
                         }
                     }
-                    if (this.Props.stackMax != -1)
+                    if (Props.stackMax != -1)
                     {
-                        if (amplifiers.Count() >= this.Props.stackMax && !amplifiers.Contains(this))
+                        if (amplifiers.Count() >= Props.stackMax && !amplifiers.Contains(this))
                         {
                             return;
                         }
@@ -111,12 +108,12 @@ namespace ART
             }
             return 0f;
         }
-        
+
         public ResourceProperties GetFirstResourcePropertiesFor(HediffResourceDef hediffResourceDef)
         {
-            return this.Props.resourceSettings.FirstOrDefault(x => x.hediff == hediffResourceDef);
+            return Props.resourceSettings.FirstOrDefault(x => x.hediff == hediffResourceDef);
         }
 
-        
+
     }
 }

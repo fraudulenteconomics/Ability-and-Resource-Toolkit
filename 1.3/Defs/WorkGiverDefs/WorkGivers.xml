@@ -15,11 +15,4 @@
     <nonColonistsCanDo>true</nonColonistsCanDo>
   </WorkGiverDef>
   
-  <JobDef>
-    <defName>ART_Maintain</defName>
-    <driverClass>ART.JobDriver_MaintainResourceBuilding</driverClass>
-    <reportString>maintaining TargetA.</reportString>
-    <casualInterruptible>false</casualInterruptible>
-    <allowOpportunisticPrefix>true</allowOpportunisticPrefix>
-  </JobDef>
 </Defs>

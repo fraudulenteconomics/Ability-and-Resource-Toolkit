@@ -1,13 +1,7 @@
 ﻿using RimWorld;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
-using UnityEngine;
 using Verse;
-using Verse.AI;
 
 namespace ART
 {
@@ -21,7 +15,7 @@ namespace ART
         {
 
         }
-        public RecipeResourceIngredients Extension => this.recipe.GetModExtension<RecipeResourceIngredients>();
+        public RecipeResourceIngredients Extension => recipe.GetModExtension<RecipeResourceIngredients>();
         public Dictionary<HediffResourceDef, float> consumedResources = new Dictionary<HediffResourceDef, float>();
         public override bool PawnAllowedToStartAnew(Pawn p)
         {
@@ -37,8 +31,7 @@ namespace ART
         {
             foreach (var resourceCost in extension.recourseCostList)
             {
-                var hediff = p.health.hediffSet.GetFirstHediffOfDef(resourceCost.resource) as HediffResource;
-                if (hediff is null || resourceCost.cost > 0 && hediff.ResourceAmount < resourceCost.cost)
+                if (!(p.health.hediffSet.GetFirstHediffOfDef(resourceCost.resource) is HediffResource hediff) || (resourceCost.cost > 0 && hediff.ResourceAmount < resourceCost.cost))
                 {
                     return false;
                 }

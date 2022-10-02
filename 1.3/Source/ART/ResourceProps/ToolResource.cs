@@ -1,9 +1,4 @@
-﻿using RimWorld;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Verse;
 
 namespace ART
@@ -11,9 +6,9 @@ namespace ART
     public class ToolResource : Tool, IResourceProps
     {
         public List<ResourceProperties> resourceSettings;
-    
+
         public List<ResourceProperties> targetResourceSettings;
-    
+
         public List<ChargeSettings> chargeSettings;
         public List<ResourceProperties> ResourceSettings => resourceSettings;
         public List<ResourceProperties> TargetResourceSettings => targetResourceSettings;

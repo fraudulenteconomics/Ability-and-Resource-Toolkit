@@ -3,24 +3,21 @@
 namespace ART
 {
     public class FloatValueCache
-	{
-		public FloatValueCache(float value)
-		{
-			this.value = value;
-		}
-		private float value;
-		public float Value
+    {
+        public FloatValueCache(float value)
         {
-			get
+            this.value = value;
+        }
+        private float value;
+        public float Value
+        {
+            get => value;
+            set
             {
-				return value;
-			}
-			set
-            {
-				this.value = value;
-				updateTick = Find.TickManager.TicksGame;
+                this.value = value;
+                updateTick = Find.TickManager.TicksGame;
             }
         }
-		public int updateTick;
-	}
+        public int updateTick;
+    }
 }

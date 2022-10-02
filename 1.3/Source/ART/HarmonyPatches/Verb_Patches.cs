@@ -1,17 +1,8 @@
 ﻿using HarmonyLib;
-using MVCF.Utilities;
 using RimWorld;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.NetworkInformation;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
 using Verse;
-using Verse.AI;
-using static UnityEngine.GraphicsBuffer;
 
 namespace ART
 {
@@ -23,7 +14,7 @@ namespace ART
         {
             if (__result)
             {
-                __result = Utils.IsUsableBy(__instance, out string disableReason);
+                __result = Utils.IsUsableBy(__instance, out _);
             }
         }
     }
@@ -35,7 +26,7 @@ namespace ART
         {
             if (__result)
             {
-                __result = Utils.IsUsableBy(__instance, out string disableReason);
+                __result = Utils.IsUsableBy(__instance, out _);
             }
         }
     }
@@ -53,9 +44,11 @@ namespace ART
                     var hediffResource = __instance.CasterPawn.health.hediffSet.GetFirstHediffOfDef(chargeSettings.hediffResource) as HediffResource;
                     foreach (var damageInfo in list)
                     {
-                        var chargeResources = new ChargeResources();
-                        chargeResources.chargeResources = new List<ChargeResource> { new ChargeResource(hediffResource.ResourceAmount, chargeSettings) };
-                        var amount = damageInfo.Amount;
+                        var chargeResources = new ChargeResources
+                        {
+                            chargeResources = new List<ChargeResource> { new ChargeResource(hediffResource.ResourceAmount, chargeSettings) }
+                        };
+                        float amount = damageInfo.Amount;
                         Utils.ApplyChargeResource(ref amount, chargeResources);
                         if (amount != damageInfo.Amount)
                         {
@@ -112,7 +105,7 @@ namespace ART
                             {
                                 if (additionalDamage.damageRange)
                                 {
-                                    var damageAmount = additionalDamage.amount.RandomInRange;
+                                    float damageAmount = additionalDamage.amount.RandomInRange;
                                     var damage = new DamageInfo(additionalDamage.damage, damageAmount, instigator: dinfoSource.Instigator, hitPart: dinfoSource.HitPart, weapon: dinfoSource.Weapon);
                                     ARTLog.Message("Damaging " + target.Thing + " with " + damage);
                                     target.Thing.TakeDamage(damage);

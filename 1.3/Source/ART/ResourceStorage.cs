@@ -1,10 +1,4 @@
-﻿using RimWorld;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
+﻿using System;
 using Verse;
 
 namespace ART
@@ -29,10 +23,7 @@ namespace ART
         }
         public float ResourceAmount
         {
-            get
-            {
-                return resourceAmount;
-            }
+            get => resourceAmount;
             set
             {
                 resourceAmount = value;
@@ -48,13 +39,8 @@ namespace ART
                 parent.GetResourceFor(resourceProperties)?.UpdateResourceData();
             }
         }
-        public float ResourceCapacity
-        {
-            get
-            {
-                return this.resourceProperties.maxResourceStorageAmount;
-            }
-        }
+
+        public float ResourceCapacity => resourceProperties.maxResourceStorageAmount;
 
         public bool CanGainCapacity(float newCapacity)
         {
@@ -108,8 +94,7 @@ namespace ART
 
         public int CompareTo(object obj)
         {
-            var other = obj as ResourceStorage;
-            if (other != null)
+            if (obj is ResourceStorage other)
             {
                 return CompareTo(other);
             }

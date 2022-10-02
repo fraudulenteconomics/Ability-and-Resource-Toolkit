@@ -1,15 +1,9 @@
 ﻿using HarmonyLib;
-using MVCF.Utilities;
 using RimWorld;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 using Verse;
-using Verse.AI;
 
 namespace ART
 {
@@ -19,12 +13,12 @@ namespace ART
     {
         public static void Postfix(Vector3 clickPos, Pawn pawn, ref List<FloatMenuOption> opts)
         {
-            IntVec3 c = IntVec3.FromVector3(clickPos);
-            List<Thing> thingList = c.GetThingList(pawn.Map);
+            var c = IntVec3.FromVector3(clickPos);
+            var thingList = c.GetThingList(pawn.Map);
             foreach (var apparel in thingList.OfType<Apparel>())
             {
-                TaggedString toCheck = "ForceWear".Translate(apparel.LabelCap, apparel);
-                FloatMenuOption floatMenuOption = opts.FirstOrDefault((FloatMenuOption x) => x.Label.Contains
+                var toCheck = "ForceWear".Translate(apparel.LabelCap, apparel);
+                var floatMenuOption = opts.FirstOrDefault((FloatMenuOption x) => x.Label.Contains
                 (toCheck));
                 if (floatMenuOption != null && !Utils.CanWear(pawn, apparel, out string reason))
                 {
@@ -33,7 +27,7 @@ namespace ART
                     opts.Add(newOption);
                 }
             }
-    
+
             if (pawn.equipment != null)
             {
                 for (int i = 0; i < thingList.Count; i++)
@@ -41,8 +35,8 @@ namespace ART
                     if (thingList[i].TryGetComp<CompEquippable>() != null)
                     {
                         var equipment = (ThingWithComps)thingList[i];
-                        TaggedString toCheck = "Equip".Translate(equipment.LabelShort);
-                        FloatMenuOption floatMenuOption = opts.FirstOrDefault((FloatMenuOption x) => x.Label.Contains
+                        var toCheck = "Equip".Translate(equipment.LabelShort);
+                        var floatMenuOption = opts.FirstOrDefault((FloatMenuOption x) => x.Label.Contains
                         (toCheck));
                         if (floatMenuOption != null && !Utils.CanEquip(pawn, equipment, out string reason))
                         {
@@ -53,14 +47,14 @@ namespace ART
                     }
                 }
             }
-    
+
             for (int i = 0; i < thingList.Count; i++)
             {
                 var t = thingList[i];
                 if (t.def.ingestible != null && pawn.RaceProps.CanEverEat(t) && t.IngestibleNow)
                 {
                     string text = (!t.def.ingestible.ingestCommandString.NullOrEmpty()) ? string.Format(t.def.ingestible.ingestCommandString, t.LabelShort) : ((string)"ConsumeThing".Translate(t.LabelShort, t));
-                    FloatMenuOption floatMenuOption = opts.FirstOrDefault((FloatMenuOption x) => x.Label.Contains(text));
+                    var floatMenuOption = opts.FirstOrDefault((FloatMenuOption x) => x.Label.Contains(text));
                     if (floatMenuOption != null && !Utils.CanDrink(pawn, t, out string reason, out bool preventFromUsage))
                     {
                         floatMenuOption.Label += ": " + reason;
@@ -69,6 +63,14 @@ namespace ART
                             floatMenuOption.action = null;
                         }
                     }
+                }
+
+                foreach (var hediffResource in Utils.HediffResourcesRefuelable(pawn, t))
+                {
+                    opts.Add(new FloatMenuOption("ART.Refuel".Translate(hediffResource.def.label, t.def.label), delegate
+                    {
+                        pawn.jobs.TryTakeOrderedJob(JobMaker.MakeJob(ART_DefOf.ART_RefuelResource, t));
+                    }));
                 }
             }
         }
@@ -79,14 +81,14 @@ namespace ART
     {
         public static void Postfix(Vector3 clickPos, Pawn pawn, List<FloatMenuOption> opts, bool drafted)
         {
-            IntVec3 c = IntVec3.FromVector3(clickPos);
-            List<Thing> thingList = c.GetThingList(pawn.Map);
+            var c = IntVec3.FromVector3(clickPos);
+            var thingList = c.GetThingList(pawn.Map);
             for (int i = 0; i < thingList.Count; i++)
             {
                 var t = thingList[i];
                 if (!pawn.CanUseIt(t, out string cannotUseMessage))
                 {
-                    FloatMenuOption floatMenuOption = opts.FirstOrDefault((FloatMenuOption x) => x.Label.ToLower().Contains(t.Label.ToLower()));
+                    var floatMenuOption = opts.FirstOrDefault((FloatMenuOption x) => x.Label.ToLower().Contains(t.Label.ToLower()));
                     if (floatMenuOption?.action != null)
                     {
                         floatMenuOption.action = null;

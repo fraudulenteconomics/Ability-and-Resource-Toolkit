@@ -1,40 +1,35 @@
 ﻿using HarmonyLib;
-using MVCF.Utilities;
 using RimWorld;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Reflection.Emit;
 using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
 using Verse;
 using Verse.AI;
 using Verse.Sound;
 
 namespace ART
 {
-	[HarmonyPatch(typeof(BillUtility), "MakeNewBill")]
-	public static class Patch_MakeNewBill
-	{ 
-		public static bool Prefix(ref Bill __result, RecipeDef recipe, Precept_ThingStyle precept = null)
+    [HarmonyPatch(typeof(BillUtility), "MakeNewBill")]
+    public static class Patch_MakeNewBill
+    {
+        public static bool Prefix(ref Bill __result, RecipeDef recipe, Precept_ThingStyle precept = null)
         {
-			if (recipe.HasModExtension<RecipeResourceIngredients>())
+            if (recipe.HasModExtension<RecipeResourceIngredients>())
             {
-				if (recipe.UsesUnfinishedThing)
-				{
-					__result = new Bill_ResourceWithUft(recipe, precept);
-				}
-				else
+                if (recipe.UsesUnfinishedThing)
                 {
-					__result = new Bill_Resource(recipe, precept);
-				}
-				return false;
-			}
-			return true;
+                    __result = new Bill_ResourceWithUft(recipe, precept);
+                }
+                else
+                {
+                    __result = new Bill_Resource(recipe, precept);
+                }
+                return false;
+            }
+            return true;
         }
-	}
+    }
 
     [HarmonyPatch(typeof(HealthCardUtility), "CreateSurgeryBill")]
     public static class Patch_CreateSurgeryBill
@@ -50,14 +45,14 @@ namespace ART
         }
         private static void CreateSurgeryBill(Pawn medPawn, RecipeDef recipe, BodyPartRecord part)
         {
-            Bill_ResourceMedical bill_Medical = new Bill_ResourceMedical(recipe);
+            var bill_Medical = new Bill_ResourceMedical(recipe);
             medPawn.BillStack.AddBill(bill_Medical);
             bill_Medical.Part = part;
             if (recipe.conceptLearned != null)
             {
                 PlayerKnowledgeDatabase.KnowledgeDemonstrated(recipe.conceptLearned, KnowledgeAmount.Total);
             }
-            Map map = medPawn.Map;
+            var map = medPawn.Map;
             if (!map.mapPawns.FreeColonists.Any((Pawn col) => recipe.PawnSatisfiesSkillRequirements(col)))
             {
                 Bill.CreateNoPawnsWithSkillDialog(recipe);
@@ -80,7 +75,7 @@ namespace ART
             {
                 Messages.Message("MessageMedicalOperationWillAngerFaction".Translate(medPawn.HomeFaction), medPawn, MessageTypeDefOf.CautionInput, historical: false);
             }
-            ThingDef minRequiredMedicine = GetMinRequiredMedicine(recipe);
+            var minRequiredMedicine = GetMinRequiredMedicine(recipe);
             if (minRequiredMedicine != null && medPawn.playerSettings != null && !medPawn.playerSettings.medCare.AllowsMedicine(minRequiredMedicine))
             {
                 Messages.Message("MessageTooLowMedCare".Translate(minRequiredMedicine.label, medPawn.LabelShort, medPawn.playerSettings.medCare.GetLabel(), medPawn.Named("PAWN")), medPawn, MessageTypeDefOf.CautionInput, historical: false);
@@ -92,7 +87,7 @@ namespace ART
         private static ThingDef GetMinRequiredMedicine(RecipeDef recipe)
         {
             tmpMedicineBestToWorst.Clear();
-            List<ThingDef> allDefsListForReading = DefDatabase<ThingDef>.AllDefsListForReading;
+            var allDefsListForReading = DefDatabase<ThingDef>.AllDefsListForReading;
             for (int i = 0; i < allDefsListForReading.Count; i++)
             {
                 if (allDefsListForReading[i].IsMedicine)
@@ -123,63 +118,63 @@ namespace ART
     }
 
     [HarmonyPatch(typeof(Dialog_BillConfig), "DoWindowContents")]
-	public static class Patch_DoWindowContents
-	{
-		[HarmonyPriority(int.MaxValue)]
-		public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
+    public static class Patch_DoWindowContents
+    {
+        [HarmonyPriority(int.MaxValue)]
+        public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
         {
-			var codes = instructions.ToList();
+            var codes = instructions.ToList();
 
-			for (var i = 0; i < codes.Count; i++)
+            for (int i = 0; i < codes.Count; i++)
             {
-				if (i > 2 && codes[i - 1].opcode == OpCodes.Blt_S && codes[i - 2].Calls(AccessTools.Method(typeof(List<IngredientCount>), "get_Count")) 
-					&& codes[i].opcode == OpCodes.Ldloc_S && codes[i].operand is LocalBuilder lb && lb.LocalIndex >= 34)
-				{
-					yield return new CodeInstruction(OpCodes.Ldloc_S, lb.LocalIndex);
-					yield return new CodeInstruction(OpCodes.Ldarg_0);
-					yield return new CodeInstruction(OpCodes.Ldfld, AccessTools.Field(typeof(Dialog_BillConfig), "bill"));
-					yield return new CodeInstruction(OpCodes.Ldfld, AccessTools.Field(typeof(Bill), "recipe"));
-					yield return new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(Patch_DoWindowContents), "AppendLine"));
+                if (i > 2 && codes[i - 1].opcode == OpCodes.Blt_S && codes[i - 2].Calls(AccessTools.Method(typeof(List<IngredientCount>), "get_Count"))
+                    && codes[i].opcode == OpCodes.Ldloc_S && codes[i].operand is LocalBuilder lb && lb.LocalIndex >= 34)
+                {
+                    yield return new CodeInstruction(OpCodes.Ldloc_S, lb.LocalIndex);
+                    yield return new CodeInstruction(OpCodes.Ldarg_0);
+                    yield return new CodeInstruction(OpCodes.Ldfld, AccessTools.Field(typeof(Dialog_BillConfig), "bill"));
+                    yield return new CodeInstruction(OpCodes.Ldfld, AccessTools.Field(typeof(Bill), "recipe"));
+                    yield return new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(Patch_DoWindowContents), "AppendLine"));
                 }
-				yield return codes[i];
+                yield return codes[i];
 
             }
-		}
+        }
 
-		public static void AppendLine(StringBuilder stringBuilder, RecipeDef recipe)
+        public static void AppendLine(StringBuilder stringBuilder, RecipeDef recipe)
         {
-			var extension = recipe.GetModExtension<RecipeResourceIngredients>();
-			if (extension != null)
+            var extension = recipe.GetModExtension<RecipeResourceIngredients>();
+            if (extension != null)
             {
-				foreach (var resourceCost in extension.recourseCostList)
+                foreach (var resourceCost in extension.recourseCostList)
                 {
-					if (resourceCost.cost > 0)
+                    if (resourceCost.cost > 0)
                     {
-						stringBuilder.AppendLine("BillRequires".Translate(resourceCost.cost, resourceCost.resource.label));
-					}
-				}
-			}
-		}
-	}
+                        stringBuilder.AppendLine("BillRequires".Translate(resourceCost.cost, resourceCost.resource.label));
+                    }
+                }
+            }
+        }
+    }
 
-	[HarmonyPatch(typeof(Toils_Recipe), nameof(Toils_Recipe.DoRecipeWork))]
-	public static class Toils_RecipePatch
+    [HarmonyPatch(typeof(Toils_Recipe), nameof(Toils_Recipe.DoRecipeWork))]
+    public static class Toils_RecipePatch
     {
-		public static void Postfix(Toil __result)
+        public static void Postfix(Toil __result)
         {
-			__result.AddPreTickAction(delegate
-			{
-				Pawn actor = __result.actor;
-				Job curJob = actor.jobs.curJob;
-				if (curJob.bill is Bill_Resource bill_resource)
+            __result.AddPreTickAction(delegate
+            {
+                var actor = __result.actor;
+                var curJob = actor.jobs.curJob;
+                if (curJob.bill is Bill_Resource bill_resource)
                 {
-					DoWork(bill_resource.recipe, actor, bill_resource.Extension, bill_resource.consumedResources);
-				}
-				else if (curJob.bill is Bill_ResourceWithUft bill_ResourceWithUft)
+                    DoWork(bill_resource.recipe, actor, bill_resource.Extension, bill_resource.consumedResources);
+                }
+                else if (curJob.bill is Bill_ResourceWithUft bill_ResourceWithUft)
                 {
-					DoWork(bill_ResourceWithUft.recipe, actor, bill_ResourceWithUft.Extension, bill_ResourceWithUft.consumedResources);
-				}
-			});
+                    DoWork(bill_ResourceWithUft.recipe, actor, bill_ResourceWithUft.Extension, bill_ResourceWithUft.consumedResources);
+                }
+            });
         }
 
         public static void DoWork(RecipeDef recipe, Pawn p, RecipeResourceIngredients extension, Dictionary<HediffResourceDef, float> consumedResources)
@@ -192,12 +187,11 @@ namespace ART
                     p.jobs.EndCurrentJob(JobCondition.Incompletable);
                     return;
                 }
-                UnfinishedThing uft = p.CurJob.GetTarget(TargetIndex.B).Thing as UnfinishedThing;
-                float num = ((p.CurJob.RecipeDef.workSpeedStat == null) ? 1f : p.GetStatValue(p.CurJob.RecipeDef.workSpeedStat));
+                var uft = p.CurJob.GetTarget(TargetIndex.B).Thing as UnfinishedThing;
+                float num = (p.CurJob.RecipeDef.workSpeedStat == null) ? 1f : p.GetStatValue(p.CurJob.RecipeDef.workSpeedStat);
                 if (p.CurJob.RecipeDef.workTableSpeedStat != null)
                 {
-                    Building_WorkTable building_WorkTable = jobDriver_DoBill.BillGiver as Building_WorkTable;
-                    if (building_WorkTable != null)
+                    if (jobDriver_DoBill.BillGiver is Building_WorkTable building_WorkTable)
                     {
                         num *= building_WorkTable.GetStatValue(p.CurJob.RecipeDef.workTableSpeedStat);
                     }
@@ -207,7 +201,7 @@ namespace ART
                 {
                     num *= 30f;
                 }
-                var workTotalAmount = recipe.WorkAmountTotal(uft?.Stuff);
+                float workTotalAmount = recipe.WorkAmountTotal(uft?.Stuff);
                 foreach (var resourceCost in extension.recourseCostList)
                 {
                     if (consumedResources is null)
@@ -219,12 +213,12 @@ namespace ART
                         consumedResources[resourceCost.resource] = 0;
                     }
 
-                    var diff = resourceCost.cost - consumedResources[resourceCost.resource];
-                    var curCost = resourceCost.cost / (workTotalAmount / num);
+                    float diff = resourceCost.cost - consumedResources[resourceCost.resource];
+                    float curCost = resourceCost.cost / (workTotalAmount / num);
                     if (diff != 0)
                     {
                         var hediff = p.health.hediffSet.GetFirstHediffOfDef(resourceCost.resource) as HediffResource;
-                        if (hediff is null || diff > 0 && (int)hediff.ResourceAmount < (int)diff)
+                        if (hediff is null || (diff > 0 && (int)hediff.ResourceAmount < (int)diff))
                         {
                             ARTLog.Message("Ending job: " + p.CurJob + " - hediff.ResourceAmount: " + hediff.ResourceAmount + " - diff: " + diff);
                             p.jobs.EndCurrentJob(JobCondition.Incompletable);
@@ -236,7 +230,7 @@ namespace ART
                             {
                                 continue;
                             }
-                            var toConsume = diff > 0 ? diff >= curCost ? curCost : diff : diff < curCost ? curCost : diff;
+                            float toConsume = diff > 0 ? diff >= curCost ? curCost : diff : diff < curCost ? curCost : diff;
                             hediff.ChangeResourceAmount(-toConsume);
                             if (consumedResources.ContainsKey(resourceCost.resource))
                             {

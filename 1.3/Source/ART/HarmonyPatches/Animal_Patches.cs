@@ -1,17 +1,9 @@
 ﻿using HarmonyLib;
-using MVCF.Utilities;
 using RimWorld;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.NetworkInformation;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
 using Verse;
 using Verse.AI;
-using VFECore;
 
 namespace ART
 {
@@ -43,15 +35,14 @@ namespace ART
     {
         public static bool Prefix(ref Job __result, WorkGiver_Tame __instance, Pawn pawn, Thing t, bool forced = false)
         {
-            var pawn2 = t as Pawn;
-            if (pawn2 != null)
+            if (t is Pawn pawn2)
             {
                 var comp = pawn2.GetComp<CompThingInUse>();
                 if (comp != null)
                 {
                     foreach (var useProps in comp.Props.useProperties)
                     {
-                        if (!pawn.CanUseIt(pawn2.Label, useProps, useProps.resourceOnTaming, useProps.cannotTameMessageKey, out var failMessage))
+                        if (!pawn.CanUseIt(pawn2.Label, useProps, useProps.resourceOnTaming, useProps.cannotTameMessageKey, out string failMessage))
                         {
                             JobFailReason.Is(failMessage);
                             __result = null;
@@ -91,15 +82,14 @@ namespace ART
     {
         public static bool Prefix(ref Job __result, WorkGiver_Tame __instance, Pawn pawn, Thing t, bool forced = false)
         {
-            var pawn2 = t as Pawn;
-            if (pawn2 != null)
+            if (t is Pawn pawn2)
             {
                 var comp = pawn2.GetComp<CompThingInUse>();
                 if (comp != null)
                 {
                     foreach (var useProps in comp.Props.useProperties)
                     {
-                        if (!pawn.CanUseIt(pawn2.Label, useProps, useProps.resourceOnTraining, useProps.cannotTrainMessageKey, out var failMessage))
+                        if (!pawn.CanUseIt(pawn2.Label, useProps, useProps.resourceOnTraining, useProps.cannotTrainMessageKey, out string failMessage))
                         {
                             JobFailReason.Is(failMessage);
                             __result = null;
@@ -118,8 +108,7 @@ namespace ART
     {
         public static void Postfix(CompHasGatherableBodyResource __instance, Pawn doer)
         {
-            var pawnShearing = __instance.parent as Pawn;
-            if (pawnShearing != null)
+            if (__instance.parent is Pawn pawnShearing)
             {
                 var comp = pawnShearing.TryGetComp<CompThingInUse>();
                 if (comp != null)
@@ -141,15 +130,14 @@ namespace ART
     {
         public static bool Prefix(ref bool __result, WorkGiver_Tame __instance, Pawn pawn, Thing t, bool forced = false)
         {
-            var pawn2 = t as Pawn;
-            if (pawn2 != null)
+            if (t is Pawn pawn2)
             {
                 var comp = pawn2.GetComp<CompThingInUse>();
                 if (comp != null)
                 {
                     foreach (var useProps in comp.Props.useProperties)
                     {
-                        if (!pawn.CanUseIt(pawn2.Label, useProps, useProps.resourceOnGather, useProps.cannotGatherMessageKey, out var failMessage))
+                        if (!pawn.CanUseIt(pawn2.Label, useProps, useProps.resourceOnGather, useProps.cannotGatherMessageKey, out string failMessage))
                         {
                             JobFailReason.Is(failMessage);
                             __result = false;
@@ -190,12 +178,14 @@ namespace ART
                     if (hediffResource.CurStage is HediffStageResource hediffStageResource && hediffStageResource.ingestibleProperties != null
                         && (hediffStageResource.ingestibleProperties.nutritionCategories & tamee.def.race.foodType) != 0)
                     {
-                        ingestionData = new IngestionData();
-                        ingestionData.hediffResource = hediffStageResource.ingestibleProperties.hediffResource != null
+                        ingestionData = new IngestionData
+                        {
+                            hediffResource = hediffStageResource.ingestibleProperties.hediffResource != null
                             ? pawn.health.hediffSet.GetFirstHediffOfDef(hediffStageResource.ingestibleProperties.hediffResource) as HediffResource
-                            : hediffResource;
-                        var requiredNutrition = JobDriver_InteractAnimal.RequiredNutritionPerFeed(tamee);
-                        var requiredResourceAmount = hediffStageResource.ingestibleProperties.resourcePerIngestion * requiredNutrition;
+                            : hediffResource
+                        };
+                        float requiredNutrition = JobDriver_InteractAnimal.RequiredNutritionPerFeed(tamee);
+                        float requiredResourceAmount = hediffStageResource.ingestibleProperties.resourcePerIngestion * requiredNutrition;
                         if (ingestionData.hediffResource != null && ingestionData.hediffResource.ResourceAmount >= requiredResourceAmount)
                         {
                             ingestionData.requiredResourceAmount = requiredResourceAmount;
@@ -218,14 +208,16 @@ namespace ART
             var tamee = __instance.job.targetA.Pawn;
             if (pawn.CanFeedAnimalWithResource(tamee, out _))
             {
-                Toil toil = new Toil();
-                toil.initAction = delegate
+                var toil = new Toil
+                {
+                    initAction = delegate
                 {
                     __instance.feedNutritionLeft = JobDriver_InteractAnimal.RequiredNutritionPerFeed(tamee);
+                },
+                    defaultCompleteMode = ToilCompleteMode.Instant
                 };
-                toil.defaultCompleteMode = ToilCompleteMode.Instant;
                 yield return toil;
-                Toil gotoAnimal = Toils_Goto.GotoThing(TargetIndex.A, PathEndMode.Touch);
+                var gotoAnimal = Toils_Goto.GotoThing(TargetIndex.A, PathEndMode.Touch);
                 yield return gotoAnimal;
                 yield return FinalizeIngest(__instance, pawn, tamee);
                 yield return Toils_Jump.JumpIf(gotoAnimal, () => __instance.feedNutritionLeft > 0f);
@@ -241,7 +233,7 @@ namespace ART
 
         public static Toil FinalizeIngest(JobDriver_InteractAnimal __instance, Pawn pawn, Pawn ingester)
         {
-            Toil toil = new Toil();
+            var toil = new Toil();
             toil.initAction = delegate
             {
                 if (pawn.CanFeedAnimalWithResource(ingester, out var ingestionData))
@@ -252,8 +244,8 @@ namespace ART
                         __instance.feedNutritionLeft = 0f;
                     }
                     PawnUtility.ForceWait(ingester, 270, pawn);
-                    Pawn actor = toil.actor;
-                    Job curJob = actor.jobs.curJob;
+                    var actor = toil.actor;
+                    var curJob = actor.jobs.curJob;
                     ingestionData.hediffResource.ChangeResourceAmount(-ingestionData.requiredResourceAmount);
                     if (!ingester.Dead)
                     {

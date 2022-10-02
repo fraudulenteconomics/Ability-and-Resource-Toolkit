@@ -1,9 +1,5 @@
 ﻿using RimWorld;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Verse;
 
 namespace ART
@@ -14,7 +10,7 @@ namespace ART
         public int stackMax = -1;
         public CompProperties_AdjustHediffsArea()
         {
-            this.compClass = typeof(CompAdjustHediffsArea);
+            compClass = typeof(CompAdjustHediffsArea);
         }
     }
 
@@ -24,36 +20,39 @@ namespace ART
         private CompRefuelable fuelComp;
         private CompFlickable flickableComp;
 
-        public new CompProperties_AdjustHediffsArea Props => this.props as CompProperties_AdjustHediffsArea;
+        public new CompProperties_AdjustHediffsArea Props => props as CompProperties_AdjustHediffsArea;
         public override void PostSpawnSetup(bool respawningAfterLoad)
         {
             base.PostSpawnSetup(respawningAfterLoad);
-            powerComp = this.parent.GetComp<CompPowerTrader>();
-            fuelComp = this.parent.GetComp<CompRefuelable>();
-            flickableComp = this.parent.GetComp<CompFlickable>();
+            powerComp = parent.GetComp<CompPowerTrader>();
+            fuelComp = parent.GetComp<CompRefuelable>();
+            flickableComp = parent.GetComp<CompFlickable>();
         }
         public override void ResourceTick()
         {
             ARTLog.Message("Active: " + Active + " - " + this);
-            ARTLog.Message("this.parent.Map: " + this.parent.Map);
+            ARTLog.Message("this.parent.Map: " + parent.Map);
             ARTLog.Message(" IsEnabled(): " + IsEnabled());
             if (Active)
             {
                 foreach (var option in Props.resourceSettings)
                 {
-                    var num = Utils.GetResourceGain(option, this);
-                    var affectedCells = Utils.GetAllCellsAround(option, this.parent, this.parent.OccupiedRect());
+                    float num = Utils.GetResourceGain(option, this);
+                    var affectedCells = Utils.GetAllCellsAround(option, parent, parent.OccupiedRect());
                     foreach (var cell in affectedCells)
                     {
-                        foreach (var pawn in cell.GetThingList(this.parent.Map).OfType<Pawn>())
+                        foreach (var pawn in cell.GetThingList(parent.Map).OfType<Pawn>())
                         {
-                            if (pawn == this.parent && !option.affectsSelf) continue;
+                            if (pawn == parent && !option.affectsSelf)
+                            {
+                                continue;
+                            }
 
-                            if (option.affectsAllies && (pawn.Faction == this.parent.Faction || !pawn.Faction.HostileTo(this.parent.Faction)))
+                            if (option.affectsAllies && (pawn.Faction == parent.Faction || !pawn.Faction.HostileTo(parent.Faction)))
                             {
                                 AppendResource(pawn, option, num);
                             }
-                            else if (option.affectsEnemies && pawn.Faction.HostileTo(this.parent.Faction))
+                            else if (option.affectsEnemies && pawn.Faction.HostileTo(parent.Faction))
                             {
                                 AppendResource(pawn, option, num);
                             }
@@ -63,7 +62,7 @@ namespace ART
             }
         }
 
-        public bool Active => this.parent.Map != null && IsEnabled();
+        public bool Active => parent.Map != null && IsEnabled();
         public override Pawn PawnHost => null;
         public bool IsEnabled()
         {
@@ -86,7 +85,7 @@ namespace ART
             if (Active)
             {
                 var option = GetFirstResourcePropertiesFor(hediffResourceDef);
-                if (option != null && cell.DistanceTo(this.parent.Position) <= option.effectRadius)
+                if (option != null && cell.DistanceTo(parent.Position) <= option.effectRadius)
                 {
                     return true;
                 }
@@ -106,16 +105,16 @@ namespace ART
                 if (hediffResource != null)
                 {
                     var amplifiers = hediffResource.GetAmplifiersFor(resourceProperties.hediff);
-                    if (!this.Props.stackEffects)
+                    if (!Props.stackEffects)
                     {
                         if (amplifiers.Count() > 0 && amplifiers.Any(x => x != this))
                         {
                             return;
                         }
                     }
-                    if (this.Props.stackMax != -1)
+                    if (Props.stackMax != -1)
                     {
-                        if (amplifiers.Count() >= this.Props.stackMax && !amplifiers.Contains(this))
+                        if (amplifiers.Count() >= Props.stackMax && !amplifiers.Contains(this))
                         {
                             return;
                         }
@@ -124,7 +123,7 @@ namespace ART
                 hediffResource = Utils.AdjustResourceAmount(pawn, resourceProperties.hediff, num, resourceProperties.addHediffIfMissing, resourceProperties, resourceProperties.applyToPart);
                 if (hediffResource != null)
                 {
-                    ARTLog.Message(this.parent + " is affecting " + pawn + " - " + resourceProperties.hediff);
+                    ARTLog.Message(parent + " is affecting " + pawn + " - " + resourceProperties.hediff);
                     hediffResource.TryAddAmplifier(this);
                 }
             }
@@ -144,16 +143,16 @@ namespace ART
             base.PostDrawExtraSelectionOverlays();
             if (Active)
             {
-                foreach (var option in this.Props.resourceSettings)
+                foreach (var option in Props.resourceSettings)
                 {
-                    GenDraw.DrawFieldEdges(Utils.GetAllCellsAround(option, this.parent, this.parent.OccupiedRect()).ToList());
+                    GenDraw.DrawFieldEdges(Utils.GetAllCellsAround(option, parent, parent.OccupiedRect()).ToList());
                 }
             }
         }
 
         public ResourceProperties GetFirstResourcePropertiesFor(HediffResourceDef hediffResourceDef)
         {
-            return this.Props.resourceSettings.FirstOrDefault(x => x.hediff == hediffResourceDef);
+            return Props.resourceSettings.FirstOrDefault(x => x.hediff == hediffResourceDef);
         }
     }
 }

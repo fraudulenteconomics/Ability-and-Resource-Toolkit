@@ -1,9 +1,5 @@
 ﻿using RimWorld;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Verse;
 
 namespace ART
@@ -18,12 +14,12 @@ namespace ART
             ARTLog.Message("source: " + source);
             foreach (var additionalDamage in additionalDamages)
             {
-                if (isRanged && additionalDamage.damageRange || isMelee && additionalDamage.damageMelee)
+                if ((isRanged && additionalDamage.damageRange) || (isMelee && additionalDamage.damageMelee))
                 {
-                    var damageAmount = GetDamageAmount(additionalDamage, damager, thing);
+                    float damageAmount = GetDamageAmount(additionalDamage, damager, thing);
                     var damage = new DamageInfo(additionalDamage.damage, damageAmount, instigator: source.Instigator, hitPart: source.HitPart, weapon: source.Weapon);
                     ARTLog.Message("Damaging " + thing + " with " + damage);
-                   thing.TakeDamage(damage);
+                    thing.TakeDamage(damage);
                 }
             }
         }

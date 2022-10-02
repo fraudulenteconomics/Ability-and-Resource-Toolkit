@@ -1,11 +1,6 @@
 ﻿using RimWorld;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Verse;
-using Verse.AI;
 
 namespace ART
 {
@@ -13,13 +8,12 @@ namespace ART
     {
         public override bool Available()
         {
-            var targetResourceSettings = this.ResourceProps.TargetResourceSettings;
+            var targetResourceSettings = ResourceProps.TargetResourceSettings;
             if (targetResourceSettings != null)
             {
                 foreach (var resourceProperties in targetResourceSettings)
                 {
-                    var hediffResource = this.CasterPawn.health.hediffSet.GetFirstHediffOfDef(resourceProperties.hediff) as HediffResource;
-                    if (hediffResource != null && hediffResource.ResourceAmount == hediffResource.ResourceCapacity)
+                    if (CasterPawn.health.hediffSet.GetFirstHediffOfDef(resourceProperties.hediff) is HediffResource hediffResource && hediffResource.ResourceAmount == hediffResource.ResourceCapacity)
                     {
                         return false;
                     }
@@ -31,34 +25,34 @@ namespace ART
         public override bool TryCastShot()
         {
             base.TryCastShot();
-            if (this.CasterPawn != null)
+            if (CasterPawn != null)
             {
-                var targetResourceSettings = this.ResourceProps.TargetResourceSettings;
+                var targetResourceSettings = ResourceProps.TargetResourceSettings;
 
                 if (targetResourceSettings != null)
                 {
                     foreach (var resourceProperties in targetResourceSettings)
                     {
-                        ARTLog.Message("Giving: " + this.CasterPawn + " - " + resourceProperties.hediff + " - " + resourceProperties.resourcePerUse);
-                        if (resourceProperties.affectsAllies || !resourceProperties.affectsAllies && !resourceProperties.affectsEnemies)
+                        ARTLog.Message("Giving: " + CasterPawn + " - " + resourceProperties.hediff + " - " + resourceProperties.resourcePerUse);
+                        if (resourceProperties.affectsAllies || (!resourceProperties.affectsAllies && !resourceProperties.affectsEnemies))
                         {
-                            Utils.AdjustResourceAmount(this.CasterPawn, resourceProperties.hediff, resourceProperties.resourcePerUse, 
+                            Utils.AdjustResourceAmount(CasterPawn, resourceProperties.hediff, resourceProperties.resourcePerUse,
                                 resourceProperties.addHediffIfMissing, resourceProperties, resourceProperties.applyToPart);
                         }
                         if (resourceProperties.effectRadius > 0)
                         {
-                            foreach (var cell in Utils.GetAllCellsAround(resourceProperties, new TargetInfo(this.CasterPawn.Position, this.CasterPawn.Map), CellRect.SingleCell(this.CasterPawn.Position)))
+                            foreach (var cell in Utils.GetAllCellsAround(resourceProperties, new TargetInfo(CasterPawn.Position, CasterPawn.Map), CellRect.SingleCell(CasterPawn.Position)))
                             {
-                                foreach (var pawn in cell.GetThingList(this.CasterPawn.Map).OfType<Pawn>())
+                                foreach (var pawn in cell.GetThingList(CasterPawn.Map).OfType<Pawn>())
                                 {
-                                    if (pawn != this.CasterPawn)
+                                    if (pawn != CasterPawn)
                                     {
-                                        if (resourceProperties.affectsAllies && (pawn.Faction == this.CasterPawn.Faction || !pawn.Faction.HostileTo(this.CasterPawn.Faction)))
+                                        if (resourceProperties.affectsAllies && (pawn.Faction == CasterPawn.Faction || !pawn.Faction.HostileTo(CasterPawn.Faction)))
                                         {
                                             Utils.AdjustResourceAmount(pawn, resourceProperties.hediff, resourceProperties.resourcePerUse, resourceProperties.addHediffIfMissing,
                                                 resourceProperties, resourceProperties.applyToPart);
                                         }
-                                        else if (resourceProperties.affectsEnemies && pawn.Faction.HostileTo(this.CasterPawn.Faction))
+                                        else if (resourceProperties.affectsEnemies && pawn.Faction.HostileTo(CasterPawn.Faction))
                                         {
                                             Utils.AdjustResourceAmount(pawn, resourceProperties.hediff, resourceProperties.resourcePerUse, resourceProperties.addHediffIfMissing,
                                                 resourceProperties, resourceProperties.applyToPart);

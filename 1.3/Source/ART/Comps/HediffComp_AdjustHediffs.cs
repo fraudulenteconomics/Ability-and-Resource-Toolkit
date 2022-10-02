@@ -1,30 +1,25 @@
 ﻿using RimWorld;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
 using Verse;
 
 namespace ART
 {
 
-	public class HediffCompProperties_AdjustHediffs : HediffCompProperties
-	{
+    public class HediffCompProperties_AdjustHediffs : HediffCompProperties
+    {
         public List<ResourceProperties> resourceSettings;
 
         public string disablePostUse;
         public HediffCompProperties_AdjustHediffs()
-		{
-			compClass = typeof(HediffComp_AdjustHediffs);
-		}
-	}
+        {
+            compClass = typeof(HediffComp_AdjustHediffs);
+        }
+    }
 
-	public class HediffComp_AdjustHediffs : HediffComp, IAdjustResource
-	{
-        public HediffCompProperties_AdjustHediffs Props => (HediffCompProperties_AdjustHediffs)this.props;
-        public Thing Parent => this.Pawn;
+    public class HediffComp_AdjustHediffs : HediffComp, IAdjustResource
+    {
+        public HediffCompProperties_AdjustHediffs Props => (HediffCompProperties_AdjustHediffs)props;
+        public Thing Parent => Pawn;
         public List<ResourceProperties> ResourceSettings => Props.resourceSettings;
         public string DisablePostUse => Props.disablePostUse;
 
@@ -40,7 +35,7 @@ namespace ART
                 return postUseDelayTicks;
             }
         }
-        public Pawn PawnHost => this.Pawn;
+        public Pawn PawnHost => Pawn;
         public void Register()
         {
             ARTManager.Instance.RegisterAdjuster(this);
@@ -58,20 +53,20 @@ namespace ART
 
         public void Drop()
         {
-            this.Pawn.health.RemoveHediff(this.parent);
+            Pawn.health.RemoveHediff(parent);
         }
         public void Notify_Removed()
         {
             Deregister();
-            if (this.Pawn != null)
+            if (Pawn != null)
             {
-                Utils.RemoveExcessHediffResources(this.Pawn, this);
+                Utils.RemoveExcessHediffResources(Pawn, this);
             }
         }
 
         public override void CompPostPostRemoved()
         {
-            this.Notify_Removed();
+            Notify_Removed();
             base.CompPostPostRemoved();
         }
 
@@ -82,13 +77,12 @@ namespace ART
         }
         public virtual void ResourceTick()
         {
-            var pawn = this.Pawn;
+            var pawn = Pawn;
             if (pawn != null)
             {
                 foreach (var resourceProperties in Props.resourceSettings)
                 {
-                    var hediffResource = pawn.health.hediffSet.GetFirstHediffOfDef(resourceProperties.hediff) as HediffResource;
-                    if (hediffResource != null && (PostUseDelayTicks.TryGetValue(hediffResource, out var disable) && (disable.delayTicks > Find.TickManager.TicksGame)
+                    if (pawn.health.hediffSet.GetFirstHediffOfDef(resourceProperties.hediff) is HediffResource hediffResource && ((PostUseDelayTicks.TryGetValue(hediffResource, out var disable) && (disable.delayTicks > Find.TickManager.TicksGame))
                         || !hediffResource.CanGainResource))
                     {
                         continue;
@@ -108,7 +102,7 @@ namespace ART
             Scribe_Collections.Look(ref postUseDelayTicks, "postUseDelayTicks", LookMode.Reference, LookMode.Deep, ref hediffResourceKeys, ref hediffResourceDisablesValues);
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
-                this.Register();
+                Register();
             }
         }
 

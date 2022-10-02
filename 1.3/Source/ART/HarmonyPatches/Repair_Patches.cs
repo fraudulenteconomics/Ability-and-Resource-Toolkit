@@ -1,15 +1,7 @@
 ﻿using HarmonyLib;
-using MVCF.Utilities;
 using RimWorld;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Reflection.Emit;
-using System.Text;
-using System.Threading.Tasks;
-using Unity.Jobs;
-using UnityEngine;
 using Verse;
 using Verse.AI;
 
@@ -32,8 +24,7 @@ namespace ART
 
         public static bool HasJobOnThing(Pawn pawn, Thing t, bool forced = false)
         {
-            Building building = t as Building;
-            if (building == null)
+            if (!(t is Building building))
             {
                 return false;
             }
@@ -131,15 +122,16 @@ namespace ART
         {
             __instance.FailOnDespawnedNullOrForbidden(TargetIndex.A);
             yield return Toils_Goto.GotoThing(TargetIndex.A, PathEndMode.Touch).FailOnDespawnedOrNull(TargetIndex.A);
-            Toil toil = Toils_General.Wait(1000);
+            var toil = Toils_General.Wait(1000);
             toil.FailOnDespawnedOrNull(TargetIndex.A);
             toil.FailOnCannotTouch(TargetIndex.A, PathEndMode.Touch);
             toil.WithEffect(__instance.job.GetTarget(TargetIndex.A).Thing.def.repairEffect, TargetIndex.A);
             toil.WithProgressBarToilDelay(TargetIndex.A);
             toil.activeSkill = () => SkillDefOf.Construction;
             yield return toil;
-            Toil toil2 = new Toil();
-            toil2.initAction = delegate
+            var toil2 = new Toil
+            {
+                initAction = delegate
             {
                 if (!__instance.pawn.HasEnoughResourceToRepair(out var repairData))
                 {
@@ -156,6 +148,7 @@ namespace ART
                     __instance.job.GetTarget(TargetIndex.A).Thing.TryGetComp<CompBreakdownable>().Notify_Repaired();
                     repairData.Item1.ChangeResourceAmount(-repairData.Item2.resourceOnRepair);
                 }
+            }
             };
             yield return toil2;
         }

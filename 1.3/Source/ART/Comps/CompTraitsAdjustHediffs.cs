@@ -1,9 +1,6 @@
 ﻿using RimWorld;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Verse;
 
 namespace ART
@@ -23,7 +20,7 @@ namespace ART
     {
         public CompProperties_TraitsAdjustHediffs()
         {
-            this.compClass = typeof(CompTraitsAdjustHediffs);
+            compClass = typeof(CompTraitsAdjustHediffs);
         }
     }
 
@@ -37,7 +34,7 @@ namespace ART
                 var resourceSettings = new List<ResourceProperties>();
                 foreach (var trait in PawnHost.story?.traits?.allTraits)
                 {
-                    if (!cachedModExtensions.TryGetValue(trait.def, out TraitsAdjustHediff traitAdjustOptions))
+                    if (!cachedModExtensions.TryGetValue(trait.def, out var traitAdjustOptions))
                     {
                         traitAdjustOptions = trait.def.GetModExtension<TraitsAdjustHediff>();
                         cachedModExtensions[trait.def] = traitAdjustOptions;
@@ -51,7 +48,7 @@ namespace ART
             }
         }
 
-        public override Pawn PawnHost => this.parent as Pawn;
+        public override Pawn PawnHost => parent as Pawn;
 
         public override void Drop()
         {
@@ -59,7 +56,7 @@ namespace ART
         }
         public override void PostDestroy(DestroyMode mode, Map previousMap)
         {
-            this.Notify_Removed();
+            Notify_Removed();
             base.PostDestroy(mode, previousMap);
         }
         public override void ResourceTick()

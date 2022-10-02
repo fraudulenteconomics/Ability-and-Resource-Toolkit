@@ -1,12 +1,6 @@
 ﻿using RimWorld;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
 using Verse;
-using Verse.AI;
 
 namespace ART
 {
@@ -20,7 +14,7 @@ namespace ART
         {
 
         }
-        public RecipeResourceIngredients Extension => this.recipe.GetModExtension<RecipeResourceIngredients>();
+        public RecipeResourceIngredients Extension => recipe.GetModExtension<RecipeResourceIngredients>();
         public Dictionary<HediffResourceDef, float> consumedResources = new Dictionary<HediffResourceDef, float>();
         public override bool PawnAllowedToStartAnew(Pawn p)
         {

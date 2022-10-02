@@ -1,15 +1,7 @@
 ﻿using HarmonyLib;
-using MVCF.Utilities;
 using RimWorld;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Reflection.Emit;
-using System.Text;
-using System.Threading.Tasks;
-using Unity.Jobs;
-using UnityEngine;
 using Verse;
 using Verse.AI;
 
@@ -32,7 +24,7 @@ namespace ART
 
         public static bool CanRefuel(Pawn pawn, Thing t, bool forced = false)
         {
-            CompRefuelable compRefuelable = t.TryGetComp<CompRefuelable>();
+            var compRefuelable = t.TryGetComp<CompRefuelable>();
             if (compRefuelable == null || compRefuelable.IsFull || (!forced && !compRefuelable.allowAutoRefuel))
             {
                 return false;
@@ -58,9 +50,9 @@ namespace ART
 
         public static bool HasEnoughResourceToRefuel(this Pawn refueler, Thing refuelable, out (HediffResource, ThingDefCountClassFloat) toConsume)
         {
-            CompRefuelable compRefuelable = refuelable.TryGetComp<CompRefuelable>();
+            var compRefuelable = refuelable.TryGetComp<CompRefuelable>();
             int fuelCountToFullyRefuel = compRefuelable.GetFuelCountToFullyRefuel();
-            ThingFilter filter = compRefuelable.Props.fuelFilter;
+            var filter = compRefuelable.Props.fuelFilter;
             foreach (var hediff in refueler.health.hediffSet.hediffs)
             {
                 if (hediff is HediffResource hediffResource && hediffResource.CurStage is HediffStageResource hediffStageResource && hediffStageResource.refuelProperties != null)
@@ -114,7 +106,7 @@ namespace ART
             {
                 return JobMaker.MakeJob(customRefuelJob ?? JobDefOf.Refuel, t);
             }
-            Job job = JobMaker.MakeJob(customAtomicRefuelJob ?? JobDefOf.RefuelAtomic, t);
+            var job = JobMaker.MakeJob(customAtomicRefuelJob ?? JobDefOf.RefuelAtomic, t);
             return job;
         }
     }
@@ -164,16 +156,16 @@ namespace ART
 
         public static Toil FinalizeRefueling(TargetIndex refuelableInd)
         {
-            Toil toil = new Toil();
+            var toil = new Toil();
             toil.initAction = delegate
             {
-                Job curJob = toil.actor.CurJob;
-                Thing thing = curJob.GetTarget(refuelableInd).Thing;
+                var curJob = toil.actor.CurJob;
+                var thing = curJob.GetTarget(refuelableInd).Thing;
                 if (toil.actor.HasEnoughResourceToRefuel(thing, out var refuelData))
                 {
                     var compRefuelable = thing.TryGetComp<CompRefuelable>();
-                    var toFuel = compRefuelable.GetFuelCountToFullyRefuel();
-                    refuelData.Item1.ChangeResourceAmount(- (refuelData.Item2.rate * toFuel));
+                    int toFuel = compRefuelable.GetFuelCountToFullyRefuel();
+                    refuelData.Item1.ChangeResourceAmount(-(refuelData.Item2.rate * toFuel));
                     var fuelThing = ThingMaker.MakeThing(refuelData.Item2.thingDef);
                     fuelThing.stackCount = toFuel;
                     compRefuelable.Refuel(new List<Thing> { fuelThing });

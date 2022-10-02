@@ -6,12 +6,12 @@
         {
             get
             {
-                if (this.ability.pawn is null)
+                if (ability.pawn is null)
                 {
                     return true;
                 }
-                var compAbilities = this.ability.Comp;
-                if (compAbilities is null || compAbilities.LearnedAbilities.Contains(this.ability) is false)
+                var compAbilities = ability.Comp;
+                if (compAbilities is null || compAbilities.LearnedAbilities.Contains(ability) is false)
                 {
                     return true;
                 }

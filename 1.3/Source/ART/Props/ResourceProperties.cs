@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 using Verse;
 
@@ -82,56 +79,55 @@ namespace ART
         public FloatRange? lightRange;
         public bool activeAboveLight;
         public bool activeBelowLight;
-        public void AdjustResource(Pawn pawn, IAdjustResource source, Dictionary<HediffResource, HediffResouceDisable> postUseDelayTicks) 
+        public void AdjustResource(Pawn pawn, IAdjustResource source, Dictionary<HediffResource, HediffResouceDisable> postUseDelayTicks)
         {
             if (CanAdjustResource(pawn, postUseDelayTicks))
             {
                 float num = this.GetResourceGain();
                 if (source.IsStorageFor(this, out var resourceStorage))
                 {
-                    if (this.addHediffIfMissing && pawn.health.hediffSet.GetFirstHediffOfDef(this.hediff) is null)
+                    if (addHediffIfMissing && pawn.health.hediffSet.GetFirstHediffOfDef(hediff) is null)
                     {
                         BodyPartRecord bodyPartRecord = null;
-                        if (this.applyToPart != null)
+                        if (applyToPart != null)
                         {
-                            bodyPartRecord = pawn.health.hediffSet.GetNotMissingParts().FirstOrDefault((BodyPartRecord x) => x.def == this.applyToPart);
+                            bodyPartRecord = pawn.health.hediffSet.GetNotMissingParts().FirstOrDefault((BodyPartRecord x) => x.def == applyToPart);
                         }
                         var hediff = HediffMaker.MakeHediff(this.hediff, pawn, bodyPartRecord) as HediffResource;
                         pawn.health.AddHediff(hediff);
                     }
-                    var toRefill = Mathf.Min(num, resourceStorage.ResourceCapacity - resourceStorage.ResourceAmount);
+                    float toRefill = Mathf.Min(num, resourceStorage.ResourceCapacity - resourceStorage.ResourceAmount);
                     resourceStorage.ResourceAmount += toRefill;
                 }
                 else
                 {
-                    Utils.AdjustResourceAmount(pawn, this.hediff, num, this.addHediffIfMissing, this, this.applyToPart);
+                    Utils.AdjustResourceAmount(pawn, hediff, num, addHediffIfMissing, this, applyToPart);
                 }
             }
         }
 
         public bool CanAdjustResource(Pawn pawn, Dictionary<HediffResource, HediffResouceDisable> postUseDelayTicks)
         {
-            var hediffResource = pawn.health.hediffSet.GetFirstHediffOfDef(this.hediff) as HediffResource;
-            if (hediffResource != null &&
-                (postUseDelayTicks != null && postUseDelayTicks.TryGetValue(hediffResource, out var disable) && (disable.delayTicks > Find.TickManager.TicksGame)
+            if (pawn.health.hediffSet.GetFirstHediffOfDef(hediff) is HediffResource hediffResource &&
+                ((postUseDelayTicks != null && postUseDelayTicks.TryGetValue(hediffResource, out var disable) && (disable.delayTicks > Find.TickManager.TicksGame))
                 || !hediffResource.CanGainResource))
             {
                 return false;
             }
 
-            if (this.temperatureRange.HasValue)
+            if (temperatureRange.HasValue)
             {
-                var curTemperature = pawn.AmbientTemperature;
-                if (!RangeAllowed(this.activeAboveTemperature, this.activeBelowTemperature, this.temperatureRange.Value, curTemperature))
+                float curTemperature = pawn.AmbientTemperature;
+                if (!RangeAllowed(activeAboveTemperature, activeBelowTemperature, temperatureRange.Value, curTemperature))
                 {
                     return false;
                 }
             }
 
-            if (this.lightRange.HasValue && pawn.Map != null)
+            if (lightRange.HasValue && pawn.Map != null)
             {
-                var curLight = pawn.Map.glowGrid.GameGlowAt(pawn.Position);
-                if (!RangeAllowed(this.activeAboveLight, this.activeBelowLight, this.lightRange.Value, curLight))
+                float curLight = pawn.Map.glowGrid.GameGlowAt(pawn.Position);
+                if (!RangeAllowed(activeAboveLight, activeBelowLight, lightRange.Value, curLight))
                 {
                     return false;
                 }

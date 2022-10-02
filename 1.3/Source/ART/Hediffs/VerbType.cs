@@ -2,9 +2,9 @@
 {
     public enum VerbType
     {
-		None,
-		Both,
-		Range,
-		Melee
+        None,
+        Both,
+        Range,
+        Melee
     }
 }

@@ -1,8 +1,6 @@
 ﻿using RimWorld;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using UnityEngine;
 using Verse;
 using Verse.Sound;
@@ -21,7 +19,7 @@ namespace ART
     {
         public CompProperties_PawnClass()
         {
-            this.compClass = typeof(CompPawnClass);
+            compClass = typeof(CompPawnClass);
         }
     }
 
@@ -34,7 +32,7 @@ namespace ART
         private float previousXp;
         public float GainedXPSinceLastLevel => xpPoints - previousXp;
         public float RequiredXPtoGain => ClassTraitDef.xpPerLevelRequirement * (level + 1);
-        public Pawn pawn => this.parent as Pawn;
+        public Pawn pawn => parent as Pawn;
         public CompAbilities compAbilities => pawn.GetComp<CompAbilities>();
 
         public List<AbilityDef> learnedAbilities = new List<AbilityDef>();
@@ -46,12 +44,16 @@ namespace ART
                 var classTrait = ClassTraitDef;
                 if (classTrait.resourceHediff != null)
                 {
-                    return this.pawn.health.hediffSet.GetFirstHediffOfDef(classTrait.resourceHediff) as HediffResource;
+                    return pawn.health.hediffSet.GetFirstHediffOfDef(classTrait.resourceHediff) as HediffResource;
                 }
                 return null;
             }
         }
-        public Ability GetLearnedAbility(AbilityDef abilityDef) => compAbilities.LearnedAbilities.FirstOrDefault(x => x.def == abilityDef);
+        public Ability GetLearnedAbility(AbilityDef abilityDef)
+        {
+            return compAbilities.LearnedAbilities.FirstOrDefault(x => x.def == abilityDef);
+        }
+
         public bool HasClassTrait(out Trait classTrait)
         {
             classTrait = ClassTrait;
@@ -103,7 +105,7 @@ namespace ART
         public void SetLevel(int newLevel)
         {
             previousXp += RequiredXPtoGain;
-            this.level = newLevel;
+            level = newLevel;
             var hediffResouce = HediffResource;
             if (hediffResouce != null)
             {
@@ -113,9 +115,15 @@ namespace ART
         public void Init(ClassTraitDef trait)
         {
             if (trait.resourceHediff != null)
+            {
                 pawn.health.AddHediff(trait.resourceHediff);
+            }
+
             if (trait.addHediff != null)
+            {
                 pawn.health.AddHediff(trait.addHediff);
+            }
+
             learnedAbilities = new List<AbilityDef>();
             UpgradeTo(trait.initialLevel);
         }
@@ -190,7 +198,7 @@ namespace ART
             comp.GiveAbility(abilityDef);
             if (spendAbilityPoints)
             {
-                var abilityPointsToSpent = abilityData.abilityTier.abilityPointsToLearn;
+                int abilityPointsToSpent = abilityData.abilityTier.abilityPointsToLearn;
                 abilityPoints -= abilityPointsToSpent;
             }
         }
@@ -201,13 +209,15 @@ namespace ART
             {
                 var hediff = pawn.health.hediffSet.GetFirstHediffOfDef(classTrait.resourceHediff);
                 if (hediff != null)
+                {
                     pawn.health.RemoveHediff(hediff);
+                }
             }
 
             var comp = compAbilities;
             foreach (var abilityDef in learnedAbilities)
             {
-                var ability = this.GetLearnedAbility(abilityDef);
+                var ability = GetLearnedAbility(abilityDef);
                 if (ability != null)
                 {
                     comp.LearnedAbilities.Remove(ability);
@@ -225,7 +235,7 @@ namespace ART
             {
                 foreach (var trait in pawn.story.traits.allTraits)
                 {
-                    if (trait.def is ClassTraitDef classTraitDef)
+                    if (trait.def is ClassTraitDef)
                     {
                         return trait;
                     }
@@ -259,7 +269,9 @@ namespace ART
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
                 if (learnedAbilities is null)
+                {
                     learnedAbilities = new List<AbilityDef>();
+                }
             }
         }
     }

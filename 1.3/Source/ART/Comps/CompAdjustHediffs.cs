@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Verse;
 
 namespace ART
@@ -17,8 +16,8 @@ namespace ART
     }
     public abstract class CompAdjustHediffs : ThingComp, IAdjustResource, IResourceStorage
     {
-        public CompProperties_AdjustHediffs Props => (CompProperties_AdjustHediffs)this.props;
-        public Thing Parent => this.parent;
+        public CompProperties_AdjustHediffs Props => (CompProperties_AdjustHediffs)props;
+        public Thing Parent => parent;
         public virtual List<ResourceProperties> ResourceSettings => Props.resourceSettings;
         public string DisablePostUse => Props.disablePostUse;
         public bool IsStorageFor(ResourceProperties resourceProperties, out ResourceStorage resourceStorages)
@@ -45,7 +44,7 @@ namespace ART
             }
             if (Props.resourceSettings != null)
             {
-                for (var i = 0; i < Props.resourceSettings.Count; i++)
+                for (int i = 0; i < Props.resourceSettings.Count; i++)
                 {
                     if (Props.resourceSettings[i].maxResourceStorageAmount > 0)
                     {
@@ -96,7 +95,7 @@ namespace ART
             var resourceStorages = ResourceStorages;
             if (Props.resourceSettings != null)
             {
-                for (var i = 0; i < Props.resourceSettings.Count; i++)
+                for (int i = 0; i < Props.resourceSettings.Count; i++)
                 {
                     if (Props.resourceSettings[i].maxResourceStorageAmount > 0 && Props.resourceSettings[i].hediff == hediffDef)
                     {
@@ -110,7 +109,7 @@ namespace ART
             var resourceStorages = ResourceStorages;
             if (Props.resourceSettings != null)
             {
-                for (var i = 0; i < Props.resourceSettings.Count; i++)
+                for (int i = 0; i < Props.resourceSettings.Count; i++)
                 {
                     if (Props.resourceSettings[i].maxResourceStorageAmount > 0 && Props.resourceSettings[i].refillOnlyInnerStorage && Props.resourceSettings[i] == resourceProperties)
                     {
@@ -125,7 +124,7 @@ namespace ART
             var sb = new StringBuilder(base.CompInspectStringExtra());
             if (Props.resourceSettings != null)
             {
-                for (var i = 0; i < Props.resourceSettings.Count; i++)
+                for (int i = 0; i < Props.resourceSettings.Count; i++)
                 {
                     var resourceProperties = Props.resourceSettings[i];
                     if (resourceProperties.maxResourceStorageAmount > 0)
@@ -201,7 +200,7 @@ namespace ART
         public abstract Pawn PawnHost { get; }
         public bool TryGetQuality(out QualityCategory qc)
         {
-            return this.parent.TryGetQuality(out qc);
+            return parent.TryGetQuality(out qc);
         }
 
         public virtual void Drop()
@@ -249,14 +248,14 @@ namespace ART
 
         public void TryForbidAfterPlacing()
         {
-            foreach (var thing in this.parent.Position.GetThingList(this.parent.Map))
+            foreach (var thing in parent.Position.GetThingList(parent.Map))
             {
                 var comp = thing.TryGetComp<CompBuildingStorageAdjustHediffs>();
                 if (comp != null)
                 {
                     foreach (var resourceSettings in comp.ResourceSettings)
                     {
-                        foreach (var thisResourceSettings in this.ResourceSettings)
+                        foreach (var thisResourceSettings in ResourceSettings)
                         {
                             if (resourceSettings.hediff == thisResourceSettings.hediff && resourceSettings.forbidItemsWhenCharging)
                             {
@@ -266,7 +265,7 @@ namespace ART
                                 }
                                 else
                                 {
-                                    this.parent.SetForbidden(true);
+                                    parent.SetForbidden(true);
                                 }
                             }
                         }
@@ -298,7 +297,7 @@ namespace ART
 
         public ThingDef GetStuff()
         {
-            return this.parent.Stuff;
+            return parent.Stuff;
         }
 
         public HediffResource GetResourceFor(ResourceProperties resourceProperties)

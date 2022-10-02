@@ -4,8 +4,8 @@ namespace ART
 {
     public class RequiredHediff
     {
-		public HediffDef hediff;
-		public int minCount;
-		public float minSeverity;
-	}
+        public HediffDef hediff;
+        public int minCount;
+        public float minSeverity;
+    }
 }

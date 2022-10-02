@@ -79,6 +79,7 @@
     <Compile Include="HarmonyPatches\Mining_Patches.cs" />
     <Compile Include="Hediffs\Command_SwitchHediffStageResource.cs" />
     <Compile Include="Hediffs\HediffResource_AbilityLink.cs" />
+    <Compile Include="Jobs\JobDriver_RefuelResource.cs" />
     <Compile Include="Props\DamageAuraProperties.cs" />
     <Compile Include="Props\GeneralProperties.cs" />
     <Compile Include="Props\HealingProperties.cs" />

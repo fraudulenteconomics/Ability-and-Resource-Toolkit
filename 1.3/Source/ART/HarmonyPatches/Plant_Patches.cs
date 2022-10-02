@@ -1,13 +1,7 @@
 ﻿using HarmonyLib;
-using MVCF.Utilities;
 using RimWorld;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
 using Verse;
 using Verse.AI;
 
@@ -25,7 +19,7 @@ namespace ART
                 {
                     foreach (var useProps in compProperties.useProperties)
                     {
-                        if (!pawn.CanUseIt(__result.plantDefToSow.label, useProps, useProps.resourceOnSow, useProps.cannotSowMessageKey, out var failMessage))
+                        if (!pawn.CanUseIt(__result.plantDefToSow.label, useProps, useProps.resourceOnSow, useProps.cannotSowMessageKey, out string failMessage))
                         {
                             JobFailReason.Is(failMessage);
                             __result = null;
@@ -101,7 +95,7 @@ namespace ART
     {
         public static void Postfix(ref bool __result, WorkGiver_GrowerHarvest __instance, Pawn pawn, IntVec3 c, bool forced = false)
         {
-            Plant plant = c.GetPlant(pawn.Map);
+            var plant = c.GetPlant(pawn.Map);
             if (plant != null)
             {
                 var comp = plant.GetComp<CompThingInUse>();
@@ -109,7 +103,7 @@ namespace ART
                 {
                     foreach (var useProps in comp.Props.useProperties)
                     {
-                        if (!pawn.CanUseIt(plant.Label, useProps, useProps.resourceOnHarvest, useProps.cannotHarvestMessageKey, out var failMessage))
+                        if (!pawn.CanUseIt(plant.Label, useProps, useProps.resourceOnHarvest, useProps.cannotHarvestMessageKey, out string failMessage))
                         {
                             JobFailReason.Is(failMessage);
                             __result = false;
@@ -133,7 +127,7 @@ namespace ART
                 {
                     if (useProps.resourceOnHarvest != 0)
                     {
-                        var resourceOnHarvest = useProps.scaleWithGrowthRate ? useProps.resourceOnHarvest * __instance.Growth : useProps.resourceOnHarvest;
+                        float resourceOnHarvest = useProps.scaleWithGrowthRate ? useProps.resourceOnHarvest * __instance.Growth : useProps.resourceOnHarvest;
                         Utils.AdjustResourceAmount(by, useProps.hediff, resourceOnHarvest, useProps.addHediffIfMissing, null, null);
                     }
                 }
@@ -146,7 +140,7 @@ namespace ART
     {
         private static void Postfix(Plant __instance, ref float __result)
         {
-            if (ARTManager.Instance.plantsAdjustedByGrowth.TryGetValue(__instance, out var growthAdjust))
+            if (ARTManager.Instance.plantsAdjustedByGrowth.TryGetValue(__instance, out float growthAdjust))
             {
                 __result += growthAdjust;
             }

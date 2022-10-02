@@ -1,10 +1,6 @@
 ﻿using RimWorld;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
 using Verse;
 using Verse.AI;
 
@@ -40,7 +36,7 @@ namespace ART
                             var ingestible = GenClosest.ClosestThing_Global_Reachable(pawn.Position, pawn.Map, ingestibles, PathEndMode.OnCell, TraverseParms.For(pawn));
                             if (ingestible != null)
                             {
-                                Job job = JobMaker.MakeJob(JobDefOf.Ingest, ingestible);
+                                var job = JobMaker.MakeJob(JobDefOf.Ingest, ingestible);
                                 job.count = 1;
                                 return job;
                             }
@@ -54,7 +50,7 @@ namespace ART
         {
             foreach (var thing in pawn.Map.listerThings.AllThings)
             {
-                if (thing.def.ingestible?.outcomeDoers != null && thing.def.ingestible.outcomeDoers.Any(y => y is IngestionOutcomeDoer_GiveHediffResource outcomeDoer 
+                if (thing.def.ingestible?.outcomeDoers != null && thing.def.ingestible.outcomeDoers.Any(y => y is IngestionOutcomeDoer_GiveHediffResource outcomeDoer
                 && outcomeDoer.hediffDef == hediffResource.def && (outcomeDoer.resourceAdjust > 0 || outcomeDoer.resourcePercent > 0)))
                 {
                     yield return thing;

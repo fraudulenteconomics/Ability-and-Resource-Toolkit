@@ -1,9 +1,4 @@
-﻿using RimWorld;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Verse;
 
 namespace ART
@@ -12,7 +7,7 @@ namespace ART
     {
         public CompProperties_ChargeResource()
         {
-            this.compClass = typeof(CompChargeResource);
+            compClass = typeof(CompChargeResource);
         }
     }
     public class CompChargeResource : ThingComp, IChargeResource
@@ -29,7 +24,7 @@ namespace ART
                 return projectilesWithChargedResource;
             }
         }
-        public CompProperties_ChargeResource Props => (CompProperties_ChargeResource)this.props;
+        public CompProperties_ChargeResource Props => (CompProperties_ChargeResource)props;
         public override void PostExposeData()
         {
             base.PostExposeData();

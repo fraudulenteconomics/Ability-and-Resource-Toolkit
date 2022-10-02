@@ -1118,8 +1118,8 @@ namespace ART
         {
             SoundDefOf.EnergyShield_AbsorbDamage.PlayOneShot(new TargetInfo(base.pawn.Position, base.pawn.Map));
             impactAngleVect = Vector3Utility.HorizontalVectorFromAngle(dinfo.Angle);
-            var loc = base.pawn.TrueCenter() + impactAngleVect.RotatedBy(180f) * 0.5f;
-            float num = Mathf.Min(10f, 2f + dinfo.Amount / 10f);
+            var loc = base.pawn.TrueCenter() + (impactAngleVect.RotatedBy(180f) * 0.5f);
+            float num = Mathf.Min(10f, 2f + (dinfo.Amount / 10f));
             FleckMaker.Static(loc, base.pawn.Map, FleckDefOf.ExplosionFlash, num);
             int num2 = (int)num;
             for (int i = 0; i < num2; i++)

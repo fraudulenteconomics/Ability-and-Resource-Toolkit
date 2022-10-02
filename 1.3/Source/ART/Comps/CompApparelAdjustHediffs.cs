@@ -1,10 +1,4 @@
 ﻿using RimWorld;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
 using Verse;
 
 namespace ART
@@ -13,13 +7,13 @@ namespace ART
     {
         public CompProperties_ApparelAdjustHediffs()
         {
-            this.compClass = typeof(CompApparelAdjustHediffs);
+            compClass = typeof(CompApparelAdjustHediffs);
         }
     }
 
     public class CompApparelAdjustHediffs : CompAdjustHediffs
     {
-        public Apparel Apparel => this.parent as Apparel;
+        public Apparel Apparel => parent as Apparel;
         public override Pawn PawnHost => Apparel.Wearer;
         public override void Notify_Removed()
         {
@@ -47,7 +41,7 @@ namespace ART
         }
         public override void PostDestroy(DestroyMode mode, Map previousMap)
         {
-            this.Notify_Removed();
+            Notify_Removed();
             base.PostDestroy(mode, previousMap);
         }
         public override void ResourceTick()

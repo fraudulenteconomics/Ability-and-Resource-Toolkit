@@ -1,9 +1,5 @@
 ﻿using RimWorld;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Verse;
 
 namespace ART
@@ -65,12 +61,35 @@ namespace ART
         private void PreInit()
         {
             Instance = this;
-            if (resourceAdjusters is null) resourceAdjusters = new List<IAdjustResource>();
-            if (thingsWithBonuses is null) thingsWithBonuses = new Dictionary<Thing, StatBonuses>();
-            if (hediffResourcesPolicies is null) hediffResourcesPolicies = new Dictionary<Pawn, HediffResourcePolicy>();
-            if (firedProjectiles is null) firedProjectiles = new Dictionary<Projectile, FiredData>();
-            if (pawnDownedStates is null) pawnDownedStates = new Dictionary<Pawn, DownedStateData>();
-            if (plantsAdjustedByGrowth is null) plantsAdjustedByGrowth = new Dictionary<Plant, float>();
+            if (resourceAdjusters is null)
+            {
+                resourceAdjusters = new List<IAdjustResource>();
+            }
+
+            if (thingsWithBonuses is null)
+            {
+                thingsWithBonuses = new Dictionary<Thing, StatBonuses>();
+            }
+
+            if (hediffResourcesPolicies is null)
+            {
+                hediffResourcesPolicies = new Dictionary<Pawn, HediffResourcePolicy>();
+            }
+
+            if (firedProjectiles is null)
+            {
+                firedProjectiles = new Dictionary<Projectile, FiredData>();
+            }
+
+            if (pawnDownedStates is null)
+            {
+                pawnDownedStates = new Dictionary<Pawn, DownedStateData>();
+            }
+
+            if (plantsAdjustedByGrowth is null)
+            {
+                plantsAdjustedByGrowth = new Dictionary<Plant, float>();
+            }
         }
 
         public override void LoadedGame()
@@ -97,10 +116,12 @@ namespace ART
 
         public void RegisterAndRecheckForPolicies(Pawn pawn)
         {
-            if (!this.hediffResourcesPolicies.TryGetValue(pawn, out var policy))
+            if (!hediffResourcesPolicies.TryGetValue(pawn, out var policy))
             {
-                policy = new HediffResourcePolicy();
-                policy.satisfyPolicies = new Dictionary<HediffResourceDef, HediffResourceSatisfyPolicy>();
+                policy = new HediffResourcePolicy
+                {
+                    satisfyPolicies = new Dictionary<HediffResourceDef, HediffResourceSatisfyPolicy>()
+                };
                 foreach (var hediffResourceDef in DefDatabase<HediffResourceDef>.AllDefs)
                 {
                     policy.satisfyPolicies[hediffResourceDef] = new HediffResourceSatisfyPolicy();

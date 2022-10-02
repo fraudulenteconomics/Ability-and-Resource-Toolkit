@@ -1,9 +1,6 @@
 ﻿using RimWorld;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Verse;
 
 namespace ART
@@ -42,7 +39,7 @@ namespace ART
                     }
                 }
             }
-            HediffResource hediff = pawn.health.hediffSet.GetFirstHediffOfDef(hediffDef) as HediffResource;
+            var hediff = pawn.health.hediffSet.GetFirstHediffOfDef(hediffDef) as HediffResource;
             if (hediff is null && addHediffIfMissing)
             {
                 BodyPartRecord bodyPartRecord = null;
@@ -66,7 +63,7 @@ namespace ART
                 }
                 if (resourcePercent != -1f)
                 {
-                    var resourceAmount = hediff.ResourceCapacity * resourcePercent;
+                    float resourceAmount = hediff.ResourceCapacity * resourcePercent;
                     if (toleranceChemical != null)
                     {
                         AddictionUtility.ModifyChemicalEffectForToleranceAndBodySize(pawn, toleranceChemical, ref resourceAmount);
@@ -80,7 +77,7 @@ namespace ART
         {
             if (parentDef.IsDrug && chance >= 1f)
             {
-                foreach (StatDrawEntry item in hediffDef.SpecialDisplayStats(StatRequest.ForEmpty()))
+                foreach (var item in hediffDef.SpecialDisplayStats(StatRequest.ForEmpty()))
                 {
                     yield return item;
                 }

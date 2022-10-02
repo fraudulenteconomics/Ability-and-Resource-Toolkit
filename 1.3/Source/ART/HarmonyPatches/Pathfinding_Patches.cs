@@ -1,15 +1,8 @@
-﻿using AnimalBehaviours;
-using HarmonyLib;
-using MVCF.Utilities;
-using RimWorld;
+﻿using HarmonyLib;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Reflection.Emit;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
 using Verse;
 using Verse.AI;
 
@@ -88,7 +81,7 @@ namespace ART
         public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
         {
             var codes = instructions.ToList();
-            var found = false;
+            bool found = false;
             for (int i = 0; i < codes.Count; i++)
             {
                 yield return codes[i];
@@ -109,7 +102,7 @@ namespace ART
             }
         }
 
-        static public int ChangePathCostIfNeeded(Pawn pawn, int xCell, int zCell, int cost)
+        public static int ChangePathCostIfNeeded(Pawn pawn, int xCell, int zCell, int cost)
         {
             var cell = new IntVec3(xCell, 0, zCell);
             if (pawn.IgnoresTerrain() && pawn.CanPassOver(cell))
@@ -145,10 +138,10 @@ namespace ART
 
         public static bool CanPassOver(this Pawn pawn, IntVec3 c)
         {
-            List<Thing> list = pawn.Map.thingGrid.ThingsListAt(c);
+            var list = pawn.Map.thingGrid.ThingsListAt(c);
             for (int i = 0; i < list.Count; i++)
             {
-                Thing thing = list[i];
+                var thing = list[i];
                 if (thing.def.passability == Traversability.Impassable)
                 {
                     return false;

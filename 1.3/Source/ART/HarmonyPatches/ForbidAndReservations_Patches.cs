@@ -1,13 +1,6 @@
 ﻿using HarmonyLib;
-using MVCF.Utilities;
 using RimWorld;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
 using Verse;
 using Verse.AI;
 
@@ -22,7 +15,7 @@ namespace ART
             if (__result)
             {
                 var thing = target.Thing;
-                if (thing != null && !claimant.CanUseIt(thing, out var failReason))
+                if (thing != null && !claimant.CanUseIt(thing, out string failReason))
                 {
                     JobFailReason.Is(failReason);
                     __result = false;
@@ -30,7 +23,7 @@ namespace ART
             }
         }
     }
-    
+
     [HarmonyPatch(typeof(ForbidUtility), "IsForbidden", new Type[] { typeof(Thing), typeof(Pawn) })]
     public static class Patch_IsForbidden
     {
@@ -38,7 +31,7 @@ namespace ART
         {
             if (!__result)
             {
-                if (!pawn.CanUseIt(t, out var failReason))
+                if (!pawn.CanUseIt(t, out string failReason))
                 {
                     JobFailReason.Is(failReason);
                     __result = true;

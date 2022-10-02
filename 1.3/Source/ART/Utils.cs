@@ -204,6 +204,24 @@ namespace ART
 			reason = "";
 			return true;
 		}
+
+		public static IEnumerable<HediffResource> HediffResourcesRefuelable(Pawn pawn, Thing fuelThing)
+		{
+			foreach (var hediffResource in pawn.health.hediffSet.hediffs.OfType<HediffResource>())
+			{
+				if (hediffResource.def.refuelHediff != null)
+				{
+					if (hediffResource.def.refuelHediff.fuelThingDef == fuelThing.def)
+					{
+						if (hediffResource.ResourceCapacity - hediffResource.ResourceAmount > 0)
+						{
+							yield return hediffResource;
+						}
+					}
+				}
+			}
+		}
+
 		public static bool IsHediffUser(this Pawn pawn)
 		{
 			return pawn.health.hediffSet.hediffs.Any(x => x is HediffResource);

@@ -54,4 +54,5 @@
 	<ART.Experience>Experience progress: </ART.Experience>
 	<ART.ClassName>Class: {0}</ART.ClassName>
 	<ART.MarketValuePerLevel>Level {0} of {1}: +{2}</ART.MarketValuePerLevel>
+	<ART.Refuel>Refuel {0} with {1}</ART.Refuel>
 </LanguageData>

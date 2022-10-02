@@ -1,10 +1,8 @@
 ﻿using HarmonyLib;
 using RimWorld;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 using Verse;
 using static Verse.AI.ReservationManager;
@@ -16,7 +14,7 @@ namespace ART
         public List<UseProps> useProperties;
         public CompProperties_ThingInUse()
         {
-            this.compClass = typeof(CompThingInUse);
+            compClass = typeof(CompThingInUse);
         }
     }
     public class CompThingInUse : ThingComp, IAdjustResource
@@ -31,7 +29,7 @@ namespace ART
         public bool powerIsOn;
         public bool UseIsEnabled(UseProps useProps)
         {
-            var ind = this.Props.useProperties.IndexOf(useProps);
+            int ind = Props.useProperties.IndexOf(useProps);
             if (useProps.toggleResourceUse && resourceUseToggleStates != null && resourceUseToggleStates.TryGetValue(ind, out bool state) && !state)
             {
                 return false;
@@ -47,7 +45,7 @@ namespace ART
         public override string CompInspectStringExtra()
         {
             var sb = new StringBuilder(base.CompInspectStringExtra());
-            var useProps = this.Props.useProperties;
+            var useProps = Props.useProperties;
             foreach (var useProp in useProps)
             {
                 if (useProp.hediffRequired)
@@ -65,11 +63,11 @@ namespace ART
                 resourceUseToggleStates = new Dictionary<int, bool>();
                 foreach (var useProps in Props.useProperties)
                 {
-                    var ind = Props.useProperties.IndexOf(useProps);
+                    int ind = Props.useProperties.IndexOf(useProps);
                     resourceUseToggleStates[ind] = useProps.defaultToggleState;
                 }
             }
-            things[this.parent] = this;
+            things[parent] = this;
             foreach (var useProps in Props.useProperties)
             {
                 if (useProps.statOffsets != null)
@@ -91,10 +89,10 @@ namespace ART
             Register();
             var gameComp = ARTManager.Instance;
             gameComp.UpdateAdjuster(this);
-            this.compPower = this.parent.TryGetComp<CompPowerTrader>();
-            this.compParentGlower = this.parent.TryGetComp<CompGlower>();
+            compPower = parent.TryGetComp<CompPowerTrader>();
+            compParentGlower = parent.TryGetComp<CompGlower>();
             gameComp.RegisterFacilityInUse(this);
-            boolValueCache = new BoolPawnsValueCache(InUseInt(out IEnumerable<Pawn> claimants), claimants);
+            boolValueCache = new BoolPawnsValueCache(InUseInt(out var claimants), claimants);
         }
 
         private BoolPawnsValueCache boolValueCache;
@@ -102,7 +100,7 @@ namespace ART
         {
             if (boolValueCache is null || Find.TickManager.TicksGame + 60 > boolValueCache.updateTick)
             {
-                boolValueCache = new BoolPawnsValueCache(InUseInt(out IEnumerable<Pawn> pawns), pawns);
+                boolValueCache = new BoolPawnsValueCache(InUseInt(out var pawns), pawns);
             }
             claimants = boolValueCache.pawns;
             return boolValueCache.value;
@@ -112,13 +110,13 @@ namespace ART
             claimants = Claimants;
             if (claimants != null)
             {
-                if (this.parent is Frame)
+                if (parent is Frame)
                 {
                     foreach (var claimant in claimants)
                     {
                         if (!claimant.pather.MovingNow && claimant.CurJobDef == JobDefOf.FinishFrame
-                            && claimant.CurJob.targetA.Thing == this.parent
-                            && this.parent.OccupiedRect().Cells.Any(x => x.DistanceTo(claimant.Position) <= 1.5f))
+                            && claimant.CurJob.targetA.Thing == parent
+                            && parent.OccupiedRect().Cells.Any(x => x.DistanceTo(claimant.Position) <= 1.5f))
                         {
                             return true;
                         }
@@ -129,7 +127,7 @@ namespace ART
                     foreach (var claimant in claimants)
                     {
                         var pawnPosition = claimant.Position;
-                        if (pawnPosition == this.parent.Position || pawnPosition == this.parent.InteractionCell)
+                        if (pawnPosition == parent.Position || pawnPosition == parent.InteractionCell)
                         {
                             return true;
                         }
@@ -142,13 +140,13 @@ namespace ART
         }
         public IEnumerable<Pawn> GetActualUsers(IEnumerable<Pawn> claimants)
         {
-            if (this.parent is Frame)
+            if (parent is Frame)
             {
                 foreach (var claimant in claimants)
                 {
                     if (!claimant.pather.MovingNow && claimant.CurJobDef == JobDefOf.FinishFrame
-                        && claimant.CurJob.targetA.Thing == this.parent
-                        && this.parent.OccupiedRect().Cells.Any(x => x.DistanceTo(claimant.Position) <= 1.5f))
+                        && claimant.CurJob.targetA.Thing == parent
+                        && parent.OccupiedRect().Cells.Any(x => x.DistanceTo(claimant.Position) <= 1.5f))
                     {
                         yield return claimant;
                     }
@@ -159,15 +157,15 @@ namespace ART
                 foreach (var claimant in claimants)
                 {
                     var pawnPosition = claimant.Position;
-                    if (pawnPosition == this.parent.Position || pawnPosition == this.parent.InteractionCell)
+                    if (pawnPosition == parent.Position || pawnPosition == parent.InteractionCell)
                     {
                         yield return claimant;
                     }
                 }
             }
         }
-        private IEnumerable<Reservation> Reservations => this.parent.Map != null 
-            ? this.parent.Map.reservationManager.ReservationsReadOnly.Where(x => x.Target.Thing == this.parent)
+        private IEnumerable<Reservation> Reservations => parent.Map != null
+            ? parent.Map.reservationManager.ReservationsReadOnly.Where(x => x.Target.Thing == parent)
             : Enumerable.Empty<Reservation>();
 
         private IEnumerable<Pawn> cachedClaimants;
@@ -177,7 +175,7 @@ namespace ART
         {
             get
             {
-                var curTicks = Find.TickManager.TicksGame;
+                int curTicks = Find.TickManager.TicksGame;
                 if (curTicks > lastClaimantCacheTick + 60 || cachedClaimants is null)
                 {
                     cachedClaimants = Reservations.Select(x => x.Claimant);
@@ -187,11 +185,11 @@ namespace ART
             }
         }
 
-        public CompProperties_ThingInUse Props => (CompProperties_ThingInUse)this.props;
+        public CompProperties_ThingInUse Props => (CompProperties_ThingInUse)props;
         public List<ResourceProperties> ResourceSettings => null;
         public Dictionary<HediffResource, HediffResouceDisable> PostUseDelayTicks => null;
         public string DisablePostUse => null;
-        public Thing Parent => this.parent;
+        public Thing Parent => parent;
         public Pawn PawnHost => null;
         public void ResourceTick()
         {
@@ -203,10 +201,10 @@ namespace ART
                 {
                     foreach (var useProps in Props.useProperties)
                     {
-                        if (useProps.resourcePerSecond != -1f && this.UseIsEnabled(useProps))
+                        if (useProps.resourcePerSecond != -1f && UseIsEnabled(useProps))
                         {
                             float num = useProps.resourcePerSecond;
-                            if (useProps.qualityScalesResourcePerSecond && this.parent.TryGetQuality(out QualityCategory qc))
+                            if (useProps.qualityScalesResourcePerSecond && parent.TryGetQuality(out var qc))
                             {
                                 num *= Utils.GetQualityMultiplierInverted(qc);
                             }
@@ -229,24 +227,26 @@ namespace ART
             {
                 if (useProps.toggleResourceUse)
                 {
-                    var ind = Props.useProperties.IndexOf(useProps);
-                    var toggle = new Command_Toggle();
-                    toggle.defaultLabel = useProps.toggleResourceLabel;
-                    toggle.defaultDesc = useProps.toggleResourceDesc;
-                    toggle.icon = ContentFinder<Texture2D>.Get(useProps.toggleResourceGizmoTexPath);
-                    toggle.toggleAction = delegate ()
+                    int ind = Props.useProperties.IndexOf(useProps);
+                    var toggle = new Command_Toggle
                     {
-                        if (resourceUseToggleStates.ContainsKey(ind))
+                        defaultLabel = useProps.toggleResourceLabel,
+                        defaultDesc = useProps.toggleResourceDesc,
+                        icon = ContentFinder<Texture2D>.Get(useProps.toggleResourceGizmoTexPath),
+                        toggleAction = delegate ()
                         {
-                            resourceUseToggleStates[ind] = !resourceUseToggleStates[ind];
-                        }
-                        else
-                        {
-                            resourceUseToggleStates[ind] = false;
-                        }
-                        UpdateGraphics();
+                            if (resourceUseToggleStates.ContainsKey(ind))
+                            {
+                                resourceUseToggleStates[ind] = !resourceUseToggleStates[ind];
+                            }
+                            else
+                            {
+                                resourceUseToggleStates[ind] = false;
+                            }
+                            UpdateGraphics();
+                        },
+                        isActive = () => (!(resourceUseToggleStates is null) && !resourceUseToggleStates.ContainsKey(ind)) || resourceUseToggleStates[ind]
                     };
-                    toggle.isActive = (() => resourceUseToggleStates is null || resourceUseToggleStates.ContainsKey(ind) ? resourceUseToggleStates[ind] : true);
                     yield return toggle;
                 }
             }
@@ -270,7 +270,7 @@ namespace ART
 
                         if (!changedGlower && useProps.glowerOptions != null)
                         {
-                            if (!useProps.glowOnlyPowered || (this.parent.TryGetComp<CompPowerTrader>()?.PowerOn ?? false))
+                            if (!useProps.glowOnlyPowered || (parent.TryGetComp<CompPowerTrader>()?.PowerOn ?? false))
                             {
                                 UpdateGlower(useProps.glowerOptions);
                                 changedGlower = true;
@@ -284,7 +284,7 @@ namespace ART
                     {
                         if (UseIsEnabled(useProps))
                         {
-                            var ind = Props.useProperties.IndexOf(useProps);
+                            int ind = Props.useProperties.IndexOf(useProps);
                             if (!changedGraphics && !useProps.texPathToggledOn.NullOrEmpty() && resourceUseToggleStates.ContainsKey(ind) && resourceUseToggleStates[ind])
                             {
                                 ChangeGraphic(useProps.texPathToggledOn);
@@ -293,7 +293,7 @@ namespace ART
 
                             if (!changedGlower && useProps.glowerOptions != null)
                             {
-                                if (useProps.glowOnlyPowered && (this.parent.TryGetComp<CompPowerTrader>()?.PowerOn ?? false))
+                                if (useProps.glowOnlyPowered && (parent.TryGetComp<CompPowerTrader>()?.PowerOn ?? false))
                                 {
                                     UpdateGlower(useProps.glowerOptions);
                                     changedGlower = true;
@@ -310,10 +310,10 @@ namespace ART
 
                 if (!changedGlower)
                 {
-                    if (this.compGlower != null)
+                    if (compGlower != null)
                     {
-                        base.parent.Map.glowGrid.DeRegisterGlower(this.compGlower);
-                        this.compGlower = null;
+                        base.parent.Map.glowGrid.DeRegisterGlower(compGlower);
+                        compGlower = null;
                     }
 
                     if (compParentGlower != null)
@@ -326,27 +326,29 @@ namespace ART
 
         public void ChangeGraphic(string texPath)
         {
-            var graphicData = new GraphicData();
-            graphicData.graphicClass = this.parent.def.graphicData.graphicClass;
-            graphicData.texPath = texPath;
-            graphicData.shaderType = this.parent.def.graphicData.shaderType;
-            graphicData.drawSize = this.parent.def.graphicData.drawSize;
-            graphicData.color = this.parent.def.graphicData.color;
-            graphicData.colorTwo = this.parent.def.graphicData.colorTwo;
-            var newGraphic = graphicData.GraphicColoredFor(this.parent);
-            Traverse.Create(this.parent).Field("graphicInt").SetValue(newGraphic);
-            base.parent.Map.mapDrawer.MapMeshDirty(this.parent.Position, MapMeshFlag.Things);
+            var graphicData = new GraphicData
+            {
+                graphicClass = parent.def.graphicData.graphicClass,
+                texPath = texPath,
+                shaderType = parent.def.graphicData.shaderType,
+                drawSize = parent.def.graphicData.drawSize,
+                color = parent.def.graphicData.color,
+                colorTwo = parent.def.graphicData.colorTwo
+            };
+            var newGraphic = graphicData.GraphicColoredFor(parent);
+            Traverse.Create(parent).Field("graphicInt").SetValue(newGraphic);
+            base.parent.Map.mapDrawer.MapMeshDirty(parent.Position, MapMeshFlag.Things);
         }
 
         public CompGlower compGlower;
         public void RemoveGlower()
         {
-            if (this.compGlower != null)
+            if (compGlower != null)
             {
-                base.parent.Map.glowGrid.DeRegisterGlower(this.compGlower);
-                this.compGlower = null;
+                base.parent.Map.glowGrid.DeRegisterGlower(compGlower);
+                compGlower = null;
             }
-            var parentGlower = this.parent.TryGetComp<CompGlower>();
+            var parentGlower = parent.TryGetComp<CompGlower>();
             if (parentGlower != null)
             {
                 base.parent.Map.glowGrid.DeRegisterGlower(parentGlower);
@@ -355,16 +357,18 @@ namespace ART
         public void UpdateGlower(GlowerOptions glowerOptions)
         {
             RemoveGlower();
-            this.compGlower = new CompGlower();
-            this.compGlower.parent = this.parent;
-            this.compGlower.Initialize(new CompProperties_Glower()
+            compGlower = new CompGlower
+            {
+                parent = parent
+            };
+            compGlower.Initialize(new CompProperties_Glower()
             {
                 glowColor = glowerOptions.glowColor,
                 glowRadius = glowerOptions.glowRadius,
                 overlightRadius = glowerOptions.overlightRadius
             });
             base.parent.Map.mapDrawer.MapMeshDirty(base.parent.Position, MapMeshFlag.Things);
-            base.parent.Map.glowGrid.RegisterGlower(this.compGlower);
+            base.parent.Map.glowGrid.RegisterGlower(compGlower);
         }
 
         public void Drop()
@@ -379,7 +383,7 @@ namespace ART
 
         public bool TryGetQuality(out QualityCategory qc)
         {
-            return this.parent.TryGetQuality(out qc);
+            return parent.TryGetQuality(out qc);
         }
 
         public void Register()
@@ -423,7 +427,7 @@ namespace ART
 
         public ThingDef GetStuff()
         {
-            return this.parent.Stuff;
+            return parent.Stuff;
         }
 
         public bool IsStorageFor(ResourceProperties resourceProperties, out ResourceStorage resourceStorages)

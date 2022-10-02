@@ -1,16 +1,9 @@
 ﻿using HarmonyLib;
-using MVCF.Utilities;
 using RimWorld;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Mail;
 using System.Reflection;
 using System.Reflection.Emit;
-using System.Text;
-using System.Threading.Tasks;
-using Unity.Jobs;
-using UnityEngine;
 using Verse;
 using Verse.AI;
 
@@ -27,7 +20,7 @@ namespace ART
             {
                 foreach (var useProps in extension.useProperties)
                 {
-                    if (!pawn.CanUseIt(t.Label, useProps, useProps.resourceOnStrike, useProps.cannotMineMessageKey, out var failMessage))
+                    if (!pawn.CanUseIt(t.Label, useProps, useProps.resourceOnStrike, useProps.cannotMineMessageKey, out string failMessage))
                     {
                         JobFailReason.Is(failMessage);
                         __result = null;
@@ -50,7 +43,7 @@ namespace ART
         public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> codeInstructions, MethodBase method)
         {
             var codes = codeInstructions.ToList();
-            for (var i = 0; i < codes.Count; i++)
+            for (int i = 0; i < codes.Count; i++)
             {
                 yield return codes[i];
                 if (i > 1 && codes[i].opcode == OpCodes.Bgt && codes[i - 1].opcode == OpCodes.Ldc_I4_0)

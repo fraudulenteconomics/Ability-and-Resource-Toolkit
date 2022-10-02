@@ -1,17 +1,9 @@
 ﻿using HarmonyLib;
-using MVCF.Utilities;
 using RimWorld;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Reflection.Emit;
-using System.Runtime.Remoting.Messaging;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
 using Verse;
-using Verse.AI;
 
 namespace ART
 {
@@ -85,7 +77,7 @@ namespace ART
         public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
         {
             var codes = instructions.ToList();
-            for (var i = 0; i < codes.Count; i++)
+            for (int i = 0; i < codes.Count; i++)
             {
                 yield return codes[i];
                 if (codes[i].opcode == OpCodes.Stloc_1)

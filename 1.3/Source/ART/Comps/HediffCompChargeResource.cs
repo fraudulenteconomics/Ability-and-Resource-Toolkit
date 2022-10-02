@@ -1,9 +1,4 @@
-﻿using RimWorld;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Verse;
 
 namespace ART
@@ -12,7 +7,7 @@ namespace ART
     {
         public HediffCompProperties_ChargeResource()
         {
-            this.compClass = typeof(HediffCompChargeResource);
+            compClass = typeof(HediffCompChargeResource);
         }
     }
     public class HediffCompChargeResource : HediffComp, IChargeResource
@@ -29,7 +24,7 @@ namespace ART
                 return projectilesWithChargedResource;
             }
         }
-        public HediffCompProperties_ChargeResource Props => (HediffCompProperties_ChargeResource)this.props;
+        public HediffCompProperties_ChargeResource Props => (HediffCompProperties_ChargeResource)props;
         public override void CompExposeData()
         {
             base.CompExposeData();

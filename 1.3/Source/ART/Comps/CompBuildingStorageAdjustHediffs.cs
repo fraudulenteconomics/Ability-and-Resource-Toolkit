@@ -1,9 +1,6 @@
 ﻿using RimWorld;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Verse;
 
 namespace ART
@@ -12,7 +9,7 @@ namespace ART
     {
         public CompProperties_BuildingStorageAdjustHediffs()
         {
-            this.compClass = typeof(CompBuildingStorageAdjustHediffs);
+            compClass = typeof(CompBuildingStorageAdjustHediffs);
         }
     }
     public class CompBuildingStorageAdjustHediffs : CompAdjustHediffs
@@ -21,17 +18,17 @@ namespace ART
         public override void PostSpawnSetup(bool respawningAfterLoad)
         {
             base.PostSpawnSetup(respawningAfterLoad);
-            compPower = this.parent.TryGetComp<CompPowerTrader>();
+            compPower = parent.TryGetComp<CompPowerTrader>();
         }
         public IEnumerable<CompAdjustHediffs> StoredItems
         {
             get
             {
-                foreach (var cell in this.parent.OccupiedRect())
+                foreach (var cell in parent.OccupiedRect())
                 {
-                    foreach (var thing in cell.GetThingList(this.parent.Map))
+                    foreach (var thing in cell.GetThingList(parent.Map))
                     {
-                        if (thing != this.parent && thing.TryGetCompAdjustHediffs(out var comp))
+                        if (thing != parent && thing.TryGetCompAdjustHediffs(out var comp))
                         {
                             yield return comp;
                         }
@@ -62,8 +59,8 @@ namespace ART
                             storage.Item3.lastChargedTick = Find.TickManager.TicksGame;
                         }
 
-                        if (resourceProperties.unforbidWhenEmpty && storage.Item3.ResourceAmount <= 0 ||
-                            resourceProperties.unforbidWhenFull && storage.Item3.ResourceAmount >= storage.Item3.ResourceCapacity)
+                        if ((resourceProperties.unforbidWhenEmpty && storage.Item3.ResourceAmount <= 0) ||
+                            (resourceProperties.unforbidWhenFull && storage.Item3.ResourceAmount >= storage.Item3.ResourceCapacity))
                         {
                             storage.Item1.parent.SetForbidden(false);
                         }

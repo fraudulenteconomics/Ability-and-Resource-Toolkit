@@ -1,10 +1,4 @@
-﻿using RimWorld;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
+﻿using System.Collections.Generic;
 using Verse;
 using Verse.AI;
 
@@ -33,19 +27,21 @@ namespace ART
 		public override IEnumerable<Toil> MakeNewToils()
 		{
 			this.FailOnDespawnedOrNull(TargetIndex.A);
-			this.FailOn(() => !this.CompMaintainable.CanMaintain(pawn, out string failReason));
+			this.FailOn(() => !CompMaintainable.CanMaintain(pawn, out string failReason));
 			yield return Toils_Goto.GotoThing(TargetIndex.A, PathEndMode.Touch);
-			Toil toil = Toils_General.Wait(180);
+			var toil = Toils_General.Wait(180);
 			toil.WithProgressBarToilDelay(TargetIndex.A);
 			toil.FailOnDespawnedNullOrForbidden(TargetIndex.A);
 			toil.FailOnCannotTouch(TargetIndex.A, PathEndMode.Touch);
 			yield return toil;
-			Toil maintain = new Toil();
-			maintain.initAction = delegate
+			var maintain = new Toil
+			{
+				initAction = delegate
 			{
 				CompMaintainable.Maintained(pawn);
+			},
+				defaultCompleteMode = ToilCompleteMode.Instant
 			};
-			maintain.defaultCompleteMode = ToilCompleteMode.Instant;
 			yield return maintain;
 		}
 	}

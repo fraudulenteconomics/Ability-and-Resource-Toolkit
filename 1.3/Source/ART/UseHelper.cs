@@ -1,7 +1,4 @@
-﻿using RimWorld;
-using System.Net.Mail;
-using Verse;
-using Verse.AI;
+﻿using Verse;
 
 namespace ART
 {
@@ -15,8 +12,7 @@ namespace ART
                 {
                     if (comp.UseIsEnabled(useProps) && useProps.hediffRequired)
                     {
-                        var hediffResource = pawn.health.hediffSet.GetFirstHediffOfDef(useProps.hediff) as HediffResource;
-                        if (hediffResource is null)
+                        if (!(pawn.health.hediffSet.GetFirstHediffOfDef(useProps.hediff) is HediffResource hediffResource))
                         {
                             var noResourceReason = "ART.NoResource".Translate(pawn.Named("PAWN"), useProps.hediff.label);
                             cannotUseMessage = useProps.cannotUseMessageKey.Translate(pawn.Named("PAWN"), t.Label, noResourceReason);
@@ -39,8 +35,7 @@ namespace ART
                     {
                         if (useProps.hediffRequired)
                         {
-                            var hediffResource = pawn.health.hediffSet.GetFirstHediffOfDef(useProps.hediff) as HediffResource;
-                            if (hediffResource is null)
+                            if (!(pawn.health.hediffSet.GetFirstHediffOfDef(useProps.hediff) is HediffResource hediffResource))
                             {
                                 var noResourceReason = "ART.NoResource".Translate(pawn.Named("PAWN"), useProps.hediff.label);
                                 cannotUseMessage = useProps.cannotUseMessageKey.Translate(pawn.Named("PAWN"), t.Label, noResourceReason);
@@ -62,7 +57,7 @@ namespace ART
         public static bool CanUseIt(this Pawn pawn, string thingLabel, UseProps useProps, float resourceAmount, string cannotUseMessageKey, out string failMessage)
         {
             failMessage = null;
-            if (useProps.hediffRequired &&  resourceAmount < 0 && !pawn.HasResource(useProps.hediff, -resourceAmount))
+            if (useProps.hediffRequired && resourceAmount < 0 && !pawn.HasResource(useProps.hediff, -resourceAmount))
             {
                 if (!cannotUseMessageKey.NullOrEmpty())
                 {

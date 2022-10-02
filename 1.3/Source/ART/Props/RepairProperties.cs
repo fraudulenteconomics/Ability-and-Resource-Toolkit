@@ -1,11 +1,8 @@
-﻿using RimWorld;
-using System.Collections.Generic;
-
-namespace ART
+﻿namespace ART
 {
     public class RepairProperties
     {
-		public float resourceOnRepair;
-		public HediffResourceDef hediffResource;
+        public float resourceOnRepair;
+        public HediffResourceDef hediffResource;
     }
 }

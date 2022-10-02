@@ -1,15 +1,9 @@
 ﻿using HarmonyLib;
-using MVCF.Utilities;
 using RimWorld.Planet;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
 using Verse;
-using Verse.AI;
 using VFECore.Abilities;
 
 namespace ART
@@ -23,7 +17,7 @@ namespace ART
             var extension = __instance.def.GetModExtension<AbilityResourceProps>();
             if (extension != null && __result)
             {
-                var isUsable = Utils.IsUsableForProps(__instance.pawn, extension, out var reason2);
+                bool isUsable = Utils.IsUsableForProps(__instance.pawn, extension, out string reason2);
                 if (!isUsable)
                 {
                     reason = reason2;
@@ -55,7 +49,7 @@ namespace ART
             var extension = __instance.def.GetModExtension<AbilityResourceProps>();
             if (extension != null)
             {
-                StringBuilder sb = new StringBuilder(__result);
+                var sb = new StringBuilder(__result);
                 sb.AppendLine(Utils.GetPropsDescriptions(__instance.pawn, extension));
                 __result = sb.ToString().TrimEndNewlines();
             }

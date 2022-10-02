@@ -1,10 +1,6 @@
 ﻿using RimWorld;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
 using Verse;
 using Verse.AI;
 
@@ -38,8 +34,7 @@ namespace ART
 
         public override bool HasJobOnThing(Pawn pawn, Thing t, bool forced = false)
         {
-            Building building = t as Building;
-            if (building == null)
+            if (!(t is Building building))
             {
                 return false;
             }
@@ -69,7 +64,7 @@ namespace ART
             {
                 return false;
             }
-            CompMaintainableResourceBuilding compMaintainable = building.TryGetComp<CompMaintainableResourceBuilding>();
+            var compMaintainable = building.TryGetComp<CompMaintainableResourceBuilding>();
             if (compMaintainable.CurStage == MaintainableStage.Healthy)
             {
                 return false;
@@ -88,7 +83,7 @@ namespace ART
 
         public override Job JobOnThing(Pawn pawn, Thing t, bool forced = false)
         {
-            return JobMaker.MakeJob(DefDatabase<JobDef>.GetNamed("ART_Maintain"), t);
+            return JobMaker.MakeJob(ART_DefOf.ART_Maintain, t);
         }
     }
 }

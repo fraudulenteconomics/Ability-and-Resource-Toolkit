@@ -17,11 +17,11 @@ namespace ART
 
         public override GizmoResult GizmoOnGUI(Vector2 topLeft, float maxWidth, GizmoRenderParms parms)
         {
-            Rect rect = new Rect(topLeft.x, topLeft.y, GetWidth(maxWidth), 75f);
-            GizmoResult result = base.GizmoOnGUI(topLeft, maxWidth, parms);
+            var rect = new Rect(topLeft.x, topLeft.y, GetWidth(maxWidth), 75f);
+            var result = base.GizmoOnGUI(topLeft, maxWidth, parms);
             if (hediffResource.lastStageActivatedTick > 0)
             {
-                var cooldownTicksRemaining = Find.TickManager.TicksGame - hediffResource.lastStageActivatedTick;
+                int cooldownTicksRemaining = Find.TickManager.TicksGame - hediffResource.lastStageActivatedTick;
                 if (cooldownTicksRemaining < hediffResource.curCooldownPeriod)
                 {
                     float num = Mathf.InverseLerp(hediffResource.curCooldownPeriod, 0, cooldownTicksRemaining);
@@ -30,7 +30,7 @@ namespace ART
             }
             if (hediffResource.lastStageSwitchTick > 0)
             {
-                var cooldownTicksRemaining = Find.TickManager.TicksGame - hediffResource.lastStageSwitchTick;
+                int cooldownTicksRemaining = Find.TickManager.TicksGame - hediffResource.lastStageSwitchTick;
                 if (cooldownTicksRemaining < hediffResource.curChangeTime)
                 {
                     float num = Mathf.Abs(1 - Mathf.InverseLerp(hediffResource.curChangeTime, 0, cooldownTicksRemaining));
@@ -55,7 +55,7 @@ namespace ART
             {
                 GUI.DrawTexture(rect, bgTex);
             }
-            Rect result = rect;
+            var result = rect;
             rect.height *= fillPercent;
             GUI.DrawTexture(rect, fillTex);
             return result;

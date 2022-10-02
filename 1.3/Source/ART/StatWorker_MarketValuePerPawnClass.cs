@@ -17,7 +17,7 @@ namespace ART
 
         public override string ExplanationPart(StatRequest req)
         {
-            StringBuilder stringBuilder = new StringBuilder();
+            var stringBuilder = new StringBuilder();
             var comp = req.Thing?.TryGetComp<CompPawnClass>();
             if (comp != null && comp.HasClassTrait(out var classTrait) && comp.ClassTraitDef.valuePerLevelOffset > 0)
             {

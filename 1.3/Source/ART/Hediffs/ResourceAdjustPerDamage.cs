@@ -1,20 +1,18 @@
-﻿using System.Collections.Generic;
-using System.Xml;
-using Verse;
+﻿using Verse;
 
 namespace ART
 {
 
     public class ResourceAdjustPerDamage
     {
-		public float? flat;
-		public float? point;
-		public DamageDef damageDef;
+        public float? flat;
+        public float? point;
+        public DamageDef damageDef;
         public HediffResourceDef hediff;
-		public float GetResourceGain(float damageAmount)
+        public float GetResourceGain(float damageAmount)
         {
             float num = 0f;
-			if (flat.HasValue)
+            if (flat.HasValue)
             {
                 num += flat.Value;
             }
@@ -24,5 +22,5 @@ namespace ART
             }
             return num;
         }
-	}
+    }
 }

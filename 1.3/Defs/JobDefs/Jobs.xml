@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <JobDef>
+    <defName>ART_Maintain</defName>
+    <driverClass>ART.JobDriver_MaintainResourceBuilding</driverClass>
+    <reportString>maintaining TargetA.</reportString>
+    <casualInterruptible>false</casualInterruptible>
+    <allowOpportunisticPrefix>true</allowOpportunisticPrefix>
+  </JobDef>
+
+  <JobDef>
+    <defName>ART_RefuelResource</defName>
+    <driverClass>ART.JobDriver_RefuelResource</driverClass>
+    <reportString>refuel with TargetA.</reportString>
+    <casualInterruptible>false</casualInterruptible>
+    <allowOpportunisticPrefix>true</allowOpportunisticPrefix>
+  </JobDef>
+  
+</Defs>
