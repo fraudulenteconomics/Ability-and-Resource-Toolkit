@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using PipeSystem;
 using RimWorld;
 using System.Collections.Generic;
 using System.Linq;
@@ -65,7 +66,30 @@ namespace ART
                     }
                 }
 
-                foreach (var hediffResource in Utils.HediffResourcesRefuelable(pawn, t))
+                var compConvertToResource = t.TryGetComp<CompConvertToResource>();
+                if (compConvertToResource != null)
+                {
+                    foreach (var hediffResource in Utils.HediffResourcesInteractableWithPipes(pawn, compConvertToResource.Props.thing, (HediffResource x) => x.ResourceAmount > 0))
+                    {
+                        opts.Add(new FloatMenuOption("ART.Fill".Translate("ART.Network".Translate(compConvertToResource.Props.pipeNet.resource.name.UncapitalizeFirst()), hediffResource.def.label), delegate
+                        {
+                            pawn.jobs.TryTakeOrderedJob(JobMaker.MakeJob(ART_DefOf.ART_FillResourceToNetwork, t));
+                        }));
+                    }
+                }
+                var compConvertToThing = t.TryGetComp<CompConvertToThing>();
+                if (compConvertToThing != null)
+                {
+                    foreach (var hediffResource in Utils.HediffResourcesInteractableWithPipes(pawn, compConvertToThing.Props.thing, (HediffResource x) => x.ResourceAmount < x.ResourceCapacity))
+                    {
+                        opts.Add(new FloatMenuOption("ART.Extract".Translate(hediffResource.def.label, "ART.Network".Translate(compConvertToThing.Props.pipeNet.resource.name.UncapitalizeFirst())), delegate
+                        {
+                            pawn.jobs.TryTakeOrderedJob(JobMaker.MakeJob(ART_DefOf.ART_ExtractResourceFromNetwork, t));
+                        }));
+                    }
+                }
+
+                foreach (var hediffResource in Utils.HediffResourcesRefuelable(pawn, t.def))
                 {
                     opts.Add(new FloatMenuOption("ART.Refuel".Translate(hediffResource.def.label, t.def.label), delegate
                     {

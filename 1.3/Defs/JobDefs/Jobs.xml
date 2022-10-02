@@ -17,4 +17,17 @@
     <allowOpportunisticPrefix>true</allowOpportunisticPrefix>
   </JobDef>
   
+  <JobDef>
+    <defName>ART_FillResourceToNetwork</defName>
+    <driverClass>ART.JobDriver_FillResourceToNetwork</driverClass>
+    <casualInterruptible>false</casualInterruptible>
+    <allowOpportunisticPrefix>true</allowOpportunisticPrefix>
+  </JobDef>
+  
+  <JobDef>
+    <defName>ART_ExtractResourceFromNetwork</defName>
+    <driverClass>ART.JobDriver_ExtractResourceFromNetwork</driverClass>
+    <casualInterruptible>false</casualInterruptible>
+    <allowOpportunisticPrefix>true</allowOpportunisticPrefix>
+  </JobDef>
 </Defs>

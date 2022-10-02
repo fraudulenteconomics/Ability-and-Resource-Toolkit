@@ -2,11 +2,14 @@
 
 namespace ART
 {
-    public enum RefuelUseType { Over, Under }
-    public class RefuelHediffProperties
+    public class GeneralFuelProperties
     {
         public ThingDef fuelThingDef;
         public float resourcePerThing;
+    }
+    public enum RefuelUseType { Over, Under }
+    public class RefuelHediffProperties : GeneralFuelProperties
+    {
         public int refuelTime;
         public bool useFromInventory;
         public float useThreshold;

@@ -38,5 +38,6 @@ namespace ART
 		public List<AbilityDef> randomAbilitiesPool;
 		public bool retainRandomLearnedAbilities;
 		public RefuelHediffProperties refuelHediff;
+		public PipeInteraction pipeInteraction;
 	}
 }

@@ -14,7 +14,7 @@ namespace ART
 			get
 			{
 
-				foreach (var hediffResource in Utils.HediffResourcesRefuelable(pawn, Fuel))
+				foreach (var hediffResource in Utils.HediffResourcesRefuelable(pawn, Fuel.def))
 				{
 					return hediffResource.def.refuelHediff.refuelTime;
 				}
@@ -30,7 +30,7 @@ namespace ART
 		public override IEnumerable<Toil> MakeNewToils()
 		{
 			this.FailOnDespawnedOrNull(TargetIndex.A);
-			this.FailOn(() => Utils.HediffResourcesRefuelable(pawn, Fuel).Any() is false);
+			this.FailOn(() => Utils.HediffResourcesRefuelable(pawn, Fuel.def).Any() is false);
 			yield return Toils_Goto.GotoThing(TargetIndex.A, PathEndMode.Touch);
 			var toil = Toils_General.Wait(RefuelTime);
 			toil.WithProgressBarToilDelay(TargetIndex.A);
@@ -42,7 +42,7 @@ namespace ART
 				initAction = delegate
 				{
 					var fuel = Fuel;
-					var hediff = Utils.HediffResourcesRefuelable(pawn, Fuel).FirstOrDefault();
+					var hediff = Utils.HediffResourcesRefuelable(pawn, Fuel.def).FirstOrDefault();
 					Utils.RefuelHediff(fuel, hediff);
 				},
 				defaultCompleteMode = ToilCompleteMode.Instant

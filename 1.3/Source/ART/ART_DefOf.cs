@@ -11,5 +11,7 @@ namespace ART
         public static StatDef HFR_CaravanDifficultyFactor;
         public static JobDef ART_Maintain;
         public static JobDef ART_RefuelResource;
+        public static JobDef ART_FillResourceToNetwork;
+        public static JobDef ART_ExtractResourceFromNetwork;
     }
 }

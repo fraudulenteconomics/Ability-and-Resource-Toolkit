@@ -35,6 +35,10 @@
       <HintPath>..\..\..\..\VanillaExpandedFramework\1.3\Assemblies\MVCF.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="PipeSystem">
+      <HintPath>..\..\..\..\VanillaExpandedFramework\1.3\Assemblies\PipeSystem.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -79,6 +83,8 @@
     <Compile Include="HarmonyPatches\Mining_Patches.cs" />
     <Compile Include="Hediffs\Command_SwitchHediffStageResource.cs" />
     <Compile Include="Hediffs\HediffResource_AbilityLink.cs" />
+    <Compile Include="Jobs\JobDriver_ExtractResourceFromNetwork.cs" />
+    <Compile Include="Jobs\JobDriver_FillResourceToNetwork.cs" />
     <Compile Include="Jobs\JobDriver_RefuelResource.cs" />
     <Compile Include="Props\DamageAuraProperties.cs" />
     <Compile Include="Props\GeneralProperties.cs" />
@@ -91,6 +97,7 @@
     <Compile Include="FiredData.cs" />
     <Compile Include="FloatValueCache.cs" />
     <Compile Include="Interfaces\IDrawable.cs" />
+    <Compile Include="Props\PipeInteraction.cs" />
     <Compile Include="Props\RefuelHediffProperties.cs" />
     <Compile Include="StatWorker_MarketValuePerPawnClass.cs" />
     <Compile Include="UI\Gizmo_ResourceStatus.cs" />

@@ -1,4 +1,5 @@
 ﻿using RimWorld;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -205,15 +206,32 @@ namespace ART
 			return true;
 		}
 
-		public static IEnumerable<HediffResource> HediffResourcesRefuelable(Pawn pawn, Thing fuelThing)
+		public static IEnumerable<HediffResource> HediffResourcesRefuelable(Pawn pawn, ThingDef fuelThing)
 		{
 			foreach (var hediffResource in pawn.health.hediffSet.hediffs.OfType<HediffResource>())
 			{
 				if (hediffResource.def.refuelHediff != null)
 				{
-					if (hediffResource.def.refuelHediff.fuelThingDef == fuelThing.def)
+					if (hediffResource.def.refuelHediff.fuelThingDef == fuelThing)
 					{
 						if (hediffResource.ResourceCapacity - hediffResource.ResourceAmount > 0)
+						{
+							yield return hediffResource;
+						}
+					}
+				}
+			}
+		}
+
+		public static IEnumerable<HediffResource> HediffResourcesInteractableWithPipes(Pawn pawn, ThingDef fuelThing, Func<HediffResource, bool> validator)
+		{
+			foreach (var hediffResource in pawn.health.hediffSet.hediffs.OfType<HediffResource>())
+			{
+				if (hediffResource.def.pipeInteraction != null)
+				{
+					if (hediffResource.def.pipeInteraction.fuelThingDef == fuelThing)
+					{
+						if (validator(hediffResource))
 						{
 							yield return hediffResource;
 						}

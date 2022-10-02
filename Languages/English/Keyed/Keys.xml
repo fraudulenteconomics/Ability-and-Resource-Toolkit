@@ -55,4 +55,9 @@
 	<ART.ClassName>Class: {0}</ART.ClassName>
 	<ART.MarketValuePerLevel>Level {0} of {1}: +{2}</ART.MarketValuePerLevel>
 	<ART.Refuel>Refuel {0} with {1}</ART.Refuel>
+	<ART.Extract>Extract {0} from {1}</ART.Extract>
+	<ART.Fill>Fill {0} with {1}</ART.Fill>
+	<ART.Extracting>Extracting {0} from {1}</ART.Extracting>
+	<ART.Filling>Filling {0} with {1}</ART.Filling>
+	<ART.Network>{0} network</ART.Network>
 </LanguageData>

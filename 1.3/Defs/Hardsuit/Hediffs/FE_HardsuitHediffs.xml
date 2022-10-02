@@ -33,7 +33,7 @@
 		<showInResourceTab>true</showInResourceTab>
 		
 		<refuelHediff>
-			<fuelThingDef>Uranium</fuelThingDef>
+			<fuelThingDef>Chemfuel</fuelThingDef>
 			<resourcePerThing>25</resourcePerThing>
 			<refuelTime>300</refuelTime>
 			<useFromInventory>true</useFromInventory>
@@ -41,7 +41,13 @@
 			<useType>Over</useType>
 			<refuelSound>PositiveEvent</refuelSound>
 		</refuelHediff>
-
+		
+		<pipeInteraction>
+			<fuelThingDef>Chemfuel</fuelThingDef>
+			<resourcePerThing>25</resourcePerThing>
+			<pipeInteractionPerResource>10</pipeInteractionPerResource>
+		</pipeInteraction>
+		
 		<randomAbilitiesPool>
 			<li>RE_SpectreArmor_AdrenalineRush</li>
 		</randomAbilitiesPool>

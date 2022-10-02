@@ -45,7 +45,7 @@ namespace ART
 
             foreach (var item in pawn.inventory.innerContainer.ToList())
             {
-                foreach (var hediffResource in Utils.HediffResourcesRefuelable(pawn, item))
+                foreach (var hediffResource in Utils.HediffResourcesRefuelable(pawn, item.def))
                 {
                     if (hediffResource.def.refuelHediff.useFromInventory)
                     {
