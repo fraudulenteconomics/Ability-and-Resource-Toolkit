@@ -1,14 +1,10 @@
 ﻿using RimWorld;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.UIElements;
 using Verse;
-using Verse.Noise;
 using Verse.Sound;
 using VFECore.Abilities;
 using AbilityDef = VFECore.Abilities.AbilityDef;
@@ -37,14 +33,14 @@ namespace ART
 
         public Dictionary<int, SavedSkillRecordCollection> savedSkillRecordsByStages;
         public List<Thing> amplifiers = new List<Thing>();
-        public HediffStageResource CurStageResource => this.CurStage as HediffStageResource;
+        public HediffStageResource CurStageResource => CurStage as HediffStageResource;
         public IEnumerable<Tuple<CompAdjustHediffs, ResourceProperties, ResourceStorage>> GetResourceStorages()
         {
-            foreach (var adjustResource in this.pawn.GetAllAdjustResources())
+            foreach (var adjustResource in pawn.GetAllAdjustResources())
             {
                 if (adjustResource is CompAdjustHediffs comp)
                 {
-                    foreach (var pair in comp.GetResourceStoragesFor(this.def))
+                    foreach (var pair in comp.GetResourceStoragesFor(def))
                     {
                         yield return new Tuple<CompAdjustHediffs, ResourceProperties, ResourceStorage>(comp, pair.Item2, pair.Item3);
                     }
@@ -55,7 +51,7 @@ namespace ART
         {
             get
             {
-                var amount = 0f;
+                float amount = 0f;
                 foreach (var tuple in GetResourceStorages())
                 {
                     amount += tuple.Item3.ResourceAmount;
@@ -67,7 +63,7 @@ namespace ART
         {
             get
             {
-                var amount = 0f;
+                float amount = 0f;
                 foreach (var tuple in GetResourceStorages())
                 {
                     amount += tuple.Item3.ResourceCapacity;
@@ -79,18 +75,18 @@ namespace ART
         public float ResourceAmount => resourceAmount + ResourceFromStorages;
         public void SetResourceAmount(float value, ResourceProperties source = null)
         {
-            ChangeResourceAmount(value - this.ResourceAmount, source);
+            ChangeResourceAmount(value - ResourceAmount, source);
         }
         public void ChangeResourceAmount(float offset, ResourceProperties source = null)
         {
-            if (this.def.isResource is false)
+            if (def.isResource is false)
             {
                 return;
             }
-            var hediffDefnameToCheck = "";// "FE_FuelPackHediff";
-            var resourceCapacity = this.ResourceCapacity;
-            var resourceFromStorages = this.ResourceFromStorages;
-            if (this.def.defName == hediffDefnameToCheck)
+            string hediffDefnameToCheck = "";// "FE_FuelPackHediff";
+            float resourceCapacity = ResourceCapacity;
+            float resourceFromStorages = ResourceFromStorages;
+            if (def.defName == hediffDefnameToCheck)
             {
                 //resourceCapacity = 10;
                 //resourceAmount = 10;
@@ -98,13 +94,13 @@ namespace ART
             }
 
             var storages = GetResourceStorages();
-            var totalValue = resourceAmount + resourceFromStorages;
+            float totalValue = resourceAmount + resourceFromStorages;
 
-            if (this.def.defName == hediffDefnameToCheck)
+            if (def.defName == hediffDefnameToCheck)
             {
                 ARTLog.Message("START");
                 ARTLog.Message("1 offset: " + offset);
-                ARTLog.Message("resourceAmount: " + this.resourceAmount);
+                ARTLog.Message("resourceAmount: " + resourceAmount);
                 ARTLog.Message("resourceFromStorages: " + resourceFromStorages);
                 ARTLog.Message("resourceCapacity: " + resourceCapacity);
                 ARTLog.Message("totalValue: " + totalValue);
@@ -112,13 +108,13 @@ namespace ART
             }
             if (offset > 0)
             {
-                var toAdd = Mathf.Min(offset, resourceCapacity - resourceAmount);
-                if (this.def.restrictResourceCap && resourceAmount + toAdd > resourceCapacity)
+                float toAdd = Mathf.Min(offset, resourceCapacity - resourceAmount);
+                if (def.restrictResourceCap && resourceAmount + toAdd > resourceCapacity)
                 {
                     toAdd = resourceCapacity - resourceAmount;
                 }
                 offset -= toAdd;
-                if (this.def.defName == hediffDefnameToCheck)
+                if (def.defName == hediffDefnameToCheck)
                 {
                     ARTLog.Message("toAdd: " + toAdd);
                     ARTLog.Message("2 offset: " + offset);
@@ -127,18 +123,18 @@ namespace ART
             }
             else if (offset < 0)
             {
-                var toSubtract = -Mathf.Min(-offset, resourceAmount);
+                float toSubtract = -Mathf.Min(-offset, resourceAmount);
                 offset -= toSubtract;
-                if (this.def.defName == hediffDefnameToCheck)
+                if (def.defName == hediffDefnameToCheck)
                 {
                     ARTLog.Message("toSubtract: " + toSubtract);
                     ARTLog.Message("2 offset: " + offset);
                 }
                 resourceAmount += toSubtract;
             }
-            if (this.def.defName == hediffDefnameToCheck)
+            if (def.defName == hediffDefnameToCheck)
             {
-                ARTLog.Message("this.resourceAmount: " + this.resourceAmount);
+                ARTLog.Message("this.resourceAmount: " + resourceAmount);
                 ARTLog.Message("END");
             }
 
@@ -149,9 +145,9 @@ namespace ART
                     bool changed = false;
                     foreach (var storage in storages)
                     {
-                        if (storage.Item2.hediff == this.def)
+                        if (storage.Item2.hediff == def)
                         {
-                            var toAdd = Mathf.Min(offset, storage.Item3.ResourceCapacity - storage.Item3.ResourceAmount);
+                            float toAdd = Mathf.Min(offset, storage.Item3.ResourceCapacity - storage.Item3.ResourceAmount);
                             if (toAdd > 0)
                             {
                                 changed = true;
@@ -173,25 +169,31 @@ namespace ART
 
             while (offset < 0)
             {
-                if (this.def.defName == hediffDefnameToCheck)
+                if (def.defName == hediffDefnameToCheck)
+                {
                     ARTLog.Message("WHILE: offset: " + offset);
+                }
 
                 bool changed = false;
                 foreach (var storage in storages)
                 {
-                    if (this.def.defName == hediffDefnameToCheck)
-                        ARTLog.Message("STORAGE: " + storage.Item2.hediff);
-
-                    if (storage.Item2.hediff == this.def)
+                    if (def.defName == hediffDefnameToCheck)
                     {
-                        var toSubtract = -Mathf.Min(-offset, storage.Item3.ResourceAmount);
-                        if (this.def.defName == hediffDefnameToCheck)
+                        ARTLog.Message("STORAGE: " + storage.Item2.hediff);
+                    }
+
+                    if (storage.Item2.hediff == def)
+                    {
+                        float toSubtract = -Mathf.Min(-offset, storage.Item3.ResourceAmount);
+                        if (def.defName == hediffDefnameToCheck)
+                        {
                             ARTLog.Message("toSubtract: " + toSubtract);
+                        }
 
                         if (toSubtract < 0)
                         {
                             changed = true;
-                            if (this.def.defName == hediffDefnameToCheck)
+                            if (def.defName == hediffDefnameToCheck)
                             {
                                 ARTLog.Message("storage.Item3: " + storage.Item3.parent + " - " + storage.Item3.resourceProperties.hediff);
                                 ARTLog.Message("1 storage.Item3.ResourceAmount: " + storage.Item3.ResourceAmount);
@@ -200,7 +202,7 @@ namespace ART
 
                             storage.Item3.ResourceAmount += toSubtract;
                             offset -= toSubtract;
-                            if (this.def.defName == hediffDefnameToCheck)
+                            if (def.defName == hediffDefnameToCheck)
                             {
                                 ARTLog.Message("2 storage.Item3.ResourceAmount: " + storage.Item3.ResourceAmount);
                                 ARTLog.Message("2 offset: " + offset);
@@ -217,11 +219,13 @@ namespace ART
             var storagesToDestroy = new List<CompAdjustHediffs>();
             foreach (var storage in storages)
             {
-                if (this.def.defName == hediffDefnameToCheck)
+                if (def.defName == hediffDefnameToCheck)
+                {
                     ARTLog.Message(storage.Item2.hediff + " - storage.Item3.ResourceAmount: " + storage.Item3.ResourceAmount);
+                }
 
-                if (storage.Item2.destroyWhenEmpty && storage.Item3.ResourceAmount <= 0 ||
-                    storage.Item2.destroyWhenFull && storage.Item3.ResourceAmount >= storage.Item3.ResourceCapacity)
+                if ((storage.Item2.destroyWhenEmpty && storage.Item3.ResourceAmount <= 0) ||
+                    (storage.Item2.destroyWhenFull && storage.Item3.ResourceAmount >= storage.Item3.ResourceCapacity))
                 {
                     storagesToDestroy.Add(storage.Item1);
                 }
@@ -234,8 +238,8 @@ namespace ART
             var storagesToDrop = new List<CompAdjustHediffs>();
             foreach (var storage in storages)
             {
-                if (storage.Item2.dropWhenEmpty && storage.Item3.ResourceAmount <= 0 ||
-                    storage.Item2.dropWhenFull && storage.Item3.ResourceAmount >= storage.Item3.ResourceCapacity)
+                if ((storage.Item2.dropWhenEmpty && storage.Item3.ResourceAmount <= 0) ||
+                    (storage.Item2.dropWhenFull && storage.Item3.ResourceAmount >= storage.Item3.ResourceCapacity))
                 {
                     storagesToDrop.Add(storage.Item1);
                 }
@@ -249,8 +253,8 @@ namespace ART
             var storagesToUnforbid = new List<CompAdjustHediffs>();
             foreach (var storage in storages)
             {
-                if (storage.Item2.unforbidWhenEmpty && storage.Item3.ResourceAmount <= 0 ||
-                    storage.Item2.unforbidWhenFull && storage.Item3.ResourceAmount >= storage.Item3.ResourceCapacity)
+                if ((storage.Item2.unforbidWhenEmpty && storage.Item3.ResourceAmount <= 0) ||
+                    (storage.Item2.unforbidWhenFull && storage.Item3.ResourceAmount >= storage.Item3.ResourceCapacity))
                 {
                     storagesToUnforbid.Add(storage.Item1);
                 }
@@ -261,9 +265,9 @@ namespace ART
                 comp.parent.SetForbidden(false);
             }
 
-            if (resourceAmount <= 0 && ResourceFromStorages <= 0 && !this.def.keepWhenEmpty)
+            if (resourceAmount <= 0 && ResourceFromStorages <= 0 && !def.keepWhenEmpty)
             {
-                this.pawn.health.RemoveHediff(this);
+                pawn.health.RemoveHediff(this);
             }
             else
             {
@@ -274,55 +278,49 @@ namespace ART
 
         public void UpdateResourceData()
         {
-            if (this.def.isResource)
+            if (def.isResource)
             {
-                if (this.def.useAbsoluteSeverity)
+                if (def.useAbsoluteSeverity)
                 {
-                    this.Severity = ResourceAmount / ResourceCapacity;
+                    Severity = ResourceAmount / ResourceCapacity;
                 }
                 else
                 {
-                    this.Severity = ResourceAmount;
+                    Severity = ResourceAmount;
                 }
             }
         }
 
         public override float Severity
         {
-            get
-            {
-                return base.Severity;
-            }
-            set
-            {
-                base.Severity = value;
-            }
+            get => base.Severity;
+            set => base.Severity = value;
         }
 
-        public bool CanGainResource => Find.TickManager.TicksGame > this.delayTicks;
-        public float ResourceCapacity => this.def.maxResourceCapacity + Utils.GetHediffResourceCapacityGainFor(this.pawn, def, out _) + GetHediffResourceCapacityGainFromAmplifiers(out _);
+        public bool CanGainResource => Find.TickManager.TicksGame > delayTicks;
+        public float ResourceCapacity => def.maxResourceCapacity + Utils.GetHediffResourceCapacityGainFor(pawn, def, out _) + GetHediffResourceCapacityGainFromAmplifiers(out _);
 
         public CompAbilities compAbilities;
         private void PreInit()
         {
             compAbilities = pawn?.GetComp<CompAbilities>();
-            if (this.amplifiers is null)
+            if (amplifiers is null)
             {
-                this.amplifiers = new List<Thing>();
+                amplifiers = new List<Thing>();
             }
-            if (this.savedSkillRecordsByStages is null)
+            if (savedSkillRecordsByStages is null)
             {
-                this.savedSkillRecordsByStages = new Dictionary<int, SavedSkillRecordCollection>();
+                savedSkillRecordsByStages = new Dictionary<int, SavedSkillRecordCollection>();
             }
-            if (this.grantedStaticAbilities is null)
+            if (grantedStaticAbilities is null)
             {
-                this.grantedStaticAbilities = new List<AbilityDef>();
+                grantedStaticAbilities = new List<AbilityDef>();
             }
-            if (this.grantedRandomAbilities is null)
+            if (grantedRandomAbilities is null)
             {
-                this.grantedRandomAbilities = new List<AbilityDef>();
+                grantedRandomAbilities = new List<AbilityDef>();
             }
-            this.Register();
+            Register();
         }
         public bool CanGainCapacity(float newCapacity)
         {
@@ -331,7 +329,7 @@ namespace ART
 
         public void AddDelay(int newDelayTicks)
         {
-            this.delayTicks = Find.TickManager.TicksGame + newDelayTicks;
+            delayTicks = Find.TickManager.TicksGame + newDelayTicks;
         }
         public bool CanHaveDelay(int newDelayTicks)
         {
@@ -348,14 +346,14 @@ namespace ART
         public bool CanUse(UseProps useProps, out string failReason)
         {
             failReason = "";
-            if (useProps.resourceOnComplete != -1f && this.ResourceAmount < -useProps.resourceOnComplete)
+            if (useProps.resourceOnComplete != -1f && ResourceAmount < -useProps.resourceOnComplete)
             {
-                failReason = "ART.ConsumesOnComplete".Translate(-useProps.resourceOnComplete, this.def.label);
+                failReason = "ART.ConsumesOnComplete".Translate(-useProps.resourceOnComplete, def.label);
                 return false;
             }
-            else if (useProps.resourcePerSecond != -1 && this.ResourceAmount < -useProps.resourcePerSecond)
+            else if (useProps.resourcePerSecond != -1 && ResourceAmount < -useProps.resourcePerSecond)
             {
-                failReason = "ART.ConsumesPerSecond".Translate(-useProps.resourcePerSecond, this.def.label);
+                failReason = "ART.ConsumesPerSecond".Translate(-useProps.resourcePerSecond, def.label);
                 return false;
             }
             return true;
@@ -368,7 +366,7 @@ namespace ART
             float num = 0;
             foreach (var compAmplifier in Amplifiers)
             {
-                var gain = compAmplifier.GetResourceCapacityGainFor(this.def);
+                float gain = compAmplifier.GetResourceCapacityGainFor(def);
                 explanation.AppendLine("ART.CapacityAmplifier".Translate(compAmplifier.Parent, gain));
                 num += gain;
             }
@@ -376,7 +374,7 @@ namespace ART
         }
         public IAdjustResouceInArea GetCompAmplifierFor(Thing thing)
         {
-            if (!cachedAmplifiers.TryGetValue(thing, out IAdjustResouceInArea comp))
+            if (!cachedAmplifiers.TryGetValue(thing, out var comp))
             {
                 comp = thing.TryGetComp<CompAdjustHediffsArea>();
                 cachedAmplifiers[thing] = comp;
@@ -397,7 +395,7 @@ namespace ART
                     else
                     {
                         var comp = GetCompAmplifierFor(amplifier);
-                        if (comp != null && comp.InRadiusFor(this.pawn.Position, this.def) && ARTManager.Instance.resourceAdjusters.Contains(comp))
+                        if (comp != null && comp.InRadiusFor(pawn.Position, def) && ARTManager.Instance.resourceAdjusters.Contains(comp))
                         {
                             yield return comp;
                         }
@@ -434,28 +432,28 @@ namespace ART
         }
         public override string Label
         {
-            get 
+            get
             {
-                var label = base.Label;
+                string label = base.Label;
                 if (!def.hideResourceAmount)
                 {
-                    label += ": " + this.resourceAmount.ToStringDecimalIfSmall() + "/" + this.ResourceCapacity.ToStringDecimalIfSmall();
+                    label += ": " + resourceAmount.ToStringDecimalIfSmall() + "/" + ResourceCapacity.ToStringDecimalIfSmall();
                     if (StoragesTotalCapacity > 0)
                     {
                         label += " (" + ResourceFromStorages.ToStringDecimalIfSmall() + "/" + StoragesTotalCapacity.ToStringDecimalIfSmall() + " " + "ART.Stored".Translate() + ")";
                     }
                 }
-                if (this.def.lifetimeTicks != -1)
+                if (def.lifetimeTicks != -1)
                 {
-                    label += " (" + Mathf.CeilToInt((this.def.lifetimeTicks - this.duration)).ToStringTicksToPeriod() + ")";
+                    label += " (" + Mathf.CeilToInt(def.lifetimeTicks - duration).ToStringTicksToPeriod() + ")";
                 }
-                if (this.CurStage is HediffStageResource hediffStageResource && hediffStageResource.effectWhenDowned != null && hediffStageResource.effectWhenDowned.ticksBetweenActivations > 0)
+                if (CurStage is HediffStageResource hediffStageResource && hediffStageResource.effectWhenDowned != null && hediffStageResource.effectWhenDowned.ticksBetweenActivations > 0)
                 {
                     if (ARTManager.Instance.pawnDownedStates.TryGetValue(pawn, out var state))
                     {
-                        if (state.lastDownedEffectTicks.TryGetValue(this.def, out var value))
+                        if (state.lastDownedEffectTicks.TryGetValue(def, out int value))
                         {
-                            var enabledInTick = value + hediffStageResource.effectWhenDowned.ticksBetweenActivations;
+                            int enabledInTick = value + hediffStageResource.effectWhenDowned.ticksBetweenActivations;
                             if (enabledInTick > Find.TickManager.TicksGame)
                             {
                                 label += " (" + "ART.WillBeActiveIn".Translate((enabledInTick - Find.TickManager.TicksGame).ToStringTicksToPeriod()) + ")";
@@ -471,12 +469,12 @@ namespace ART
         {
             get
             {
-                var baseText = base.TipStringExtra;
-                if (this.def.isResource)
+                string baseText = base.TipStringExtra;
+                if (def.isResource)
                 {
-                    var allCapacityAdjusters = "ART.NativeCapacity".Translate(this.def.maxResourceCapacity);
-                    Utils.GetHediffResourceCapacityGainFor(this.pawn, def, out var sbExplanation);
-                    var explanation = sbExplanation.ToString().TrimEndNewlines();
+                    var allCapacityAdjusters = "ART.NativeCapacity".Translate(def.maxResourceCapacity);
+                    Utils.GetHediffResourceCapacityGainFor(pawn, def, out var sbExplanation);
+                    string explanation = sbExplanation.ToString().TrimEndNewlines();
                     if (!explanation.NullOrEmpty())
                     {
                         allCapacityAdjusters += "\n" + explanation;
@@ -497,7 +495,7 @@ namespace ART
         {
             get
             {
-                if (this.def.lifetimeTicks != -1 && duration > this.def.lifetimeTicks)
+                if (def.lifetimeTicks != -1 && duration > def.lifetimeTicks)
                 {
                     return true;
                 }
@@ -505,7 +503,7 @@ namespace ART
                 {
                     return true;
                 }
-                if (this.def.keepWhenEmpty)
+                if (def.keepWhenEmpty)
                 {
                     if (comps != null)
                     {
@@ -519,26 +517,26 @@ namespace ART
                     }
                     return false;
                 }
-                var value = base.ShouldRemove;
+                bool value = base.ShouldRemove;
                 if (value)
                 {
-                    Log.Message("Removing: " + this + " this.ResourceAmount: " + this.ResourceAmount + " - this.Severity: " + this.Severity);
+                    Log.Message("Removing: " + this + " this.ResourceAmount: " + ResourceAmount + " - this.Severity: " + Severity);
                 }
                 return value;
             }
         }
-        
+
         public bool SourceOnlyAmplifiers()
         {
             var amplifiers = Amplifiers;
-            if (!this.def.keepWhenEmpty && amplifiers.Any())
+            if (!def.keepWhenEmpty && amplifiers.Any())
             {
                 foreach (var amplifier in amplifiers)
                 {
                     var comp = GetCompAmplifierFor(amplifier.Parent);
-                    if (comp != null && !comp.InRadiusFor(this.pawn.Position, this.def))
+                    if (comp != null && !comp.InRadiusFor(pawn.Position, def))
                     {
-                        var option = comp.GetFirstResourcePropertiesFor(this.def);
+                        var option = comp.GetFirstResourcePropertiesFor(def);
                         if (option.removeOutsideArea)
                         {
                             return true;
@@ -552,7 +550,7 @@ namespace ART
         {
             float num = 0;
 
-            var comps = Utils.GetAllAdjustResources(this.pawn);
+            var comps = Utils.GetAllAdjustResources(pawn);
             foreach (var comp in comps)
             {
                 var resourceSettings = comp.ResourceSettings;
@@ -562,7 +560,7 @@ namespace ART
                     {
                         if (option.hediff == def)
                         {
-                            var num2 = option.GetResourceGain(comp);
+                            float num2 = option.GetResourceGain(comp);
                             num += num2;
                         }
                     }
@@ -579,16 +577,16 @@ namespace ART
         public override void Notify_PawnPostApplyDamage(DamageInfo dinfo, float totalDamageDealt)
         {
             base.Notify_PawnPostApplyDamage(dinfo, totalDamageDealt);
-            if (this.CurStage is HediffStageResource hediffStageResource)
+            if (CurStage is HediffStageResource hediffStageResource)
             {
                 if (hediffStageResource.resourceAdjustPerDamages != null)
                 {
                     foreach (var value in hediffStageResource.resourceAdjustPerDamages)
                     {
-                        if (value.damageDef is null || dinfo.Def != null && value.damageDef == dinfo.Def)
+                        if (value.damageDef is null || (dinfo.Def != null && value.damageDef == dinfo.Def))
                         {
-                            var resourceToGain = value.GetResourceGain(totalDamageDealt);
-                            var hediff = value.hediff != null ? this.pawn.health.hediffSet.GetFirstHediffOfDef(value.hediff) as HediffResource : this;
+                            float resourceToGain = value.GetResourceGain(totalDamageDealt);
+                            var hediff = value.hediff != null ? pawn.health.hediffSet.GetFirstHediffOfDef(value.hediff) as HediffResource : this;
                             if (hediff != null)
                             {
                                 hediff.ChangeResourceAmount(resourceToGain);
@@ -602,15 +600,15 @@ namespace ART
         {
             base.PostAdd(dinfo);
             PreInit();
-            this.resourceAmount = this.def.initialResourceAmount;
+            resourceAmount = def.initialResourceAmount;
             UpdateResourceData();
-            this.duration = 0;
-            if (this.def.sendLetterWhenGained && this.pawn.Faction == Faction.OfPlayerSilentFail)
+            duration = 0;
+            if (def.sendLetterWhenGained && pawn.Faction == Faction.OfPlayerSilentFail)
             {
-                Find.LetterStack.ReceiveLetter(this.def.letterTitleKey.Translate(this.pawn.Named("PAWN"), this.def.Named("RESOURCE")),
-                    this.def.letterMessageKey.Translate(this.pawn.Named("PAWN"), this.def.Named("RESOURCE")), this.def.letterType, this.pawn);
+                Find.LetterStack.ReceiveLetter(def.letterTitleKey.Translate(pawn.Named("PAWN"), def.Named("RESOURCE")),
+                    def.letterMessageKey.Translate(pawn.Named("PAWN"), def.Named("RESOURCE")), def.letterType, pawn);
             }
-            var hediffStageResource = this.CurStageResource;
+            var hediffStageResource = CurStageResource;
             if (hediffStageResource != null)
             {
                 if (hediffStageResource.healingProperties != null && hediffStageResource.healingProperties.healOnApply)
@@ -624,15 +622,15 @@ namespace ART
             }
             ARTLog.Message("PostAdd");
             OnStageSwitch(hediffStageResource);
-            this.Register();
+            Register();
         }
 
         public override void PostRemoved()
         {
             base.PostRemoved();
             Notify_Removed();
-            this.Deregister();
-            var comps = Utils.GetAllAdjustResources(this.pawn);
+            Deregister();
+            var comps = Utils.GetAllAdjustResources(pawn);
             foreach (var comp in comps)
             {
                 var resourceSettings = comp.ResourceSettings;
@@ -651,29 +649,29 @@ namespace ART
         public override void Tick()
         {
             base.Tick();
-            this.duration++;
-            if (this.pawn.IsHashIntervalTick(30))
+            duration++;
+            if (pawn.IsHashIntervalTick(30))
             {
                 UpdateResourceData();
                 if (ResourceCapacity < 0)
                 {
-                    Utils.TryDropExcessHediffGears(this.pawn);
+                    Utils.TryDropExcessHediffGears(pawn);
                 }
             }
 
-            var hediffStageResource = this.CurStage as HediffStageResource;
-            if (this.previousStageIndex != this.CurStageIndex)
+            var hediffStageResource = CurStage as HediffStageResource;
+            if (previousStageIndex != CurStageIndex)
             {
                 OnStageSwitch(hediffStageResource);
             }
 
             if (hediffStageResource != null)
             {
-                if (hediffStageResource.needAdjustProperties != null && this.pawn.IsHashIntervalTick(hediffStageResource.needAdjustProperties.tickRate))
+                if (hediffStageResource.needAdjustProperties != null && pawn.IsHashIntervalTick(hediffStageResource.needAdjustProperties.tickRate))
                 {
                     foreach (var needToAdjust in hediffStageResource.needAdjustProperties.needsToAdjust)
                     {
-                        var need = this.pawn.needs.TryGetNeed(needToAdjust.need);
+                        var need = pawn.needs.TryGetNeed(needToAdjust.need);
                         if (need != null)
                         {
                             need.CurLevelPercentage += needToAdjust.adjustValue;
@@ -702,104 +700,104 @@ namespace ART
 
         private void OnStageSwitch(HediffStageResource hediffStageResource)
         {
-            ARTLog.Message(pawn + " switching stage " + this.CurStageIndex + " - " + this.previousStageIndex);
-            var previousStage = this.previousStageIndex > -1 ? def.stages[this.previousStageIndex] as HediffStageResource : null;
+            ARTLog.Message(pawn + " switching stage " + CurStageIndex + " - " + previousStageIndex);
+            var previousStage = previousStageIndex > -1 ? def.stages[previousStageIndex] as HediffStageResource : null;
             if (previousStage != null)
             {
                 if (previousStage.skillAdjustProperties != null)
                 {
                     foreach (var skillAdjust in previousStage.skillAdjustProperties)
                     {
-                        RemoveSkillAdjust(this.previousStageIndex, skillAdjust);
+                        RemoveSkillAdjust(previousStageIndex, skillAdjust);
                     }
                 }
             }
 
-            this.previousStageIndex = this.CurStageIndex;
+            previousStageIndex = CurStageIndex;
             if (hediffStageResource != null && hediffStageResource.skillAdjustProperties != null)
             {
                 foreach (var skillAdjust in hediffStageResource.skillAdjustProperties)
                 {
-                    AddSkillAdjust(this.CurStageIndex, skillAdjust);
+                    AddSkillAdjust(CurStageIndex, skillAdjust);
                 }
             }
 
-            if (this.compAbilities != null)
+            if (compAbilities != null)
             {
                 if (hediffStageResource != null)
                 {
-                    if (this.def.randomAbilitiesPool != null)
+                    if (def.randomAbilitiesPool != null)
                     {
-                        var amount = hediffStageResource.randomAbilitiesAmountToGain.RandomInRange;
-                        var abilityCandidates = this.def.randomAbilitiesPool.Where(x => !this.compAbilities.HasAbility(x)).Take(amount);
+                        int amount = hediffStageResource.randomAbilitiesAmountToGain.RandomInRange;
+                        var abilityCandidates = def.randomAbilitiesPool.Where(x => !compAbilities.HasAbility(x)).Take(amount);
                         if (!def.retainRandomLearnedAbilities)
                         {
-                            var abilitiesToRemove = this.compAbilities.LearnedAbilities.Where(x => this.grantedRandomAbilities.Contains(x.def));
+                            var abilitiesToRemove = compAbilities.LearnedAbilities.Where(x => grantedRandomAbilities.Contains(x.def));
                             foreach (var ability in abilitiesToRemove)
                             {
                                 ARTLog.Message(pawn + " - removing random ability: " + ability);
-                                this.compAbilities.LearnedAbilities.Remove(ability);
+                                compAbilities.LearnedAbilities.Remove(ability);
                             }
                         }
 
                         foreach (var ability in abilityCandidates)
                         {
                             ARTLog.Message(pawn + " - gaining random ability: " + ability);
-                            this.compAbilities.GiveAbility(ability);
-                            this.grantedRandomAbilities.Add(ability);
+                            compAbilities.GiveAbility(ability);
+                            grantedRandomAbilities.Add(ability);
                         }
                     }
                     else
                     {
-                        var abilitiesToRemove = this.compAbilities.LearnedAbilities.Where(x => this.grantedRandomAbilities.Contains(x.def));
+                        var abilitiesToRemove = compAbilities.LearnedAbilities.Where(x => grantedRandomAbilities.Contains(x.def));
                         foreach (var ability in abilitiesToRemove)
                         {
                             ARTLog.Message(pawn + " - removing random ability: " + ability);
-                            this.compAbilities.LearnedAbilities.Remove(ability);
+                            compAbilities.LearnedAbilities.Remove(ability);
                         }
                     }
 
                     if (hediffStageResource.staticAbilitiesToGain != null)
                     {
-                        var abilitiesToRemove = this.compAbilities.LearnedAbilities.Where(x => this.grantedStaticAbilities.Contains(x.def)
+                        var abilitiesToRemove = compAbilities.LearnedAbilities.Where(x => grantedStaticAbilities.Contains(x.def)
                             && !hediffStageResource.staticAbilitiesToGain.Contains(x.def));
                         foreach (var ability in abilitiesToRemove)
                         {
                             ARTLog.Message(pawn + " - removing static ability: " + ability);
-                            this.compAbilities.LearnedAbilities.Remove(ability);
+                            compAbilities.LearnedAbilities.Remove(ability);
                         }
 
-                        var abilityCandidates = hediffStageResource.staticAbilitiesToGain.Where(x => !this.compAbilities.HasAbility(x));
+                        var abilityCandidates = hediffStageResource.staticAbilitiesToGain.Where(x => !compAbilities.HasAbility(x));
                         foreach (var ability in abilityCandidates)
                         {
                             ARTLog.Message(pawn + " - gaining static ability: " + ability);
-                            this.compAbilities.GiveAbility(ability);
-                            this.grantedStaticAbilities.Add(ability);
+                            compAbilities.GiveAbility(ability);
+                            grantedStaticAbilities.Add(ability);
                         }
                     }
                     else
                     {
-                        var abilitiesToRemove = this.compAbilities.LearnedAbilities.Where(x => this.grantedStaticAbilities.Contains(x.def));
+                        var abilitiesToRemove = compAbilities.LearnedAbilities.Where(x => grantedStaticAbilities.Contains(x.def));
                         foreach (var ability in abilitiesToRemove)
                         {
                             ARTLog.Message(pawn + " - removing static ability: " + ability);
-                            this.compAbilities.LearnedAbilities.Remove(ability);
+                            compAbilities.LearnedAbilities.Remove(ability);
                         }
                     }
                 }
                 else
                 {
-                    var abilitiesToRemove = this.compAbilities.LearnedAbilities.Where(x => this.grantedRandomAbilities.Contains(x.def));
+                    var abilitiesToRemove = compAbilities.LearnedAbilities.Where(x => grantedRandomAbilities.Contains(x.def));
                     foreach (var ability in abilitiesToRemove)
                     {
                         ARTLog.Message(pawn + " - removing random ability: " + ability);
-                        this.compAbilities.LearnedAbilities.Remove(ability);
+                        compAbilities.LearnedAbilities.Remove(ability);
                     }
-                    abilitiesToRemove = this.compAbilities.LearnedAbilities.Where(x => this.grantedStaticAbilities.Contains(x.def));
+                    abilitiesToRemove = compAbilities.LearnedAbilities.Where(x => grantedStaticAbilities.Contains(x.def));
                     foreach (var ability in abilitiesToRemove)
                     {
                         ARTLog.Message(pawn + " - removing static ability: " + ability);
-                        this.compAbilities.LearnedAbilities.Remove(ability);
+                        compAbilities.LearnedAbilities.Remove(ability);
                     }
 
                 }
@@ -808,28 +806,28 @@ namespace ART
 
         public override IEnumerable<Gizmo> GetGizmos()
         {
-            if (this.def.stages != null)
+            if (def.stages != null)
             {
-                var toggleableStages = this.def.stages.OfType<HediffStageResource>().Where(x => x.togglingProperties != null);
+                var toggleableStages = def.stages.OfType<HediffStageResource>().Where(x => x.togglingProperties != null);
                 if (toggleableStages.Any())
                 {
                     yield return new Command_SwitchHediffStageResource(this)
                     {
-                        defaultLabel = this.def.label + " - " + this.CurStage.label,
+                        defaultLabel = def.label + " - " + CurStage.label,
                         icon = GetIcon(),
                         action = delegate
                         {
                             var options = new List<FloatMenuOption>();
-                            var otherStages = toggleableStages.Where(x => x != this.CurStage).ToList();
+                            var otherStages = toggleableStages.Where(x => x != CurStage).ToList();
                             foreach (var otherStage in otherStages)
                             {
-                                options.Add(new FloatMenuOption(this.def.label + " - " + otherStage.label, delegate
+                                options.Add(new FloatMenuOption(def.label + " - " + otherStage.label, delegate
                                 {
                                     lastStageSwitchTick = Find.TickManager.TicksGame;
                                     stageSwitchTickToActivate = Find.TickManager.TicksGame + otherStage.togglingProperties.changeTime;
                                     curChangeTime = otherStage.togglingProperties.changeTime;
                                     curCooldownPeriod = otherStage.togglingProperties.cooldownTime;
-                                    stageIndexToActivate = this.def.stages.IndexOf(otherStage);
+                                    stageIndexToActivate = def.stages.IndexOf(otherStage);
                                 }));
                             }
                             Find.WindowStack.Add(new FloatMenu(options));
@@ -838,27 +836,27 @@ namespace ART
                     };
                     Texture2D GetIcon()
                     {
-                        if (this.CurStage is HediffStageResource stageResource && stageResource.togglingProperties.graphicData != null)
+                        if (CurStage is HediffStageResource stageResource && stageResource.togglingProperties.graphicData != null)
                         {
                             return ContentFinder<Texture2D>.Get(stageResource.togglingProperties.graphicData.texPath);
                         }
-                        return ContentFinder<Texture2D>.Get(this.def.fallbackTogglingGraphicData.texPath);
+                        return ContentFinder<Texture2D>.Get(def.fallbackTogglingGraphicData.texPath);
                     }
 
                     bool IsActive()
                     {
-                        if (this.lastStageActivatedTick > 0)
+                        if (lastStageActivatedTick > 0)
                         {
-                            var cooldownTicksRemaining = Find.TickManager.TicksGame - this.lastStageActivatedTick;
-                            if (cooldownTicksRemaining < this.curCooldownPeriod)
+                            int cooldownTicksRemaining = Find.TickManager.TicksGame - lastStageActivatedTick;
+                            if (cooldownTicksRemaining < curCooldownPeriod)
                             {
                                 return false;
                             }
                         }
-                        if (this.lastStageSwitchTick > 0)
+                        if (lastStageSwitchTick > 0)
                         {
-                            var cooldownTicksRemaining = Find.TickManager.TicksGame - this.lastStageSwitchTick;
-                            if (cooldownTicksRemaining < this.curChangeTime)
+                            int cooldownTicksRemaining = Find.TickManager.TicksGame - lastStageSwitchTick;
+                            if (cooldownTicksRemaining < curChangeTime)
                             {
                                 return false;
                             }
@@ -871,44 +869,44 @@ namespace ART
 
         private void SwitchToStage(int stageIndex)
         {
-            var stage = this.def.stages[stageIndex] as HediffStageResource;
-            if (this.def.useAbsoluteSeverity)
+            var stage = def.stages[stageIndex] as HediffStageResource;
+            if (def.useAbsoluteSeverity)
             {
-                this.SetResourceAmount(this.ResourceCapacity * stage.minSeverity);
-                this.Severity = ResourceAmount;
+                SetResourceAmount(ResourceCapacity * stage.minSeverity);
+                Severity = ResourceAmount;
             }
             else
             {
-                this.SetResourceAmount(stage.minSeverity);
-                this.Severity = this.ResourceAmount;
+                SetResourceAmount(stage.minSeverity);
+                Severity = ResourceAmount;
             }
             if (stage.togglingProperties.soundOnToggle != null)
             {
                 stage.togglingProperties.soundOnToggle.PlayOneShot(new TargetInfo(pawn.Position, pawn.Map));
             }
-            this.lastStageActivatedTick = Find.TickManager.TicksGame;
+            lastStageActivatedTick = Find.TickManager.TicksGame;
             stageIndexToActivate = -1;
         }
         private void DoDamage(DamageAuraProperties damagingProperties)
         {
             lastDamagingEffectTick = Find.TickManager.TicksGame;
-            foreach (var victim in Utils.GetPawnsAround(pawn, damagingProperties.effectRadius))
+            foreach (var victim in Utils.GetPawnsAround(pawn, damagingProperties))
             {
                 if (CanDamage(victim, damagingProperties))
                 {
-                    var damageDef = damagingProperties.damageFromEquippedWeapon 
-                        ? this.pawn.equipment.PrimaryEq.PrimaryVerb.GetDamageDef() 
+                    var damageDef = damagingProperties.damageFromEquippedWeapon
+                        ? pawn.equipment.PrimaryEq.PrimaryVerb.GetDamageDef()
                         : damagingProperties.damageDef;
-                    var damageInfo = new DamageInfo(damageDef, damagingProperties.damageAmount, 1f, instigator: this.pawn, 
-                        weapon: damagingProperties.damageFromEquippedWeapon ? this.pawn.equipment.Primary.def : this.pawn.def);
+                    var damageInfo = new DamageInfo(damageDef, damagingProperties.damageAmount, 1f, instigator: pawn,
+                        weapon: damagingProperties.damageFromEquippedWeapon ? pawn.equipment.Primary.def : pawn.def);
                     victim.TakeDamage(damageInfo);
                     if (victim.MapHeld != null)
                     {
-                        if (damagingProperties.selfDamageMote != null && this.pawn == victim)
+                        if (damagingProperties.selfDamageMote != null && pawn == victim)
                         {
-                            MoteMaker.MakeStaticMote(this.pawn.Position, this.pawn.Map, damagingProperties.selfDamageMote);
+                            MoteMaker.MakeStaticMote(pawn.Position, pawn.Map, damagingProperties.selfDamageMote);
                         }
-                        else if (damagingProperties.otherDamageMote != null && this.pawn != victim)
+                        else if (damagingProperties.otherDamageMote != null && pawn != victim)
                         {
                             MoteMaker.MakeStaticMote(victim.PositionHeld, victim.MapHeld, damagingProperties.otherDamageMote);
                         }
@@ -935,11 +933,11 @@ namespace ART
                     return false;
                 }
             }
-            if (!properties.affectsSelf && this.pawn == thing)
+            if (!properties.affectsSelf && pawn == thing)
             {
                 return false;
             }
-            if (!properties.affectsSelf && !properties.worksThroughWalls && !GenSight.LineOfSight(this.pawn.Position, thing.Position, this.pawn.Map))
+            if (!properties.affectsSelf && !properties.worksThroughWalls && !GenSight.LineOfSight(pawn.Position, thing.Position, pawn.Map))
             {
                 return false;
             }
@@ -1017,8 +1015,8 @@ namespace ART
         public void DoTend(TendingProperties tendingProperties)
         {
             lastTendingEffectTick = Find.TickManager.TicksGame;
-            var hediffs = tendingProperties.affectConditions 
-                ? pawn.health.hediffSet.hediffs.Where(x => x.TendableNow()).ToList() 
+            var hediffs = tendingProperties.affectConditions
+                ? pawn.health.hediffSet.hediffs.Where(x => x.TendableNow()).ToList()
                 : pawn.health.hediffSet.hediffs.Where(x => x is Hediff_Injury && x.TendableNow()).ToList();
             if (hediffs.Any())
             {
@@ -1040,7 +1038,7 @@ namespace ART
         {
             lastHealingEffectTick = Find.TickManager.TicksGame;
             float totalSpentPoints = healingProperties.healPoints;
-            foreach (var pawn in Utils.GetPawnsAround(this.pawn, healingProperties))
+            foreach (var pawn in Utils.GetPawnsAround(pawn, healingProperties))
             {
                 if (CanHeal(pawn, healingProperties))
                 {
@@ -1093,8 +1091,8 @@ namespace ART
         {
             foreach (var hediff in pawn.health.hediffSet.hediffs)
             {
-                if (healingProperties.affectIllness && !(hediff is Hediff_Injury) && !(hediff is Hediff_MissingPart) 
-                    && (hediff.def.PossibleToDevelopImmunityNaturally() && !hediff.FullyImmune() || hediff.def.makesSickThought && hediff.def.tendable))
+                if (healingProperties.affectIllness && !(hediff is Hediff_Injury) && !(hediff is Hediff_MissingPart)
+                    && ((hediff.def.PossibleToDevelopImmunityNaturally() && !hediff.FullyImmune()) || (hediff.def.makesSickThought && hediff.def.tendable)))
                 {
                     yield return hediff;
                 }
@@ -1120,7 +1118,7 @@ namespace ART
         {
             SoundDefOf.EnergyShield_AbsorbDamage.PlayOneShot(new TargetInfo(base.pawn.Position, base.pawn.Map));
             impactAngleVect = Vector3Utility.HorizontalVectorFromAngle(dinfo.Angle);
-            Vector3 loc = base.pawn.TrueCenter() + impactAngleVect.RotatedBy(180f) * 0.5f;
+            var loc = base.pawn.TrueCenter() + impactAngleVect.RotatedBy(180f) * 0.5f;
             float num = Mathf.Min(10f, 2f + dinfo.Amount / 10f);
             FleckMaker.Static(loc, base.pawn.Map, FleckDefOf.ExplosionFlash, num);
             int num2 = (int)num;
@@ -1148,13 +1146,13 @@ namespace ART
         public Dictionary<HediffResource, HediffResouceDisable> PostUseDelayTicks => null;
         public Thing Parent => pawn;
         public Pawn PawnHost => pawn;
-        public List<ResourceProperties> ResourceSettings => this.CurStageResource?.resourceSettings ?? new List<ResourceProperties>();
+        public List<ResourceProperties> ResourceSettings => CurStageResource?.resourceSettings ?? new List<ResourceProperties>();
         public string DisablePostUse => "";
 
         private static Dictionary<GraphicData, Material> auraGraphics = new Dictionary<GraphicData, Material>();
         public static Material GetAuraMaterial(GraphicData graphicData)
         {
-            if (!auraGraphics.TryGetValue(graphicData, out Material material))
+            if (!auraGraphics.TryGetValue(graphicData, out var material))
             {
                 auraGraphics[graphicData] = material = MaterialPool.MatFrom(graphicData.texPath, graphicData.shaderType?.Shader ?? ShaderDatabase.Mote, graphicData.color);
             }
@@ -1162,32 +1160,32 @@ namespace ART
         }
         public virtual void Draw()
         {
-            if (this.CurStage is HediffStageResource hediffStageResource)
+            if (CurStage is HediffStageResource hediffStageResource)
             {
-                if (hediffStageResource.ShieldIsActive(pawn) && this.ResourceAmount > 0)
+                if (hediffStageResource.ShieldIsActive(pawn) && ResourceAmount > 0)
                 {
-                    float num = Mathf.Lerp(1.2f, 1.55f, this.def.lifetimeTicks != -1 ? (this.def.lifetimeTicks - duration) / this.def.lifetimeTicks : 1);
-                    Vector3 drawPos = base.pawn.Drawer.DrawPos;
+                    float num = Mathf.Lerp(1.2f, 1.55f, def.lifetimeTicks != -1 ? (def.lifetimeTicks - duration) / def.lifetimeTicks : 1);
+                    var drawPos = base.pawn.Drawer.DrawPos;
                     drawPos.y = AltitudeLayer.MoteOverhead.AltitudeFor();
                     int num2 = Find.TickManager.TicksGame - lastAbsorbDamageTick;
                     if (num2 < 8)
                     {
-                        float num3 = (float)(8 - num2) / 8f * 0.05f;
+                        float num3 = (8 - num2) / 8f * 0.05f;
                         drawPos += impactAngleVect * num3;
                         num -= num3;
                     }
                     float angle = Rand.Range(0, 360);
-                    Vector3 s = new Vector3(num, 1f, num);
-                    Matrix4x4 matrix = default(Matrix4x4);
+                    var s = new Vector3(num, 1f, num);
+                    var matrix = default(Matrix4x4);
                     matrix.SetTRS(drawPos, Quaternion.AngleAxis(angle, Vector3.up), s);
                     Graphics.DrawMesh(MeshPool.plane10, matrix, BubbleMat, 0);
                 }
                 if (hediffStageResource.damageAuraProperties?.auraGraphic != null)
                 {
-                    Vector3 drawPos = base.pawn.Drawer.DrawPos;
+                    var drawPos = base.pawn.Drawer.DrawPos;
                     drawPos.y = AltitudeLayer.MoteOverhead.AltitudeFor();
-                    Vector3 s = new Vector3(hediffStageResource.damageAuraProperties.auraGraphic.drawSize.x, 1f, hediffStageResource.damageAuraProperties.auraGraphic.drawSize.y);
-                    Matrix4x4 matrix = default(Matrix4x4);
+                    var s = new Vector3(hediffStageResource.damageAuraProperties.auraGraphic.drawSize.x, 1f, hediffStageResource.damageAuraProperties.auraGraphic.drawSize.y);
+                    var matrix = default(Matrix4x4);
                     matrix.SetTRS(drawPos, Quaternion.identity, s);
                     var auraMaterial = GetAuraMaterial(hediffStageResource.damageAuraProperties.auraGraphic);
                     Graphics.DrawMesh(MeshPool.plane10, matrix, auraMaterial, 0);
@@ -1244,15 +1242,15 @@ namespace ART
 
         public void Drop()
         {
-            this.PawnHost.health.RemoveHediff(this);
+            PawnHost.health.RemoveHediff(this);
             Notify_Removed();
         }
         public void Notify_Removed()
         {
             Deregister();
-            if (this.PawnHost != null)
+            if (PawnHost != null)
             {
-                Utils.RemoveExcessHediffResources(this.PawnHost, this);
+                Utils.RemoveExcessHediffResources(PawnHost, this);
             }
         }
         public void ResourceTick()

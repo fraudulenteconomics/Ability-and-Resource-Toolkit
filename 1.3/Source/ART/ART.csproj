@@ -90,6 +90,7 @@
     <Compile Include="FiredData.cs" />
     <Compile Include="FloatValueCache.cs" />
     <Compile Include="Interfaces\IDrawable.cs" />
+    <Compile Include="Props\RefuelHediffProperties.cs" />
     <Compile Include="StatWorker_MarketValuePerPawnClass.cs" />
     <Compile Include="UI\Gizmo_ResourceStatus.cs" />
     <Compile Include="HarmonyPatches\Recipe_Patches.cs" />
@@ -178,7 +179,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Krafs.Publicizer">
-      <Version>1.0.3</Version>
+      <Version>2.0.1</Version>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>

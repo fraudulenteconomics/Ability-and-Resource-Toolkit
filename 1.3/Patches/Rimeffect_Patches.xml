@@ -16,7 +16,7 @@
 									<hediff>FE_FusionReactor</hediff>
 									<resourcePerUse>-30</resourcePerUse>
 									<disableIfMissingHediff>false</disableIfMissingHediff>
-									<disableReason>Insufficient energy.</disableReason>
+									<disableReasonKey>FE.InsufficientEnergy</disableReasonKey>
 									<minimumResourcePerUse>30</minimumResourcePerUse>
 									<postUseDelay>300</postUseDelay>
 									<requiredForUse>true</requiredForUse>

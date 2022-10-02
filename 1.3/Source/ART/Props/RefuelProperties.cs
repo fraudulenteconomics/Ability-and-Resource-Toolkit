@@ -1,5 +1,4 @@
-﻿using RimWorld;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Xml;
 using Verse;
 
@@ -18,7 +17,7 @@ namespace ART
 		public ThingDefCountClassFloat(ThingDef thingDef, float count)
 		{
 			this.thingDef = thingDef;
-			this.rate = count;
+			rate = count;
 		}
 
 		public void ExposeData()
@@ -50,15 +49,15 @@ namespace ART
 
 		public IngredientCount ToIngredientCount()
 		{
-			IngredientCount ingredientCount = new IngredientCount();
+			var ingredientCount = new IngredientCount();
 			ingredientCount.SetBaseCount(rate);
 			ingredientCount.filter.SetAllow(thingDef, allow: true);
 			return ingredientCount;
 		}
 	}
-    public class RefuelProperties
-    {
+	public class RefuelProperties
+	{
 		public List<ThingDefCountClassFloat> resourcesPerFuelUnit;
 		public HediffResourceDef hediffResource;
-    }
+	}
 }

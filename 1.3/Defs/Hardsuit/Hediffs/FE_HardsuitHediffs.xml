@@ -32,11 +32,21 @@
 		<letterMessageKey>FE.FusionReactorGainedMessage</letterMessageKey>
 		<showInResourceTab>true</showInResourceTab>
 		
+		<refuelHediff>
+			<fuelThingDef>Uranium</fuelThingDef>
+			<resourcePerThing>25</resourcePerThing>
+			<refuelTime>300</refuelTime>
+			<useFromInventory>true</useFromInventory>
+			<useThreshold>0.1</useThreshold>
+			<useType>Over</useType>
+			<refuelSound>PositiveEvent</refuelSound>
+		</refuelHediff>
+
 		<randomAbilitiesPool>
 			<li>RE_SpectreArmor_AdrenalineRush</li>
 		</randomAbilitiesPool>
 		<retainRandomLearnedAbilities>true</retainRandomLearnedAbilities>
-		
+
 		<stages>
 			<li Class="ART.HediffStageResource">
 				<label>Stage One</label>
@@ -48,7 +58,7 @@
 						<temperatureRange>10~50</temperatureRange>
 						<activeAboveTemperature>false</activeAboveTemperature>
 						<activeBelowTemperature>false</activeBelowTemperature>
-						
+
 						<lightRange>0.1~0.5</lightRange>
 						<activeAboveLight>false</activeAboveLight>
 						<activeBelowLight>false</activeBelowLight>
@@ -136,7 +146,7 @@
 						<skill>Shooting</skill>
 						<skillLevelOffset>5</skillLevelOffset>
 						<maxSkillLevel>18</maxSkillLevel>
-						<forcedPassion>Minor</forcedPassion>					
+						<forcedPassion>Minor</forcedPassion>
 					</li>
 				</skillAdjustProperties>
 				<damageAuraProperties>
@@ -208,13 +218,13 @@
 						<skill>Shooting</skill>
 						<skillLevelOffset>6</skillLevelOffset>
 						<maxSkillLevel>18</maxSkillLevel>
-						<forcedPassion>Major</forcedPassion>					
+						<forcedPassion>Major</forcedPassion>
 					</li>
 					<li>
 						<skill>Melee</skill>
 						<skillLevelOffset>4</skillLevelOffset>
 						<maxSkillLevel>18</maxSkillLevel>
-						<forcedPassion>Major</forcedPassion>					
+						<forcedPassion>Major</forcedPassion>
 					</li>
 				</skillAdjustProperties>
 				<togglingProperties>

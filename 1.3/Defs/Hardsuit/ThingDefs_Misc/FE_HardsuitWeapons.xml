@@ -39,7 +39,7 @@
 						<hediff>FE_RepulsorRifle</hediff>
 						<resourcePerUse>2</resourcePerUse>
 						<disableIfMissingHediff>false</disableIfMissingHediff>
-						<disableReason>Too much energy</disableReason>
+						<disableReasonKey>FE.TooMuchEnergy</disableReasonKey>
 						<postUseDelay>1500</postUseDelay>
 						<minimumResourcePerUse>0</minimumResourcePerUse>
 					</li>
@@ -69,7 +69,7 @@
 						<hediff>FE_RepulsorRifle</hediff>
 						<resourcePerUse>-20</resourcePerUse>
 						<disableIfMissingHediff>false</disableIfMissingHediff>
-						<disableReason>Not enough energy</disableReason>
+						<disableReasonKey>FE.NotEnoughEnergy</disableReasonKey>
 						<postUseDelay>0</postUseDelay>
 						<minimumResourcePerUse>20</minimumResourcePerUse>
 					</li>
@@ -272,7 +272,7 @@
 						<hediff>FE_FusionReactor</hediff>
 						<resourcePerUse>-1.2</resourcePerUse>
 						<disableIfMissingHediff>false</disableIfMissingHediff>
-						<disableReason>Insufficient energy.</disableReason>
+						<disableReasonKey>FE.InsufficientEnergy</disableReasonKey>
 						<minimumResourcePerUse>1.2</minimumResourcePerUse>
 						<postUseDelay>90</postUseDelay>
 					</li>
@@ -376,7 +376,7 @@
 						<hediff>FE_CutterCharge</hediff>
 						<resourcePerUse>1</resourcePerUse>
 						<disableIfMissingHediff>false</disableIfMissingHediff>
-						<disableReason>Insufficient energy.</disableReason>
+						<disableReasonKey>FE.InsufficientEnergy</disableReasonKey>
 						<minimumResourcePerUse>0</minimumResourcePerUse>
 						<postUseDelay>300</postUseDelay>
 					</li>
@@ -394,7 +394,7 @@
 						<hediff>FE_CutterCharge</hediff>
 						<resourcePerUse>1</resourcePerUse>
 						<disableIfMissingHediff>false</disableIfMissingHediff>
-						<disableReason>Insufficient energy.</disableReason>
+						<disableReasonKey>FE.InsufficientEnergy</disableReasonKey>
 						<minimumResourcePerUse>0</minimumResourcePerUse>
 						<postUseDelay>300</postUseDelay>
 					</li>
@@ -419,7 +419,7 @@
 						<hediff>FE_CutterCharge</hediff>
 						<resourcePerUse>1</resourcePerUse>
 						<disableIfMissingHediff>false</disableIfMissingHediff>
-						<disableReason>Insufficient energy.</disableReason>
+						<disableReasonKey>FE.InsufficientEnergy</disableReasonKey>
 						<minimumResourcePerUse>0</minimumResourcePerUse>
 						<postUseDelay>300</postUseDelay>
 					</li>
@@ -440,7 +440,7 @@
 						<hediff>FE_CutterCharge</hediff>
 						<resourcePerUse>-5</resourcePerUse>
 						<disableIfMissingHediff>true</disableIfMissingHediff>
-						<disableReason>Insufficient charge.</disableReason>
+						<disableReasonKey>FE.InsufficientCharge</disableReasonKey>
 						<minimumResourcePerUse>5</minimumResourcePerUse>
 						<postUseDelay>0</postUseDelay>
 					</li>
@@ -480,7 +480,7 @@
 						<hediff>FE_CutterCharge</hediff>
 						<resourcePerUse>-5</resourcePerUse>
 						<disableIfMissingHediff>true</disableIfMissingHediff>
-						<disableReason>Insufficient charge.</disableReason>
+						<disableReasonKey>FE.InsufficientCharge</disableReasonKey>
 						<minimumResourcePerUse>5</minimumResourcePerUse>
 						<postUseDelay>0</postUseDelay>
 					</li>
@@ -602,7 +602,7 @@
 						<hediff>FE_PulseBattery</hediff>
 						<resourcePerUse>-1.0</resourcePerUse>
 						<disableIfMissingHediff>false</disableIfMissingHediff>
-						<disableReason>Insufficient energy.</disableReason>
+						<disableReasonKey>FE.InsufficientEnergy</disableReasonKey>
 						<minimumResourcePerUse>0</minimumResourcePerUse>
 					</li>
 				</resourceSettings>

@@ -1,21 +1,14 @@
-﻿using RimWorld;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using Verse;
-using VFECore.Abilities;
 using AbilityDef = VFECore.Abilities.AbilityDef;
 
 namespace ART
 {
 	public class HediffResourceDef : HediffDef
-    {
-        public float maxResourceCapacity;
-        public float initialResourceAmount;
+	{
+		public float maxResourceCapacity;
+		public float initialResourceAmount;
 		public bool keepWhenEmpty;
 		public int lifetimeTicks = -1;
 		public bool hideResourceAmount;
@@ -44,5 +37,6 @@ namespace ART
 
 		public List<AbilityDef> randomAbilitiesPool;
 		public bool retainRandomLearnedAbilities;
+		public RefuelHediffProperties refuelHediff;
 	}
 }

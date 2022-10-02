@@ -2,6 +2,7 @@
 
 namespace ART
 {
+
     public class DamageAuraProperties : GeneralProperties
     {
         public DamageDef damageDef;

@@ -29,7 +29,7 @@
 								<hediff>FE_FusionReactor</hediff>
 								<resourcePerUse>-25</resourcePerUse>
 								<disableIfMissingHediff>false</disableIfMissingHediff>
-								<disableReason>Not enough energy</disableReason>
+								<disableReasonKey>FE.NotEnoughEnergy</disableReasonKey>
 								<postUseDelay>600</postUseDelay>
 								<minimumResourcePerUse>25</minimumResourcePerUse>
 							</li>
@@ -171,7 +171,7 @@
 								<hediff>FE_FusionReactor</hediff>
 								<resourcePerUse>-25</resourcePerUse>
 								<disableIfMissingHediff>true</disableIfMissingHediff>
-								<disableReason>Not enough energy</disableReason>
+								<disableReasonKey>FE.NotEnoughEnergy</disableReasonKey>
 								<postUseDelay>600</postUseDelay>
 								<minimumResourcePerUse>25</minimumResourcePerUse>
 							</li>
@@ -231,7 +231,7 @@
 								<hediff>FE_FusionReactor</hediff>
 								<resourcePerUse>4</resourcePerUse>
 								<disableIfMissingHediff>false</disableIfMissingHediff>
-								<disableReason>Insufficient energy.</disableReason>
+								<disableReasonKey>FE.InsufficientEnergy</disableReasonKey>
 								<minimumResourcePerUse>0</minimumResourcePerUse>
 								<postUseDelay>0</postUseDelay>
 							</li>

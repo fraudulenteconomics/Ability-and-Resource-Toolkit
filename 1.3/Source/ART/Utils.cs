@@ -1,24 +1,20 @@
-﻿using Ionic.Zlib;
-using RimWorld;
-using System;
+﻿using RimWorld;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using UnityEngine;
 using Verse;
 using Verse.Sound;
-using VFECore.Abilities;
 using AbilityDef = VFECore.Abilities.AbilityDef;
 
 namespace ART
 {
-    public struct AbilityLearnState
-    {
-        public AbilityDef abilityDef;
-        public bool learned;
-    }
-    [HotSwappable]
+	public struct AbilityLearnState
+	{
+		public AbilityDef abilityDef;
+		public bool learned;
+	}
+	[HotSwappable]
 	[StaticConstructorOnStartup]
 	public static class Utils
 	{
@@ -26,9 +22,9 @@ namespace ART
 		{
 			foreach (var thingDef in DefDatabase<ThingDef>.AllDefs.Where(x => x.race?.Humanlike ?? false))
 			{
-                thingDef.inspectorTabsResolved.Add(InspectTabManager.GetSharedInstance(typeof(ITab_Pawn_Resource)));
-                thingDef.inspectorTabsResolved.Add(InspectTabManager.GetSharedInstance(typeof(ITab_Pawn_Class)));
-                thingDef.comps.Add(new CompProperties_PawnClass());
+				thingDef.inspectorTabsResolved.Add(InspectTabManager.GetSharedInstance(typeof(ITab_Pawn_Resource)));
+				thingDef.inspectorTabsResolved.Add(InspectTabManager.GetSharedInstance(typeof(ITab_Pawn_Class)));
+				thingDef.comps.Add(new CompProperties_PawnClass());
 			}
 		}
 
@@ -36,10 +32,10 @@ namespace ART
 		{
 			comp = pawn.TryGetComp<CompPawnClass>();
 			return comp != null;
-        }
-        public static IEnumerable<AbilityLearnState> GetAbilities(this Pawn pawn)
+		}
+		public static IEnumerable<AbilityLearnState> GetAbilities(this Pawn pawn)
 		{
-            var comp = pawn.TryGetComp<CompPawnClass>();
+			var comp = pawn.TryGetComp<CompPawnClass>();
 			var traitDef = comp.ClassTraitDef;
 			var unlockedTrees = new List<AbilityTreeDef>();
 			foreach (var tree in traitDef.classAbilities)
@@ -48,26 +44,26 @@ namespace ART
 				var existingAbility = allAbilitiesFromTier.FirstOrDefault(x => comp.learnedAbilities.Contains(x));
 				if (existingAbility != null)
 				{
-                    yield return new AbilityLearnState { abilityDef = existingAbility, learned = true };
-                }
+					yield return new AbilityLearnState { abilityDef = existingAbility, learned = true };
+				}
 				else
 				{
-                    yield return new AbilityLearnState { abilityDef = tree.abilityTiers[0].abilityDef, learned = false };
-                }
+					yield return new AbilityLearnState { abilityDef = tree.abilityTiers[0].abilityDef, learned = false };
+				}
 			}
-        }
+		}
 
-        public static AbilityDef GetLearnableAbility(this AbilityLearnState learnedState, AbilityData abilityData)
-        {
-            if (!learnedState.learned)
-            {
-                return learnedState.abilityDef;
-            }
-            return abilityData.abilityTree.abilityTiers.Last() != abilityData.abilityTier
-                ? abilityData.abilityTree.abilityTiers[abilityData.abilityTree.abilityTiers
-                .IndexOf(abilityData.abilityTier) + 1].abilityDef : null;
-        }
-        public static void TryAssignNewSkillRelatedHediffs(SkillRecord skillRecord, Pawn pawn)
+		public static AbilityDef GetLearnableAbility(this AbilityLearnState learnedState, AbilityData abilityData)
+		{
+			if (!learnedState.learned)
+			{
+				return learnedState.abilityDef;
+			}
+			return abilityData.abilityTree.abilityTiers.Last() != abilityData.abilityTier
+				? abilityData.abilityTree.abilityTiers[abilityData.abilityTree.abilityTiers
+				.IndexOf(abilityData.abilityTier) + 1].abilityDef : null;
+		}
+		public static void TryAssignNewSkillRelatedHediffs(SkillRecord skillRecord, Pawn pawn)
 		{
 			var options = skillRecord.def.GetModExtension<SkillHediffGrantOptions>();
 			if (options != null)
@@ -114,19 +110,19 @@ namespace ART
 			{
 				foreach (var hediff in comp.blacklistHediffsPreventAdd)
 				{
-                    ARTLog.Message(pawn + " hediff " + hediff);
+					ARTLog.Message(pawn + " hediff " + hediff);
 
-                    if (pawn.health.hediffSet.GetFirstHediffOfDef(hediff) != null)
+					if (pawn.health.hediffSet.GetFirstHediffOfDef(hediff) != null)
 					{
 						ARTLog.Message(pawn + " can't drink " + potion);
 						reason = comp.cannotDrinkReason;
 						preventFromUsage = comp.preventFromUsageIfHasBlacklistedHediff;
-                        return false;
+						return false;
 					}
 				}
 			}
 			preventFromUsage = false;
-            reason = "";
+			reason = "";
 			return true;
 		}
 		public static bool CanWear(Pawn pawn, Apparel apparel, out string reason)
@@ -257,7 +253,7 @@ namespace ART
 			{
 				foreach (var apparel in apparels)
 				{
-					if (!compApparelAdjustCache.TryGetValue(apparel, out CompApparelAdjustHediffs comp))
+					if (!compApparelAdjustCache.TryGetValue(apparel, out var comp))
 					{
 						comp = apparel.GetComp<CompApparelAdjustHediffs>();
 						compApparelAdjustCache[apparel] = comp;
@@ -274,7 +270,7 @@ namespace ART
 			{
 				foreach (var equipment in equipments)
 				{
-					if (!compWeaponAdjustCache.TryGetValue(equipment, out CompWeaponAdjustHediffs comp))
+					if (!compWeaponAdjustCache.TryGetValue(equipment, out var comp))
 					{
 						comp = equipment.GetComp<CompWeaponAdjustHediffs>();
 						compWeaponAdjustCache[equipment] = comp;
@@ -290,7 +286,7 @@ namespace ART
 			{
 				foreach (var hediff in pawn.health.hediffSet.hediffs)
 				{
-					if (!hediffCompAdjustCache.TryGetValue(hediff, out HediffComp_AdjustHediffs comp))
+					if (!hediffCompAdjustCache.TryGetValue(hediff, out var comp))
 					{
 						comp = hediff.TryGetComp<HediffComp_AdjustHediffs>();
 						hediffCompAdjustCache[hediff] = comp;
@@ -299,7 +295,7 @@ namespace ART
 					{
 						yield return comp;
 					}
-					if (!hediffCompAdjustPerStageCache.TryGetValue(hediff, out HediffComp_AdjustHediffsPerStages comp2))
+					if (!hediffCompAdjustPerStageCache.TryGetValue(hediff, out var comp2))
 					{
 						comp2 = hediff.TryGetComp<HediffComp_AdjustHediffsPerStages>();
 						hediffCompAdjustPerStageCache[hediff] = comp2;
@@ -310,13 +306,13 @@ namespace ART
 					}
 
 					if (hediff is HediffResource hediffResource)
-                    {
+					{
 						yield return hediffResource;
-                    }
+					}
 				}
 			}
 
-			if (!compTraitsAdjustHediffsCache.TryGetValue(pawn, out CompTraitsAdjustHediffs traitComp))
+			if (!compTraitsAdjustHediffsCache.TryGetValue(pawn, out var traitComp))
 			{
 				traitComp = pawn.TryGetComp<CompTraitsAdjustHediffs>();
 				compTraitsAdjustHediffsCache[pawn] = traitComp;
@@ -341,7 +337,7 @@ namespace ART
 					{
 						if (option.hediff == hdDef)
 						{
-							var gain = GetCapacityFor(comp, option);
+							float gain = GetCapacityFor(comp, option);
 							result += gain;
 							explanation.AppendLine("ART.CapacityAdjuster".Translate(comp.Parent.Label, gain));
 						}
@@ -354,10 +350,10 @@ namespace ART
 
 		public static float GetCapacityFor(this IAdjustResource props, ResourceProperties resourceProperties)
 		{
-			var num = 0f;
+			float num = 0f;
 			if (resourceProperties.maxResourceCapacityOffset != 0)
-            {
-				if (resourceProperties.qualityScalesCapacityOffset && props.Parent.TryGetQuality(out QualityCategory qc))
+			{
+				if (resourceProperties.qualityScalesCapacityOffset && props.Parent.TryGetQuality(out var qc))
 				{
 					num = resourceProperties.maxResourceCapacityOffset * GetQualityMultiplier(qc);
 
@@ -379,19 +375,19 @@ namespace ART
 					}
 
 					foreach (var adjustResourceComp in props.GetOtherResources())
-                    {
+					{
 						foreach (var option in adjustResourceComp.ResourceSettings)
-                        {
+						{
 							if (option.hediff == resourceProperties.hediff)
-                            {
+							{
 								if (resourceProperties.hediff == option.hediff)
 								{
 									num *= option.resourceCapacityFactor;
 									num += option.resourceCapacityOffset;
 								}
 							}
-                        }
-                    }
+						}
+					}
 				}
 				else
 				{
@@ -403,7 +399,7 @@ namespace ART
 
 		public static void RemoveExcessHediffResources(Pawn pawn, IAdjustResource adjuster)
 		{
-			List<HediffResourceDef> hediffResourcesToRemove = pawn.health.hediffSet.hediffs.OfType<HediffResource>()
+			var hediffResourcesToRemove = pawn.health.hediffSet.hediffs.OfType<HediffResource>()
 					.Select(x => x.def).Where(x => adjuster.ResourceSettings?.Any(y => y.hediff == x) ?? false).ToList();
 
 			var comps = GetAllAdjustResources(pawn);
@@ -467,7 +463,8 @@ namespace ART
 						if (hediff != null && resourceProperties.dropIfOverCapacity && hediff.ResourceCapacity < 0)
 						{
 							comp.Drop();
-							if (!resourceProperties.overCapacityReasonKey.NullOrEmpty())
+							Log.Message(pawn + " is dropping " + comp);
+							if (!resourceProperties.overCapacityReasonKey.NullOrEmpty() && PawnUtility.ShouldSendNotificationAbout(pawn))
 							{
 								Messages.Message(resourceProperties.overCapacityReasonKey.Translate(pawn.Named("PAWN"), comp.Parent.Named("THING")), MessageTypeDefOf.CautionInput);
 							}
@@ -479,25 +476,25 @@ namespace ART
 
 		public static HediffResource AdjustResourceAmount(this Pawn pawn, HediffResourceDef hdDef, float sevOffset, bool addHediffIfMissing, ResourceProperties resourceProperties, BodyPartDef bodyPartDef, bool applyToDamagedPart = false)
 		{
-			HediffResource hediffResource = pawn.health.hediffSet.GetFirstHediffOfDef(hdDef) as HediffResource;
-			if (resourceProperties.fixedResourceAmount != -1)
-            {
-                if (hediffResource != null)
-                {
-                    sevOffset = resourceProperties.fixedResourceAmount - hediffResource.ResourceAmount;
-                }
-                else
-                {
-                    sevOffset = resourceProperties.fixedResourceAmount;
-                }
-            }
+			var hediffResource = pawn.health.hediffSet.GetFirstHediffOfDef(hdDef) as HediffResource;
+			if (resourceProperties != null && resourceProperties.fixedResourceAmount != -1)
+			{
+				if (hediffResource != null)
+				{
+					sevOffset = resourceProperties.fixedResourceAmount - hediffResource.ResourceAmount;
+				}
+				else
+				{
+					sevOffset = resourceProperties.fixedResourceAmount;
+				}
+			}
 
-            if (hediffResource != null)
+			if (hediffResource != null)
 			{
 				if (sevOffset > 0 && hediffResource.def.restrictResourceCap && hediffResource.ResourceAmount >= hediffResource.ResourceCapacity)
-                {
+				{
 					return hediffResource;
-                }
+				}
 				hediffResource.ChangeResourceAmount(sevOffset, resourceProperties);
 				return hediffResource;
 			}
@@ -633,7 +630,7 @@ namespace ART
 						var resourceHediff = pawn.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
 						if (option.disableIfMissingHediff)
 						{
-							bool hediffResourceIsEmptyOrNull = resourceHediff != null ? resourceHediff.ResourceAmount <= 0 : true;
+							bool hediffResourceIsEmptyOrNull = resourceHediff == null || resourceHediff.ResourceAmount <= 0;
 							if (hediffResourceIsEmptyOrNull)
 							{
 								disableReason = option.disableReasonKey.Translate();
@@ -662,7 +659,7 @@ namespace ART
 						{
 							if (resourceHediff != null)
 							{
-								var num = resourceHediff.ResourceAmount - -option.resourcePerUse;
+								float num = resourceHediff.ResourceAmount - -option.resourcePerUse;
 								if (num < 0)
 								{
 									disableReason = option.disableReasonKey.Translate();
@@ -679,19 +676,19 @@ namespace ART
 
 		public static string GetPropsDescriptions(Pawn pawn, IResourceProps props)
 		{
-			StringBuilder description = new StringBuilder();
+			var description = new StringBuilder();
 			var resourceSettings = props.ResourceSettings;
 			if (resourceSettings != null)
 			{
 				foreach (var option in resourceSettings)
 				{
 					if (option.requiredForUse)
-                    {
-                        if (option.resourcePerUse < 0)
-                        {
-                            description.AppendLine("ART.ConsumesPerUse".Translate(-option.resourcePerUse, option.hediff.label).Colorize(option.hediff.defaultLabelColor));
-                        }
-                        else if (option.disableIfMissingHediff)
+					{
+						if (option.resourcePerUse < 0)
+						{
+							description.AppendLine("ART.ConsumesPerUse".Translate(-option.resourcePerUse, option.hediff.label).Colorize(option.hediff.defaultLabelColor));
+						}
+						else if (option.disableIfMissingHediff)
 						{
 							description.AppendLine("ART.WillBeDisabledIfMissingResource".Translate(option.hediff.label).Colorize(option.hediff.defaultLabelColor));
 						}
@@ -760,14 +757,14 @@ namespace ART
 		}
 
 		public static void ApplyResourceSettings(Thing target, Pawn casterPawn, IResourceProps props)
-        {
-            ApplyTargetResourceSettings(target, props);
-            ApplyResourceSettings(casterPawn, props);
-        }
+		{
+			ApplyTargetResourceSettings(target, props);
+			ApplyResourceSettings(casterPawn, props);
+		}
 		public static void ApplyResourceSettings(List<Thing> targets, Pawn casterPawn, IResourceProps props)
 		{
 			foreach (var target in targets)
-            {
+			{
 				ApplyTargetResourceSettings(target, props);
 			}
 			ApplyResourceSettings(casterPawn, props);
@@ -775,128 +772,126 @@ namespace ART
 
 
 		private static void ApplyTargetResourceSettings(Thing target, IResourceProps props)
-        {
-            if (props.TargetResourceSettings != null)
-            {
-                var targetPawn = target as Pawn;
-                if (targetPawn != null)
-                {
-                    foreach (var option in props.TargetResourceSettings)
-                    {
-                        if (option.resetLifetimeTicks)
-                        {
-                            var targetHediff = targetPawn.health.hediffSet.GetFirstHediffOfDef(option.hediff) as HediffResource;
-                            if (targetHediff != null)
-                            {
-                                targetHediff.duration = 0;
-                            }
-                        }
-                    }
-                }
-            }
-        }
+		{
+			if (props.TargetResourceSettings != null)
+			{
+				if (target is Pawn targetPawn)
+				{
+					foreach (var option in props.TargetResourceSettings)
+					{
+						if (option.resetLifetimeTicks)
+						{
+							if (targetPawn.health.hediffSet.GetFirstHediffOfDef(option.hediff) is HediffResource targetHediff)
+							{
+								targetHediff.duration = 0;
+							}
+						}
+					}
+				}
+			}
+		}
 
-        private static void ApplyResourceSettings(Pawn casterPawn, IResourceProps props)
-        {
-            if (props.ResourceSettings != null)
-            {
-                var hediffResourceManage = ARTManager.Instance;
+		private static void ApplyResourceSettings(Pawn casterPawn, IResourceProps props)
+		{
+			if (props.ResourceSettings != null)
+			{
+				var hediffResourceManage = ARTManager.Instance;
 
-                var hediffPostUse = new Dictionary<HediffResource, List<int>>();
-                var hediffPostUseDelayMultipliers = new Dictionary<HediffResource, List<float>>();
+				var hediffPostUse = new Dictionary<HediffResource, List<int>>();
+				var hediffPostUseDelayMultipliers = new Dictionary<HediffResource, List<float>>();
 
-                var disablePostUseString = "";
-                var comps = GetAllAdjustResources(casterPawn);
+				string disablePostUseString = "";
+				var comps = GetAllAdjustResources(casterPawn);
 
-                foreach (var resourceProperties in props.ResourceSettings)
-                {
-                    var hediffResource = AdjustResourceAmount(casterPawn, resourceProperties.hediff, resourceProperties.resourcePerUse,
-                        resourceProperties.addHediffIfMissing, resourceProperties, resourceProperties.applyToPart);
-                    if (hediffResource != null)
-                    {
-                        var hediffResourcePostUseDelay = new List<int>();
-                        var hediffResourcePostUseDelayMultipliers = new List<float>();
-                        foreach (var comp in comps)
-                        {
-                            var compResourseSettings = comp.ResourceSettings?.FirstOrDefault(x => x.hediff == resourceProperties.hediff);
-                            if (compResourseSettings != null)
-                            {
-                                if (resourceProperties.postUseDelay != 0)
-                                {
-                                    hediffResourcePostUseDelay.Add(resourceProperties.postUseDelay);
-                                    disablePostUseString += comp.DisablePostUse + "\n";
-                                    if (compResourseSettings.postUseDelayMultiplier != 1)
-                                    {
-                                        hediffResourcePostUseDelayMultipliers.Add(compResourseSettings.postUseDelayMultiplier);
-                                    }
-                                }
-                            }
+				foreach (var resourceProperties in props.ResourceSettings)
+				{
+					var hediffResource = AdjustResourceAmount(casterPawn, resourceProperties.hediff, resourceProperties.resourcePerUse,
+						resourceProperties.addHediffIfMissing, resourceProperties, resourceProperties.applyToPart);
+					if (hediffResource != null)
+					{
+						var hediffResourcePostUseDelay = new List<int>();
+						var hediffResourcePostUseDelayMultipliers = new List<float>();
+						foreach (var comp in comps)
+						{
+							var compResourseSettings = comp.ResourceSettings?.FirstOrDefault(x => x.hediff == resourceProperties.hediff);
+							if (compResourseSettings != null)
+							{
+								if (resourceProperties.postUseDelay != 0)
+								{
+									hediffResourcePostUseDelay.Add(resourceProperties.postUseDelay);
+									disablePostUseString += comp.DisablePostUse + "\n";
+									if (compResourseSettings.postUseDelayMultiplier != 1)
+									{
+										hediffResourcePostUseDelayMultipliers.Add(compResourseSettings.postUseDelayMultiplier);
+									}
+								}
+							}
 
-                            if (resourceProperties.postUseDelay != 0)
-                            {
-                                if (hediffPostUse.ContainsKey(hediffResource))
-                                {
-                                    hediffPostUse[hediffResource].Add(resourceProperties.postUseDelay);
-                                }
-                                else
-                                {
-                                    hediffPostUse[hediffResource] = new List<int> { resourceProperties.postUseDelay };
-                                }
-                                if (compResourseSettings != null && compResourseSettings.postUseDelayMultiplier != 1)
-                                {
-                                    if (hediffPostUseDelayMultipliers.ContainsKey(hediffResource))
-                                    {
-                                        hediffPostUseDelayMultipliers[hediffResource].Add(compResourseSettings.postUseDelayMultiplier);
-                                    }
-                                    else
-                                    {
-                                        hediffPostUseDelayMultipliers[hediffResource] = new List<float> { compResourseSettings.postUseDelayMultiplier };
-                                    }
-                                }
-                            }
-                        }
+							if (resourceProperties.postUseDelay != 0)
+							{
+								if (hediffPostUse.ContainsKey(hediffResource))
+								{
+									hediffPostUse[hediffResource].Add(resourceProperties.postUseDelay);
+								}
+								else
+								{
+									hediffPostUse[hediffResource] = new List<int> { resourceProperties.postUseDelay };
+								}
+								if (compResourseSettings != null && compResourseSettings.postUseDelayMultiplier != 1)
+								{
+									if (hediffPostUseDelayMultipliers.ContainsKey(hediffResource))
+									{
+										hediffPostUseDelayMultipliers[hediffResource].Add(compResourseSettings.postUseDelayMultiplier);
+									}
+									else
+									{
+										hediffPostUseDelayMultipliers[hediffResource] = new List<float> { compResourseSettings.postUseDelayMultiplier };
+									}
+								}
+							}
+						}
 
-                        if (hediffResourcePostUseDelay.Any() && hediffResourcePostUseDelayMultipliers.Any())
-                        {
-                            foreach (var comp in comps)
-                            {
-                                comp.PostUseDelayTicks[hediffResource] = new HediffResouceDisable((int)((Find.TickManager.TicksGame + hediffResourcePostUseDelay.Average()) * hediffResourcePostUseDelayMultipliers.Average()), disablePostUseString);
-                            }
-                        }
-                        else if (hediffResourcePostUseDelay.Any())
-                        {
-                            foreach (var comp in comps)
-                            {
-                                comp.PostUseDelayTicks[hediffResource] = new HediffResouceDisable((int)((Find.TickManager.TicksGame + hediffResourcePostUseDelay.Average())), disablePostUseString);
-                            }
-                        }
-                    }
-                }
+						if (hediffResourcePostUseDelay.Any() && hediffResourcePostUseDelayMultipliers.Any())
+						{
+							foreach (var comp in comps)
+							{
+								comp.PostUseDelayTicks[hediffResource] = new HediffResouceDisable((int)((Find.TickManager.TicksGame + hediffResourcePostUseDelay.Average()) * hediffResourcePostUseDelayMultipliers.Average()), disablePostUseString);
+							}
+						}
+						else if (hediffResourcePostUseDelay.Any())
+						{
+							foreach (var comp in comps)
+							{
+								comp.PostUseDelayTicks[hediffResource] = new HediffResouceDisable((int)(Find.TickManager.TicksGame + hediffResourcePostUseDelay.Average()), disablePostUseString);
+							}
+						}
+					}
+				}
 
-                foreach (var hediffData in hediffPostUse)
-                {
-                    if (hediffData.Key != null && hediffPostUse.TryGetValue(hediffData.Key, out List<int> hediffPostUseList))
-                    {
-                        int newDelayTicks;
-                        if (hediffPostUseDelayMultipliers.TryGetValue(hediffData.Key, out List<float> hediffPostUseMultipliers) && hediffPostUseMultipliers.Any())
-                        {
-                            newDelayTicks = (int)(hediffPostUseList.Average() * hediffPostUseMultipliers.Average());
-                        }
-                        else
-                        {
-                            newDelayTicks = (int)(hediffPostUseList.Average());
-                        }
+				foreach (var hediffData in hediffPostUse)
+				{
+					if (hediffData.Key != null && hediffPostUse.TryGetValue(hediffData.Key, out var hediffPostUseList))
+					{
+						int newDelayTicks;
+						if (hediffPostUseDelayMultipliers.TryGetValue(hediffData.Key, out var hediffPostUseMultipliers) && hediffPostUseMultipliers.Any())
+						{
+							newDelayTicks = (int)(hediffPostUseList.Average() * hediffPostUseMultipliers.Average());
+						}
+						else
+						{
+							newDelayTicks = (int)hediffPostUseList.Average();
+						}
 
-                        if (hediffData.Key.CanHaveDelay(newDelayTicks))
-                        {
-                            hediffData.Key.AddDelay(newDelayTicks);
-                        }
-                    }
-                }
-            }
-        }
+						if (hediffData.Key.CanHaveDelay(newDelayTicks))
+						{
+							hediffData.Key.AddDelay(newDelayTicks);
+						}
+					}
+				}
+			}
+		}
 
-        public static void ApplyChargeResource(ref float damageAmount, ChargeResources chargeResources)
+		public static void ApplyChargeResource(ref float damageAmount, ChargeResources chargeResources)
 		{
 			ARTLog.Message("Old damage: " + damageAmount);
 			foreach (var chargeResource in chargeResources.chargeResources)
@@ -918,7 +913,7 @@ namespace ART
 		}
 		private static void DoScalarDamage(ref float __result, float resourceAmount, ChargeSettings chargeSettings)
 		{
-			__result = (int)(__result * Mathf.Pow((1 + chargeSettings.damagePerCharge), (resourceAmount - chargeSettings.minimumResourcePerUse) / chargeSettings.resourcePerCharge));
+			__result = (int)(__result * Mathf.Pow(1 + chargeSettings.damagePerCharge, (resourceAmount - chargeSettings.minimumResourcePerUse) / chargeSettings.resourcePerCharge));
 		}
 
 		private static void DoLinearDamage(ref float __result, float resourceAmount, ChargeSettings chargeSettings)
@@ -939,7 +934,7 @@ namespace ART
 		}
 		public static HashSet<IntVec3> GetAllCellsInRadius(ResourceProperties option, CellRect occupiedCells)
 		{
-			HashSet<IntVec3> tempCells = new HashSet<IntVec3>();
+			var tempCells = new HashSet<IntVec3>();
 			foreach (var cell in occupiedCells)
 			{
 				foreach (var intVec in GenRadial.RadialCellsAround(cell, option.effectRadius, true))
@@ -951,28 +946,32 @@ namespace ART
 		}
 		public static HashSet<IntVec3> GetAffectedCells(ResourceProperties option, TargetInfo targetInfo, CellRect occupiedCells)
 		{
-			HashSet<IntVec3> affectedCells = new HashSet<IntVec3>();
-			HashSet<IntVec3> tempCells = GetAllCellsInRadius(option, occupiedCells);
-			Predicate<IntVec3> validator = delegate (IntVec3 cell)
+			var affectedCells = new HashSet<IntVec3>();
+			var tempCells = GetAllCellsInRadius(option, occupiedCells);
+			bool validator(IntVec3 cell)
 			{
-				if (!tempCells.Contains(cell)) return false;
+				if (!tempCells.Contains(cell))
+				{
+					return false;
+				}
+
 				var edifice = cell.GetEdifice(targetInfo.Map);
-				var result = edifice == null || edifice.def.passability != Traversability.Impassable || occupiedCells.Cells.Contains(cell);
+				bool result = edifice == null || edifice.def.passability != Traversability.Impassable || occupiedCells.Cells.Contains(cell);
 				return result;
-			};
+			}
 			var centerCell = occupiedCells.CenterCell;
 			targetInfo.Map.floodFiller.FloodFill(centerCell, validator, delegate (IntVec3 x)
 			{
 				if (tempCells.Contains(x))
 				{
 					var edifice = x.GetEdifice(targetInfo.Map);
-					var result = edifice == null || edifice.def.passability != Traversability.Impassable || occupiedCells.Cells.Contains(x);
+					bool result = edifice == null || edifice.def.passability != Traversability.Impassable || occupiedCells.Cells.Contains(x);
 					if (result && (GenSight.LineOfSight(centerCell, x, targetInfo.Map) || centerCell.DistanceTo(x) <= 1.5f))
 					{
 						affectedCells.Add(x);
 					}
 				}
-			}, int.MaxValue, rememberParents: false, (IEnumerable<IntVec3>)null);
+			}, int.MaxValue, rememberParents: false, null);
 			affectedCells.AddRange(occupiedCells.Cells);
 			return affectedCells;
 		}
@@ -980,29 +979,29 @@ namespace ART
 		public static float GetResourceGain(this ResourceProperties resourceProperties, IAdjustResource source = null)
 		{
 			float num = resourceProperties.resourcePerSecond;
-			if (source != null && resourceProperties.qualityScalesResourcePerSecond && source.TryGetQuality(out QualityCategory qc))
+			if (source != null && resourceProperties.qualityScalesResourcePerSecond && source.TryGetQuality(out var qc))
 			{
 				num *= GetQualityMultiplier(qc);
 			}
 			var stuff = source?.GetStuff();
 			if (stuff != null)
-            {
+			{
 				var extension = stuff.GetModExtension<StuffExtension>();
 				if (extension != null)
-                {
+				{
 					foreach (var option in extension.resourceSettings)
-                    {
+					{
 						if (option.hediff == resourceProperties.hediff)
-                        {
+						{
 							num *= option.resourcePerSecondFactor;
 							num += option.resourcePerSecondOffset;
 						}
-                    }
+					}
 				}
-            }
+			}
 
 			if (source != null)
-            {
+			{
 				foreach (var otherComp in source.GetOtherResources())
 				{
 					foreach (var option in otherComp.ResourceSettings)
@@ -1027,42 +1026,49 @@ namespace ART
 		}
 
 		public static IEnumerable<IAdjustResource> GetOtherResources(this IAdjustResource comp)
-        {
+		{
 			var pawnHost = comp.PawnHost;
 			if (pawnHost != null)
-            {
+			{
 				foreach (var otherResourceComp in pawnHost.GetAllAdjustResources())
-                {
+				{
 					if (otherResourceComp != comp)
-                    {
+					{
 						yield return otherResourceComp;
-                    }
-                }
-            }
-        }
+					}
+				}
+			}
+		}
 		public static IResourceProps GetResourceProps(this Verb verb)
 		{
-			if (verb.verbProps is IResourceProps verbResourceProps) return verbResourceProps;
-			if (verb.tool is IResourceProps toolResourceProps) return toolResourceProps;
+			if (verb.verbProps is IResourceProps verbResourceProps)
+			{
+				return verbResourceProps;
+			}
+
+			if (verb.tool is IResourceProps toolResourceProps)
+			{
+				return toolResourceProps;
+			}
+
 			return null;
 		}
 
 		public static bool HasResource(this Pawn pawn, HediffResourceDef hediffResource, float minResource = 0f)
-        {
-			var hediff = pawn.health.hediffSet.GetFirstHediffOfDef(hediffResource) as HediffResource;
-			if (hediff != null && hediff.ResourceAmount >= minResource)
-            {
+		{
+			if (pawn.health.hediffSet.GetFirstHediffOfDef(hediffResource) is HediffResource hediff && hediff.ResourceAmount >= minResource)
+			{
 				return true;
-            }
+			}
 			return false;
-        }
+		}
 
 		public static IEnumerable<Pawn> GetPawnsAround(Pawn checker, GeneralProperties properties)
 		{
 			if (checker.MapHeld is null)
-            {
+			{
 				yield break;
-            }
+			}
 			else
 			{
 				if (properties.effectRadius > 0)
@@ -1071,22 +1077,21 @@ namespace ART
 					{
 						yield return pawn;
 
-                    }
-                }
+					}
+				}
 				else if (properties.affectsSelf)
 				{
 					yield return checker;
 				}
 			}
 		}
-
 		public static IEnumerable<Pawn> GetPawnsAround(Pawn checker, float effectRadius)
 		{
-            foreach (var pawn in GenRadial.RadialDistinctThingsAround(checker.PositionHeld, checker.MapHeld, effectRadius, true).OfType<Pawn>())
-            {
-                yield return pawn;
-            }
-        }
+			foreach (var pawn in GenRadial.RadialDistinctThingsAround(checker.PositionHeld, checker.MapHeld, effectRadius, true).OfType<Pawn>())
+			{
+				yield return pawn;
+			}
+		}
 		public static void HealHediffs(Pawn pawn, ref float healPoints, List<Hediff> hediffsToHeal, bool pointsOverflow, HealPriority healPriority, bool healAll, SoundDef soundOnEffect)
 		{
 			if (healPriority == HealPriority.TendablesFirst)
@@ -1102,14 +1107,14 @@ namespace ART
 				if (healAll)
 				{
 					hediff.Severity = 0;
-                    if (soundOnEffect != null)
+					if (soundOnEffect != null)
 					{
 						soundOnEffect.PlayOneShot(new TargetInfo(pawn.Position, pawn.Map));
 					}
 				}
 				else if (healPoints != 0)
 				{
-					var toHealPoints = Mathf.Min(healPoints, hediff.Severity);
+					float toHealPoints = Mathf.Min(healPoints, hediff.Severity);
 					hediff.Severity -= toHealPoints;
 					healPoints -= toHealPoints;
 					if (soundOnEffect != null)

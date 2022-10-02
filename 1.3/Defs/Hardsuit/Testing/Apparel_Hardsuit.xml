@@ -760,7 +760,7 @@
 						<hediff>FE_SteamTank</hediff>
 						<resourcePerUse>-100</resourcePerUse>
 						<disableIfMissingHediff>true</disableIfMissingHediff>
-						<disableReason>Not enough steam.</disableReason>
+						<disableReasonKey>FE.NotEnoughSteam</disableReasonKey>
 						<minimumResourcePerUse>99.9</minimumResourcePerUse>
 					</li>
 				</resourceSettings>
@@ -857,7 +857,7 @@
 						<hediff>FE_SteamTank</hediff>
 						<resourcePerUse>-20</resourcePerUse>
 						<disableIfMissingHediff>true</disableIfMissingHediff>
-						<disableReason>Not enough steam.</disableReason>
+						<disableReasonKey>FE.NotEnoughSteam</disableReasonKey>
 						<minimumResourcePerUse>19.9</minimumResourcePerUse>
 					</li>
 					<li>
@@ -974,7 +974,7 @@
 						<hediff>FE_SteamTank</hediff>
 						<resourcePerUse>-10</resourcePerUse>
 						<disableIfMissingHediff>true</disableIfMissingHediff>
-						<disableReason>Not enough steam.</disableReason>
+						<disableReasonKey>FE.NotEnoughSteam</disableReasonKey>
 						<minimumResourcePerUse>9.9</minimumResourcePerUse>
 					</li>
 					<li>
@@ -1097,7 +1097,7 @@
 						<hediff>FE_SteamTank</hediff>
 						<resourcePerUse>-60</resourcePerUse>
 						<disableIfMissingHediff>true</disableIfMissingHediff>
-						<disableReason>Not enough steam.</disableReason>
+						<disableReasonKey>FE.NotEnoughSteam</disableReasonKey>
 						<minimumResourcePerUse>59.9</minimumResourcePerUse>
 					</li>
 				</resourceSettings>
@@ -1246,7 +1246,7 @@
 						<hediff>FE_SteamTank</hediff>
 						<resourcePerUse>-200</resourcePerUse>
 						<disableIfMissingHediff>true</disableIfMissingHediff>
-						<disableReason>Not enough steam.</disableReason>
+						<disableReasonKey>FE.NotEnoughSteam</disableReasonKey>
 						<minimumResourcePerUse>199.9</minimumResourcePerUse>
 					</li>
 				</resourceSettings>
@@ -1914,7 +1914,7 @@
 					<li>
 						<hediff>FE_SteamBowHediff</hediff>
 						<resourcePerUse>10</resourcePerUse>
-						<disableReason>Insufficient steam.</disableReason>
+						<disableReasonKey>FE.InsufficientSteam</disableReasonKey>
 					</li>
 				</resourceSettings>
 				<verbClass>Verb_Shoot</verbClass>
@@ -2118,7 +2118,7 @@
 					<li>
 						<hediff>FE_StoneFlingerHediff</hediff>
 						<resourcePerUse>6</resourcePerUse>
-						<disableReason>Insufficient steam.</disableReason>
+						<disableReasonKey>FE.InsufficientSteam</disableReasonKey>
 					</li>
 				</resourceSettings>
 				<verbClass>Verb_Shoot</verbClass>
